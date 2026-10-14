@@ -4,7 +4,7 @@ All app checks below are **NOT RUN in planning**. Requires separately reviewed t
 
 ## Prerequisites and commands
 
-Use existing Node 22.x >=22.12, locked dependencies and matching Playwright 1.56.1 Chromium already available. If missing, report the precise capability gap; do not silently install/upgrade. Use the existing scripts, not new infrastructure:
+Required capabilities are Node 22.x >=22.12, locked dependencies and Chromium matching Playwright 1.56.1. Verify their availability during later authorized implementation preflight; matching Chromium availability is **NOT VERIFIED** in this planning session and remains so unless observed. Missing matching Chromium blocks required browser verification; report the precise capability gap without treating it as a pass or waiver. This guide grants no installation or upgrade authority. Use the existing scripts, not new infrastructure:
 
 ```sh
 npm run typecheck
