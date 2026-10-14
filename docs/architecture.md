@@ -56,7 +56,7 @@ not a backend/API or Vite preview production server. Only absolute dist is serve
 0.0.0.0 plus validated PORT (unset: 3000, supplied decimal 1–65535), nonzero startup
 failure without fallback. Default root index, no SPA catch-all/directory listing/
 symlinks; configuration response and fetch are no-store. See [deployment](deployment.md)
-for the locally verified boundary versus unknown hosting status.
+for the serving boundary and separately verified Railway deployment.
 
 Playwright core imports actual validator/transition/storage/date/rule helpers;
 Chromium uses a built app through the same production start command. Composed tests
@@ -69,9 +69,10 @@ These are focused local checks, not universal accessibility/security/browser cla
 Task-local commands and observations are retained in [tasks](../specs/001-ba-movement-demo/tasks.md).
 
 No backend/database/schema owner, authentication, real booking, payment, maps,
-notification or external integration is implemented. No live Railway action was
-performed; project/service/domain/credentials/runtime remain unknown. The conceptual
-HTML remains visual authority and historical artifact, not operational behavior truth.
+notification or external integration is implemented. The first authorized Railway
+release uses this unchanged Node listener; [deployment](deployment.md) owns verified
+resource IDs, runtime, public URL and live checks. The conceptual HTML remains visual
+authority and historical artifact, not operational behavior truth.
 
 ## Historical initialization and planning provenance
 

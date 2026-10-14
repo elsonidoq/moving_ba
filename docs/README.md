@@ -6,7 +6,7 @@
 
 - [Conceptual interactive mockup](mockup_ba_en_movimiento_v2.html): Spanish-language demonstration of activity selection, individual practice or classes, continuity, and illustrative rewards. Not an official service; class data and transactions are simulated.
 - [Architecture](architecture.md): current implemented client/state/content/serving/test boundaries, exact dependencies, and preserved historical research.
-- [Deployment](deployment.md): verified local build/start/PORT contract, Railway-capable boundary and unknown live deployment status.
+- [Deployment](deployment.md): verified local and Railway build/start/PORT contract, public HTTPS URL, exact successful deployment and content redeployment runbook.
 - [Documentation routing](documentation-routing.md): material change categories and authoritative owners.
 - [Open issues](open_issues.md): canonical register for verified unresolved work.
 

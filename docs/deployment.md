@@ -2,13 +2,36 @@
 
 ## Current status
 
-**Local static delivery verified. Live deployment unknown / not performed.**
-No Railway CLI/auth/account/project/service/domain operation has been authorized or
-run. Hosting service, domain, credentials, deployed runtime and platform status remain
-unknown. No URL, partner integration or operational service is claimed. Deployment is
-not required for local acceptance; later operations need explicit permission and usable
-capability. The use-railway skill was read only for documentation context, with no CLI
-probe, installation or mutation.
+**Live demo verified on Railway, 2026-10-14.**
+Public HTTPS: **https://movingba-production.up.railway.app** (desktop and phone browsers;
+no tunnel needed). This is still a conceptual, non-official simulation, not a live
+booking, training-verification or partner service.
+
+| Resource | Verified value |
+| --- | --- |
+| Workspace | My Projects (`786dd741-cf10-4c08-b16e-8e47734be3c4`) |
+| Project | moving_ba (`cc82d4e3-18c9-4bf6-93fc-f5cd9f58a05d`) |
+| Environment | production (`75f39978-e9e1-4019-8b04-b60308632dcd`) |
+| Service | moving_ba (`07c70e92-6e27-477f-a3e0-2264da1c8c9c`) |
+| Deployment | `bf3b2bdd-858f-4b7f-8481-f46f0a74de52` — **SUCCESS**, status updated at 20:28:28Z |
+| Source | Clean main revision `80361c0906235b2809dbf9c57c568f41f40b93bb`, uploaded from cwd |
+| Region / replicas | us-east4-eqdc4a / 1 |
+| Domain target | 8080; domain ID `abf3962f-0602-4ae1-8dbf-a1d9055dfb94` |
+
+Railway CLI 5.63.1 was already installed at `/home/dev/.railway/bin/railway` but was
+not on PATH. Existing authentication worked; no installation or login was necessary.
+The installed use-railway skill and setup/deploy/configuration references were used.
+CLI tooling-health suggestions to modify global Pi configuration were not applied;
+the existing skill and hosted Railway MCP worked. No billing plan, database, volume,
+custom domain purchase or unrelated service was changed.
+
+The initial `railway up` created the project/service and submitted deployment
+`6ee520e0-2164-4d16-bc0e-f27fd77a7f39` (observed SUCCESS). Detection chose the correct
+Node listener but defaulted to `npm install`. One scoped environment configuration
+patch selected locked installation and explicit build/start commands, automatically
+creating the final deployment above from the same source snapshot. This was not a
+second source upload or a retry of a failed build. Later documentation commits are
+not part of that uploaded application snapshot.
 
 ## Verified local build/start boundary
 
@@ -64,14 +87,58 @@ verified end to end. Each browser/origin has its own demo localStorage.
 The remote static server itself binds all interfaces; tunneling does not restrict
 its remote exposure. Use the remote firewall if access should be tunnel-only.
 
-## Railway-capable, not deployed
+## Verified Railway configuration and redeployment
 
-A later authorized static service can build with `npm ci && npm run build`, start
-with `npm start`, provide supported Node 22.x and inject `PORT`; the listener already
-uses Railway's required 0.0.0.0 host and explicit port. This is a tested local command
-contract, not a verified Railway project/runtime configuration or success record.
-Do not invent a service ID, domain, credential state or platform rollback procedure.
-No containers, backend, database, auth or integration is needed by this demo.
+Service configuration is stored on Railway, not in a repository deployment file:
+
+- Builder: **RAILPACK**, observed Railpack **0.41.0**, Node provider (not Caddy).
+- `RAILPACK_NODE_VERSION=22.23.3` (within package engines `>=22.12.0 <23`).
+- `RAILPACK_NODE_NPM_INSTALL=npm ci`.
+- Build command: `npm run build` (includes TypeScript checking, creates `dist`).
+- Start command: `npm start` → `node scripts/serve.mjs`.
+- Railway injects `PORT`; runtime logs confirm **Listening on 0.0.0.0:8080**.
+- Domain targets **8080**. No static/SPA-output override or catch-all was added.
+
+Scoped configuration was read back through describe-service; exact-deployment build
+logs confirmed Node 22.23.3/npm 10.9.9, `npm ci`, successful typecheck/Vite build and
+`npm start`. Source/lockfile/public files/scripts were uploaded; Railway built dist,
+not a local dist upload. No backend, database, auth or integration is required.
+
+For a future **authorized** content release, edit `public/config/app-content.json`,
+validate it and upload the source directory to these exact resources:
+
+```sh
+cd /home/dev/projects/moving_ba
+npm run test:core -- --grep 'content validation'
+git status --short
+# Use railway on PATH, or the existing absolute CLI path on this host.
+SESSION_ID="ba-content-$(date +%s)"
+RAILWAY_CALLER=skill:use-railway@1.7.0 \
+RAILWAY_AGENT_SESSION="$SESSION_ID" \
+/home/dev/.railway/bin/railway up \
+  --project cc82d4e3-18c9-4bf6-93fc-f5cd9f58a05d \
+  --environment 75f39978-e9e1-4019-8b04-b60308632dcd \
+  --service 07c70e92-6e27-477f-a3e0-2264da1c8c9c \
+  --detach --json -m 'Update demo content'
+```
+
+Capture `deploymentId` from that upload and poll that **exact ID** using:
+
+```sh
+RAILWAY_CALLER=skill:use-railway@1.7.0 \
+RAILWAY_AGENT_SESSION="$SESSION_ID" \
+/home/dev/.railway/bin/railway deployment list \
+  --project cc82d4e3-18c9-4bf6-93fc-f5cd9f58a05d \
+  --environment 75f39978-e9e1-4019-8b04-b60308632dcd \
+  --service 07c70e92-6e27-477f-a3e0-2264da1c8c9c --json
+```
+
+When operating through use-railway, prefix subsequent CLI commands with the same
+caller/session values as the upload. Upload completion alone is not success: require
+SUCCESS, then recheck HTTPS root, JSON/no-store, assets and a hash refresh. Inspect
+bounded logs for the submitted ID before retrying any failure. The current service
+has no GitHub source connection: Git pushes do **not** automatically redeploy it.
+A plain `railway redeploy` rebuilds the existing snapshot, not edited local JSON.
 
 Repository public JSON edits require rebuilding the artifact and, for a published
 service, a separately authorized redeployment. A reload fetches the newly served
@@ -85,6 +152,40 @@ and observed service/deployment evidence; no database migration is involved. loc
 is browser-origin-specific, not hosted state. If an old build cannot read a future
 envelope, it offers scoped demo recovery rather than migration/global browser clearing.
 
+## Live verification and limitations
+
+After final-deployment SUCCESS, HTTPS checks and Playwright 1.56.1 with existing
+Chromium 153.0.8010.12 passed against the public origin:
+
+- Root application rendered at 1280px; JavaScript loaded with JavaScript MIME.
+- JSON returned 200, JSON MIME, `Cache-Control: no-store`, populated bytes identical
+  to repository JSON; all three sport SVGs returned exact repository bytes.
+- Missing `/config/absent.json` and `/assets/absent.svg` returned real 404s.
+- `/#/returning/yoga/solo/yoga-returning` survived refresh.
+- At 360×900, Calistenia opened both solo and class paths without horizontal overflow.
+- One explicit solo completion (including double final-step activation) persisted
+  once after reload; Mi camino showed 1 practice/10 points and rewards agreed.
+- Fictional Yoga class interest survived refresh without changing completions or
+  reward output. Swimming blocked no/each single affirmation; both enabled water.
+- No uncaught browser errors; desktop/mobile screenshots were viewed.
+
+Disposable script/log/screenshots: `/tmp/ba-railway-deploy/` in the deployment session;
+these are not required for a fresh checkout or redeploy. Live verification did not
+mutate served content, mock responses or freeze the clock. Browser history created
+by these checks belongs only to the disposable browser context, not other visitors.
+
+Physical cellphone hardware, Safari/Firefox and universal device/accessibility support
+were not tested. Previously verified 68 core/26 Chromium local tests were not rerun
+as a full suite; app source and dependencies are unchanged. The existing local server
+on port 4173 was preserved. New HTTPS-origin localStorage does not inherit localhost
+or tunnel history; different browsers/devices have independent demo histories.
+
+[OI-1](open_issues.md#oi-1--assess-reported-dependency-audit-warnings) remains open:
+Railway `npm ci` also reported three high-severity warnings. Advisories and runtime/
+development exposure are unassessed; no dependency remediation or production security
+hardening is claimed. No audit fix was applied. Future deployments/rollback require
+appropriate authorization; no platform rollback was exercised.
+
 ## Historical provenance
 
 Initialization found only a conceptual HTML file, no verified deployment commands or
@@ -95,5 +196,6 @@ approval selected the minimal explicit listener instead. The immutable
 [research correction](../specs/001-ba-movement-demo/research.md#static-serving-correction)
 and historical [architecture research](architecture.md#planned-demo-architecture-not-implemented)
 retain those observations. Current local proofs supersede planning's then-UNRUN labels,
-not its source provenance or unknown live status. Three high npm audit warnings remain
-unassessed; do not infer production hardening from local demo acceptance.
+not its source provenance. Before the authorized first deployment recorded above, live
+hosting state was unknown and no Railway operation had been performed. Three high npm
+audit warnings remain unassessed; do not infer production hardening from local demo acceptance.

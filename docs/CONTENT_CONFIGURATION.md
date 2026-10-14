@@ -107,4 +107,6 @@ in-tab use with a visible persistence warning; invalid envelopes offer scoped re
 Editing repository public JSON does not mutate a deployed build. Rebuild and, only
 with separate authorization, redeploy that static artifact. Reload fetches the newly
 served bytes; there is no CMS, account, hot deployed editor or remote-edit promise.
-Current hosting/deployment status is unknown; see [deployment](deployment.md).
+The demo is published on Railway; see [deployment](deployment.md) for the public URL,
+verified source-upload redeployment procedure and exact resource scope. Git pushes alone
+do not update this service. HTTPS-origin localStorage is separate from local previews.

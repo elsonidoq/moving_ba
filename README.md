@@ -1,6 +1,9 @@
 # BA en movimiento
 
-A conceptual Spanish-language demo, not an official service. No live deployment or integrations.
+A conceptual Spanish-language demo, not an official service. No live integrations.
+
+**Public demo:** https://movingba-production.up.railway.app —
+[verified Railway configuration and deployment](docs/deployment.md).
 
 ## Local development
 
@@ -164,10 +167,10 @@ editing, real-file failure/retry checks, fixtures and the rebuild/redeploy bound
 
 ## Delivery status and provenance
 
-Implementation is local-only; hosting service/domain/runtime credentials and live
-Railway deployment status are **unknown / not performed**. Local `build` + `start`
-are Railway-capable, not evidence that anything is deployed. See the canonical
-[deployment owner](docs/deployment.md) before any separately authorized operation.
+The demo is deployed on Railway; the canonical [deployment owner](docs/deployment.md)
+records the exact successful deployment, source revision, build/start/runtime settings,
+public HTTPS checks and redeployment commands. Git pushes do not automatically deploy.
+New HTTPS-origin browser storage does not inherit localhost/tunnel history.
 No backend, account, payment, map, notification, CMS or real offer is present.
 Browser storage is demo convenience, not authenticated or physically verified data;
 concurrent multi-tab transactions and universal device/accessibility support are
@@ -213,4 +216,6 @@ Focused visual/timed evidence remains T007's actual observations (only stat cont
 and storage-action wording were later refined/re-viewed; no timing/path change).
 All required local items are verified and independent final review passed; human
 owner acceptance remains separate. Live deployment, multi-browser/human-user study and security-audit
-remediation were not performed.
+remediation were not performed during local implementation. The subsequently authorized
+first Railway release and its separate live smoke evidence are recorded in
+[Deployment](docs/deployment.md).
