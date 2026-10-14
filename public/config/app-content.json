@@ -1,0 +1,1147 @@
+{
+  "schemaVersion": 1,
+  "branding": {
+    "name": "BA en movimiento",
+    "tagline": "La ciudad te invita a moverte. Vos elegís cómo seguir.",
+    "demoNotice": "Demostración conceptual · no es un servicio oficial"
+  },
+  "ui": {
+    "home": "Inicio",
+    "back": "Volver",
+    "profile": "Tu momento con el movimiento",
+    "chooseSport": "¿Qué te gustaría practicar?",
+    "choosePath": "Elegí cómo querés moverte",
+    "solo": "Entrenar por mi cuenta",
+    "soloDescription": "Conocé una práctica breve, con pasos y apoyos posibles.",
+    "classes": "Sumarme a una clase",
+    "classesDescription": "Explorá ejemplos de acompañamiento, gratuitos y pagos.",
+    "planPreview": "Tu práctica, paso a paso",
+    "classCatalog": "Clases para explorar",
+    "steps": "Pasos de la práctica",
+    "duration": "Duración orientativa",
+    "level": "Nivel orientativo",
+    "environment": "Entorno",
+    "prerequisites": "Antes de empezar",
+    "safety": "Cuidarte es parte del camino",
+    "free": "Gratis · ejemplo",
+    "paid": "Pago · precio ilustrativo",
+    "price": "Precio",
+    "schedule": "Horario de ejemplo",
+    "venue": "Lugar ficticio",
+    "locality": "Zona de referencia",
+    "requirements": "Qué necesitás",
+    "receiver": "Quién recibiría el interés",
+    "contact": "Contacto simulado",
+    "dryLand": "Preparación en seco · sin entrar al agua",
+    "water": "Práctica en el agua · requiere ambas confirmaciones",
+    "swimRedirect": "Si querés aprender a nadar, buscá acompañamiento profesional. Podés explorar las clases de ejemplo.",
+    "start": "Empezar práctica simulada",
+    "completeStep": "Completé este paso",
+    "stepProgress": "Tu avance en esta práctica",
+    "success": "Un paso posible, a tu manera. ¡Bien ahí!",
+    "next": "Tu próximo paso",
+    "interest": "Me interesa esta clase",
+    "interestSuccess": "Guardamos tu interés simulado. No se envió ninguna solicitud ni hay una reserva.",
+    "journey": "Mi camino",
+    "challenges": "Desafíos y logros",
+    "historyEmpty": "Tu camino empieza con una primera práctica posible. Todavía no hay sesiones completadas.",
+    "seedOrigin": "Datos de demostración",
+    "simulatedOrigin": "Práctica simulada por vos",
+    "points": "Puntos ilustrativos",
+    "activeWeeks": "Semanas con movimiento",
+    "weeklyGoal": "Tu objetivo de esta semana",
+    "badges": "Logros de tu recorrido",
+    "benefits": "Beneficios ilustrativos",
+    "reset": "Restablecer demostración",
+    "resetConfirm": "Se restablecerán los tres perfiles de esta demostración. Tus otros datos del navegador no cambian.",
+    "storageWarning": "No pudimos guardar en este navegador. Podés seguir en esta pestaña, pero al recargar se perderán los cambios.",
+    "storageRecovery": "No pudimos leer los datos de esta demostración. Restablecé sólo la demo para seguir.",
+    "canSwim": "Confirmo que ya sé nadar con autonomía.",
+    "safePool": "Confirmo que estoy en una pileta habilitada, supervisada por guardavidas y que respeto las reglas del lugar.",
+    "loading": "Estamos preparando tu próximo paso…",
+    "retry": "Intentar de nuevo",
+    "configurationError": "No pudimos cargar el contenido. Revisá la configuración e intentá de nuevo.",
+    "skipToContent": "Ir al contenido",
+    "rest": "Descansar también es cuidarte. Tus logros siguen con vos.",
+    "pause": "Una pausa no borra lo que ya hiciste. Retomá sin apuro.",
+    "history": "Tu recorrido",
+    "sessionAbandoned": "Saliste de la práctica sin completarla. No se sumó una sesión.",
+    "notAvailable": "Esta opción ya no está disponible. Elegí otra para seguir."
+  },
+  "legal": {
+    "illustrativeTraining": "Prácticas ilustrativas: esta demo no verifica actividad física ni da indicaciones personales. No hagas ejercicios con dolor.",
+    "professionalReview": "Antes de entrenar de verdad, estas propuestas requieren revisión de una persona profesional calificada y adaptación a tus necesidades.",
+    "fictionalClasses": "Todas las clases, docentes, lugares, horarios, precios y contactos son ficticios. No hay inscripción, cupos ni reservas reales.",
+    "noOfficialStatus": "Propuesta conceptual, no es un servicio oficial de GCBA ni tiene patrocinio confirmado.",
+    "nonredeemable": "Los puntos y beneficios son ilustrativos, no se pueden canjear ni comprar.",
+    "noAgreement": "Beneficio de demostración, sin convenio vigente. No es una oferta real.",
+    "locationNotice": "Las zonas son referencias de Buenos Aires, no ubicaciones verificadas ni recomendaciones de lugares."
+  },
+  "profiles": [
+    {
+      "id": "first",
+      "title": "Primera vez",
+      "subtitle": "Una primera práctica posible, sin experiencia previa.",
+      "welcome": "Tu primer paso empieza acá.",
+      "hero": "No hace falta ser experto.",
+      "cta": "Elegí un primer paso",
+      "nextPrompt": "Repetí una práctica cómoda cuando tengas ganas.",
+      "defaultSportId": "calisthenics",
+      "defaultPlanId": "cal-first",
+      "scenarioId": "scenario-first",
+      "weeklyGoal": 1
+    },
+    {
+      "id": "returning",
+      "title": "Retomando",
+      "subtitle": "Tu experiencia sigue con vos, también después de una pausa.",
+      "welcome": "Volver también es avanzar.",
+      "hero": "Una sesión puede alcanzar.",
+      "cta": "Volvé a tu ritmo",
+      "nextPrompt": "Retomá suave, sin recuperar todo en un día.",
+      "defaultSportId": "calisthenics",
+      "defaultPlanId": "cal-returning",
+      "scenarioId": "scenario-returning",
+      "weeklyGoal": 1
+    },
+    {
+      "id": "regular",
+      "title": "Ya entreno",
+      "subtitle": "Control, aprendizaje y recuperación para seguir.",
+      "welcome": "Siempre hay algo para descubrir.",
+      "hero": "Seguí sumando a tu manera.",
+      "cta": "Explorá con control",
+      "nextPrompt": "Repetí con buena técnica; alterná práctica y descanso.",
+      "defaultSportId": "calisthenics",
+      "defaultPlanId": "cal-regular",
+      "scenarioId": "scenario-regular",
+      "weeklyGoal": 2
+    }
+  ],
+  "sports": [
+    {
+      "id": "calisthenics",
+      "name": "Calistenia",
+      "summary": "Barras, movimiento y confianza.",
+      "heroAsset": "/assets/calisthenics.svg",
+      "heroAlt": "Barras de calistenia en un parque",
+      "environment": "Parque con apoyos estables",
+      "facilities": "Barra baja firme, banco y espacio despejado.",
+      "tips": [
+        "No necesitás una dominada para empezar.",
+        "Elegí apoyos estables y un rango cómodo."
+      ],
+      "modes": [
+        "solo",
+        "classes"
+      ],
+      "safetyCopy": "No uses estructuras inestables. Si aparece dolor, frená."
+    },
+    {
+      "id": "yoga",
+      "name": "Yoga",
+      "summary": "Respiración, movilidad y bienestar.",
+      "heroAsset": "/assets/yoga.svg",
+      "heroAlt": "Mat de yoga, bloques y una planta",
+      "environment": "Casa o parque tranquilo",
+      "facilities": "Mat antideslizante, bloques o apoyos firmes.",
+      "tips": [
+        "Respirá sin forzar ni retener el aire.",
+        "Adaptá las posturas; no hace falta llegar más lejos."
+      ],
+      "modes": [
+        "solo",
+        "classes"
+      ],
+      "safetyCopy": "No fuerces articulaciones ni sostengas posturas dolorosas."
+    },
+    {
+      "id": "swimming",
+      "name": "Natación",
+      "summary": "Prepararte en seco o nadar con seguridad.",
+      "heroAsset": "/assets/swimming.svg",
+      "heroAlt": "Pileta con carriles y antiparras",
+      "environment": "Preparación en seco o pileta habilitada",
+      "facilities": "Zona seca antideslizante; para agua, pileta supervisada con guardavidas.",
+      "tips": [
+        "El perfil no dice si sabés nadar.",
+        "Para aprender, buscá una persona instructora calificada."
+      ],
+      "modes": [
+        "solo",
+        "classes"
+      ],
+      "safetyCopy": "Sin ambas confirmaciones de habilidad y pileta segura, sólo preparación en seco. Nunca nades sin supervisión."
+    }
+  ],
+  "exercises": [
+    {
+      "id": "cal-first-shoulders",
+      "sportId": "calisthenics",
+      "title": "Movilidad de hombros",
+      "quantity": "4 círculos suaves por lado",
+      "technique": "Dejá los hombros bajos y mové dentro de un rango cómodo, sin dolor.",
+      "imageAsset": "/assets/calisthenics.svg",
+      "imageAlt": "Barras de calistenia en un parque",
+      "medium": "dry-land"
+    },
+    {
+      "id": "cal-first-row",
+      "sportId": "calisthenics",
+      "title": "Remo australiano con apoyo",
+      "quantity": "1 serie de 4 repeticiones",
+      "technique": "Usá una barra baja firme, pies cerca del cuerpo y apoyo cómodo. No necesitás hacer dominadas.",
+      "imageAsset": "/assets/calisthenics.svg",
+      "imageAlt": "Barras de calistenia en un parque",
+      "medium": "dry-land"
+    },
+    {
+      "id": "cal-first-squat",
+      "sportId": "calisthenics",
+      "title": "Sentadilla asistida",
+      "quantity": "1 serie de 4 repeticiones",
+      "technique": "Sujetate de un apoyo estable y bajá sólo lo que puedas controlar.",
+      "imageAsset": "/assets/calisthenics.svg",
+      "imageAlt": "Barras de calistenia en un parque",
+      "medium": "dry-land"
+    },
+    {
+      "id": "yoga-first-breath",
+      "sportId": "yoga",
+      "title": "Respiración consciente sentada",
+      "quantity": "5 respiraciones cómodas",
+      "technique": "Apoyá los pies y respirá a tu ritmo, sin retenciones.",
+      "imageAsset": "/assets/yoga.svg",
+      "imageAlt": "Mat de yoga, bloques y una planta",
+      "medium": "dry-land"
+    },
+    {
+      "id": "yoga-first-mobility",
+      "sportId": "yoga",
+      "title": "Gato y vaca adaptado",
+      "quantity": "5 movimientos suaves",
+      "technique": "Usá una silla firme si hace falta y mové sólo dentro de un rango cómodo.",
+      "imageAsset": "/assets/yoga.svg",
+      "imageAlt": "Mat de yoga, bloques y una planta",
+      "medium": "dry-land"
+    },
+    {
+      "id": "yoga-first-rest",
+      "sportId": "yoga",
+      "title": "Descanso con apoyo",
+      "quantity": "4 respiraciones cómodas",
+      "technique": "Elegí una posición sin dolor, con almohadón o respaldo. No fuerces la flexión.",
+      "imageAsset": "/assets/yoga.svg",
+      "imageAlt": "Mat de yoga, bloques y una planta",
+      "medium": "dry-land"
+    },
+    {
+      "id": "swim-dry-first-shoulders",
+      "sportId": "swimming",
+      "title": "Movilidad de hombros en seco",
+      "quantity": "5 círculos por lado",
+      "technique": "Lejos del borde, mové brazos y hombros sin dolor.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "dry-land"
+    },
+    {
+      "id": "swim-dry-first-breath",
+      "sportId": "swimming",
+      "title": "Respiración en seco",
+      "quantity": "5 respiraciones cómodas",
+      "technique": "De pie con apoyo, soltá el aire sin retenciones. No sumerjas la cara.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "dry-land"
+    },
+    {
+      "id": "swim-dry-first-coordination",
+      "sportId": "swimming",
+      "title": "Coordinación de brazos en seco",
+      "quantity": "3 alternancias lentas",
+      "technique": "Con pies quietos y apoyo estable, coordiná los brazos sin entrar al agua. Descansá al cerrar.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "dry-land"
+    },
+    {
+      "id": "swim-water-first-warmup",
+      "sportId": "swimming",
+      "title": "Desplazamiento cómodo en el agua",
+      "quantity": "1 tramo corto de hasta 10 m",
+      "technique": "Sólo si ya nadás con autonomía, con permiso del lugar y guardavidas. Descansá al llegar.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "water"
+    },
+    {
+      "id": "swim-water-first-technique",
+      "sportId": "swimming",
+      "title": "Nado cómodo con atención a la técnica",
+      "quantity": "1 tramo de hasta 15 m",
+      "technique": "No busques velocidad. Elegí un estilo conocido y descansá entre tramos; respetá las reglas de la pileta.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "water"
+    },
+    {
+      "id": "swim-water-first-rest",
+      "sportId": "swimming",
+      "title": "Pausa de recuperación segura",
+      "quantity": "1 pausa completa en zona permitida",
+      "technique": "Salí o apoyate sólo donde esté permitido. Terminá antes si perdés comodidad; nunca sigas con dolor.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "water"
+    },
+    {
+      "id": "cal-returning-shoulders",
+      "sportId": "calisthenics",
+      "title": "Movilidad de hombros suave",
+      "quantity": "3 círculos suaves por lado",
+      "technique": "Buscá comodidad y hacé pausas cuando lo necesites.",
+      "imageAsset": "/assets/calisthenics.svg",
+      "imageAlt": "Barras de calistenia en un parque",
+      "medium": "dry-land"
+    },
+    {
+      "id": "cal-returning-row",
+      "sportId": "calisthenics",
+      "title": "Remo australiano muy asistido",
+      "quantity": "1 serie de 3 repeticiones",
+      "technique": "Acercá los pies para descargar esfuerzo y usá un recorrido corto. No requiere dominadas.",
+      "imageAsset": "/assets/calisthenics.svg",
+      "imageAlt": "Barras de calistenia en un parque",
+      "medium": "dry-land"
+    },
+    {
+      "id": "cal-returning-squat",
+      "sportId": "calisthenics",
+      "title": "Sentadilla asistida corta",
+      "quantity": "1 serie de 3 repeticiones",
+      "technique": "Usá apoyo firme, menos profundidad y descansá entre movimientos.",
+      "imageAsset": "/assets/calisthenics.svg",
+      "imageAlt": "Barras de calistenia en un parque",
+      "medium": "dry-land"
+    },
+    {
+      "id": "yoga-returning-breath",
+      "sportId": "yoga",
+      "title": "Respiración consciente sentada",
+      "quantity": "3 respiraciones cómodas",
+      "technique": "Apoyá los pies y respirá a tu ritmo, sin retenciones.",
+      "imageAsset": "/assets/yoga.svg",
+      "imageAlt": "Mat de yoga, bloques y una planta",
+      "medium": "dry-land"
+    },
+    {
+      "id": "yoga-returning-mobility",
+      "sportId": "yoga",
+      "title": "Movilidad de columna sentada",
+      "quantity": "3 movimientos suaves",
+      "technique": "Usá una silla firme si hace falta y mové sólo dentro de un rango cómodo.",
+      "imageAsset": "/assets/yoga.svg",
+      "imageAlt": "Mat de yoga, bloques y una planta",
+      "medium": "dry-land"
+    },
+    {
+      "id": "yoga-returning-rest",
+      "sportId": "yoga",
+      "title": "Descanso con apoyo",
+      "quantity": "2 respiraciones cómodas",
+      "technique": "Elegí una posición sin dolor, con almohadón o respaldo. No fuerces la flexión.",
+      "imageAsset": "/assets/yoga.svg",
+      "imageAlt": "Mat de yoga, bloques y una planta",
+      "medium": "dry-land"
+    },
+    {
+      "id": "swim-dry-returning-shoulders",
+      "sportId": "swimming",
+      "title": "Movilidad de hombros en seco",
+      "quantity": "3 círculos por lado",
+      "technique": "Lejos del borde, mové brazos y hombros sin dolor.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "dry-land"
+    },
+    {
+      "id": "swim-dry-returning-breath",
+      "sportId": "swimming",
+      "title": "Respiración en seco",
+      "quantity": "3 respiraciones cómodas",
+      "technique": "De pie con apoyo, soltá el aire sin retenciones. No sumerjas la cara.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "dry-land"
+    },
+    {
+      "id": "swim-dry-returning-coordination",
+      "sportId": "swimming",
+      "title": "Coordinación de brazos en seco",
+      "quantity": "3 alternancias lentas",
+      "technique": "Con pies quietos y apoyo estable, coordiná los brazos sin entrar al agua. Descansá al cerrar.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "dry-land"
+    },
+    {
+      "id": "swim-water-returning-warmup",
+      "sportId": "swimming",
+      "title": "Desplazamiento cómodo en el agua",
+      "quantity": "1 tramo corto de hasta 10 m",
+      "technique": "Sólo si ya nadás con autonomía, con permiso del lugar y guardavidas. Descansá al llegar.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "water"
+    },
+    {
+      "id": "swim-water-returning-technique",
+      "sportId": "swimming",
+      "title": "Nado cómodo con atención a la técnica",
+      "quantity": "1 tramo de hasta 10 m",
+      "technique": "No busques velocidad. Elegí un estilo conocido y descansá entre tramos; respetá las reglas de la pileta.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "water"
+    },
+    {
+      "id": "swim-water-returning-rest",
+      "sportId": "swimming",
+      "title": "Pausa de recuperación segura",
+      "quantity": "1 pausa completa en zona permitida",
+      "technique": "Salí o apoyate sólo donde esté permitido. Terminá antes si perdés comodidad; nunca sigas con dolor.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "water"
+    },
+    {
+      "id": "cal-regular-shoulders",
+      "sportId": "calisthenics",
+      "title": "Control escapular con apoyo",
+      "quantity": "1 serie de 6 repeticiones",
+      "technique": "Mové las escápulas sin encoger el cuello, con los pies apoyados.",
+      "imageAsset": "/assets/calisthenics.svg",
+      "imageAlt": "Barras de calistenia en un parque",
+      "medium": "dry-land"
+    },
+    {
+      "id": "cal-regular-row",
+      "sportId": "calisthenics",
+      "title": "Remo australiano controlado",
+      "quantity": "2 series de 5 repeticiones",
+      "technique": "Elegí una inclinación que permita bajar lento y mantener el tronco estable. Descansá entre series.",
+      "imageAsset": "/assets/calisthenics.svg",
+      "imageAlt": "Barras de calistenia en un parque",
+      "medium": "dry-land"
+    },
+    {
+      "id": "cal-regular-side",
+      "sportId": "calisthenics",
+      "title": "Plancha lateral adaptada",
+      "quantity": "2 apoyos de 10 segundos por lado",
+      "technique": "Apoyá rodillas si hace falta; priorizá alineación y cerrá con recuperación.",
+      "imageAsset": "/assets/calisthenics.svg",
+      "imageAlt": "Barras de calistenia en un parque",
+      "medium": "dry-land"
+    },
+    {
+      "id": "yoga-regular-standing",
+      "sportId": "yoga",
+      "title": "Secuencia de pie controlada",
+      "quantity": "3 transiciones lentas",
+      "technique": "Acortá el paso si lo necesitás y coordiná el movimiento con la respiración.",
+      "imageAsset": "/assets/yoga.svg",
+      "imageAlt": "Mat de yoga, bloques y una planta",
+      "medium": "dry-land"
+    },
+    {
+      "id": "yoga-regular-balance",
+      "sportId": "yoga",
+      "title": "Equilibrio con apoyo",
+      "quantity": "2 apoyos de 10 segundos por lado",
+      "technique": "Tené una pared cerca, sostené la mirada y evitá bloquear las rodillas.",
+      "imageAsset": "/assets/yoga.svg",
+      "imageAlt": "Mat de yoga, bloques y una planta",
+      "medium": "dry-land"
+    },
+    {
+      "id": "yoga-regular-close",
+      "sportId": "yoga",
+      "title": "Respiración y recuperación",
+      "quantity": "4 respiraciones cómodas",
+      "technique": "Volvé a una postura estable y soltá el esfuerzo sin retener el aire.",
+      "imageAsset": "/assets/yoga.svg",
+      "imageAlt": "Mat de yoga, bloques y una planta",
+      "medium": "dry-land"
+    },
+    {
+      "id": "swim-dry-regular-shoulders",
+      "sportId": "swimming",
+      "title": "Movilidad de hombros en seco",
+      "quantity": "5 círculos por lado",
+      "technique": "Lejos del borde, mové brazos y hombros sin dolor.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "dry-land"
+    },
+    {
+      "id": "swim-dry-regular-breath",
+      "sportId": "swimming",
+      "title": "Respiración en seco",
+      "quantity": "5 respiraciones cómodas",
+      "technique": "De pie con apoyo, soltá el aire sin retenciones. No sumerjas la cara.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "dry-land"
+    },
+    {
+      "id": "swim-dry-regular-coordination",
+      "sportId": "swimming",
+      "title": "Coordinación de brazos en seco",
+      "quantity": "6 alternancias lentas",
+      "technique": "Con pies quietos y apoyo estable, coordiná los brazos sin entrar al agua. Descansá al cerrar.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "dry-land"
+    },
+    {
+      "id": "swim-water-regular-warmup",
+      "sportId": "swimming",
+      "title": "Desplazamiento cómodo en el agua",
+      "quantity": "1 tramo corto de hasta 10 m",
+      "technique": "Sólo si ya nadás con autonomía, con permiso del lugar y guardavidas. Descansá al llegar.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "water"
+    },
+    {
+      "id": "swim-water-regular-technique",
+      "sportId": "swimming",
+      "title": "Nado cómodo con atención a la técnica",
+      "quantity": "2 tramos de hasta 15 m",
+      "technique": "No busques velocidad. Elegí un estilo conocido y descansá entre tramos; respetá las reglas de la pileta.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "water"
+    },
+    {
+      "id": "swim-water-regular-rest",
+      "sportId": "swimming",
+      "title": "Pausa de recuperación segura",
+      "quantity": "1 pausa completa en zona permitida",
+      "technique": "Salí o apoyate sólo donde esté permitido. Terminá antes si perdés comodidad; nunca sigas con dolor.",
+      "imageAsset": "/assets/swimming.svg",
+      "imageAlt": "Pileta con carriles y antiparras",
+      "medium": "water"
+    }
+  ],
+  "plans": [
+    {
+      "id": "cal-first",
+      "sportId": "calisthenics",
+      "profileId": "first",
+      "level": "Inicio con apoyos",
+      "name": "Calistenia: un primer paso",
+      "description": "Tres movimientos accesibles para conocer los apoyos, sin buscar fatiga.",
+      "duration": "8 minutos",
+      "environment": "Parque con barra baja y apoyo firme",
+      "prerequisites": [
+        "Revisá la estabilidad de la barra y los apoyos.",
+        "Adaptá el esfuerzo con revisión profesional."
+      ],
+      "safetyCopy": "No uses estructuras inestables. Si aparece dolor, frená.",
+      "medium": "dry-land",
+      "steps": [
+        {
+          "id": "shoulders",
+          "exerciseId": "cal-first-shoulders"
+        },
+        {
+          "id": "row",
+          "exerciseId": "cal-first-row"
+        },
+        {
+          "id": "squat",
+          "exerciseId": "cal-first-squat"
+        }
+      ]
+    },
+    {
+      "id": "yoga-first",
+      "sportId": "yoga",
+      "profileId": "first",
+      "level": "Inicio amable",
+      "name": "Yoga: respirar y moverte",
+      "description": "Respiración y movilidad suave; las posturas se adaptan a vos.",
+      "duration": "7 minutos",
+      "environment": "Casa o parque, superficie seca y estable",
+      "prerequisites": [
+        "Mat o silla firme y apoyos cómodos.",
+        "Sin necesidad de flexibilidad previa."
+      ],
+      "safetyCopy": "No fuerces articulaciones ni sostengas posturas dolorosas.",
+      "medium": "dry-land",
+      "steps": [
+        {
+          "id": "breath",
+          "exerciseId": "yoga-first-breath"
+        },
+        {
+          "id": "mobility",
+          "exerciseId": "yoga-first-mobility"
+        },
+        {
+          "id": "rest",
+          "exerciseId": "yoga-first-rest"
+        }
+      ]
+    },
+    {
+      "id": "swim-dry-first",
+      "sportId": "swimming",
+      "profileId": "first",
+      "level": "Preparación suave",
+      "name": "Natación: prepararte fuera del agua",
+      "description": "Preparación fuera del agua; no enseña a nadar ni reemplaza una clase. Una práctica accesible sin pileta.",
+      "duration": "6 minutos",
+      "environment": "Zona seca, estable y alejada del borde",
+      "prerequisites": [
+        "No hace falta saber nadar para esta preparación en seco.",
+        "No entrar al agua durante esta práctica."
+      ],
+      "safetyCopy": "Sin ambas confirmaciones de habilidad y pileta segura, sólo preparación en seco. Nunca nades sin supervisión.",
+      "medium": "dry-land",
+      "steps": [
+        {
+          "id": "shoulders",
+          "exerciseId": "swim-dry-first-shoulders"
+        },
+        {
+          "id": "breath",
+          "exerciseId": "swim-dry-first-breath"
+        },
+        {
+          "id": "coordination",
+          "exerciseId": "swim-dry-first-coordination"
+        }
+      ]
+    },
+    {
+      "id": "swim-water-first",
+      "sportId": "swimming",
+      "profileId": "first",
+      "level": "Nado autónomo, no iniciación",
+      "name": "Natación: una práctica breve si ya nadás",
+      "description": "Variante exclusivamente para quien ya sabe nadar; requiere ambas confirmaciones y supervisión. No es una clase para aprender.",
+      "duration": "7 minutos",
+      "environment": "Pileta habilitada y supervisada con guardavidas",
+      "prerequisites": [
+        "Saber nadar con autonomía.",
+        "Confirmar pileta habilitada, guardavidas y cumplimiento de las reglas del lugar."
+      ],
+      "safetyCopy": "Sin ambas confirmaciones de habilidad y pileta segura, sólo preparación en seco. Nunca nades sin supervisión.",
+      "medium": "water",
+      "steps": [
+        {
+          "id": "warmup",
+          "exerciseId": "swim-water-first-warmup"
+        },
+        {
+          "id": "technique",
+          "exerciseId": "swim-water-first-technique"
+        },
+        {
+          "id": "rest",
+          "exerciseId": "swim-water-first-rest"
+        }
+      ]
+    },
+    {
+      "id": "cal-returning",
+      "sportId": "calisthenics",
+      "profileId": "returning",
+      "level": "Retorno suave con apoyos",
+      "name": "Calistenia: volver sin apuro",
+      "description": "Menos repeticiones y recorrido más corto que la primera propuesta. No hace falta recuperar lo anterior hoy.",
+      "duration": "5 minutos",
+      "environment": "Parque con barra baja y apoyo firme",
+      "prerequisites": [
+        "Revisá la estabilidad de la barra y los apoyos.",
+        "Adaptá el esfuerzo con revisión profesional."
+      ],
+      "safetyCopy": "No uses estructuras inestables. Si aparece dolor, frená.",
+      "medium": "dry-land",
+      "steps": [
+        {
+          "id": "shoulders",
+          "exerciseId": "cal-returning-shoulders"
+        },
+        {
+          "id": "row",
+          "exerciseId": "cal-returning-row"
+        },
+        {
+          "id": "squat",
+          "exerciseId": "cal-returning-squat"
+        }
+      ]
+    },
+    {
+      "id": "yoga-returning",
+      "sportId": "yoga",
+      "profileId": "returning",
+      "level": "Retorno suave",
+      "name": "Yoga: volver con suavidad",
+      "description": "Menos movimientos, sentado y con pausas libres para retomar.",
+      "duration": "4 minutos",
+      "environment": "Casa o parque, superficie seca y estable",
+      "prerequisites": [
+        "Mat o silla firme y apoyos cómodos.",
+        "Sin necesidad de flexibilidad previa."
+      ],
+      "safetyCopy": "No fuerces articulaciones ni sostengas posturas dolorosas.",
+      "medium": "dry-land",
+      "steps": [
+        {
+          "id": "breath",
+          "exerciseId": "yoga-returning-breath"
+        },
+        {
+          "id": "mobility",
+          "exerciseId": "yoga-returning-mobility"
+        },
+        {
+          "id": "rest",
+          "exerciseId": "yoga-returning-rest"
+        }
+      ]
+    },
+    {
+      "id": "swim-dry-returning",
+      "sportId": "swimming",
+      "profileId": "returning",
+      "level": "Preparación suave",
+      "name": "Natación: retomar en seco",
+      "description": "Preparación fuera del agua; no enseña a nadar ni reemplaza una clase. Menos movimientos para volver sin apuro.",
+      "duration": "4 minutos",
+      "environment": "Zona seca, estable y alejada del borde",
+      "prerequisites": [
+        "No hace falta saber nadar para esta preparación en seco.",
+        "No entrar al agua durante esta práctica."
+      ],
+      "safetyCopy": "Sin ambas confirmaciones de habilidad y pileta segura, sólo preparación en seco. Nunca nades sin supervisión.",
+      "medium": "dry-land",
+      "steps": [
+        {
+          "id": "shoulders",
+          "exerciseId": "swim-dry-returning-shoulders"
+        },
+        {
+          "id": "breath",
+          "exerciseId": "swim-dry-returning-breath"
+        },
+        {
+          "id": "coordination",
+          "exerciseId": "swim-dry-returning-coordination"
+        }
+      ]
+    },
+    {
+      "id": "swim-water-returning",
+      "sportId": "swimming",
+      "profileId": "returning",
+      "level": "Nado autónomo, no iniciación",
+      "name": "Natación: volver al agua con pausa",
+      "description": "Variante exclusivamente para quien ya sabe nadar; requiere ambas confirmaciones y supervisión. No es una clase para aprender.",
+      "duration": "5 minutos",
+      "environment": "Pileta habilitada y supervisada con guardavidas",
+      "prerequisites": [
+        "Saber nadar con autonomía.",
+        "Confirmar pileta habilitada, guardavidas y cumplimiento de las reglas del lugar."
+      ],
+      "safetyCopy": "Sin ambas confirmaciones de habilidad y pileta segura, sólo preparación en seco. Nunca nades sin supervisión.",
+      "medium": "water",
+      "steps": [
+        {
+          "id": "warmup",
+          "exerciseId": "swim-water-returning-warmup"
+        },
+        {
+          "id": "technique",
+          "exerciseId": "swim-water-returning-technique"
+        },
+        {
+          "id": "rest",
+          "exerciseId": "swim-water-returning-rest"
+        }
+      ]
+    },
+    {
+      "id": "cal-regular",
+      "sportId": "calisthenics",
+      "profileId": "regular",
+      "level": "Práctica habitual con control",
+      "name": "Calistenia: control y recuperación",
+      "description": "Una progresión moderada de técnica, sin competir ni buscar el límite.",
+      "duration": "12 minutos",
+      "environment": "Parque con barra baja y apoyo firme",
+      "prerequisites": [
+        "Revisá la estabilidad de la barra y los apoyos.",
+        "Adaptá el esfuerzo con revisión profesional."
+      ],
+      "safetyCopy": "No uses estructuras inestables. Si aparece dolor, frená.",
+      "medium": "dry-land",
+      "steps": [
+        {
+          "id": "shoulders",
+          "exerciseId": "cal-regular-shoulders"
+        },
+        {
+          "id": "row",
+          "exerciseId": "cal-regular-row"
+        },
+        {
+          "id": "side",
+          "exerciseId": "cal-regular-side"
+        }
+      ]
+    },
+    {
+      "id": "yoga-regular",
+      "sportId": "yoga",
+      "profileId": "regular",
+      "level": "Práctica habitual adaptada",
+      "name": "Yoga: transiciones y equilibrio",
+      "description": "Explorá control y coordinación con apoyos, y reservá espacio para recuperar.",
+      "duration": "10 minutos",
+      "environment": "Casa o parque, superficie seca y estable",
+      "prerequisites": [
+        "Mat o silla firme y apoyos cómodos.",
+        "Sin necesidad de flexibilidad previa."
+      ],
+      "safetyCopy": "No fuerces articulaciones ni sostengas posturas dolorosas.",
+      "medium": "dry-land",
+      "steps": [
+        {
+          "id": "standing",
+          "exerciseId": "yoga-regular-standing"
+        },
+        {
+          "id": "balance",
+          "exerciseId": "yoga-regular-balance"
+        },
+        {
+          "id": "close",
+          "exerciseId": "yoga-regular-close"
+        }
+      ]
+    },
+    {
+      "id": "swim-dry-regular",
+      "sportId": "swimming",
+      "profileId": "regular",
+      "level": "Coordinación controlada",
+      "name": "Natación: coordinación y recuperación en seco",
+      "description": "Preparación fuera del agua; no enseña a nadar ni reemplaza una clase. Una práctica accesible sin pileta.",
+      "duration": "6 minutos",
+      "environment": "Zona seca, estable y alejada del borde",
+      "prerequisites": [
+        "No hace falta saber nadar para esta preparación en seco.",
+        "No entrar al agua durante esta práctica."
+      ],
+      "safetyCopy": "Sin ambas confirmaciones de habilidad y pileta segura, sólo preparación en seco. Nunca nades sin supervisión.",
+      "medium": "dry-land",
+      "steps": [
+        {
+          "id": "shoulders",
+          "exerciseId": "swim-dry-regular-shoulders"
+        },
+        {
+          "id": "breath",
+          "exerciseId": "swim-dry-regular-breath"
+        },
+        {
+          "id": "coordination",
+          "exerciseId": "swim-dry-regular-coordination"
+        }
+      ]
+    },
+    {
+      "id": "swim-water-regular",
+      "sportId": "swimming",
+      "profileId": "regular",
+      "level": "Nado autónomo, no iniciación",
+      "name": "Natación: técnica con descanso",
+      "description": "Variante exclusivamente para quien ya sabe nadar; requiere ambas confirmaciones y supervisión. No es una clase para aprender.",
+      "duration": "10 minutos",
+      "environment": "Pileta habilitada y supervisada con guardavidas",
+      "prerequisites": [
+        "Saber nadar con autonomía.",
+        "Confirmar pileta habilitada, guardavidas y cumplimiento de las reglas del lugar."
+      ],
+      "safetyCopy": "Sin ambas confirmaciones de habilidad y pileta segura, sólo preparación en seco. Nunca nades sin supervisión.",
+      "medium": "water",
+      "steps": [
+        {
+          "id": "warmup",
+          "exerciseId": "swim-water-regular-warmup"
+        },
+        {
+          "id": "technique",
+          "exerciseId": "swim-water-regular-technique"
+        },
+        {
+          "id": "rest",
+          "exerciseId": "swim-water-regular-rest"
+        }
+      ]
+    }
+  ],
+  "classes": [
+    {
+      "id": "cal-free",
+      "sportId": "calisthenics",
+      "title": "Calistenia con apoyos en grupo",
+      "schedule": "Martes 18:30",
+      "venue": "Parque Horizonte ficticio",
+      "locality": "Caballito · referencia ficticia",
+      "level": "Inicio con apoyos",
+      "requirements": [
+        "Conversar con una persona profesional antes de entrenar.",
+        "Respetar las reglas del lugar y adaptar la práctica.",
+        "Ropa cómoda y apoyos adecuados."
+      ],
+      "description": "Exploración de barras bajas y sentadillas asistidas. No se requieren dominadas. Clase y disponibilidad ficticias: no es una oferta real.",
+      "receiver": "A confirmar",
+      "contactCopy": "Contacto ficticio de demostración. No se envían mensajes ni solicitudes.",
+      "price": {
+        "kind": "free",
+        "amount": 0,
+        "currency": "ARS"
+      },
+      "fictional": true
+    },
+    {
+      "id": "cal-paid",
+      "sportId": "calisthenics",
+      "title": "Calistenia: técnica en grupo reducido",
+      "schedule": "Sábados 10:00",
+      "venue": "Patio Movimiento ficticio",
+      "locality": "Villa Crespo · referencia ficticia",
+      "level": "Control adaptado",
+      "requirements": [
+        "Conversar con una persona profesional antes de entrenar.",
+        "Respetar las reglas del lugar y adaptar la práctica.",
+        "Ropa cómoda y apoyos adecuados."
+      ],
+      "description": "Revisión ilustrativa de remos y control escapular con pausas. Clase y disponibilidad ficticias: no es una oferta real.",
+      "receiver": "A confirmar",
+      "contactCopy": "Contacto ficticio de demostración. No se envían mensajes ni solicitudes.",
+      "price": {
+        "kind": "paid",
+        "amount": 4500,
+        "currency": "ARS"
+      },
+      "fictional": true
+    },
+    {
+      "id": "yoga-free",
+      "sportId": "yoga",
+      "title": "Yoga suave al aire libre",
+      "schedule": "Miércoles 09:00",
+      "venue": "Plaza Calma ficticia",
+      "locality": "Almagro · referencia ficticia",
+      "level": "Inicio amable",
+      "requirements": [
+        "Conversar con una persona profesional antes de entrenar.",
+        "Respetar las reglas del lugar y adaptar la práctica.",
+        "Ropa cómoda y apoyos adecuados."
+      ],
+      "description": "Respiración y movilidad con alternativas sentadas, sin exigir flexibilidad. Clase y disponibilidad ficticias: no es una oferta real.",
+      "receiver": "A confirmar",
+      "contactCopy": "Contacto ficticio de demostración. No se envían mensajes ni solicitudes.",
+      "price": {
+        "kind": "free",
+        "amount": 0,
+        "currency": "ARS"
+      },
+      "fictional": true
+    },
+    {
+      "id": "yoga-paid",
+      "sportId": "yoga",
+      "title": "Yoga: equilibrio con acompañamiento",
+      "schedule": "Sábados 11:30",
+      "venue": "Estudio Pausa ficticio",
+      "locality": "Chacarita · referencia ficticia",
+      "level": "Práctica adaptada",
+      "requirements": [
+        "Conversar con una persona profesional antes de entrenar.",
+        "Respetar las reglas del lugar y adaptar la práctica.",
+        "Ropa cómoda y apoyos adecuados."
+      ],
+      "description": "Transiciones lentas y equilibrio con pared, con espacio para recuperar. Clase y disponibilidad ficticias: no es una oferta real.",
+      "receiver": "A confirmar",
+      "contactCopy": "Contacto ficticio de demostración. No se envían mensajes ni solicitudes.",
+      "price": {
+        "kind": "paid",
+        "amount": 5000,
+        "currency": "ARS"
+      },
+      "fictional": true
+    },
+    {
+      "id": "swim-free",
+      "sportId": "swimming",
+      "title": "Natación: conocer el agua con docente",
+      "schedule": "Jueves 17:00",
+      "venue": "Polideportivo Arroyo ficticio",
+      "locality": "Boedo · referencia ficticia",
+      "level": "Aprendizaje con instructor",
+      "requirements": [
+        "Conversar con una persona profesional antes de entrenar.",
+        "Respetar las reglas del lugar y adaptar la práctica.",
+        "Para la clase técnica, saber nadar; para aprender, acompañamiento docente."
+      ],
+      "description": "Ejemplo de acompañamiento para aprender; no habilita una práctica autónoma. Clase y disponibilidad ficticias: no es una oferta real.",
+      "receiver": "A confirmar",
+      "contactCopy": "Contacto ficticio de demostración. No se envían mensajes ni solicitudes.",
+      "price": {
+        "kind": "free",
+        "amount": 0,
+        "currency": "ARS"
+      },
+      "fictional": true
+    },
+    {
+      "id": "swim-paid",
+      "sportId": "swimming",
+      "title": "Natación: técnica para quien ya nada",
+      "schedule": "Domingos 11:00",
+      "venue": "Pileta Encuentro ficticia",
+      "locality": "Saavedra · referencia ficticia",
+      "level": "Nado autónomo",
+      "requirements": [
+        "Conversar con una persona profesional antes de entrenar.",
+        "Respetar las reglas del lugar y adaptar la práctica.",
+        "Para la clase técnica, saber nadar; para aprender, acompañamiento docente."
+      ],
+      "description": "Revisión ilustrativa de coordinación y descansos en pileta supervisada. Clase y disponibilidad ficticias: no es una oferta real.",
+      "receiver": "A confirmar",
+      "contactCopy": "Contacto ficticio de demostración. No se envían mensajes ni solicitudes.",
+      "price": {
+        "kind": "paid",
+        "amount": 6500,
+        "currency": "ARS"
+      },
+      "fictional": true
+    }
+  ],
+  "rules": {
+    "pointsPerCompletion": 10,
+    "challenges": [
+      {
+        "id": "first-session",
+        "title": "Un paso esta semana",
+        "description": "Una práctica posible, sin apuro.",
+        "metric": "sessions",
+        "period": "week",
+        "target": 1
+      },
+      {
+        "id": "monthly-weeks",
+        "title": "Volver durante el mes",
+        "description": "Sumá movimiento en dos semanas distintas, con descanso.",
+        "metric": "activeWeeks",
+        "period": "month",
+        "target": 2
+      }
+    ],
+    "badges": [
+      {
+        "id": "first-step",
+        "title": "Primer paso",
+        "description": "Una práctica completada en tu recorrido.",
+        "metric": "sessions",
+        "threshold": 1
+      },
+      {
+        "id": "steady-path",
+        "title": "Un camino propio",
+        "description": "Movimiento en tres semanas diferentes, sin exigir una racha.",
+        "metric": "activeWeeks",
+        "threshold": 3
+      }
+    ],
+    "benefits": [
+      {
+        "id": "possible-benefit",
+        "title": "Una pausa para cuidarte",
+        "description": "Ejemplo de un posible beneficio de bienestar, sin oferta real.",
+        "disclaimer": "Ilustrativo, no canjeable y sin convenio vigente.",
+        "pointsThreshold": 30,
+        "redeemable": false
+      }
+    ]
+  },
+  "scenarios": {
+    "referenceDate": "2026-10-14",
+    "defaultProfileId": "first",
+    "profiles": [
+      {
+        "id": "scenario-first",
+        "profileId": "first",
+        "history": []
+      },
+      {
+        "id": "scenario-returning",
+        "profileId": "returning",
+        "history": [
+          {
+            "id": "returning-seed-1",
+            "sportId": "calisthenics",
+            "planId": "cal-returning",
+            "activityDate": "2026-08-17"
+          },
+          {
+            "id": "returning-seed-2",
+            "sportId": "yoga",
+            "planId": "yoga-returning",
+            "activityDate": "2026-08-24"
+          }
+        ]
+      },
+      {
+        "id": "scenario-regular",
+        "profileId": "regular",
+        "history": [
+          {
+            "id": "regular-seed-1",
+            "sportId": "calisthenics",
+            "planId": "cal-regular",
+            "activityDate": "2026-09-23"
+          },
+          {
+            "id": "regular-seed-2",
+            "sportId": "yoga",
+            "planId": "yoga-regular",
+            "activityDate": "2026-09-30"
+          },
+          {
+            "id": "regular-seed-3",
+            "sportId": "calisthenics",
+            "planId": "cal-regular",
+            "activityDate": "2026-10-05"
+          },
+          {
+            "id": "regular-seed-4",
+            "sportId": "yoga",
+            "planId": "yoga-regular",
+            "activityDate": "2026-10-12"
+          }
+        ]
+      }
+    ]
+  }
+}

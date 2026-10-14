@@ -1,3 +1,40 @@
+import { useEffect, useState } from 'react';
+import type { Content } from './content/types';
+import { loadContent } from './content/load';
+import { AppProvider, useApp } from './state/context';
+import AppShell from './components/AppShell';
+import Home from './screens/Home';
+import SportChoice from './screens/SportChoice';
+import Plan from './screens/Plan';
+import ClassCatalog from './screens/ClassCatalog';
+
+type Bootstrap = { status: 'loading' } | { status: 'ready'; content: Content } | { status: 'error'; hint: string };
+
+function Screens() {
+  const { route } = useApp();
+  return <AppShell>{route.screen === 'home' ? <Home /> : route.screen === 'choice' ? <SportChoice /> : route.screen === 'plan' ? <Plan /> : <ClassCatalog />}</AppShell>;
+}
+
 export default function App() {
-  return <main className="app"><header className="brand">BA en movimiento</header><section className="hero"><h1>Un primer paso posible.</h1><p>Elegí moverte a tu ritmo.</p></section><p>Demostración conceptual. No es un servicio oficial.</p></main>;
+  const [state, setState] = useState<Bootstrap>({ status: 'loading' });
+  const [retry, setRetry] = useState(0);
+  useEffect(() => {
+    const controller = new AbortController();
+    setState({ status: 'loading' });
+    loadContent(controller.signal).then(content => {
+      if (!controller.signal.aborted) setState({ status: 'ready', content });
+    }).catch(error => {
+      if (!controller.signal.aborted) setState({ status: 'error', hint: error.message });
+    });
+    return () => controller.abort();
+  }, [retry]);
+  if (state.status === 'ready') return <AppProvider content={state.content}><Screens /></AppProvider>;
+  // The bootstrap shell must work when the public file itself cannot be read.
+  return <main className="app bootstrap" aria-busy={state.status === 'loading'}>
+    {state.status === 'loading' ? <p role="status">Estamos cargando el contenido…</p> : <section role="alert">
+      <h1>No pudimos cargar el contenido.</h1>
+      <p>Revisá la configuración e intentá de nuevo.</p><p>{state.hint}</p>
+      <button onClick={() => setRetry(value => value + 1)}>Intentar de nuevo</button>
+    </section>}
+  </main>;
 }

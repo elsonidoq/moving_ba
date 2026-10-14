@@ -1,0 +1,36 @@
+import type { Content, ProfileId, SportId } from '../content/types';
+
+export type Route =
+  | { screen: 'home'; profileId: ProfileId }
+  | { screen: 'choice'; profileId: ProfileId; sportId: SportId }
+  | { screen: 'plan'; profileId: ProfileId; sportId: SportId; mode: 'solo'; planId: string }
+  | { screen: 'catalog'; profileId: ProfileId; sportId: SportId; mode: 'classes' };
+
+export function safePlan(content: Content, profileId: ProfileId, sportId: SportId) {
+  const profile = content.profiles.find(p => p.id === profileId)!;
+  return content.plans.find(p => p.id === profile.defaultPlanId && p.sportId === sportId)
+    ?? content.plans.find(p => p.profileId === profileId && p.sportId === sportId && p.medium === 'dry-land')!;
+}
+
+/** URL identity is navigation only, never session or swimming eligibility. */
+export function guardHash(hash: string, content: Content): Route {
+  const parts = hash.replace(/^#\/?/, '').split('/');
+  const profileId = content.profiles.find(p => p.id === parts[0])?.id ?? content.scenarios.defaultProfileId;
+  if (!content.profiles.some(p => p.id === parts[0])) return { screen: 'home', profileId };
+  const sportId = content.sports.find(s => s.id === parts[1])?.id;
+  if (!sportId) return { screen: 'home', profileId };
+  if (parts[2] === 'classes') return { screen: 'catalog', profileId, sportId, mode: 'classes' };
+  if (parts[2] === 'solo' && parts.length === 4) {
+    const plan = content.plans.find(p => p.id === parts[3] && p.profileId === profileId && p.sportId === sportId && p.medium === 'dry-land');
+    if (plan) return { screen: 'plan', profileId, sportId, mode: 'solo', planId: plan.id };
+  }
+  return { screen: 'choice', profileId, sportId };
+}
+
+export function routeHash(route: Route): string {
+  const base = `#/${route.profileId}`;
+  if (route.screen === 'home') return `${base}/home`;
+  const sport = `${base}/${route.sportId}`;
+  if (route.screen === 'plan') return `${sport}/solo/${route.planId}`;
+  return `${sport}/${route.screen === 'catalog' ? 'classes' : 'choice'}`;
+}
