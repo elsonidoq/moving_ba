@@ -5,8 +5,8 @@
 - [Content configuration](CONTENT_CONFIGURATION.md): implemented JSON fields, local edits, validation, snapshots and reset.
 
 - [Conceptual interactive mockup](mockup_ba_en_movimiento_v2.html): Spanish-language demonstration of activity selection, individual practice or classes, continuity, and illustrative rewards. Not an official service; class data and transactions are simulated.
-- [Architecture](architecture.md): verified conceptual-demo baseline and clearly labeled planned runtime content/state/build/test decisions, dependency versions and research provenance.
-- [Deployment](deployment.md): operational verification status; no invented deployment procedures.
+- [Architecture](architecture.md): current implemented client/state/content/serving/test boundaries, exact dependencies, and preserved historical research.
+- [Deployment](deployment.md): verified local build/start/PORT contract, Railway-capable boundary and unknown live deployment status.
 - [Documentation routing](documentation-routing.md): material change categories and authoritative owners.
 - [Open issues](open_issues.md): canonical register for verified unresolved work.
 
@@ -18,7 +18,7 @@
 
 ## Child documentation directories
 
-None at initialization. Each future direct child documentation directory requires
+None currently. Each future direct child documentation directory requires
 its own `README.md` and a parent-index pointer.
 
 ## Initialization approval

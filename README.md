@@ -14,6 +14,10 @@ npm run build
 PORT=4173 npm start
 ```
 
+Run `dev` interactively and stop it with Ctrl-C when finished; run the remaining
+checks/build/start commands separately. Stop the built server before browser tests,
+which own port 4173.
+
 `start` serves only built `dist` on `0.0.0.0`. PORT defaults to 3000 only when unset;
 supplied PORT must be a decimal integer 1–65535. Occupied ports fail, never switch.
 Missing files return 404; no directory listings or SPA catch-all.
@@ -77,12 +81,15 @@ sessions, 0/20/40 points, 0/2/4 active weeks and weekly progress 0/1, 0/1, 1/2.
 Seeds display `Datos de demostración`; explicit app completions display
 `Práctica simulada por vos`. Historical Spanish snapshots survive content renames or
 retired plans. Rule edits recompute views after reload; fixture edits take effect only
-on deliberate reset, not every reload. Content-edit/failure browser acceptance and
-final presenter/visual rehearsal remain later tasks.
+on deliberate reset, not every reload. Real served-file edits/failure recovery and
+final presenter/visual checks are covered by the focused checks below.
 
 ## Checks
 
 ```sh
+# Fresh setup only: install matching Chromium (no automatic OS installation).
+npx playwright install chromium
+npm run build
 npm run test:core
 npm run test:e2e
 ```
@@ -100,16 +107,21 @@ npm run test:e2e -- --grep 'configured navigation'
 ```
 
 The latter covers all 18 profile/sport/branch selections, guarded hash/history/reload,
-HTTP public-file identity and early 360px/1280px visual/keyboard checks. Tests are added
-with their delivered functionality; these navigation checks alone do not prove
-participation/persistence/rewards. Batch B separately validates actual transition,
-storage and date/rule helpers and the composed production-browser boundaries.
+HTTP public-file identity and early 360px/1280px visual/keyboard checks. These
+navigation checks alone do not prove participation/persistence/rewards.
+The transition, storage/date helpers and composed browser tests below cover those
+boundaries. Tests run serially within the browser file: content mutation tests
+own the real served dist JSON and restore it even on failure. Do not run another
+preview/browser process against that fixture concurrently.
 Dependency audit reported three high-severity
 warnings, not assessed or fixed; exact approved pins are retained.
 
 ```sh
 npm run test:core -- --grep 'session integrity|swimming start guard|storage envelope|class identity|history rules dates'
 npm run test:e2e -- --grep 'solo durable completion|swimming safety|yoga interest|profile reset|calisthenics journey rewards'
+npm run test:e2e -- --grep 'content edits'
+npm run test:e2e -- --grep 'content failures'
+npm run test:e2e -- --grep 'inspection guards'
 ```
 
 The rewards/profile tests freeze the browser clock to the fixture reference and
@@ -149,3 +161,53 @@ class or complete a skipped session. All routes remain subject to identity/safet
 
 [Content editing guide](docs/CONTENT_CONFIGURATION.md) documents independent JSON
 editing, real-file failure/retry checks, fixtures and the rebuild/redeploy boundary.
+
+## Delivery status and provenance
+
+Implementation is local-only; hosting service/domain/runtime credentials and live
+Railway deployment status are **unknown / not performed**. Local `build` + `start`
+are Railway-capable, not evidence that anything is deployed. See the canonical
+[deployment owner](docs/deployment.md) before any separately authorized operation.
+No backend, account, payment, map, notification, CMS or real offer is present.
+Browser storage is demo convenience, not authenticated or physically verified data;
+concurrent multi-tab transactions and universal device/accessibility support are
+not guaranteed. Training content needs qualified review before real-world use.
+Three high-severity npm audit warnings remain unassessed; no audit fix or upgrade.
+
+The approved Standard specification is retained at `c31871b`; corrected plan/tasks
+approval at `d8e14bc` renewed implementation and a bounded model-readiness exception.
+The feature [approval/index](specs/001-ba-movement-demo/README.md) owns the historical
+answers and artifact hashes; historical Draft/PENDING/UNRUN labels describe their
+producing stage, not current execution status. [Tasks](specs/001-ba-movement-demo/tasks.md)
+retains actual task-local checks. The installed `/skill:planner` is the workflow
+owner. Retained artifacts record native
+SpecKit specify/plan/tasks/analyze provenance, including `setup-plan.sh --json` and
+`setup-tasks.sh --json`; invocation evidence belongs to those artifacts/parent session,
+not a new downstream planning run. Coding batches A T001–T002, B T003–T005 and
+C T006–T008 used `openai-codex/gpt-6.1-sol` configured `medium`; provider-internal effort
+is unknown under the explicit readiness exception. Independent final read-only
+`openai-codex/gpt-6-astra:medium` review is a separate parent-owned next step, not a
+coding or deployment claim.
+
+T007's actual agent-led interactive 360×900 production-browser rehearsal took
+177.841 seconds (~2m58) including final reset observation; selected Calistenia-to-
+completion 31.793 seconds. No real exercise, fake clock or pacing waits. This is not
+a human-user usability study. Both 360px and 1280px six-concept/both-branch screenshots
+were actually viewed against v2 art; focused keyboard/focus/44px targets/reduced-motion,
+Spanish loading/error/storage/empty/interest/success checks passed. No universal
+accessibility certification is implied. Bounded runtime evidence is returned with
+task checkpoints, not shipped as an application feature.
+
+Final local integration (T008, built T007 source `fcecd668`): actual `npm ci`,
+`npm run typecheck`, `npm run build`, `npm run test:core` (**68 passed**) and
+`npm run test:e2e` (**26 passed**) completed with Node 22.23.3/npm 10.9.9,
+Playwright 1.56.1/Chromium 141.0.7390.37. The full browser run includes exact-ID
+Calistenia rewards/refresh, both Yoga interests without rewards, swimming affirmations,
+all-profile persistence/reset/sentinel/recovery and actual served-file edits/three
+failure variants/restoration. Dev and nondefault production commands were followed;
+HTTP root/JSON/assets200, absent paths404, JSON no-store and hash reload passed.
+Focused visual/timed evidence remains T007's actual observations (only stat contrast
+and storage-action wording were later refined/re-viewed; no timing/path change).
+All required local items are verified; final independent review/owner acceptance is
+still separate. Live deployment, multi-browser/human-user study and security-audit
+remediation were not performed.

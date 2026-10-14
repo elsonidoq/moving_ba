@@ -51,8 +51,8 @@ copy cannot grant eligibility. Assets are only `/assets/calisthenics.svg`,
 5. For a built preview, repeat `npm run build` **after each repository edit** before
    reloading: the server reads `dist`, not `public`. Dev serves public directly.
    No React edits are needed. `npm run test:core -- --grep 'content validation'`
-   checks repository content; `npm run build` alone only typechecks/bundles, it does
-   not validate JSON. A browser reload validates the file actually being served.
+   checks repository content (six classes is a minimum, not a cap).
+   `npm run build` alone only typechecks/bundles; it does not validate JSON. A browser reload validates the file actually being served.
 6. Restore your example edits. Use **Restablecer demostración**, accept its confirmation,
    and inspect each profile under **Mi camino**. This replaces only
    `ba-en-movimiento:demo:v1` on the current browser origin; other origins and unrelated

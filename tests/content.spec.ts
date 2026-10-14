@@ -20,7 +20,7 @@ test.describe('content validation', () => {
       console.log(`${profile.id}/water -> ${water!.id}`);
     }
     expect(content.scenarios.profiles.find(s => s.profileId === 'first')?.history).toEqual([]);
-    expect(content.classes).toHaveLength(6);
+    expect(content.classes.length).toBeGreaterThanOrEqual(6);
   });
   const cases: [string, (c: Content) => void, string][] = [
     ['missing branding field', c => { delete (c.branding as Partial<Content['branding']>).name; }, 'branding.name'],
