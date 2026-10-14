@@ -8,6 +8,11 @@
 - [Documentation routing](documentation-routing.md): material change categories and authoritative owners.
 - [Open issues](open_issues.md): canonical register for verified unresolved work.
 
+## Product policy outside this directory
+
+- [Project constitution](../.specify/memory/constitution.md): pragmatic demo delivery, proportionate verification/documentation, and Spanish app/English engineering policy.
+- [Policy artifacts index](../.specify/README.md): directory map for the constitution location; not a complete SpecKit installation.
+
 ## Child documentation directories
 
 None at initialization. Each future direct child documentation directory requires

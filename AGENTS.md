@@ -1,5 +1,14 @@
 # Project instructions
 
+## Product policy
+
+Read the [project constitution](.specify/memory/constitution.md) before planning or
+execution. Prioritize pragmatic, working demo increments with proportionate testing
+and documentation. User-facing app content is in Spanish; code identifiers,
+comments, developer-facing messages, tests, documentation, and planning artifacts
+are in English (user-facing Spanish strings remain Spanish in code and tests).
+The constitution is local product policy, not implementation authorization.
+
 <!-- coherence-contract:start -->
 ## Coherence suite contract
 
