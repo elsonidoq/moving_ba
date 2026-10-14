@@ -3,7 +3,7 @@
 ## Direct files
 
 - [Conceptual interactive mockup](mockup_ba_en_movimiento_v2.html): Spanish-language demonstration of activity selection, individual practice or classes, continuity, and illustrative rewards. Not an official service; class data and transactions are simulated.
-- [Architecture](architecture.md): verified repository-level structure and limits of the conceptual demo.
+- [Architecture](architecture.md): verified conceptual-demo baseline and clearly labeled planned runtime content/state/build/test decisions, dependency versions and research provenance.
 - [Deployment](deployment.md): operational verification status; no invented deployment procedures.
 - [Documentation routing](documentation-routing.md): material change categories and authoritative owners.
 - [Open issues](open_issues.md): canonical register for verified unresolved work.
