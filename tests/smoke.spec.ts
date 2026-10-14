@@ -169,3 +169,114 @@ for (const width of [360, 1280]) {
     console.log(`${width}px keyboard Enter opened actual choice/plan; solid focus outline; reduced-motion transition=0s; page scrolling exercised`);
   });
 }
+
+const bEvidence = '/tmp/ba-batch-b';
+const demoKey = 'ba-en-movimiento:demo:v1';
+async function envelope(page: import('@playwright/test').Page) {
+  await expect(page.locator('main')).toBeVisible();
+  return page.evaluate(key => JSON.parse(localStorage.getItem(key)!), demoKey);
+}
+async function finish(page: import('@playwright/test').Page) {
+  await page.getByRole('button', { name: content.ui.start, exact: true }).click();
+  const attempt = await page.locator('[data-attempt-id]').getAttribute('data-attempt-id');
+  const planId = (await page.url()).split('/session/')[1].split('/')[0];
+  const plan = content.plans.find(p => p.id === planId)!;
+  for (const step of plan.steps) {
+    await expect(page.locator('[data-current-step-id]')).toHaveAttribute('data-current-step-id',step.id);
+    await expect(page.locator('main')).toContainText(content.exercises.find(e => e.id === step.exerciseId)!.technique);
+    const button = page.getByRole('button', { name: content.ui.completeStep, exact: true });
+    if (step.id === plan.steps.at(-1)!.id) await button.evaluate(element => { (element as HTMLButtonElement).click(); (element as HTMLButtonElement).click(); });
+    else await button.click();
+  }
+  await expect(page.locator('[data-completed-attempt-id]')).toHaveAttribute('data-completed-attempt-id',attempt!);
+  return attempt!;
+}
+test('swimming safety separate affirmations, dry default, abandonment and stale routes', async ({ page }) => {
+  for (const profile of content.profiles) {
+    await page.goto(`/#/${profile.id}/swimming/solo/swim-dry-${profile.id}`);
+    await expect(page.locator('.medium-label')).toHaveText(content.ui.dryLand);
+    const water = page.getByRole('button',{name:content.ui.startWater,exact:true});
+    await expect(water).toBeDisabled();
+    await page.getByRole('checkbox',{name:content.ui.canSwim}).check(); await expect(water).toBeDisabled();
+    await page.getByRole('checkbox',{name:content.ui.canSwim}).uncheck();
+    await page.getByRole('checkbox',{name:content.ui.safePool}).check(); await expect(water).toBeDisabled();
+    await page.getByRole('checkbox',{name:content.ui.canSwim}).check(); await expect(water).toBeEnabled();
+    await water.click();
+    await expect(page.locator('[data-current-step-id]')).toHaveAttribute('data-current-step-id',content.plans.find(p=>p.id===`swim-water-${profile.id}`)!.steps[0].id);
+    await expect(page.locator('.medium-label')).toHaveText(content.ui.water);
+    const stale = page.url();
+    await page.getByRole('link',{name:content.ui.home,exact:true}).click();
+    await page.evaluate(hash => { location.hash=hash; },stale.split('#')[1]);
+    await expect(page.locator('[data-attempt-id]')).toHaveCount(0);
+    await page.goto(`/#/${profile.id}/swimming/solo/swim-dry-${profile.id}`);
+    await expect(page.getByRole('checkbox',{name:content.ui.canSwim})).not.toBeChecked();
+    await expect(page.getByRole('checkbox',{name:content.ui.safePool})).not.toBeChecked();
+    await page.getByRole('button',{name:content.ui.start,exact:true}).click();
+    await expect(page.locator('.medium-label')).toHaveText(content.ui.dryLand);
+    await page.getByRole('combobox').selectOption('first');
+    await page.goto(`/#/first/swimming/solo/swim-dry-first`);
+    await page.getByRole('link',{name:content.ui.classes,exact:true}).click();
+    await expect(page.locator('[data-class-id]')).toHaveCount(2);
+    console.log('swimming gate',profile.id,'none/ability-only/pool-only blocked; both water; dry available; stale abandoned');
+  }
+  expect(Object.values((await envelope(page)).profiles).every((p: any)=>Object.keys(p.completions).length===0)).toBe(true);
+});
+test('solo durable completion explicit order, replay navigation, refresh, new attempt and partial zero', async ({ page, browser }) => {
+  await page.goto('/#/first/calisthenics/solo/cal-first');
+  expect(Object.keys((await envelope(page)).profiles.first.completions)).toHaveLength(0);
+  await page.goto('/#/first/calisthenics/session/cal-first/forged');
+  await expect(page.locator('[data-attempt-id]')).toHaveCount(0);
+  await page.getByRole('button',{name:content.ui.start,exact:true}).click();
+  await page.getByRole('button',{name:content.ui.completeStep,exact:true}).click();
+  await page.reload(); await expect(page.locator('[data-plan-id]')).toHaveAttribute('data-plan-id','cal-first');
+  expect(Object.keys((await envelope(page)).profiles.first.completions)).toHaveLength(0);
+  const id = await finish(page); const success = page.url();
+  await page.reload(); await expect(page.locator('[data-completed-attempt-id]')).toHaveAttribute('data-completed-attempt-id',id);
+  await page.getByRole('link',{name:content.ui.next,exact:true}).click();
+  await page.goBack(); await page.goForward(); await page.goto(success);
+  expect(Object.keys((await envelope(page)).profiles.first.completions)).toEqual([id]);
+  await page.getByRole('link',{name:content.ui.next,exact:true}).click();
+  const second = await finish(page); expect(second).not.toBe(id);
+  expect(Object.keys((await envelope(page)).profiles.first.completions)).toEqual([id,second]);
+  await page.getByRole('combobox').selectOption('returning'); await page.reload();
+  await expect(page.getByRole('combobox')).toHaveValue('returning');
+  const saved = await envelope(page); console.log('durable envelope',JSON.stringify(saved));
+  const context = await browser.newContext({storageState:await page.context().storageState()});
+  const other = await context.newPage(); await other.goto('/'); await expect(other.getByRole('combobox')).toHaveValue('returning'); await context.close();
+  mkdirSync(bEvidence,{recursive:true}); await page.screenshot({path:`${bEvidence}/t003-success-profile.png`,fullPage:true});
+});
+for (const mode of ['denied','corrupt','version','sport','profile']) {
+  test(`storage envelope browser ${mode} Spanish scoped recovery`,async ({page})=>{
+    await page.addInitScript(({mode,key})=>{
+      localStorage.setItem('unrelated','sentinel');
+      if(mode==='denied') { Storage.prototype.getItem=()=>{throw Error('denied');};Storage.prototype.setItem=()=>{throw Error('denied');}; }
+      else if(mode==='corrupt') localStorage.setItem(key,'{');
+    },{mode,key:demoKey});
+    await page.goto('/');
+    await expect(page.locator('main')).toBeVisible();
+    if(!['denied','corrupt'].includes(mode)) {
+      await page.evaluate(({mode,key})=>{const e=JSON.parse(localStorage.getItem(key)!);if(mode==='version')e.schemaVersion=2; if(mode==='sport')e.profiles.returning.baselineHistory[0].sportId='unknown';if(mode==='profile')e.selectedProfileId='unknown';localStorage.setItem(key,JSON.stringify(e));},{mode,key:demoKey});
+      await page.reload();
+    }
+    const warning=mode==='denied'?content.ui.storageWarning:content.ui.storageRecovery;
+    await expect(page.getByRole('alert')).toContainText(warning);
+    if(mode==='denied') {
+      await page.goto('/#/first/calisthenics/solo/cal-first'); await finish(page);
+      await expect(page.locator('[data-completed-attempt-id]')).toHaveCount(1);
+      await expect(page.getByRole('alert')).toContainText(warning);
+    } else {
+      await page.getByRole('button',{name:content.ui.storageRecovery,exact:true}).click();
+      await expect(page.getByRole('alert')).toHaveCount(0);
+      expect(Object.keys((await envelope(page)).profiles.first.completions)).toHaveLength(0);
+      expect(await page.evaluate(()=>localStorage.getItem('unrelated'))).toBe('sentinel');
+    }
+    console.log(mode,'Spanish warning',warning,'scoped recovery/in-memory success');
+  });
+}
+test('storage envelope browser external event abandons transient session',async({page})=>{
+  await page.goto('/#/first/calisthenics/solo/cal-first');
+  await page.getByRole('button',{name:content.ui.start,exact:true}).click();
+  await page.evaluate(key=>window.dispatchEvent(new StorageEvent('storage',{key})),demoKey);
+  await expect(page.locator('[data-attempt-id]')).toHaveCount(0);
+  expect(Object.keys((await envelope(page)).profiles.first.completions)).toHaveLength(0);
+});

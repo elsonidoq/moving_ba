@@ -18,13 +18,17 @@ PORT=4173 npm start
 supplied PORT must be a decimal integer 1–65535. Occupied ports fail, never switch.
 Missing files return 404; no directory listings or SPA catch-all.
 
-## Configured previews (Batch A)
+## Configured practice
 
 Choose `Primera vez`, `Retomando` or `Ya entreno` with `Tu momento con el movimiento`.
 Each sport opens its own introduction. `Entrenar por mi cuenta` opens that profile's
 ordered safe plan; `Sumarme a una clase` shows the sport's distinct fictional free/paid
-examples. No start, interest, reset, history or incentive actions are delivered yet.
-Swimming previews are dry-land only; relationship profiles never establish swimming ability.
+examples. Start a simulated practice and explicitly complete each ordered step; only
+the final accepted step stores one completion. Leaving or refreshing an unfinished
+practice abandons it without credit. A new explicit start makes a new attempt.
+Swimming defaults to dry land: the water variant requires both swimming ability and
+a permitted supervised pool with guardavidas and venue rules. Profiles never grant ability.
+Class interest, normal reset and derived journey screens are not delivered yet.
 
 Product copy, all twelve plans, six classes, rules and seed scenarios live in the
 human-editable `public/config/app-content.json`. The app fetches
@@ -34,6 +38,18 @@ To preview a local file edit in production mode, rebuild and restart/reload the 
 served build. There is no CMS or live deployment editing promise.
 Hash routes reload without server rewrites, e.g. `/#/returning/yoga/solo/yoga-returning`.
 Unknown/mismatched identities return to a valid selection, never a positional substitute.
+
+## Local session persistence
+
+Only `ba-en-movimiento:demo:v1` is written (schema 1). Profile selection, materialized
+seed snapshots and completed attempts persist; active cursors and swim affirmations do
+not. Returning has two demonstration records (August 17/24); regular has four across
+four weeks (September 23 through October 12), anchored to 2026-10-14. Seeds materialize
+once, not on every reload. Historical titles survive renamed/retired plans.
+Invalid storage offers scoped recovery; denied writes warn in Spanish and retain
+in-memory dedup only, without a reload-persistence promise. Storage events reload the
+envelope and abandon active work; concurrent multi-tab transactions are not guaranteed.
+All exercise/completion actions are simulations, not verified training.
 
 ## Checks
 

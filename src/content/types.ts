@@ -8,7 +8,7 @@ export const uiKeys = [
   'classes', 'classesDescription', 'planPreview', 'classCatalog', 'steps', 'duration',
   'level', 'environment', 'prerequisites', 'safety', 'free', 'paid', 'price',
   'schedule', 'venue', 'locality', 'requirements', 'receiver', 'contact', 'dryLand',
-  'water', 'swimRedirect', 'start', 'completeStep', 'stepProgress', 'success',
+  'water', 'startWater', 'swimRedirect', 'start', 'completeStep', 'stepProgress', 'success',
   'next', 'interest', 'interestSuccess', 'journey', 'challenges', 'historyEmpty',
   'seedOrigin', 'simulatedOrigin', 'points', 'activeWeeks', 'weeklyGoal', 'badges',
   'benefits', 'reset', 'resetConfirm', 'storageWarning', 'storageRecovery',

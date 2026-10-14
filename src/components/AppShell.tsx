@@ -1,10 +1,10 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import { useApp } from '../state/context';
-import { routeHash } from '../state/navigation';
+import { guardHash, routeHash } from '../state/navigation';
 import type { ProfileId } from '../content/types';
 
 export default function AppShell({ children }: { children: ReactNode }) {
-  const { content, route, navigate } = useApp();
+  const { content, route, navigate, status, recover, attempt, envelope } = useApp();
   const main = useRef<HTMLElement>(null);
   const { ui } = content;
   const back = route.screen === 'plan' || route.screen === 'catalog'
@@ -13,7 +13,11 @@ export default function AppShell({ children }: { children: ReactNode }) {
   useEffect(() => {
     main.current?.querySelector<HTMLElement>('h1')?.focus();
   }, [route.screen, route.profileId, 'sportId' in route ? route.sportId : null]);
-  return <div className="app">
+  return <div className="app" onClickCapture={event => {
+    const link = (event.target as HTMLElement).closest('a');
+    const hash = link?.getAttribute('href');
+    if (hash?.startsWith('#/')) { event.preventDefault(); navigate(guardHash(hash, content, { attempt, envelope })); }
+  }}>
     <button className="skip-link" onClick={() => main.current?.focus()}>{ui.skipToContent}</button>
     <header className="app-header">
       <a className="brand" href={routeHash({ screen: 'home', profileId: route.profileId })}>
@@ -32,6 +36,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <a href={routeHash(back)}><span aria-hidden="true">← </span>{ui.back}</a>
       <a href={routeHash({ screen: 'home', profileId: route.profileId })}>{ui.home}</a>
     </nav>}
+    {status !== 'ready' && <section role="alert" className="safety"><p>{status === 'invalid' ? ui.storageRecovery : ui.storageWarning}</p><button onClick={recover}>{ui.storageRecovery}</button></section>}
     <main id="main-content" tabIndex={-1} ref={main} data-profile-id={route.profileId} data-sport-id={'sportId' in route ? route.sportId : undefined} data-mode={'mode' in route ? route.mode : undefined}>{children}</main>
     <footer>
       <p>{content.legal.illustrativeTraining}</p>

@@ -99,3 +99,7 @@ footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--line);
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }
+.affirmation { display: flex; align-items: center; gap: .8rem; min-height: 52px; margin: 1rem 0; }
+.affirmation input { width: 24px; height: 24px; flex-shrink: 0; }
+progress { width: 100%; accent-color: #29bdef; }
+button:disabled { opacity: .5; cursor: not-allowed; }

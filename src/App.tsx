@@ -7,12 +7,14 @@ import Home from './screens/Home';
 import SportChoice from './screens/SportChoice';
 import Plan from './screens/Plan';
 import ClassCatalog from './screens/ClassCatalog';
+import Session from './screens/Session';
+import Success from './screens/Success';
 
 type Bootstrap = { status: 'loading' } | { status: 'ready'; content: Content } | { status: 'error'; hint: string };
 
 function Screens() {
   const { route } = useApp();
-  return <AppShell>{route.screen === 'home' ? <Home /> : route.screen === 'choice' ? <SportChoice /> : route.screen === 'plan' ? <Plan /> : <ClassCatalog />}</AppShell>;
+  return <AppShell>{route.screen === 'home' ? <Home /> : route.screen === 'choice' ? <SportChoice /> : route.screen === 'plan' ? <Plan /> : route.screen === 'session' ? <Session /> : route.screen === 'success' ? <Success /> : <ClassCatalog />}</AppShell>;
 }
 
 export default function App() {
