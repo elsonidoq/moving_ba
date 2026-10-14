@@ -9,6 +9,20 @@ comments, developer-facing messages, tests, documentation, and planning artifact
 are in English (user-facing Spanish strings remain Spanish in code and tests).
 The constitution is local product policy, not implementation authorization.
 
+## SpecKit capability discovery
+
+Project SpecKit assets use installed `specify-cli` 1.0.12, native Pi prompts, and
+Bash scripts. See the [tooling index](.specify/README.md) and
+[Pi command map](.pi/README.md). Start managed work with `/skill:planner`;
+Standard producers use `.pi/prompts/speckit.specify.md`, `speckit.plan.md`, and
+`speckit.tasks.md`, with independent review using `speckit.analyze.md`.
+The active constitution remains `.specify/memory/constitution.md`.
+
+Treat upstream template phases, sample tasks, test-first notes, and research
+examples as scaffolding, not additional product requirements. Actual artifacts
+must obey local demo policy and installed planning/task contracts. Installed
+commands/workflows do not waive stage approvals or authorize feature work.
+
 <!-- coherence-contract:start -->
 ## Coherence suite contract
 

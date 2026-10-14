@@ -11,7 +11,8 @@
 ## Product policy outside this directory
 
 - [Project constitution](../.specify/memory/constitution.md): pragmatic demo delivery, proportionate verification/documentation, and Spanish app/English engineering policy.
-- [Policy artifacts index](../.specify/README.md): directory map for the constitution location; not a complete SpecKit installation.
+- [SpecKit tooling and policy index](../.specify/README.md): constitution, templates, Bash scripts, manifests, workflow assets, and setup provenance.
+- [Pi command map](../.pi/README.md): installed `/speckit.*` prompts and reload/trust instructions.
 
 ## Child documentation directories
 
