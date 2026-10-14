@@ -45,7 +45,7 @@ selections, not a claim of latest releases, security audit, or tested installati
 | TypeScript 5.9.3 | [metadata](https://registry.npmjs.org/typescript/5.9.3): Node `>=14.17` |
 | @types/react / @types/react-dom 19.2.2 | [React types](https://registry.npmjs.org/@types/react/19.2.2), [DOM types](https://registry.npmjs.org/@types/react-dom/19.2.2): DOM types peer `@types/react: ^19.2.0` |
 | @playwright/test 1.56.1 | [metadata](https://registry.npmjs.org/@playwright/test/1.56.1): Node `>=18` |
-| serve 14.2.5 (runtime dependency) | [metadata](https://registry.npmjs.org/serve/14.2.5): Node `>=14`; CLI `build/main.js` |
+| serve-handler 6.1.6 (direct runtime dependency; replaces serve CLI) | [metadata](https://registry.npmjs.org/serve-handler/6.1.6): CommonJS entry `src/index.js`, no declared Node engine; Node 22 runtime compatibility must be exercised |
 
 Repository decision: use Node 22.x, at least 22.12, with observed 22.23.3 as the
 local validation target; declare this requirement and verify hosting runtime during
@@ -66,18 +66,45 @@ compatibility evidence only: install/typecheck/build/browser execution remain UN
   become plausible HTML/config fallback.
 - **Documented:** Vite 7 [static deploy](https://v7.vite.dev/guide/static-deploy)
   states output defaults to `dist` and `vite preview` is not a production server.
-  **Decision:** build/typecheck with Vite, run `serve` for static hosting, use hash
+  **Decision:** build/typecheck with Vite, run a minimal Node HTTP listener with `serve-handler` for static hosting, use hash
   navigation (no server-side route rewriting needed). **Check:** production start
   serves root, assets and JSON, including reload on a hash route.
-- **Documented:** serve v14.2.5 [CLI source, ENDPOINTS and options](https://raw.githubusercontent.com/vercel/serve/v14.2.5/source/utilities/cli.ts)
-  supports `-l tcp://hostname:port`, `--no-clipboard`, `--no-port-switching`;
-  [main source](https://raw.githubusercontent.com/vercel/serve/v14.2.5/source/main.ts)
-  reads `PORT` when defaulting a listener and `--single` rewrites all paths to HTML.
-  **Decision:** explicit `tcp://0.0.0.0:${PORT:-3000}`, no `--single`, fail on occupied
-  port; disable update checking with `NO_UPDATE_CHECK=1` (the same CLI source's
-  `checkForUpdates` returns immediately when that variable is set). **Check:** chosen nondefault port binds
-  all interfaces, missing config is 404/error rather than HTML; startup has no need
-  for service integration. Shell expansion targets Railway/Linux, not Windows cmd.
+- **Disproved:** serve 14.2.5 accepts `--no-port-switching` syntactically, but the
+  actual occupied-port readiness check switched ports. Installed `build/main.js`
+  lines 250–255 unconditionally call `startServer({ port: 0 }, ...)` after a positive
+  reachability check, ignoring that flag. [Feature evidence](../specs/001-ba-movement-demo/research.md#static-serving-correction)
+  retains the observed listeners and failure provenance. The earlier CLI-option
+  inspection was not behavioral proof; do not reuse its serving-readiness claim.
+- **Documented, version-specific:** serve-handler 6.1.6
+  [README](https://raw.githubusercontent.com/vercel/serve-handler/6.1.6/README.md)
+  Usage/Options describes an async request/response handler with third-argument
+  configuration; `public` accepts an absolute root, `headers` overrides response
+  headers, directory listing can be disabled, and symlinks default to disabled.
+  [Source](https://raw.githubusercontent.com/vercel/serve-handler/6.1.6/src/index.js)
+  `getHeaders` (lines 194–256) uses MIME, Last-Modified by default and custom headers;
+  exported handler (548–620) resolves the root, decodes paths and checks containment;
+  `findRelated` (281–311) resolves directory index HTML with default clean URLs;
+  missing files/disabled listings/symlinks return 404 (676–713). No listener or
+  automatic port selection is part of this handler. Official tag README/source
+  bytes matched the installed 6.1.6 package during read-only correction research.
+  **Derived decision (PLANNED):** direct runtime pin 6.1.6; `npm start` runs
+  `node scripts/serve.mjs`. This minimal ESM adapter uses `node:http` and the
+  CommonJS handler's default import, serves only an absolute project `dist` root,
+  and listens explicitly on `0.0.0.0` and validated `PORT` (unset defaults to 3000;
+  supplied value must be decimal integer 1–65535, not empty or zero). Startup
+  errors exit nonzero, with no reachability precheck, retry or fallback port.
+  Delegate MIME, file paths, streaming and errors to the dependency, not custom
+  static routing. Keep default clean URLs for root index resolution, no rewrites/
+  catch-all, `directoryListing: false`, `renderSingle: false`, `symlinks: false`.
+  Set `Cache-Control: no-store` for `/config/app-content.json` through handler
+  headers; keep client fetch no-store. No API/backend or separately built server.
+  Simple SIGTERM listener close is sufficient; no process manager/shutdown subsystem.
+  **Checks/assumptions:** ESM interoperability and actual composed behavior remain
+  UNVERIFIED for this replacement. T001/V1–V2 must prove install/build, default and
+  nondefault host/port, invalid-port rejection and occupied-port nonzero exit with
+  no second listener; root/JS/absent-file responses and no directory listing.
+  T002/V2 proves JSON/SVG/hash reload and JSON no-store; T006 retains actual edited
+  file/recovery proof. Inspect config/root boundaries; no broad security-audit claim.
 - **Documented:** Railway [common errors / Application not listening on the correct host or port](https://docs.railway.com/guides/fixing-common-errors)
   requires `0.0.0.0` and injected `PORT`. **Decision:** same local and Railway-capable
   static command. **Check:** local nondefault-port HTTP smoke; live platform check

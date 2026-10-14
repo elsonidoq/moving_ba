@@ -23,9 +23,16 @@ PORT=4173 npm start
 
 Intended script contracts: `dev` runs Vite; `typecheck` runs `tsc --noEmit` with an
 appropriate project config; `build` typechecks then `vite build`. `start` runs
-`NO_UPDATE_CHECK=1 serve dist -l tcp://0.0.0.0:${PORT:-3000} --no-clipboard --no-port-switching`
-under the Railway/Linux shell. Do not add `--single`: hash navigation needs no catch-all,
-and missing JSON must stay an error. `serve` must remain a runtime dependency.
+`node scripts/serve.mjs`, a planned minimal ESM Node HTTP listener using direct
+runtime dependency `serve-handler` 6.1.6 (not the serve CLI). It serves only `dist`,
+binds `0.0.0.0`, defaults to 3000 only when PORT is unset, and rejects supplied empty,
+nondecimal, zero or out-of-range ports (valid range 1–65535). Startup errors must exit
+nonzero without fallback. Handler defaults resolve the root index; no catch-all
+rewrites, directory listing, render-single or symlink serving. Set JSON Cache-Control
+no-store; hash navigation needs no fallback and missing JSON must stay a real error.
+The adapter delegates static path/MIME/stream handling, not a custom API/file server.
+These constraints are planned; the [CLI disproof and replacement evidence](research.md#static-serving-correction)
+do not establish successful replacement execution.
 In another terminal, with the server still running:
 
 ```bash
@@ -49,7 +56,12 @@ local success proves deployability only. No Railway command is part of this pass
 ## Required validation scenarios
 
 1. **Configured serving (R1/R2):** build/start, inspect actual listener and HTTP root,
-   SVG asset and public JSON responses. Reload a hash route. Confirm nonexistent
+   SVG asset and public JSON responses (JSON Cache-Control no-store). Confirm default
+   PORT 3000 when unset and explicit nondefault host/port, invalid PORT nonzero exit,
+   and no directory listing. Hold the chosen port with a test-owned listener, run the
+   same npm start command: require nonzero exit and no second/fallback listener;
+   capture exit status plus before/after listener output, then stop only owned processes.
+   Reload a hash route. Confirm nonexistent
    config returns failure and not index HTML. In a test-owned served fixture edit a
    class title AND schedule, reorder a plan's steps, and change reward copy. Reload
    each relevant screen and assert the edited strings/order with no React changes.

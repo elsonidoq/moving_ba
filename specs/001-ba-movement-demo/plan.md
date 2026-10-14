@@ -3,10 +3,11 @@
 **Feature**: `001-ba-movement-demo` | **Date**: 2026-10-14 | **Git branch**: `main`
 **Input**: [Approved specification](spec.md), immutable source at
 `c31871bad4f71aa8185088138f4d8343f3ec69bb`; [approval evidence](README.md).
-**Status**: Produced and self-reviewed; plan approval NOT YET GIVEN. Parent inspection,
-tasks production, independent overall review and final owner approval remain. No
-standalone plan approval gate is required before authorized task preparation. No
-implementation authorized here.
+**Status**: Bounded static-serving correction after readiness disproof at baseline
+`a6fb956881ad4ff135572739b529b160f931084a`. Prior overall approval remains recorded
+in [README](README.md); changed plan/tasks require fresh independent review and
+renewed final approval, **PENDING**. Specification unchanged; no implementation
+is authorized by this correction.
 
 ## Summary
 
@@ -25,7 +26,7 @@ localStorage holds isolated histories from which incentives derive. Serve a stat
 
 **Language/Version**: TypeScript 5.9.3; Node 22.x >=22.12 (observed 22.23.3), npm 10.9.9.
 **Primary Dependencies**: React/react-dom 19.2.0, Vite 7.2.2,
-@vitejs/plugin-react 5.1.1; types 19.2.2; runtime serve 14.2.5. Exact initial pins,
+@vitejs/plugin-react 5.1.1; types 19.2.2; direct runtime serve-handler 6.1.6. Exact initial pins,
 lockfile and `npm ci`; compatibility evidence/provenance in canonical guidance.
 **Storage**: One versioned localStorage key; no database, account, server state or auth.
 **Testing**: @playwright/test 1.56.1, matching Chromium; its runner also executes
@@ -64,6 +65,7 @@ Intended implementation layout (not existing files or writes authorized now):
 
 ```text
 package.json, package-lock.json, index.html, tsconfig.json, vite.config.ts
+scripts/serve.mjs # minimal Node HTTP listener delegating static files to serve-handler
 src/
   main.tsx, App.tsx, styles.css
   content/       # types, runtime loader and validation
@@ -84,7 +86,15 @@ docs/
 Use one project, no repository/service abstractions. Keep validator and selectors
 independent of React rendering for focused tests; context integrates them. Hash
 navigation supports browser history while preserving static file 404s. Avoid a router
-dependency, schema framework and separately built server. Layout may use smaller
+dependency, schema framework and separately built server. The planned ESM serving
+adapter is infrastructure for TC-004, not an API/backend: `npm start` invokes
+`node scripts/serve.mjs`, serving an absolute `dist` root via serve-handler 6.1.6.
+Bind `0.0.0.0` with validated PORT (unset: 3000; supplied decimal integer 1–65535);
+startup errors exit nonzero with no precheck/retry/fallback. Delegate path/MIME/file
+handling to the dependency; no catch-all rewrites, directory listing or symlinks.
+Preserve default clean URLs for root index; JSON gets no-store headers. See canonical
+source-derived constraints and actual proof requirements in [architecture](../../docs/architecture.md#source-recommendation--constraint--observable-check).
+Layout may use smaller
 cohesive files but must retain these clear content/state/render/verification seams.
 
 ## Architecture and invariants
