@@ -131,3 +131,15 @@ button:not(.skip-link) { width: 100%; }
   .journey-stats dd { font-size: 1.65rem; }
 }
 .journey-stats dt { color: #294f42; }
+/* One-person shell keeps normal document flow, reserving room for the bottom tabs. */
+.app { padding-bottom: 110px; }
+.app-header { position: relative; padding-right: 54px; }
+.profile-button { position: absolute; right: 0; top: 0; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; background: var(--yellow); border: 2px solid #171b1e; }
+.bottom-tabs { position: fixed; z-index: 3; bottom: 0; left: 50%; transform: translateX(-50%); width: min(640px,100%); display: flex; background: #fffdf0; border-top: 2px solid var(--yellow); padding: 8px 10px max(8px,env(safe-area-inset-bottom)); gap: 8px; }
+.bottom-tabs a { flex: 1; min-height: 48px; display: grid; place-items: center; border-radius: 12px; font-weight: 750; }
+.bottom-tabs a[aria-current] { background: var(--yellow); }
+fieldset { border: 0; padding: 0; margin: 20px 0; min-width: 0; }
+legend { line-height: 1.5; margin-bottom: 12px; }
+.situation-option { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; margin-bottom: 12px; line-height: 1.5; cursor: pointer; }
+.situation-option:has(:checked) { background: #fff6bb; border-color: #8c7712; }
+.situation-option input { width: 24px; height: 24px; flex: none; margin: 0; }

@@ -5,6 +5,7 @@ import { sourceKey, type Envelope, type LegacyEnvelope } from './storage';
 export type Route =
   | { screen: 'onboarding'; profileId: ProfileId }
   | { screen: 'recovery'; profileId: ProfileId }
+  | { screen: 'profile' | 'sports' | 'classes'; profileId: ProfileId }
   | { screen: 'home'; profileId: ProfileId }
   | { screen: 'journey'; profileId: ProfileId }
   | { screen: 'challenges'; profileId: ProfileId }
@@ -23,10 +24,26 @@ export function safePlan(content: Content, profileId: ProfileId, sportId: SportI
 
 /** URL identity is navigation only, never session or swimming eligibility. */
 export function guardHash(hash: string, content: Content, runtime?: { attempt: Attempt | null; envelope: Envelope | LegacyEnvelope }): Route {
-  const parts = hash.replace(/^#\/?/, '').split('/');
+  let parts: string[];
+  try { parts = hash.replace(/^#\/?/, '').split('/').map(decodeURIComponent); } catch { parts = []; }
   const actual = runtime?.envelope && 'layout' in runtime.envelope ? runtime.envelope : null;
   const profileId = actual?.preference?.situationId ?? content.profiles.find(p => p.id === parts[0])?.id ?? 'first';
   if (actual && !actual.preference) return {screen:'onboarding',profileId:'first'};
+  if (['home','onboarding','recovery','sports','classes','profile','session','success'].includes(parts[0])) {
+    if (parts[0] === 'profile') return {screen:parts[1] === 'journey' || parts[1] === 'challenges' ? parts[1] : 'profile',profileId};
+    if (parts[0] === 'sports' && parts.length === 1) return {screen:'sports',profileId};
+    if (parts[0] === 'classes' && parts.length === 1) return {screen:'classes',profileId};
+    if (parts[0] === 'session') {
+      const a = runtime?.attempt;
+      return a?.status === 'active' && a.attemptId === parts[1] ? {screen:'session',profileId,sportId:a.sportId,planId:a.planId,attemptId:a.attemptId} : {screen:'home',profileId};
+    }
+    if (parts[0] === 'success') {
+      const r = actual?.journey[parts[1]];
+      return r?.origin === 'user-simulated' ? {screen:'success',profileId,sportId:r.sportId,attemptId:r.id} : {screen:'home',profileId};
+    }
+    if (parts[0] === 'sports' && parts.length > 1) parts = [profileId,...parts.slice(1)];
+    else return {screen:'home',profileId};
+  }
   if (!content.profiles.some(p => p.id === parts[0])) return { screen: 'home', profileId };
   if ((parts[1] === 'journey' || parts[1] === 'challenges') && parts.length === 2) return {screen:parts[1],profileId};
   const sportId = content.sports.find(s => s.id === parts[1])?.id;
@@ -55,12 +72,13 @@ export function guardHash(hash: string, content: Content, runtime?: { attempt: A
 }
 
 export function routeHash(route: Route): string {
-  const base = `#/${route.profileId}`;
-  if (route.screen === 'onboarding' || route.screen === 'recovery' || route.screen === 'home' || route.screen === 'journey' || route.screen === 'challenges') return `${base}/${route.screen}`;
-  const sport = `${base}/${route.sportId}`;
+  if (['home','onboarding','recovery','profile','sports','classes'].includes(route.screen)) return `#/${route.screen}`;
+  if (route.screen === 'journey' || route.screen === 'challenges') return `#/profile/${route.screen}`;
+  if (route.screen === 'session') return `#/session/${encodeURIComponent(route.attemptId)}`;
+  if (route.screen === 'success') return `#/success/${encodeURIComponent(sourceKey('actual','completion',route.attemptId))}`;
+  if (!('sportId' in route)) return '#/home';
+  const sport = `#/sports/${route.sportId}`;
   if (route.screen === 'detail') return `${sport}/classes/${route.classId}`;
-  if (route.screen === 'session') return `${sport}/session/${route.planId}/${route.attemptId}`;
-  if (route.screen === 'success') return `${sport}/success/${route.attemptId}`;
   if (route.screen === 'plan') return `${sport}/solo/${route.planId}`;
-  return `${sport}/${route.screen === 'catalog' ? 'classes' : 'choice'}`;
+  return route.screen === 'catalog' ? `${sport}/classes` : sport;
 }

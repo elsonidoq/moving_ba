@@ -4,6 +4,9 @@ import { loadContent } from './content/load';
 import { AppProvider, useApp } from './state/context';
 import AppShell from './components/AppShell';
 import Home from './screens/Home';
+import Onboarding from './screens/Onboarding';
+import Profile from './screens/Profile';
+import { routeHash } from './state/navigation';
 import SportChoice from './screens/SportChoice';
 import Plan from './screens/Plan';
 import ClassCatalog from './screens/ClassCatalog';
@@ -16,8 +19,8 @@ import Challenges from './screens/Challenges';
 type Bootstrap = { status: 'loading' } | { status: 'ready'; content: Content } | { status: 'error'; hint: string };
 
 function Screens() {
-  const { route } = useApp();
-  return <AppShell>{route.screen === 'home' ? <Home /> : route.screen === 'choice' ? <SportChoice /> : route.screen === 'plan' ? <Plan /> : route.screen === 'session' ? <Session /> : route.screen === 'success' ? <Success /> : route.screen === 'detail' ? <ClassDetail /> : route.screen === 'journey' ? <Journey /> : route.screen === 'challenges' ? <Challenges /> : <ClassCatalog />}</AppShell>;
+  const { route, content } = useApp();
+  return <AppShell>{route.screen === 'onboarding' || route.screen === 'recovery' ? <Onboarding /> : route.screen === 'profile' ? <Profile /> : route.screen === 'sports' || route.screen === 'classes' ? <><h1 tabIndex={-1}>{content.ui[route.screen]}</h1>{content.sports.map(s=><a className="button-link secondary" key={s.id} href={routeHash(route.screen === 'sports' ? {screen:'choice',profileId:route.profileId,sportId:s.id} : {screen:'catalog',profileId:route.profileId,sportId:s.id,mode:'classes'})}>{s.name}</a>)}</> : route.screen === 'home' ? <Home /> : route.screen === 'choice' ? <SportChoice /> : route.screen === 'plan' ? <Plan /> : route.screen === 'session' ? <Session /> : route.screen === 'success' ? <Success /> : route.screen === 'detail' ? <ClassDetail /> : route.screen === 'journey' ? <Journey /> : route.screen === 'challenges' ? <Challenges /> : <ClassCatalog />}</AppShell>;
 }
 
 export default function App() {

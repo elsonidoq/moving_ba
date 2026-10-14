@@ -23,8 +23,8 @@ export default function Journey() {
       <a className="button-link" href={routeHash({screen:'plan',profileId:profile.id,sportId:plan.sportId,mode:'solo',planId:plan.id})}>{plan.name}</a>
     </section>
     <h2>{ui.history}</h2>
-    {!journey.history.length ? <p>{ui.historyEmpty}</p> : <ol className="history-list">{journey.history.map(record => <li key={record.id} data-history-id={record.id}>
-      <strong>{record.planTitle}</strong><p>{record.sportTitle} · <time dateTime={record.activityDate}>{displayDate(record.activityDate)}</time></p>
+    {!journey.history.length ? <p>{ui.historyEmpty}</p> : <ol className="history-list">{journey.history.map(record => <li key={record.sourceKey} data-history-id={record.sourceKey}>
+      <strong>{record.planTitle}</strong><p className="muted">{content.onboarding.choices.find(c => c.id === record.profileId)?.label} · {record.id}</p><p>{record.sportTitle} · <time dateTime={record.activityDate}>{displayDate(record.activityDate)}</time></p>
       {record.sportId === 'swimming' && <p>{ui[record.medium === 'water' ? 'water' : 'dryLand']}</p>}<p className="muted">{record.origin === 'seed' ? ui.seedOrigin : ui.simulatedOrigin}</p>
     </li>)}</ol>}
     {!!journey.weekKeys.length && <section><h2>{ui.activeWeeks}</h2><ul>{journey.weekKeys.map(key => <li key={key} data-week-key={key}>{ui.weekOf} {displayDate(key)}</li>)}</ul></section>}

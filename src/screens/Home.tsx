@@ -2,8 +2,8 @@ import { useApp } from '../state/context';
 import { routeHash } from '../state/navigation';
 
 export default function Home() {
-  const { content, route } = useApp();
-  const profile = content.profiles.find(p => p.id === route.profileId)!;
+  const { content, route, envelope } = useApp();
+  const profile = content.profiles.find(p => p.id === envelope.preference?.situationId)!;
   return <>
     <p className="eyebrow">{profile.title}</p>
     <h1 tabIndex={-1}>{profile.welcome}</h1>
