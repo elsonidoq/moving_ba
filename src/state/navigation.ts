@@ -5,7 +5,8 @@ import { sourceKey, type Envelope, type LegacyEnvelope } from './storage';
 export type Route =
   | { screen: 'onboarding'; profileId: ProfileId }
   | { screen: 'recovery'; profileId: ProfileId }
-  | { screen: 'profile' | 'sports' | 'classes'; profileId: ProfileId }
+  | { screen: 'profile' | 'sports'; profileId: ProfileId }
+  | { screen: 'classes'; profileId: ProfileId; sportId?: SportId }
   | { screen: 'home'; profileId: ProfileId }
   | { screen: 'journey'; profileId: ProfileId }
   | { screen: 'challenges'; profileId: ProfileId }
@@ -32,7 +33,10 @@ export function guardHash(hash: string, content: Content, runtime?: { attempt: A
   if (['home','onboarding','recovery','sports','classes','profile','session','success'].includes(parts[0])) {
     if (parts[0] === 'profile') return {screen:parts[1] === 'journey' || parts[1] === 'challenges' ? parts[1] : 'profile',profileId};
     if (parts[0] === 'sports' && parts.length === 1) return {screen:'sports',profileId};
-    if (parts[0] === 'classes' && parts.length === 1) return {screen:'classes',profileId};
+    if (parts[0] === 'classes') {
+      const sportId = content.sports.find(s => s.id === parts[1])?.id;
+      return sportId ? {screen:'classes',profileId,sportId} : {screen:'classes',profileId};
+    }
     if (parts[0] === 'session') {
       const a = runtime?.attempt;
       return a?.status === 'active' && a.attemptId === parts[1] ? {screen:'session',profileId,sportId:a.sportId,planId:a.planId,attemptId:a.attemptId} : {screen:'home',profileId};
@@ -72,7 +76,8 @@ export function guardHash(hash: string, content: Content, runtime?: { attempt: A
 }
 
 export function routeHash(route: Route): string {
-  if (['home','onboarding','recovery','profile','sports','classes'].includes(route.screen)) return `#/${route.screen}`;
+  if (route.screen === 'classes') return `#/classes${route.sportId ? '/' + route.sportId : ''}`;
+  if (['home','onboarding','recovery','profile','sports'].includes(route.screen)) return `#/${route.screen}`;
   if (route.screen === 'journey' || route.screen === 'challenges') return `#/profile/${route.screen}`;
   if (route.screen === 'session') return `#/session/${encodeURIComponent(route.attemptId)}`;
   if (route.screen === 'success') return `#/success/${encodeURIComponent(sourceKey('actual','completion',route.attemptId))}`;

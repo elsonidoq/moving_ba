@@ -2,11 +2,12 @@ import { useEffect, useRef, type ReactNode } from 'react';
 import { useApp } from '../state/context';
 import { guardHash, routeHash, type Route } from '../state/navigation';
 export default function AppShell({children}:{children:ReactNode}) {
- const {content,route,navigate,status,attempt,envelope,message}=useApp();const main=useRef<HTMLElement>(null);const {ui}=content;
+ const {content,route,navigate,status,attempt,envelope,message,parent}=useApp();const main=useRef<HTMLElement>(null);const {ui}=content;
  const hidden=route.screen==='onboarding'||route.screen==='recovery';
  let back:Route={screen:'home',profileId:route.profileId};
  if(route.screen==='journey'||route.screen==='challenges')back={screen:'profile',profileId:route.profileId};
- if(route.screen==='detail')back={screen:'catalog',profileId:route.profileId,sportId:route.sportId,mode:'classes'};
+ if(route.screen==='choice')back={screen:'sports',profileId:route.profileId};
+ if(route.screen==='detail')back=parent && (parent.screen==='classes'||parent.screen==='catalog') ? parent : {screen:'catalog',profileId:route.profileId,sportId:route.sportId,mode:'classes'};
  if(route.screen==='plan'||route.screen==='catalog')back={screen:'choice',profileId:route.profileId,sportId:route.sportId};
  if(route.screen==='session')back={screen:'plan',profileId:route.profileId,sportId:route.sportId,mode:'solo',planId:route.planId};
  useEffect(()=>{main.current?.querySelector<HTMLElement>('h1')?.focus();},[route,attempt?.cursor]);

@@ -73,3 +73,49 @@ for(const width of [360,1280]) test(`one-person onboarding profile keyboard visu
  const sizes=await page.evaluate(()=>({client:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,appBottom:document.querySelector('.app')!.getBoundingClientRect().bottom,tabHeight:document.querySelector('.bottom-tabs')!.getBoundingClientRect().height,padding:getComputedStyle(document.querySelector('.app')!).paddingBottom}));expect(sizes.scroll).toBeLessThanOrEqual(sizes.client);expect(parseInt(sizes.padding)).toBeGreaterThan(sizes.tabHeight);
  await page.getByRole('button',{name:content.ui.skipToContent}).focus();await page.keyboard.press('Enter');await expect(page.locator('main')).toBeFocused();console.log('keyboard radio ArrowDown/profile/reset cancel/skip focus passed',width,sizes,'screenshots',`${evidence}/t003-${width}-*.png`);
 });
+
+test('one-person class intention cross-sport catalog exposes every exact class',async({page})=>{
+ await page.goto('/');await choose(page);await page.getByRole('navigation',{name:'Principal'}).getByRole('link',{name:'Clases',exact:true}).click();
+ await expect(page.locator('[data-class-id]')).toHaveCount(content.classes.length);
+});
+
+test('one-person class intention all sport branches, exact fields, contextual keyboard back and distinct durable intention',async({page})=>{
+ const geoCalls:string[]=[];await page.addInitScript(()=>{navigator.geolocation.getCurrentPosition=()=>{throw Error('unexpected geolocation');};navigator.geolocation.watchPosition=()=>{throw Error('unexpected geolocation');};});page.on('pageerror',e=>geoCalls.push(e.message));
+ await page.goto('/');await choose(page);const initial=JSON.parse((await raw(page))!);
+ for(const sport of content.sports){
+   await page.getByRole('navigation',{name:'Principal'}).getByRole('link',{name:content.ui.sports,exact:true}).click();await page.getByRole('link',{name:new RegExp(sport.name)}).filter({has:page.locator('strong')}).click();
+   await expect(page.getByRole('heading',{level:1})).toHaveText(sport.name);await page.getByRole('link',{name:new RegExp(content.ui.solo)}).click();
+   const plan=content.plans.find(p=>p.profileId==='first'&&p.sportId===sport.id&&p.medium==='dry-land')!;await expect(page.locator('[data-plan-id]')).toHaveAttribute('data-plan-id',plan.id);
+   await page.getByRole('link',{name:content.ui.back,exact:true}).click();await page.locator('main').getByRole('link',{name:new RegExp('^'+content.ui.classes)}).click();await expect(page.locator('[data-class-id]')).toHaveCount(2);
+   for(const item of content.classes.filter(c=>c.sportId===sport.id)){
+     const card=page.locator(`[data-class-id="${item.id}"]`);await card.getByRole('link',{name:content.ui.viewClass}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();
+     const detail=page.locator(`[data-detail-class-id="${item.id}"]`);for(const field of ['title','schedule','venue','locality','level','description','receiver','contactCopy'] as const)await expect(detail).toContainText(item[field]);for(const r of item.requirements)await expect(detail).toContainText(r);
+     await expect(detail).toContainText('ARS');await expect(detail).toContainText(content.ui[item.price.kind]);await expect(detail).toContainText(content.legal.fictionalClasses);await expect(detail).toContainText(content.ui.locationIllustration);await expect(detail).toContainText(content.ui.intentionNotice);
+     await page.getByRole('link',{name:content.ui.back,exact:true}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();await expect(page.locator('main')).toHaveAttribute('data-sport-id',sport.id);console.log('exact class fields / keyboard detail back',JSON.stringify(item));
+   }
+ }
+ await page.getByRole('navigation',{name:'Principal'}).getByRole('link',{name:content.ui.classes,exact:true}).click();await page.locator('.class-filters').getByRole('link',{name:'Yoga',exact:true}).click();
+ await page.locator('[data-class-id="yoga-paid"]').getByRole('link',{name:content.ui.viewClass}).click();await page.getByRole('link',{name:content.ui.back,exact:true}).click();await expect(page).toHaveURL(/#\/classes\/yoga$/);await expect(page.locator('[data-class-id]')).toHaveCount(2);
+ await page.locator('[data-class-id="yoga-paid"]').getByRole('link',{name:content.ui.viewClass}).click();await page.getByRole('button',{name:content.ui.interest,exact:true}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('status').filter({hasText:content.ui.interestSuccess})).toBeVisible();
+ const interested=JSON.parse((await raw(page))!);expect(Object.keys(interested.interests)).toHaveLength(1);expect(interested.intention).toBeNull();
+ const intend=page.getByRole('button',{name:content.ui.intention,exact:true});await intend.focus();await page.keyboard.press('Enter');const first=await raw(page);await intend.click();expect(await raw(page)).toBe(first);expect(JSON.parse(first!).intention.classSnapshot).toEqual(content.classes.find(c=>c.id==='yoga-paid'));
+ await page.reload();await page.getByRole('navigation',{name:'Principal'}).getByRole('link',{name:content.ui.home,exact:true}).click();await expect(page.locator('[data-intended-class-id]')).toHaveCount(1);await expect(page.locator('[data-intended-class-id="yoga-paid"]')).toContainText(content.classes.find(c=>c.id==='yoga-paid')!.schedule);
+ await page.goto('/#/sports/calisthenics/classes/cal-free');await page.getByRole('button',{name:content.ui.intention,exact:true}).click();const second=JSON.parse((await raw(page))!);expect(second.intention.classId).toBe('cal-free');expect(second.interests).toEqual(interested.interests);expect(second.journey).toEqual(initial.journey);
+ await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await expect(page.locator('[data-stat="sessions"]')).toHaveText('0');await expect(page.locator('[data-stat="points"]')).toHaveText('0');expect(geoCalls).toEqual([]);
+ console.log('interest separate',JSON.stringify(interested),'first intention bytes',first,'replacement bytes',JSON.stringify(second),'no geolocation calls or credit');
+});
+test('one-person class intention reorder, retirement and wrong/unknown hashes never substitute array positions',async({page})=>{
+ await page.goto('/');await choose(page);await page.goto('/#/sports/yoga/classes/yoga-paid');await page.getByRole('button',{name:content.ui.intention,exact:true}).click();const bytes=await raw(page);
+ const reordered=structuredClone(content);reordered.classes.reverse();await page.route('**/config/app-content.json',r=>r.fulfill({json:reordered}));await page.reload();await expect(page.getByRole('heading',{level:1})).toHaveText(content.classes.find(c=>c.id==='yoga-paid')!.title);
+ const retired=structuredClone(reordered);const replacement=retired.classes.find(c=>c.id==='yoga-paid')!;replacement.id='yoga-replacement';replacement.title='Otra clase ilustrativa';await page.unroute('**/config/app-content.json');await page.route('**/config/app-content.json',r=>r.fulfill({json:retired}));
+ await page.goto('/?retired#/home');await expect(page.locator('[data-intended-class-id="yoga-paid"]')).toContainText(content.ui.notAvailable);await expect(page.locator('[data-intended-class-id]')).not.toContainText('Otra clase ilustrativa');expect(await raw(page)).toBe(bytes);
+ await page.goto('/#/sports/swimming/classes/yoga-free');await expect(page.locator('[data-detail-class-id]')).toHaveCount(0);await expect(page.locator('[data-class-id]')).toHaveCount(2);
+ await page.goto('/#/sports/yoga/classes/unknown');await expect(page.locator('[data-detail-class-id]')).toHaveCount(0);await expect(page.locator('[data-class-id]')).toHaveCount(2);await page.goto('/#/sports/unknown');await expect(page.getByRole('heading',{level:1})).toBeVisible();expect(await raw(page)).toBe(bytes);
+ console.log('reorder/retirement snapshot bytes unchanged',bytes,'unknown/wrong-sport no arbitrary detail');
+});
+for(const width of [360,1280])test(`one-person class intention visual and keyboard ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:900});await page.goto('/');await choose(page);const nav=page.getByRole('navigation',{name:'Principal'});await nav.getByRole('link',{name:content.ui.classes,exact:true}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();
+ await page.locator('[data-class-id="cal-free"]').getByRole('link',{name:content.ui.viewClass}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();await page.getByRole('button',{name:content.ui.interest,exact:true}).focus();await page.keyboard.press('Enter');await page.getByRole('button',{name:content.ui.intention,exact:true}).focus();await page.keyboard.press('Enter');
+ await page.screenshot({path:`${evidence}/t004-${width}-detail.png`,fullPage:true});await nav.getByRole('link',{name:content.ui.home,exact:true}).click();await page.screenshot({path:`${evidence}/t004-${width}-home.png`,fullPage:true});
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);console.log('class nav/detail/back/interest/intention keyboard, heading focus and no overflow',width);
+});

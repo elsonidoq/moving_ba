@@ -5,7 +5,7 @@ import { completeStep, startSession, type Attempt } from './session';
 import { legacyView, loadEnvelope, registerInterest, resetEnvelope, saveEnvelope, setIntention, storageKey, type Envelope, type LegacyEnvelope, type Loaded } from './storage';
 
 export type Runtime = Loaded & {
-  route: Route; attempt: Attempt | null; canSwim: boolean; safePool: boolean;
+  route: Route; parent: Route | null; attempt: Attempt | null; canSwim: boolean; safePool: boolean;
   mode: {kind:'actual'} | {kind:'preview';scenarioId:string;answerId?:string};
   message: string | null;
 };
@@ -28,7 +28,7 @@ function landing(e: Envelope, invalid = false): Route {
 /** Synchronous production owner shared by React and helper tests; all commands read the current state. */
 export function createCommandOwner(content: Content, port: Parameters<typeof loadEnvelope>[1], hash = '', clock = () => new Date(), uuid = () => crypto.randomUUID()) {
   const loaded = loadEnvelope(content,port);
-  let state: Runtime = {...loaded,...cleared,message:loaded.status === 'unavailable' ? content.ui.storageWarning + ' Los datos guardados anteriormente pueden volver al recargar.' : null,route:loaded.status === 'invalid' ? landing(loaded.envelope,true) : guardHash(hash,content,{attempt:null,envelope:loaded.envelope})};
+  let state: Runtime = {...loaded,...cleared,parent:null,message:loaded.status === 'unavailable' ? content.ui.storageWarning + ' Los datos guardados anteriormente pueden volver al recargar.' : null,route:loaded.status === 'invalid' ? landing(loaded.envelope,true) : guardHash(hash,content,{attempt:null,envelope:loaded.envelope})};
   const persist = (envelope: Envelope) => {
     if (envelope === state.envelope) return;
     const status = saveEnvelope(envelope,port,state);
@@ -42,16 +42,16 @@ export function createCommandOwner(content: Content, port: Parameters<typeof loa
       if (command.type === 'storageEvent') {
         if (command.key !== storageKey && command.key !== null) return false;
         // Invalidation precedes the read, including synchronous observable storage ports.
-        state = {...state,...cleared};
+        state = {...state,...cleared,parent:null};
         const next = loadEnvelope(content,port);
         state = {...state,...next,route:landing(next.envelope,next.status === 'invalid'),message:next.status === 'unavailable' ? content.ui.storageWarning + ' Los datos guardados anteriormente pueden volver al recargar.' : null};
       } else if (command.type === 'reset') {
         if (!command.confirmed || state.mode.kind !== 'actual') return false;
         const next = resetEnvelope(port,true)!;
-        state = {...next,...cleared,route:landing(next.envelope),message:next.status === 'ready' ? null : content.ui.resetFailed};
+        state = {...next,...cleared,parent:null,route:landing(next.envelope),message:next.status === 'ready' ? null : content.ui.resetFailed};
       } else if (command.type === 'exitPreview') {
         if (state.mode.kind !== 'preview') return false;
-        state = {...state,...cleared,route:landing(state.envelope)};
+        state = {...state,...cleared,parent:null,route:landing(state.envelope)};
       } else if (command.type === 'enterScenario') {
         const scenario = content.previewScenarios.find(s => s.id === command.scenarioId);
         if (!canAct() || !scenario) return false;
@@ -64,7 +64,8 @@ export function createCommandOwner(content: Content, port: Parameters<typeof loa
         state = {...state,mode:{...state.mode,answerId:answer.id}};
       } else if (command.type === 'navigate') {
         const route = state.status === 'invalid' ? landing(state.envelope,true) : guardHash(command.hash,content,state);
-        state = {...state,route,attempt:null,canSwim:false,safePool:false};
+        const parent = route.screen === 'detail' ? (state.route.screen === 'classes' || state.route.screen === 'catalog' ? state.route : state.route.screen === 'detail' ? state.parent : null) : state.parent;
+        state = {...state,route,parent,attempt:null,canSwim:false,safePool:false};
       } else if (command.type === 'chooseSituation' || command.type === 'editSituation') {
         if (state.mode.kind !== 'actual' || state.status === 'invalid' || !content.profiles.some(p => p.id === command.situationId) || (command.type === 'editSituation' && !state.envelope.preference)) return false;
         if (state.envelope.preference?.situationId === command.situationId) return false;

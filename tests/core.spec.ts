@@ -221,3 +221,12 @@ test('actual command custody exact class identity survives reorder and retiremen
   const removed={...content,classes:content.classes.filter(c=>c.id!=='yoga-free')};expect(guardHash('#/first/yoga/classes/yoga-free',removed,{attempt:null,envelope:owner.getState().envelope}).screen).toBe('catalog');expect(guardHash('#/first/swimming/classes/yoga-free',content,{attempt:null,envelope:owner.getState().envelope}).screen).toBe('catalog');
   expect(Object.values(validateEnvelope(owner.getState().envelope,removed).interests).find(i=>i.classId==='yoga-free')?.classTitle).toBe(content.classes.find(c=>c.id==='yoga-free')!.title);
 });
+
+test('actual command custody intention same/different/retired exact snapshots preserve all source-scoped history and interests',()=>{
+ const s=storage(JSON.stringify(legacyFixture()));const owner=createCommandOwner(content,s.port,'',()=>now);owner.dispatch({type:'chooseSituation',situationId:'returning'});
+ const baseline=owner.getState().envelope;expect(owner.dispatch({type:'intention',classId:'yoga-paid'})).toBe(true);const first=owner.getState().envelope;expect(first.intention?.classSnapshot).toEqual(content.classes.find(c=>c.id==='yoga-paid'));
+ const calls=s.writes().length;expect(owner.dispatch({type:'intention',classId:'yoga-paid'})).toBe(false);expect(s.writes()).toHaveLength(calls);
+ expect(owner.dispatch({type:'intention',classId:'cal-free'})).toBe(true);const second=owner.getState().envelope;expect({...second,intention:null}).toEqual({...first,intention:null});expect(second.journey).toEqual(baseline.journey);expect(second.interests).toEqual(baseline.interests);
+ const removed={...content,classes:content.classes.filter(c=>c.id!=='cal-free')};const loaded=createCommandOwner(removed,s.port,'',()=>now);const before=loaded.getState().envelope;expect(loaded.dispatch({type:'intention',classId:'cal-free'})).toBe(false);expect(loaded.getState().envelope.intention?.classSnapshot).toEqual(content.classes.find(c=>c.id==='cal-free'));expect(loaded.getState().envelope).toBe(before);
+ console.log('intention same no write/different replacement/retired snapshot',JSON.stringify(second),'counts unchanged',selectJourney(content,second,'returning',now).sessions);
+});

@@ -143,3 +143,6 @@ legend { line-height: 1.5; margin-bottom: 12px; }
 .situation-option { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; margin-bottom: 12px; line-height: 1.5; cursor: pointer; }
 .situation-option:has(:checked) { background: #fff6bb; border-color: #8c7712; }
 .situation-option input { width: 24px; height: 24px; flex: none; margin: 0; }
+.class-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+.class-filters a { min-height: 44px; display: flex; align-items: center; padding: 10px; border: 1px solid var(--line); border-radius: 12px; }
+.class-filters a[aria-current] { background: var(--yellow); }
