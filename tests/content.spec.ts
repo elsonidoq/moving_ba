@@ -108,3 +108,78 @@ test.describe('content validation', () => {
     }
   });
 });
+
+test('content validation rejects missing onboarding contract before consumers mount', () => {
+  const c = clone(); delete (c as unknown as Record<string, unknown>).onboarding;
+  expect(() => validateContent(c)).toThrow('onboarding');
+});
+
+test.describe('content validation extended contract', () => {
+  test('exact choices, four moments and nine supportive answer destinations', () => {
+    const c = validateContent(clone());
+    expect(c.onboarding.choices.map(x => x.label)).toEqual(['No estoy entrenando y quiero empezar.', 'Entrenaba antes y quiero volver.', 'Ya estoy entrenando.']);
+    expect(c.previewScenarios.map(x => x.title)).toEqual(['Entrenamiento sostenido', 'Volver después de una pausa', 'Dejó de entrenar y de usar la app', 'Pensaba asistir a una clase, pero no fue']);
+    expect(c.chats.find(x => x.id === 'missed-class-chat')!.answers.map(x => x.label)).toEqual(['Me surgió algo', 'El horario o el lugar no me sirven', 'No me gustó la actividad', 'No me sentí cómodo/a con el docente o la clase', 'Prefiero no responder']);
+    expect(c.chats.find(x => x.id === 'inactive-chat')!.answers.map(x => x.label)).toEqual(['Volver con una clase', 'Entrenar algo corto por mi cuenta', 'Probar otra actividad', 'Prefiero no responder']);
+    for (const chat of c.chats) for (const a of chat.answers) {
+      const d = c.destinations.find(x => x.id === a.destinationId)!;
+      expect(d).toBeTruthy();
+      if (d.kind === 'plan') expect(c.plans.find(p => p.id === d.planId)).toMatchObject({ medium: 'dry-land', profileId: c.previewScenarios.find(s => s.id === chat.scenarioId)!.recommendationSituationId });
+      console.log(`${chat.id}/${a.id}: ${a.response} -> ${JSON.stringify(d)}`);
+    }
+    expect(c.exercises.every(e => e.imageStatus === 'unavailable' && e.imageId === null && e.imageAsset === '')).toBe(true);
+    console.log('All exact exercise images unavailable; no verified photos or asset approvals.');
+  });
+  const cases: [string, (c: Content) => void, string][] = [
+    ['missing onboarding copy', c => { c.onboarding.editTitle = ''; }, 'onboarding.editTitle'],
+    ['extra choice', c => { c.onboarding.choices.push({id:'other' as never,label:'Otra cosa'}); }, 'onboarding.choices'],
+    ['incorrect exact choice', c => { c.onboarding.choices[0].label = 'Otra cosa'; }, 'label'],
+    ['duplicate scenario', c => { c.previewScenarios[1].id = 'sustained'; }, 'duplicado'],
+    ['unknown scenario ID', c => { c.previewScenarios[0].id = 'unknown'; }, 'previewScenarios'],
+    ['missing scenario copy', c => { c.previewScenarios[0].guidance = ''; }, 'guidance'],
+    ['scenario malformed date', c => { c.previewScenarios[0].referenceDate = '2026-02-30'; }, 'referenceDate'],
+    ['scenario wrong category', c => { c.previewScenarios[0].recommendationSituationId = 'first'; }, 'situación'],
+    ['scenario wrong kind', c => { c.previewScenarios[0].kind = 'notice'; }, 'kind'],
+    ['unknown chat', c => { c.previewScenarios[2].chatId = 'unknown'; }, 'chatId'],
+    ['chat wrong owner', c => { c.chats[0].scenarioId = 'inactive'; }, 'otro escenario'],
+    ['unknown chat ID', c => { c.chats[0].id = 'unknown'; }, 'chats'],
+    ['duplicate answer', c => { c.chats[0].answers[1].id = c.chats[0].answers[0].id; }, 'duplicado'],
+    ['Other answer', c => { c.chats[0].answers[0].id = 'other'; }, 'answers'],
+    ['missing supportive response', c => { c.chats[0].answers[0].response = ''; }, 'response'],
+    ['unknown destination', c => { c.chats[0].answers[0].destinationId = 'unknown'; }, 'destinationId'],
+    ['duplicate destination', c => { c.destinations[1].id = c.destinations[0].id; }, 'duplicado'],
+    ['contradictory destination', c => { (c.destinations[0] as unknown as Record<string,unknown>).planId = 'cal-returning'; }, 'contradictorios'],
+    ['wrong sport target', c => { c.destinations[0].sportId = 'yoga'; }, 'deporte'],
+    ['retired exact class', c => { (c.destinations[0] as {classId:string}).classId = 'retired'; }, 'retired'],
+    ['wrong case kind', c => { c.destinations[0] = {id:c.destinations[0].id,kind:'sport',sportId:'yoga',label:'Explorar'}; }, 'kind'],
+    ['wrong category plan', c => { (c.destinations.find(d => d.kind === 'plan') as {planId:string}).planId = 'yoga-first'; }, 'situación'],
+    ['water destination', c => { const d = c.destinations.find(d => d.kind === 'plan')!; d.sportId = 'swimming'; (d as {planId:string}).planId = 'swim-water-returning'; }, 'medio seguro'],
+    ['unknown image', c => { c.exercises[0].imageId = 'unknown'; }, 'imageId'],
+    ['false verified missing image', c => { c.exercises[0].imageStatus = 'verified'; }, 'no disponible'],
+    ['general SVG exact exercise', c => { c.exercises[0].imageAsset = '/assets/calisthenics.svg'; }, 'imageAsset'],
+  ];
+  for (const [name, mutate, hint] of cases) test(`rejects ${name}`, () => {
+    const c = clone(); mutate(c); expect(() => validateContent(c)).toThrow(hint);
+    try { validateContent(c); } catch(e) { console.log(`${name}: ${(e as Error).message}`); }
+  });
+  function withUnverifiedImage() {
+    const c = clone(); const e = c.exercises[0];
+    c.images.push({id:'pending',path:null,alt:'Imagen del ejercicio no disponible',subject:{kind:'exercise',id:e.id},sourceUrl:null,attribution:'Sin atribución verificada',provenance:'Sin permiso verificado',licenseStatus:'unverified',evidence:null});
+    e.imageId = 'pending'; return c;
+  }
+  test('unverified exact assignment is honestly unavailable, not displayable', () => {
+    const c = validateContent(withUnverifiedImage()); expect(c.exercises[0].imageStatus).toBe('unavailable'); expect(c.images[0].path).toBeNull();
+    console.log('pending exact subject, path=null/license=unverified -> unavailable');
+    const general = withUnverifiedImage(); general.images[0].subject = {kind:'sport',id:'calisthenics'};
+    expect(() => validateContent(general)).toThrow('ejercicio exacto');
+    const claimed = withUnverifiedImage(); claimed.exercises[0].imageStatus = 'verified';
+    expect(() => validateContent(claimed)).toThrow('estado');
+  });
+  for (const path of ['http://example.com/a.jpg','https://example.com/a.jpg','//example.com/a.jpg','data:image/png;base64,AAAA','javascript:alert(1)','/assets\\photo.jpg','/assets/../photo.jpg','/assets/%2e%2e/photo.jpg','/assets/%252e%252e/photo.jpg','/assets/photo.jpg?x=1','/assets/photo.jpg#x','/assets/unapproved.jpg','/assets/calisthenics.svg']) {
+    test(`rejects image path ${path}`, () => {
+      const c = withUnverifiedImage(); c.images[0].path = path;
+      expect(() => validateContent(c)).toThrow('images.pending.path');
+      try { validateContent(c); } catch(e) { console.log(`${JSON.stringify(path)} -> ${(e as Error).message}`); }
+    });
+  }
+});

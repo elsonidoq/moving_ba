@@ -15,6 +15,9 @@ export const uiKeys = [
   'canSwim', 'safePool', 'loading', 'retry', 'configurationError', 'skipToContent',
   'sessions', 'weekOf', 'thisWeek', 'thisMonth', 'earned', 'nextAchievement',
   'rest', 'pause', 'history', 'sessionAbandoned', 'notAvailable',
+  'sports', 'profileAccessibleName', 'editSituation', 'previewBadge', 'exitPreview',
+  'intention', 'intentionNotice', 'intentionEmpty', 'imageUnavailable', 'scriptedDisclosure',
+  'futureAI', 'cancel', 'resetFailed', 'chooseRequired', 'previous', 'reviewNext', 'locationIllustration',
 ] as const;
 export type UI = Record<typeof uiKeys[number], string>;
 export interface Profile {
@@ -28,7 +31,7 @@ export interface Sport {
 }
 export interface Exercise {
   id: string; sportId: SportId; title: string; quantity: string; technique: string;
-  imageAsset: string; imageAlt: string; medium: Medium;
+  imageAsset: string; imageAlt: string; medium: Medium; imageId: string | null; imageStatus: 'unavailable' | 'verified';
 }
 export interface Plan {
   id: string; sportId: SportId; profileId: ProfileId; level: string; name: string;
@@ -47,6 +50,11 @@ export interface Content {
   branding: { name: string; tagline: string; demoNotice: string };
   ui: UI;
   legal: Record<'illustrativeTraining' | 'professionalReview' | 'fictionalClasses' | 'noOfficialStatus' | 'nonredeemable' | 'noAgreement' | 'locationNotice', string>;
+  onboarding: { title: string; instructions: string; continueLabel: string; validationLabel: string; editTitle: string; editInstructions: string; choices: { id: ProfileId; label: string }[] };
+  previewScenarios: PreviewScenario[];
+  chats: ScriptedChat[];
+  destinations: Destination[];
+  images: ImageAssignment[];
   profiles: Profile[]; sports: Sport[]; exercises: Exercise[]; plans: Plan[]; classes: ClassListing[];
   rules: {
     pointsPerCompletion: number;
@@ -58,4 +66,24 @@ export interface Content {
     referenceDate: string; defaultProfileId: 'first';
     profiles: { id: string; profileId: ProfileId; history: { id: string; sportId: SportId; planId: string; activityDate: string }[] }[];
   };
+}
+
+export interface PreviewScenario {
+  id: string; title: string; disclosure: string; guidance: string; referenceDate: string;
+  recommendationSituationId: ProfileId; kind: 'journey' | 'notice';
+  history: { id: string; sportId: SportId; planId: string; activityDate: string }[];
+  chatId?: string; notice?: string; activationLabel?: string;
+}
+export interface ScriptedChat {
+  id: string; scenarioId: string; introduction: string; disclosure: string;
+  answers: { id: string; label: string; response: string; destinationId: string }[];
+}
+export type Destination = { id: string; sportId: SportId; label: string } & (
+  { kind: 'class'; classId: string; planId?: never } |
+  { kind: 'plan'; planId: string; classId?: never } |
+  { kind: 'sport'; classId?: never; planId?: never });
+export interface ImageAssignment {
+  id: string; path: string | null; alt: string; subject: { kind: 'exercise' | 'sport'; id: string };
+  sourceUrl: string | null; attribution: string; provenance: string;
+  licenseStatus: 'unverified' | 'verified'; evidence: string | null;
 }

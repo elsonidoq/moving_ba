@@ -1,4 +1,5 @@
 import { uiKeys, type Content } from './types';
+import { verifiedImages } from './images';
 
 type RecordValue = Record<string, unknown>;
 const assets = ['/assets/calisthenics.svg', '/assets/yoga.svg', '/assets/swimming.svg'];
@@ -84,7 +85,7 @@ export function validateContent(input: unknown): Content {
   for (const exercise of exercises) {
     const path = `exercises.${exercise.id}`;
     fields(exercise, ['title', 'quantity', 'technique', 'imageAlt'], path);
-    choice(exercise.imageAsset, assets, `${path}.imageAsset`);
+    if (exercise.imageAsset !== '') fail(`${path}.imageAsset`, 'la ilustración general no representa un ejercicio exacto; usá imageId o el estado no disponible.');
     choice(exercise.sportId, sportIds, `${path}.sportId`);
     choice(exercise.medium, ['dry-land', 'water'], `${path}.medium`);
     if (exercise.medium === 'water' && exercise.sportId !== 'swimming') fail(path, 'un ejercicio en agua debe pertenecer a natación.');
@@ -176,5 +177,129 @@ export function validateContent(input: unknown): Content {
     if (profile.id === 'returning' && dates.some(day => day === referenceDate)) fail(`scenarios.${scenario.id}`, 'el perfil que retoma debe mostrar una pausa anterior a la fecha de referencia.');
     if (profile.id === 'regular' && new Set(dates.map(weekKey)).size < 2) fail(`scenarios.${scenario.id}`, 'la práctica habitual requiere antecedentes de semanas diferentes.');
   }
+  validateExtensions(root, exercises, plans, classes, sports);
   return input as Content;
+}
+
+const onboardingLabels = ['No estoy entrenando y quiero empezar.', 'Entrenaba antes y quiero volver.', 'Ya estoy entrenando.'];
+const scenarioTitles = ['Entrenamiento sostenido', 'Volver después de una pausa', 'Dejó de entrenar y de usar la app', 'Pensaba asistir a una clase, pero no fue'];
+const cases = {
+  'missed-class': [
+    ['interruption', 'Me surgió algo', ['class']],
+    ['schedule', 'El horario o el lugar no me sirven', ['class']],
+    ['dislike', 'No me gustó la actividad', ['sport']],
+    ['discomfort', 'No me sentí cómodo/a con el docente o la clase', ['class', 'plan']],
+    ['skip', 'Prefiero no responder', ['sport', 'plan']],
+  ],
+  inactive: [
+    ['class', 'Volver con una clase', ['class']],
+    ['short-solo', 'Entrenar algo corto por mi cuenta', ['plan']],
+    ['other-sport', 'Probar otra actividad', ['sport']],
+    ['skip', 'Prefiero no responder', ['sport', 'plan']],
+  ],
+} as const;
+function validateExtensions(root: RecordValue, exercises: RecordValue[], plans: RecordValue[], classes: RecordValue[], sports: RecordValue[]) {
+  const onboarding = object(root.onboarding, 'onboarding');
+  fields(onboarding, ['title', 'instructions', 'continueLabel', 'validationLabel', 'editTitle', 'editInstructions'], 'onboarding');
+  const choices = entities(onboarding.choices, 'onboarding.choices');
+  exactIds(choices, profileIds, 'onboarding.choices');
+  profileIds.forEach((id, i) => {
+    if (reference(choices, id, 'onboarding.choices').label !== onboardingLabels[i]) fail(`onboarding.choices.${id}.label`, 'se requiere la opción exacta de situación.');
+  });
+  const destinations = entities(root.destinations, 'destinations');
+  if (destinations.length !== 9) fail('destinations', 'se requieren nueve destinos.');
+  for (const d of destinations) {
+    const path = `destinations.${d.id}`;
+    fields(d, ['label'], path);
+    choice(d.kind, ['class', 'plan', 'sport'], `${path}.kind`);
+    choice(d.sportId, sportIds, `${path}.sportId`);
+    const allowed = ['id', 'kind', 'sportId', 'label', ...(d.kind === 'class' ? ['classId'] : d.kind === 'plan' ? ['planId'] : [])];
+    if (Object.keys(d).some(key => !allowed.includes(key))) fail(path, 'el destino contiene campos contradictorios.');
+    if (d.kind !== 'sport') {
+      const target = reference(d.kind === 'class' ? classes : plans, d[d.kind === 'class' ? 'classId' : 'planId'], path);
+      if (target.sportId !== d.sportId || (d.kind === 'plan' && target.medium !== 'dry-land')) fail(path, 'el destino no corresponde al deporte o medio seguro.');
+    }
+  }
+  const scenarios = entities(root.previewScenarios, 'previewScenarios');
+  exactIds(scenarios, ['sustained', 'return', 'inactive', 'missed-class'], 'previewScenarios');
+  const chats = entities(root.chats, 'chats');
+  exactIds(chats, ['inactive-chat', 'missed-class-chat'], 'chats');
+  const usedDestinations = new Set<unknown>();
+  for (const [i, id] of ['sustained', 'return', 'inactive', 'missed-class'].entries()) {
+    const scenario = reference(scenarios, id, 'previewScenarios');
+    const path = `previewScenarios.${id}`;
+    fields(scenario, ['title', 'disclosure', 'guidance'], path);
+    if (scenario.title !== scenarioTitles[i]) fail(`${path}.title`, 'se requiere el nombre exacto del escenario.');
+    const referenceDate = date(scenario.referenceDate, `${path}.referenceDate`);
+    choice(scenario.recommendationSituationId, profileIds, `${path}.recommendationSituationId`);
+    const kind = i < 2 ? 'journey' : 'notice';
+    choice(scenario.kind, [kind], `${path}.kind`);
+    const history = list(scenario.history, `${path}.history`, false);
+    const dates: string[] = [];
+    if (history.length) for (const h of entities(history, `${path}.history`)) {
+      const hp = `${path}.history.${h.id}`;
+      choice(h.sportId, sportIds, `${hp}.sportId`);
+      const plan = reference(plans, h.planId, `${hp}.planId`);
+      if (plan.sportId !== h.sportId || plan.profileId !== scenario.recommendationSituationId) fail(hp, 'el plan no corresponde al deporte o situación.');
+      const day = date(h.activityDate, `${hp}.activityDate`);
+      if (day > referenceDate) fail(hp, 'el antecedente no puede ser posterior a la referencia.');
+      dates.push(day);
+    }
+    if (id === 'sustained' && new Set(dates.map(weekKey)).size < 2) fail(path, 'se requieren semanas diferentes de práctica.');
+    if (id === 'return' && dates.some(day => day >= referenceDate)) fail(path, 'la vuelta requiere una pausa.');
+    if (kind === 'journey') {
+      if (['chatId', 'notice', 'activationLabel'].some(key => key in scenario)) fail(path, 'un recorrido no puede declarar un aviso.');
+      continue;
+    }
+    fields(scenario, ['notice', 'activationLabel'], path);
+    const chat = reference(chats, scenario.chatId, `${path}.chatId`);
+    if (chat.id !== `${id}-chat` || chat.scenarioId !== id) fail(path, 'el chat corresponde a otro escenario.');
+    fields(chat, ['introduction', 'disclosure'], `chats.${chat.id}`);
+    const answers = entities(chat.answers, `chats.${chat.id}.answers`);
+    const expected = cases[id as keyof typeof cases];
+    exactIds(answers, expected.map(c => c[0]), `chats.${chat.id}.answers`);
+    for (const [answerId, label, kinds] of expected) {
+      const a = reference(answers, answerId, `chats.${chat.id}.answers`);
+      const ap = `chats.${chat.id}.answers.${answerId}`;
+      fields(a, ['label', 'response'], ap);
+      if (a.label !== label) fail(`${ap}.label`, 'se requiere la respuesta predefinida exacta.');
+      const d = reference(destinations, a.destinationId, `${ap}.destinationId`);
+      choice(d.kind, kinds, `${ap}.destinationId.kind`);
+      if (usedDestinations.has(d.id)) fail(ap, 'cada caso requiere su propio destino.');
+      usedDestinations.add(d.id);
+      if (d.kind === 'plan' && reference(plans, d.planId, ap).profileId !== scenario.recommendationSituationId) fail(ap, 'el plan no corresponde a la situación del escenario.');
+    }
+  }
+  const images = list(root.images, 'images', false).length ? entities(root.images, 'images') : [];
+  for (const image of images) {
+    const path = `images.${image.id}`;
+    fields(image, ['alt', 'attribution', 'provenance'], path);
+    const subject = object(image.subject, `${path}.subject`);
+    choice(subject.kind, ['exercise', 'sport'], `${path}.subject.kind`);
+    reference(subject.kind === 'exercise' ? exercises : sports, subject.id, `${path}.subject.id`);
+    choice(image.licenseStatus, ['unverified', 'verified'], `${path}.licenseStatus`);
+    if (image.sourceUrl !== null) {
+      const url = text(image.sourceUrl, `${path}.sourceUrl`);
+      if (!/^https?:\/\/[^\s]+$/.test(url)) fail(`${path}.sourceUrl`, 'se requiere una URL de procedencia válida, solo como metadato.');
+    }
+    if (image.evidence !== null) text(image.evidence, `${path}.evidence`);
+    if (image.path !== null) {
+      const local = text(image.path, `${path}.path`);
+      const approval = verifiedImages[local];
+      if (!/^\/assets\/[a-zA-Z0-9/-]+\.(?:jpg|jpeg|png|webp)$/.test(local) || local.includes('..') || !approval) fail(`${path}.path`, 'ruta local no autorizada o no canónica.');
+      if (image.licenseStatus !== 'verified' || approval.subjectKind !== subject.kind || approval.subjectId !== subject.id || approval.evidence !== image.evidence) fail(path, 'falta verificación independiente de licencia y sujeto exacto.');
+    } else if (image.licenseStatus === 'verified') fail(path, 'no se puede declarar verificada una imagen sin ruta autorizada.');
+  }
+  for (const e of exercises) {
+    const path = `exercises.${e.id}`;
+    choice(e.imageStatus, ['unavailable', 'verified'], `${path}.imageStatus`);
+    if (e.imageId === null) {
+      if (e.imageStatus !== 'unavailable') fail(path, 'una imagen ausente debe figurar como no disponible.');
+      continue;
+    }
+    const image = reference(images, e.imageId, `${path}.imageId`);
+    const subject = object(image.subject, path);
+    if (subject.kind !== 'exercise' || subject.id !== e.id) fail(path, 'la imagen debe representar este ejercicio exacto, no un deporte general.');
+    if (e.imageStatus !== (image.path !== null && image.licenseStatus === 'verified' ? 'verified' : 'unavailable')) fail(path, 'el estado de la imagen no corresponde a su verificación.');
+  }
 }
