@@ -3,8 +3,8 @@
 ## Direct files
 
 - [Specification](spec.md): consolidated Standard source, acceptance criteria, settled constraints, assumptions, and provenance.
-- [Plan](plan.md): serving-corrected architecture, delivery outcomes and provenance; renewed final approval pending.
-- [Tasks](tasks.md): serving-corrected outcomes and retained REQUIRED checks; renewed final approval and execution evidence pending.
+- [Plan](plan.md): approved serving-corrected architecture, delivery outcomes and provenance.
+- [Tasks](tasks.md): approved serving-corrected outcomes and retained REQUIRED checks; execution evidence pending.
 - [Research](research.md): bounded decisions and canonical research pointer.
 - [Data model](data-model.md): state, history, dates, persistence and transitions.
 - [Quickstart](quickstart.md): intended validation/run guide; commands not executed.
@@ -38,10 +38,28 @@ No specification renewal is needed for this unchanged source. Correction validat
 counts 24 REQUIRED IDs in both baseline and corrected tasks; the historical review's
 25-item claim below is retained as reported provenance, not a reason to add an item.
 
-Execution batches remain A T001–T002, B T003–T005, C T006–T008, owner-selected
-Sol/medium for all coding. No further installs, browsers or implementation workers
-before parent review, renewed approval and affected readiness. Prior generic scratch
-readiness is not acceptance of this unimplemented replacement or the feature.
+## Renewed approval and execution selection
+
+Owner answer through `ask_user`: **“Approve revision and bounded readiness exception”**.
+This renews implementation authorization for `spec.md`, `plan.md`, and `tasks.md`
+at `d8e14bcf53f9b05f547d30e4ab8458d988ca9574`, preserving all eight tasks and 24
+REQUIRED items. Fresh targeted review `d0811d78-d3fe-4466-885e-7fc9e438436c` found
+no issues; report `/tmp/ba-movement-demo-serving-review.md`. Plan hash:
+`5b096ad19b31921d793ff98b0078e6991a043b0d8bce4ad067dfa2f97923bc03`; tasks hash:
+`364d0eace6ddd0657d7a3f28c9cdebbe39f9c504bf08f2f1346d230acfd47612`.
+
+Approved sequential delegated coding batches: A T001–T002, B T003–T005, C T006–T008;
+exact coding profile `openai-codex/gpt-6.1-sol:medium`, never Astra. Fresh independent
+final reviewer: `openai-codex/gpt-6-astra:medium`, read-only. Local pinned npm
+installation, matching Chromium, build/server/browser checks and scratch readiness
+are authorized; OS installs, credential/settings changes, push and live deployment
+are not. Scratch proof `/tmp/ba-movement-demo-serving-readiness.md` passed replacement
+serving/build/browser checks; it is capability proof, not product acceptance.
+
+Explicit feature-scoped routing exception: successful exact Sol model/configured-medium
+runs may establish dispatch readiness despite unavailable exact supported-effort
+metadata. Provider-internal effort remains unknown. No product verification or other
+permission gate is waived. Dependency audit warnings remain unassessed.
 
 ## Overall approval
 
