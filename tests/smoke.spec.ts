@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { readFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, mkdirSync, writeFileSync, unlinkSync } from 'node:fs';
 import type { Content } from '../src/content/types';
 
 const content = JSON.parse(readFileSync('public/config/app-content.json', 'utf8')) as Content;
@@ -443,4 +443,87 @@ test('calisthenics journey rewards exactly once at composed boundaries, humane p
   }
   await page.clock.setFixedTime(new Date('2026-11-02T15:00:00Z'));
   const rested=await assertDerived(page,'first','2026-11-02');expect(rested.points).toBe(twice.points);expect(rested.badges).toEqual(twice.badges);expect(rested.ids).toEqual(twice.ids);expect(rested.weeklyGoal).toBe('0 / 1');
+});
+
+// This file runs serially: mutations affect the actual dist file owned by this server.
+const servedConfig = 'dist/config/app-content.json';
+const cEvidence = '/tmp/ba-batch-c';
+test('content edits real served file, immutable selections and historical snapshots', async ({page, request}) => {
+  mkdirSync(cEvidence,{recursive:true});
+  const original = readFileSync(servedConfig);
+  try {
+    await page.goto('/#/first/calisthenics/solo/cal-first');
+    const attemptId = await finish(page);
+    await page.goto('/#/first/yoga/classes/yoga-free');
+    await page.getByRole('button',{name:content.ui.interest,exact:true}).click();
+    const saved = await envelope(page);
+    const edited = structuredClone(content);
+    const item = edited.classes.find(c=>c.id==='yoga-free')!;
+    item.title = 'Yoga: encuentro editorial de ejemplo'; item.schedule = 'Viernes 16:45 · horario ficticio';
+    const plan = edited.plans.find(p=>p.id==='cal-first')!;
+    plan.steps.reverse(); plan.name = 'Calistenia: versión editorial';
+    edited.exercises.find(e=>e.id===plan.steps[0].exerciseId)!.technique = 'Ejemplo editorial: usá un apoyo estable y un recorrido cómodo.';
+    edited.rules.benefits[0].description = 'Una pausa editorial de demostración, sin oferta real.';
+    const bytes = JSON.stringify(edited,null,2)+'\n';
+    writeFileSync(servedConfig,bytes); writeFileSync(cEvidence+'/edited-content.json',bytes);
+    const response = await request.get('/config/app-content.json');
+    expect(response.status()).toBe(200); expect(await response.text()).toBe(bytes);
+    await page.reload();
+    await expect(page.locator('[data-detail-class-id]')).toHaveAttribute('data-detail-class-id','yoga-free');
+    await expect(page.getByRole('heading',{level:1})).toHaveText(item.title);
+    await expect(page.locator('main')).toContainText(item.schedule);
+    await page.goto('/#/first/calisthenics/solo/cal-first'); await page.reload();
+    expect(await page.locator('[data-step-id]').evaluateAll(rows=>rows.map(r=>r.getAttribute('data-step-id')))).toEqual(plan.steps.map(s=>s.id));
+    expect(await page.locator('[data-exercise-id]').evaluateAll(rows=>rows.map(r=>r.getAttribute('data-exercise-id')))).toEqual(plan.steps.map(s=>s.exerciseId));
+    await expect(page.locator('main')).toContainText(edited.exercises.find(e=>e.id===plan.steps[0].exerciseId)!.technique);
+    await page.goto('/#/first/challenges'); await page.reload();
+    await expect(page.locator('[data-benefit-id]')).toContainText(edited.rules.benefits[0].description);
+    expect((await envelope(page)).profiles.first).toEqual(saved.profiles.first);
+    await page.goto('/#/first/journey');
+    await expect(page.locator(`[data-history-id="${attemptId}"]`)).toContainText(content.plans.find(p=>p.id==='cal-first')!.name);
+    // Retire identities while keeping required coverage and references valid.
+    item.id='yoga-editorial'; plan.id='cal-editorial'; edited.profiles[0].defaultPlanId=plan.id;
+    writeFileSync(servedConfig,JSON.stringify(edited));
+    await page.goto('/#/first/yoga/classes/yoga-free'); await page.reload();
+    await expect(page).toHaveURL(/first\/yoga\/classes$/);
+    await expect(page.locator('[data-detail-class-id]')).toHaveCount(0);
+    await expect(page.locator('[data-class-id="yoga-editorial"]')).toHaveCount(1);
+    await page.goto('/#/first/calisthenics/solo/cal-first'); await page.reload();
+    await expect(page).toHaveURL(/calisthenics\/choice$/);
+    expect((await envelope(page)).profiles.first).toEqual(saved.profiles.first);
+    console.log('REAL HTTP200 edits yoga-free title+schedule; cal-first reversed stable steps',plan.steps,'benefit description+exercise technique; retired routes -> catalog/choice; snapshots retained',attemptId);
+  } finally { writeFileSync(servedConfig,original); }
+  expect(await (await request.get('/config/app-content.json')).body()).toEqual(original);
+  await page.goto('/'); await page.reload();
+  await expect(page.getByRole('heading',{level:1})).toHaveText(content.profiles[0].welcome);
+  await page.goto('/#/first/yoga/classes/yoga-free');
+  await expect(page.getByRole('heading',{level:1})).toHaveText(content.classes.find(c=>c.id==='yoga-free')!.title);
+  console.log('Baseline restored: actual HTTP bytes and original Yoga detail');
+});
+test('content failures real missing malformed reference-invalid files recover on retry',async({page,request})=>{
+  const original=readFileSync(servedConfig);
+  try {
+    for(const kind of ['missing','malformed','reference-invalid']) {
+      try {
+        if(kind==='missing') unlinkSync(servedConfig);
+        else if(kind==='malformed') writeFileSync(servedConfig,'{"schemaVersion":');
+        else {const invalid=structuredClone(content);invalid.plans[0].steps[0].exerciseId='missing-editor-exercise';writeFileSync(servedConfig,JSON.stringify(invalid));}
+        const response=await request.get('/config/app-content.json');
+        expect(response.status()).toBe(kind==='missing'?404:200);
+        await page.goto('/#/first/challenges'); await page.reload();
+        const alert=page.getByRole('alert');
+        await expect(alert).toContainText('No pudimos cargar el contenido.');
+        await expect(alert).toContainText('Revisá la configuración e intentá de nuevo.');
+        await expect(alert).toContainText(kind==='missing'?'404':kind==='malformed'?'formato JSON válido':'missing-editor-exercise');
+        await expect(page.locator('[data-stat], [data-benefit-id]')).toHaveCount(0);
+        console.log('REAL failure',kind,'HTTP',response.status(),'Spanish blocking hint',await alert.innerText());
+      } finally {writeFileSync(servedConfig,original);}
+      expect(await (await request.get('/config/app-content.json')).body()).toEqual(original);
+      await page.getByRole('button',{name:'Intentar de nuevo',exact:true}).click();
+      await expect(page.getByRole('heading',{level:1})).toHaveText(content.ui.challenges);
+      await expect(page.getByRole('alert')).toHaveCount(0);
+      await expect(page.locator('[data-benefit-id]')).toHaveCount(content.rules.benefits.length);
+      console.log(kind,'restored HTTP exact baseline and retry rendered challenges successfully');
+    }
+  } finally {writeFileSync(servedConfig,original);}
 });

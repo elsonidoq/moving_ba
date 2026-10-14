@@ -2,6 +2,8 @@
 
 ## Direct files
 
+- [Content configuration](CONTENT_CONFIGURATION.md): implemented JSON fields, local edits, validation, snapshots and reset.
+
 - [Conceptual interactive mockup](mockup_ba_en_movimiento_v2.html): Spanish-language demonstration of activity selection, individual practice or classes, continuity, and illustrative rewards. Not an official service; class data and transactions are simulated.
 - [Architecture](architecture.md): verified conceptual-demo baseline and clearly labeled planned runtime content/state/build/test decisions, dependency versions and research provenance.
 - [Deployment](deployment.md): operational verification status; no invented deployment procedures.

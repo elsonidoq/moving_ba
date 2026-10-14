@@ -33,7 +33,7 @@ test.describe('content validation', () => {
     ['bad entity ID Bad_ID', c => { c.plans[0].id = 'Bad_ID'; }, 'Bad_ID'],
     ['duplicate entity cal-first', c => { c.plans.push(c.plans[0]); }, 'cal-first'],
     ['duplicate sport ID', c => { c.sports[1].id = c.sports[0].id; }, 'duplicado'],
-    ['duplicate step shoulders', c => { c.plans[0].steps.push(c.plans[0].steps[0]); }, 'shoulders'],
+    ['duplicate current step identity', c => { c.plans[0].steps.push(c.plans[0].steps[0]); }, String(source.plans[0].steps[0].id)],
     ['bad step ID 1-step', c => { c.plans[0].steps[0].id = '1-step'; }, '1-step'],
     ['unknown exercise missing-exercise', c => { c.plans[0].steps[0].exerciseId = 'missing-exercise'; }, 'missing-exercise'],
     ['wrong sport exercise yoga-first-breath', c => { c.plans[0].steps[0].exerciseId = 'yoga-first-breath'; }, 'otro deporte'],
