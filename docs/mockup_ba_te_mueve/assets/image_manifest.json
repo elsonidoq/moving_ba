@@ -1,0 +1,234 @@
+{
+  "city_hero": {
+    "title": "Ciudad y parques de Buenos Aires",
+    "photoId": 20779916,
+    "source": "https://www.pexels.com/photo/aerial-photography-of-a-cityscape-20779916/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/city_hero.jpg",
+    "cdn": "https://images.pexels.com/photos/20779916/pexels-photo-20779916.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "city_park": {
+    "title": "Parque de Buenos Aires con edificios",
+    "photoId": 31414914,
+    "source": "https://www.pexels.com/photo/green-park-view-in-buenos-aires-cityscape-31414914/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/city_park.jpg",
+    "cdn": "https://images.pexels.com/photos/31414914/pexels-photo-31414914.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "cali_card": {
+    "title": "Persona entrenando en barras de parque",
+    "photoId": 39757461,
+    "source": "https://www.pexels.com/photo/man-exercising-on-outdoor-gym-equipment-in-park-39757461/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/cali_card.jpg",
+    "cdn": "https://images.pexels.com/photos/39757461/pexels-photo-39757461.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "cali_hero": {
+    "title": "Atleta haciendo dominadas en barra exterior",
+    "photoId": 16495746,
+    "source": "https://www.pexels.com/photo/young-shirtless-man-exercising-outdoors-16495746/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/cali_hero.jpg",
+    "cdn": "https://images.pexels.com/photos/16495746/pexels-photo-16495746.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "cali_class_a": {
+    "title": "Grupo de personas haciendo ejercicio funcional al aire libre",
+    "photoId": 31293814,
+    "source": "https://www.pexels.com/photo/group-outdoor-fitness-training-session-31293814/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/cali_class_a.jpg",
+    "cdn": "https://images.pexels.com/photos/31293814/pexels-photo-31293814.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "cali_class_b": {
+    "title": "Grupo de entrenamiento al aire libre con equipamiento",
+    "photoId": 8401819,
+    "source": "https://www.pexels.com/photo/women-doing-outdoor-exercises-8401819/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/cali_class_b.jpg",
+    "cdn": "https://images.pexels.com/photos/8401819/pexels-photo-8401819.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "cali_warmup": {
+    "title": "Mujer movilizando brazos al aire libre",
+    "photoId": 4426319,
+    "source": "https://www.pexels.com/photo/asian-sportswoman-stretching-arms-before-training-in-park-4426319/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/cali_warmup.jpg",
+    "cdn": "https://images.pexels.com/photos/4426319/pexels-photo-4426319.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "cali_squat": {
+    "title": "Hombre realizando sentadilla en parque",
+    "photoId": 4803865,
+    "source": "https://www.pexels.com/photo/man-exercising-in-park-4803865/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/cali_squat.jpg",
+    "cdn": "https://images.pexels.com/photos/4803865/pexels-photo-4803865.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "cali_incline": {
+    "title": "Mujer haciendo flexiones inclinadas sobre un banco",
+    "photoId": 8401820,
+    "source": "https://www.pexels.com/photo/woman-doing-push-ups-exercises-push-8401820/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/cali_incline.jpg",
+    "cdn": "https://images.pexels.com/photos/8401820/pexels-photo-8401820.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "cali_plank": {
+    "title": "Hombre realizando plancha al aire libre",
+    "photoId": 4920466,
+    "source": "https://www.pexels.com/photo/man-doing-core-exercises-4920466/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/cali_plank.jpg",
+    "cdn": "https://images.pexels.com/photos/4920466/pexels-photo-4920466.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "cali_stretch": {
+    "title": "Mujer haciendo estiramiento en parque",
+    "photoId": 34382760,
+    "source": "https://www.pexels.com/photo/woman-stretching-in-park-during-daytime-exercise-34382760/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/cali_stretch.jpg",
+    "cdn": "https://images.pexels.com/photos/34382760/pexels-photo-34382760.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "yoga_card": {
+    "title": "Mujer practicando yoga en parque",
+    "photoId": 34382753,
+    "source": "https://www.pexels.com/photo/woman-practicing-yoga-outdoors-in-park-34382753/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/yoga_card.jpg",
+    "cdn": "https://images.pexels.com/photos/34382753/pexels-photo-34382753.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "yoga_hero": {
+    "title": "Mujer haciendo yoga y meditación en parque",
+    "photoId": 34395954,
+    "source": "https://www.pexels.com/photo/outdoor-yoga-meditation-class-in-a-park-34395954/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/yoga_hero.jpg",
+    "cdn": "https://images.pexels.com/photos/34395954/pexels-photo-34395954.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "yoga_class_a": {
+    "title": "Grupo de yoga al aire libre en parque",
+    "photoId": 36715598,
+    "source": "https://www.pexels.com/photo/outdoor-group-yoga-session-in-a-sunny-park-36715598/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/yoga_class_a.jpg",
+    "cdn": "https://images.pexels.com/photos/36715598/pexels-photo-36715598.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "yoga_class_b": {
+    "title": "Otra clase grupal de yoga en parque con árboles",
+    "photoId": 8172947,
+    "source": "https://www.pexels.com/photo/people-on-the-park-doing-yoga-8172947/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/yoga_class_b.jpg",
+    "cdn": "https://images.pexels.com/photos/8172947/pexels-photo-8172947.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "yoga_breathe": {
+    "title": "Mujer meditando sentada en parque",
+    "photoId": 35253327,
+    "source": "https://www.pexels.com/photo/woman-practicing-yoga-outdoors-in-park-35253327/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/yoga_breathe.jpg",
+    "cdn": "https://images.pexels.com/photos/35253327/pexels-photo-35253327.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "yoga_sidebend": {
+    "title": "Mujer realizando inclinación lateral sentada en parque",
+    "photoId": 4971621,
+    "source": "https://www.pexels.com/photo/a-woman-doing-yoga-4971621/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/yoga_sidebend.jpg",
+    "cdn": "https://images.pexels.com/photos/4971621/pexels-photo-4971621.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "yoga_downward": {
+    "title": "Mujer realizando postura perro boca abajo",
+    "photoId": 7592992,
+    "source": "https://www.pexels.com/photo/faceless-woman-practicing-downward-facing-dog-asana-7592992/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/yoga_downward.jpg",
+    "cdn": "https://images.pexels.com/photos/7592992/pexels-photo-7592992.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "yoga_child": {
+    "title": "Mujer en postura del niño",
+    "photoId": 4534638,
+    "source": "https://www.pexels.com/photo/woman-kneeling-on-a-yoga-mat-4534638/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/yoga_child.jpg",
+    "cdn": "https://images.pexels.com/photos/4534638/pexels-photo-4534638.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "yoga_relax": {
+    "title": "Persona en savasana o relajación tumbada",
+    "photoId": 4325489,
+    "source": "https://www.pexels.com/photo/man-in-gray-tank-top-lying-on-black-carpet-4325489/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/yoga_relax.jpg",
+    "cdn": "https://images.pexels.com/photos/4325489/pexels-photo-4325489.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "swim_card": {
+    "title": "Nadadora haciendo crol en piscina cubierta",
+    "photoId": 6539731,
+    "source": "https://www.pexels.com/photo/woman-swimming-in-a-lap-pool-6539731/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/swim_card.jpg",
+    "cdn": "https://images.pexels.com/photos/6539731/pexels-photo-6539731.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "swim_hero": {
+    "title": "Nadador realizando estilo libre en pileta",
+    "photoId": 9030293,
+    "source": "https://www.pexels.com/photo/a-swimmer-swimming-in-the-swimming-pool-9030293/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/swim_hero.jpg",
+    "cdn": "https://images.pexels.com/photos/9030293/pexels-photo-9030293.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "swim_class_a": {
+    "title": "Personas nadando largos en pileta",
+    "photoId": 18167934,
+    "source": "https://www.pexels.com/photo/people-swimming-in-a-pool-18167934/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/swim_class_a.jpg",
+    "cdn": "https://images.pexels.com/photos/18167934/pexels-photo-18167934.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "swim_class_b": {
+    "title": "Grupo de nadadores entrenando en pileta",
+    "photoId": 8028682,
+    "source": "https://www.pexels.com/photo/people-swimming-in-the-pool-8028682/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/swim_class_b.jpg",
+    "cdn": "https://images.pexels.com/photos/8028682/pexels-photo-8028682.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "swim_warmup": {
+    "title": "Nadador estirando antes de entrar al agua",
+    "photoId": 6539744,
+    "source": "https://www.pexels.com/photo/a-swimmer-doing-stretching-6539744/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/swim_warmup.jpg",
+    "cdn": "https://images.pexels.com/photos/6539744/pexels-photo-6539744.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "swim_board": {
+    "title": "Nadadores preparando las tablas de natación",
+    "photoId": 18372085,
+    "source": "https://www.pexels.com/photo/man-at-swimming-pool-in-black-and-white-18372085/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/swim_board.jpg",
+    "cdn": "https://images.pexels.com/photos/18372085/pexels-photo-18372085.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "swim_freestyle": {
+    "title": "Nadadora haciendo crol en piscina",
+    "photoId": 6539731,
+    "source": "https://www.pexels.com/photo/woman-swimming-in-a-lap-pool-6539731/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/swim_freestyle.jpg",
+    "cdn": "https://images.pexels.com/photos/6539731/pexels-photo-6539731.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "swim_backstroke": {
+    "title": "Atleta ejecutando estilo espalda en piscina",
+    "photoId": 8688618,
+    "source": "https://www.pexels.com/photo/a-person-swimming-in-the-pool-8688618/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/swim_backstroke.jpg",
+    "cdn": "https://images.pexels.com/photos/8688618/pexels-photo-8688618.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  },
+  "swim_cooldown": {
+    "title": "Nadador practicando nado suave",
+    "photoId": 5903226,
+    "source": "https://www.pexels.com/photo/a-swimmer-training-on-a-pool-5903226/",
+    "license": "Pexels License (consultar términos)",
+    "local": "assets/photos/swim_cooldown.jpg",
+    "cdn": "https://images.pexels.com/photos/5903226/pexels-photo-5903226.jpeg?fm=jpg&cs=tinysrgb&w=1400"
+  }
+}
