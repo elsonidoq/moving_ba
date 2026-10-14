@@ -1,157 +1,223 @@
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
-import type { Content } from '../src/content/types';
+import type { Content, ProfileId } from '../src/content/types';
+import { validateContent } from '../src/content/validate';
 import { startSession, completeStep, abandonSession } from '../src/state/session';
-import { materialize, loadEnvelope, saveEnvelope, validateEnvelope, storageKey, registerInterest } from '../src/state/storage';
+import { materialize, loadEnvelope, saveEnvelope, validateEnvelope, validateLegacyEnvelope, normalizeLegacy, sourceKey, resetEnvelope, storageKey, type Envelope, type LegacyEnvelope, type StoragePort } from '../src/state/storage';
+import { createCommandOwner, type Command } from '../src/state/context';
 import { guardHash } from '../src/state/navigation';
-const content = JSON.parse(readFileSync('public/config/app-content.json', 'utf8')) as Content;
-const now = new Date('2026-10-14T15:00:00.000Z');
-const input = { profileId: 'first', sportId: 'calisthenics', planId: 'cal-first', canSwim: false, safePool: false } as const;
-
-test('session integrity ordered explicit events, replay, abandonment and durable atomic upsert', () => {
-  let envelope = materialize(content);
-  let attempt = startSession(content, input, () => 'attempt-one')!;
-  expect(Object.keys(envelope.profiles.first.completions)).toHaveLength(0);
-  for (const [id, step] of [['wrong', attempt.steps[0].id], [attempt.attemptId, 'wrong'], [attempt.attemptId, attempt.steps.at(-1)!.id]]) {
-    expect(completeStep(attempt, envelope, id, step, now)).toEqual({ attempt, envelope });
-  }
-  const original = structuredClone(attempt);
-  for (const step of original.steps) {
-    expect(attempt.steps[attempt.cursor].id).toBe(step.id);
-    const previous = attempt;
-    ({ attempt: attempt, envelope } = completeStep(attempt, envelope, attempt.attemptId, step.id, now) as {attempt: typeof attempt; envelope: typeof envelope});
-    expect(completeStep(attempt, envelope, original.attemptId, step.id, now)).toEqual({ attempt, envelope });
-    console.log('accepted', original.attemptId, step.id, 'cursor', previous.cursor, '->', attempt.cursor, 'stored', Object.keys(envelope.profiles.first.completions));
-  }
-  expect(attempt.status).toBe('completed');
-  expect(envelope.profiles.first.completions['attempt-one'].completedStepIds).toEqual(original.steps.map(s => s.id));
-  const store = new Map<string,string>(); const port = {getItem: (k: string) => store.get(k) ?? null, setItem: (k: string,v: string) => {store.set(k,v);}};
-  expect(saveEnvelope(envelope, port)).toBe('ready');
-  const refreshed = loadEnvelope(content, port).envelope;
-  expect(Object.keys(refreshed.profiles.first.completions)).toEqual(['attempt-one']);
-  for (const hash of ['#/first/calisthenics/choice', '#/first/calisthenics/success/attempt-one', '#/first/calisthenics/session/cal-first/attempt-one']) guardHash(hash, content, {attempt, envelope});
-  expect(completeStep(attempt, refreshed, original.attemptId, original.steps.at(-1)!.id, now).envelope).toBe(refreshed);
-  let second = startSession(content, input, () => 'attempt-two')!;
-  for (const step of second.steps) { const result = completeStep(second, envelope, second.attemptId, step.id, now); second = result.attempt!; envelope = result.envelope; }
-  expect(Object.keys(envelope.profiles.first.completions)).toEqual(['attempt-one','attempt-two']);
-  expect(envelope.profiles.returning.completions).toEqual({});
-  const partial = startSession(content, input, () => 'partial')!;
-  const advanced = completeStep(partial, envelope, partial.attemptId, partial.steps[0].id, now).attempt!;
-  expect(completeStep(abandonSession(advanced), envelope, partial.attemptId, partial.steps[1].id, now).envelope).toBe(envelope);
-  expect(guardHash('#/first/calisthenics/session/cal-first/partial', content, {attempt: null, envelope}).screen).toBe('plan');
-  console.log('final envelope', JSON.stringify(envelope));
-});
-test('swimming start guard forged/direct inputs and profile never grants ability', () => {
-  for (const profile of content.profiles) for (const canSwim of [false,true]) for (const safePool of [false,true]) {
-    const gate = { profileId: profile.id, sportId: 'swimming' as const, planId: `swim-water-${profile.id}`, canSwim, safePool };
-    const result = startSession(content, gate, () => 'swim-attempt');
-    expect(!!result).toBe(canSwim && safePool);
-    console.log('START', gate, 'allowed', result?.planId ?? null);
-  }
-  expect(startSession(content, {...input, planId:'swim-water-first', canSwim:true,safePool:true})).toBeNull();
-  expect(startSession(content, {...input, sportId:'swimming',planId:'swim-dry-first'})).not.toBeNull();
-  expect(guardHash('#/regular/swimming/session/swim-water-regular/forged', content).screen).toBe('choice');
-});
-test('storage envelope validation, scoped writes, retired snapshots and unavailable memory', () => {
-  const sentinel = 'untouched'; const values = new Map([['unrelated',sentinel]]);
-  const writes: string[] = [];
-  const port = {getItem: (k: string) => values.get(k) ?? null, setItem: (k: string,v: string) => {writes.push(k);values.set(k,v);}};
-  const loaded = loadEnvelope(content,port); expect(loaded.status).toBe('ready');
-  const edited = structuredClone(content); edited.scenarios.profiles[1].history = [];
-  expect(loadEnvelope(edited,port).envelope).toEqual(loaded.envelope);
-  const retired = structuredClone(loaded.envelope); retired.profiles.returning.baselineHistory[0].planId = 'retired-plan';
-  expect(validateEnvelope(retired,content)).toEqual(retired);
-  for (const mutation of [(e: any) => e.schemaVersion=2, (e: any) => e.points=100, (e: any) => e.profiles.returning.baselineHistory[0].points=100, (e: any) => e.selectedProfileId='unknown', (e: any) => e.profiles.returning.baselineHistory[0].sportId='unknown', (e: any) => e.profiles.returning.baselineHistory[0].profileId='unknown']) {
-    const invalid = structuredClone(loaded.envelope); mutation(invalid); values.set(storageKey,JSON.stringify(invalid));
-    expect(loadEnvelope(content,port).status).toBe('invalid');
-    expect(() => validateEnvelope(invalid,content)).toThrow(content.ui.storageRecovery);
-  }
-  values.set(storageKey,'{'); expect(loadEnvelope(content,port).status).toBe('invalid');
-  const denied = { getItem: () => {throw Error('denied');}, setItem: () => {throw Error('denied');} };
-  expect(loadEnvelope(content,denied).status).toBe('unavailable');
-  expect(saveEnvelope(loaded.envelope,denied)).toBe('unavailable');
-  expect(values.get('unrelated')).toBe(sentinel); expect(new Set(writes)).toEqual(new Set([storageKey]));
-  console.log('one-key writes', writes, 'sentinel',values.get('unrelated'),'invalid Spanish',content.ui.storageRecovery,'unavailable',content.ui.storageWarning);
-});
-
-test('class identity exact six fields, order independence, interest never credit', () => {
-  let envelope = materialize(content);
-  const before = JSON.stringify(content.profiles.map(p => [envelope.profiles[p.id].baselineHistory,envelope.profiles[p.id].completions]));
-  const reordered = {...content, classes:[...content.classes].reverse()};
-  for (const sport of content.sports) for (const kind of ['free','paid']) {
-    const item = content.classes.find(c=>c.sportId===sport.id && c.price.kind===kind)!;
-    expect(item).toBeTruthy(); expect(item.price.amount).toBe(kind==='free'?0:item.price.amount);
-    if(kind==='paid')expect(item.price.amount).toBeGreaterThan(0);
-    expect(item.price.currency).toBe('ARS');expect(item.fictional).toBe(true);expect(item.receiver).toBe('A confirmar');
-    for(const field of ['title','schedule','venue','locality','level','description','receiver','contactCopy'] as const)expect(item[field]).not.toBe('');
-    expect(item.requirements.length).toBeGreaterThan(0);
-    const hash=`#/first/${sport.id}/classes/${item.id}`;
-    expect(guardHash(hash,reordered)).toEqual({screen:'detail',profileId:'first',sportId:sport.id,mode:'classes',classId:item.id});
-    envelope=registerInterest(envelope,reordered,'first',sport.id,item.id,now);
-    expect(registerInterest(envelope,reordered,'first',sport.id,item.id,now)).toBe(envelope);
-    expect(envelope.profiles.first.interests[item.id].classTitle).toBe(item.title);
-    console.log('class',JSON.stringify(item),'interest key',item.id);
-  }
-  expect(JSON.stringify(content.profiles.map(p => [envelope.profiles[p.id].baselineHistory,envelope.profiles[p.id].completions]))).toBe(before);
-  expect(Object.keys(envelope.profiles.first)).toEqual(['baselineHistory','completions','interests']);
-  const removed={...content,classes:content.classes.filter(c=>c.id!=='yoga-free')};
-  expect(guardHash('#/first/yoga/classes/yoga-free',removed).screen).toBe('catalog');
-  expect(validateEnvelope(envelope,removed).profiles.first.interests['yoga-free'].classTitle).toBe(content.classes.find(c=>c.id==='yoga-free')!.title);
-  expect(registerInterest(envelope,content,'first','swimming','yoga-free',now)).toBe(envelope);
-});
-
 import { activityDate, weekKey, monthKey } from '../src/state/dates';
-import { eligibleHistory, selectJourney } from '../src/state/selectors';
-import type { HistoryRecord, Envelope } from '../src/state/storage';
-function independentWeek(date: string) {
-  const days = Math.floor(Date.parse(date+'T00:00:00Z') / 86400000);
-  return new Date((Math.floor((days+3)/7)*7-3)*86400000).toISOString().slice(0,10);
+import { eligibleHistory, selectJourney, selectPreviewJourney } from '../src/state/selectors';
+const content = validateContent(JSON.parse(readFileSync('public/config/app-content.json', 'utf8'))) as Content;
+const now = new Date('2026-10-14T15:00:00.000Z');
+const input = {profileId:'first',sportId:'calisthenics',planId:'cal-first',canSwim:false,safePool:false} as const;
+const profiles: ProfileId[] = ['first','returning','regular'];
+function storage(raw?: string) {
+  const values = new Map<string,string>([['unrelated','sentinel']]); if (raw !== undefined) values.set(storageKey,raw);
+  const calls: string[][] = []; let denyRead=false,denyWrite=false;
+  const port:StoragePort = {
+    getItem(k) {calls.push(['get',k]);if(denyRead)throw Error('denied read');return values.get(k)??null;},
+    setItem(k,v) {calls.push(['set',k,v]);if(denyWrite)throw Error('denied write');values.set(k,v);},
+  };
+  return {values,calls,port,readsDenied:(v:boolean)=>{denyRead=v;},writesDenied:(v:boolean)=>{denyWrite=v;},writes:()=>calls.filter(c=>c[0]==='set')};
 }
-function independent(content: Content, e: Envelope, profileId: typeof input.profileId | 'returning' | 'regular', today: string) {
-  const p=e.profiles[profileId];
-  const records=[...new Map([...p.baselineHistory,...Object.values(p.completions)].map(r=>[r.id,r])).values()];
-  const weeks=(list:HistoryRecord[])=>new Set(list.map(r=>independentWeek(r.activityDate))).size;
-  const week=records.filter(r=>independentWeek(r.activityDate)===independentWeek(today)&&r.activityDate<=today);
-  const month=records.filter(r=>r.activityDate.slice(0,7)===today.slice(0,7)&&r.activityDate<=today);
-  return {ids:records.map(r=>r.id).sort(),points:records.length*content.rules.pointsPerCompletion,sessions:records.length,activeWeeks:weeks(records),weeklySessions:week.length,weeklyGoal:content.profiles.find(p=>p.id===profileId)!.weeklyGoal,
-    challenges:content.rules.challenges.map(r=>({id:r.id,value:r.metric==='sessions'?(r.period==='week'?week:month).length:weeks(r.period==='week'?week:month)})),
-    badges:content.rules.badges.map(r=>({id:r.id,earned:(r.metric==='sessions'?records.length:weeks(records))>=r.threshold})),weekKeys:[...new Set(records.map(r=>independentWeek(r.activityDate)))].sort()};
+/** Deliberately independent of current fixtures and retired current-catalog membership. */
+function legacyFixture():LegacyEnvelope {
+  const e:LegacyEnvelope = {schemaVersion:1,selectedProfileId:'regular',scenarioReferenceDate:'2026-10-14',profiles:{} as LegacyEnvelope['profiles']};
+  for (const [i,p] of profiles.entries()) e.profiles[p] = {
+    baselineHistory: ['z-seed','same-seed','a-seed'].map((id,j)=>({id,profileId:p,sportId:'yoga',planId:`retired-${p}-${j}`,planTitle:`Práctica retirada ${p} ${j}`,sportTitle:`Yoga histórico ${p}`,medium:'dry-land',activityDate:`2026-10-0${i+j+1}`,origin:'seed'})),
+    completions:{'same-attempt':{id:'same-attempt',attemptId:'same-attempt',profileId:p,sportId:'swimming',planId:`retired-water-${p}`,planTitle:`Agua histórica ${p}`,sportTitle:`Natación histórica ${p}`,medium:'water',activityDate:'2026-10-14',origin:'user-simulated',timestamp:now.toISOString(),completedStepIds:[`step-${p}`,'same-step']}},
+    interests:{'retired-class':{classId:'retired-class',profileId:p,sportId:'calisthenics',classTitle:`Clase retirada ${p}`,sportTitle:`Calistenia histórica ${p}`,timestamp:now.toISOString(),origin:'simulated-interest'}},
+  };
+  return e;
 }
-test('history rules dates baseline union unique completion, independent oracle, snapshots and rule/reset semantics',()=>{
-  let e=materialize(content);
-  for(const p of content.profiles) {
-    const baseline=selectJourney(content,e,p.id,now);
-    const baselineExpected=independent(content,e,p.id,'2026-10-14');
-    expect(baseline.points).toBe(baselineExpected.points);expect(baseline.activeWeeks).toBe(baselineExpected.activeWeeks);expect(baseline.weeklySessions).toBe(baselineExpected.weeklySessions);expect(baseline.badges.map(r=>({id:r.id,earned:r.earned}))).toEqual(baselineExpected.badges);
-    console.log('baseline oracle',p.id,JSON.stringify(baselineExpected));
-    let attempt=startSession(content,{...input,profileId:p.id,planId:p.defaultPlanId},()=>`new-${p.id}`)!;
-    for(const step of attempt.steps) { const next=completeStep(attempt,e,attempt.attemptId,step.id,now);attempt=next.attempt!;e=next.envelope; }
-    const actual=selectJourney(content,e,p.id,now);const expected=independent(content,e,p.id,'2026-10-14');
-    expect({ids:actual.history.map(r=>r.id).sort(),points:actual.points,sessions:actual.sessions,activeWeeks:actual.activeWeeks,weeklySessions:actual.weeklySessions,weeklyGoal:actual.weeklyGoal,challenges:actual.challenges.map(r=>({id:r.id,value:r.value})),badges:actual.badges.map(r=>({id:r.id,earned:r.earned})),weekKeys:actual.weekKeys}).toEqual(expected);
-    const later=selectJourney(content,e,p.id,new Date('2026-11-02T15:00:00Z'));
-    expect(later.weeklySessions).toBe(0); expect(later.points).toBe(actual.points); expect(later.badges).toEqual(actual.badges); expect(later.history).toEqual(actual.history);
-    console.log('history oracle',p.id,'date',actual.today,'rule',content.rules.pointsPerCompletion,'expected',JSON.stringify(expected),'actual',JSON.stringify(actual));
-  }
-  const changed=structuredClone(content);changed.plans[0].name='Nombre nuevo';changed.plans=changed.plans.filter(p=>p.id!=='cal-first');changed.rules.pointsPerCompletion=3;
-  changed.rules.badges[0].threshold=99;changed.rules.challenges[0].target=4;
-  expect(selectJourney(changed,e,'first',now).badges[0].earned).toBe(false);expect(selectJourney(changed,e,'first',now).challenges[0]).toMatchObject({value:1,target:4});
-  expect(selectJourney(changed,e,'first',now).points).toBe(3);expect(eligibleHistory(e,'first')[0].planTitle).toBe(content.plans[0].name);
-  const duplicated=structuredClone(e);duplicated.profiles.first.completions.duplicate=duplicated.profiles.first.completions['new-first'];
-  expect(eligibleHistory(duplicated,'first')).toHaveLength(1);
-  const port={getItem:()=>JSON.stringify(e),setItem:()=>{}};const fixtureEdit=structuredClone(content);fixtureEdit.scenarios.profiles[1].history.pop();
-  expect(loadEnvelope(fixtureEdit,port).envelope.profiles.returning.baselineHistory).toHaveLength(2);
-  expect(materialize(fixtureEdit).profiles.returning.baselineHistory).toHaveLength(1);
-  expect(materialize(content).profiles.first.baselineHistory).toHaveLength(0);
+test('one-person compatibility new actual initialization is empty and unchosen',()=>{
+  const s=storage(); const loaded=loadEnvelope(content,s.port);
+  expect(loaded).toEqual({envelope:materialize(),status:'ready',readBlocked:false});
+  expect(loaded.envelope).toEqual({schemaVersion:1,layout:'one-person',preference:null,journey:{},interests:{},intention:null});
+  expect(s.writes()).toEqual([]);console.log('new actual',JSON.stringify(loaded),'write calls',s.writes());
 });
-test('history rules dates BA local Monday/month boundaries, honest numerator and lifetime rest preservation',()=>{
-  expect(activityDate(new Date('2026-11-02T01:30:00Z'))).toBe('2026-11-01');
-  expect(activityDate(new Date('2026-11-02T03:00:00Z'))).toBe('2026-11-02');
-  expect(activityDate(new Date('2026-11-01T02:30:00Z'))).toBe('2026-10-31');
-  expect(weekKey('2026-11-01')).toBe('2026-10-26');expect(weekKey('2026-11-02')).toBe('2026-11-02');expect(monthKey('2026-10-31')).toBe('2026-10');
-  const e=materialize(content);e.profiles.first.baselineHistory=['2026-10-25','2026-10-26','2026-10-31','2026-11-01','2026-11-02'].map((d,i)=>({id:`boundary-${i}`,profileId:'first',sportId:'calisthenics',planId:'retired',planTitle:'Práctica histórica',sportTitle:'Calistenia',medium:'dry-land',activityDate:d,origin:'seed'}));
-  const c=structuredClone(content);c.rules.challenges=[{id:'week-sessions',title:'Semana',description:'Ejemplo',metric:'sessions',period:'week',target:1},{id:'month-sessions',title:'Mes',description:'Ejemplo',metric:'sessions',period:'month',target:1},{id:'week-weeks',title:'Semanas',description:'Ejemplo',metric:'activeWeeks',period:'week',target:1},{id:'month-weeks',title:'Mes y semanas',description:'Ejemplo',metric:'activeWeeks',period:'month',target:1}];
-  for(const [instant,today,numerators] of [['2026-11-01T02:30:00Z','2026-10-31',[2,3,1,2]],['2026-11-02T01:30:00Z','2026-11-01',[3,1,1,1]],['2026-11-02T03:00:00Z','2026-11-02',[1,2,1,2]]] as const) {
-    const actual=selectJourney(c,e,'first',new Date(instant));expect(actual.today).toBe(today);expect(actual.challenges.map(r=>r.value)).toEqual(numerators);expect(actual.challenges.map(r=>({id:r.id,value:r.value}))).toEqual(independent(c,e,'first',today).challenges);
-    expect(actual.points).toBe(50);expect(actual.activeWeeks).toBe(3);expect(actual.badges.every(r=>r.earned)).toBe(true);console.log('BA boundary',instant,today,actual.weekKeys,'numerators',actual.challenges.map(r=>r.value),'lifetime',actual.points,actual.badges.map(r=>r.earned));
+test('one-person compatibility colliding source tuples preserve every field, archive, stable order and no reimport/reseed',()=>{
+  const legacy=legacyFixture();expect(validateLegacyEnvelope(legacy)).toEqual(legacy);
+  const raw=JSON.stringify(legacy); const s=storage(raw);
+  const loaded=loadEnvelope(content,s.port);expect(loaded.status).toBe('ready');const e=loaded.envelope;
+  const tuples:string[]=[];
+  for(const p of profiles) {
+    const data=legacy.profiles[p];
+    for(const r of [...data.baselineHistory].sort((a,b)=>a.id.localeCompare(b.id))) {
+      const key=sourceKey('legacy',p,'baseline',r.id);tuples.push(key);expect(e.journey[key]).toEqual(r);console.log('every field equal',key,JSON.stringify(e.journey[key]));
+    }
+    for(const [id,r] of Object.entries(data.completions)) {const key=sourceKey('legacy',p,'completion',id);tuples.push(key);expect(e.journey[key]).toEqual(r);console.log('every field equal',key,JSON.stringify(r));}
+    for(const [id,r] of Object.entries(data.interests)) {const key=sourceKey('legacy',p,'interest',id);expect(e.interests[key]).toEqual(r);console.log('every field equal',key,JSON.stringify(r));}
   }
+  expect(Object.keys(e.journey)).toEqual(tuples);expect(e.legacySource).toEqual(legacy);expect(e.preference).toBeNull();expect(e.intention).toBeNull();
+  expect(normalizeLegacy(legacy)).toEqual(e);expect(eligibleHistory(e)).toHaveLength(12);expect(Object.keys(e.interests)).toHaveLength(3);
+  const reversed=structuredClone(legacy);for(const p of profiles)reversed.profiles[p].baselineHistory.reverse();
+  expect(normalizeLegacy(reversed).journey).toEqual(e.journey);expect(Object.keys(normalizeLegacy(reversed).journey)).toEqual(tuples);
+  const changed=structuredClone(content);changed.scenarios.profiles=[];changed.profiles=[];changed.sports=[];
+  expect(loadEnvelope(changed,s.port).envelope).toEqual(e);expect(loadEnvelope(content,s.port).envelope).toEqual(e);
+  expect(s.values.get(storageKey)).toBe(raw);expect(s.writes()).toEqual([]);
+  expect(saveEnvelope(e,s.port,loaded)).toBe('ready');expect(s.writes()).toHaveLength(1);
+  const canonical=s.values.get(storageKey);expect(loadEnvelope(changed,s.port).envelope).toEqual(e);expect(loadEnvelope(content,s.port).envelope).toEqual(e);expect(s.writes()).toHaveLength(1);expect(s.values.get(storageKey)).toBe(canonical);
+  expect(selectJourney(content,e,'first',now)).toMatchObject({sessions:12,points:120,activeWeeks:3});
+  console.log('ordered tuples',tuples,'archive profiles',Object.keys(e.legacySource!.profiles),'logical sessions/points',12,120,'raw reads wrote',0,'canonical save count',s.writes().length);
+});
+test('one-person compatibility frozen legacy rejects unknown fields and unsafe/malformed records without current content',()=>{
+  const mutations:((e:LegacyEnvelope)=>void)[]=[e=>{(e as any).points=10;},e=>{e.selectedProfileId='unknown' as never;},e=>{e.scenarioReferenceDate='2026-02-30';},e=>{e.profiles.first.baselineHistory[0].sportId='unknown' as never;},e=>{e.profiles.first.baselineHistory[0].medium='water';},e=>{e.profiles.first.completions['same-attempt'].completedStepIds=['same','same'];},e=>{e.profiles.first.completions['same-attempt'].activityDate='2026-10-13';},e=>{e.profiles.first.completions['same-attempt'].attemptId='different';},e=>{(e.profiles.first.interests['retired-class'] as any).secret='bad';}];
+  for(const mutate of mutations){const e=legacyFixture();mutate(e);expect(()=>validateLegacyEnvelope(e)).toThrow('datos guardados');}
+});
+test('one-person storage reset preserves invalid bytes and blocks ordinary saves, every cancel is full no-op',()=>{
+  const invalids=['{',JSON.stringify({...materialize(),answers:['sensitive']}),JSON.stringify({...materialize(),preference:{situationId:'unknown',confirmed:true}}),JSON.stringify({...materialize(),layout:'unknown'})];
+  for(const raw of invalids){
+    const s=storage(raw);const loaded=loadEnvelope(content,s.port);expect(loaded.status).toBe('invalid');
+    expect(saveEnvelope(materialize(),s.port,loaded)).toBe('invalid');expect(s.values.get(storageKey)).toBe(raw);expect(s.writes()).toHaveLength(0);
+    const owner=createCommandOwner(content,s.port);for(const entry of ['profile','recovery'] as const){const before=owner.getState();const calls=s.calls.length;expect(owner.dispatch({type:'reset',confirmed:false,entry})).toBe(false);expect(owner.getState()).toBe(before);expect(s.calls).toHaveLength(calls);}
+    expect(owner.dispatch({type:'chooseSituation',situationId:'first'})).toBe(false);expect(s.values.get(storageKey)).toBe(raw);
+    console.log('invalid bytes preserved',JSON.stringify(raw),'status',loaded.status,'Spanish recovery',content.ui.storageRecovery,'set calls',s.writes());
+  }
+});
+test('one-person storage reset confirmed scoped tombstone clears transients and archive without reseed; cancel in normal entries is no-op',()=>{
+  const s=storage(JSON.stringify(legacyFixture()));const owner=createCommandOwner(content,s.port,'#/regular/yoga/solo/yoga-regular',()=>now);
+  owner.dispatch({type:'chooseSituation',situationId:'returning'});owner.dispatch({type:'intention',classId:'yoga-free'});owner.dispatch({type:'affirm',key:'canSwim',value:true});owner.dispatch({type:'affirm',key:'safePool',value:true});owner.dispatch({type:'start',planId:'swim-water-returning'});
+  for(const entry of ['profile','recovery'] as const){const before=owner.getState();const calls=structuredClone(s.calls);expect(owner.dispatch({type:'reset',confirmed:false,entry})).toBe(false);expect(owner.getState()).toBe(before);expect(s.calls).toEqual(calls);}
+  expect(resetEnvelope(s.port,false)).toBeNull();const before=s.values.get(storageKey);
+  expect(owner.dispatch({type:'reset',confirmed:true,entry:'profile'})).toBe(true);
+  expect(owner.getState()).toMatchObject({envelope:materialize(),attempt:null,canSwim:false,safePool:false,mode:{kind:'actual'},route:{screen:'onboarding'},status:'ready',message:null});
+  expect(s.values.get(storageKey)).toBe(JSON.stringify(materialize()));expect(s.values.get('unrelated')).toBe('sentinel');expect(new Set(s.writes().map(c=>c[1]))).toEqual(new Set([storageKey]));expect(loadEnvelope(content,s.port).envelope).toEqual(materialize());
+  console.log('confirmed reset before',before,'after',s.values.get(storageKey),'calls',s.calls);
+  const corrupt=storage('{');const recovery=createCommandOwner(content,corrupt.port);expect(recovery.dispatch({type:'reset',confirmed:true,entry:'recovery'})).toBe(true);expect(corrupt.values.get(storageKey)).toBe(JSON.stringify(materialize()));
+});
+test('one-person storage reset denied reads prevent overwrite until successful reconciliation; denied writes/reset are honestly tab-only',()=>{
+  const raw=JSON.stringify(legacyFixture());const s=storage(raw);s.readsDenied(true);const owner=createCommandOwner(content,s.port);
+  expect(owner.getState()).toMatchObject({status:'unavailable',readBlocked:true});s.readsDenied(false);
+  expect(owner.dispatch({type:'chooseSituation',situationId:'first'})).toBe(true);expect(s.writes()).toHaveLength(0);expect(s.values.get(storageKey)).toBe(raw);expect(owner.getState().message).toContain('pestaña');expect(owner.getState().message).toContain('volver al recargar');
+  owner.dispatch({type:'storageEvent',key:storageKey});expect(owner.getState().envelope).toEqual(normalizeLegacy(legacyFixture()));expect(owner.getState().readBlocked).toBe(false);
+  s.writesDenied(true);owner.dispatch({type:'chooseSituation',situationId:'regular'});expect(owner.getState().status).toBe('unavailable');expect(owner.getState().message).toContain('volver al recargar');expect(s.values.get(storageKey)).toBe(raw);
+  owner.dispatch({type:'reset',confirmed:true,entry:'profile'});expect(owner.getState()).toMatchObject({envelope:materialize(),status:'unavailable',readBlocked:true,message:content.ui.resetFailed});expect(owner.getState().message).toContain('Los datos anteriores pueden volver');expect(s.values.get(storageKey)).toBe(raw);expect(s.values.get('unrelated')).toBe('sentinel');
+  s.writesDenied(false);expect(loadEnvelope(content,s.port).envelope).toEqual(normalizeLegacy(legacyFixture()));
+  console.log('denied bytes remain',raw,'calls',s.calls,'reset Spanish',owner.getState().message);
+});
+test('actual command custody URLs and legacy selection never consent; edits only preference; interest/intention grant no credit',()=>{
+  const s=storage(JSON.stringify(legacyFixture()));const owner=createCommandOwner(content,s.port,'#/regular/yoga/solo/yoga-regular',()=>now);
+  expect(owner.getState().envelope.preference).toBeNull();expect(owner.getState().route.screen).toBe('onboarding');expect(s.writes()).toHaveLength(0);
+  for(const hash of ['#/first/home','#/returning/yoga/classes/yoga-free','#/regular/swimming/session/swim-water-regular/forged'])owner.dispatch({type:'navigate',hash});
+  expect(s.writes()).toHaveLength(0);expect(owner.dispatch({type:'start',planId:'cal-first'})).toBe(false);
+  owner.dispatch({type:'chooseSituation',situationId:'first'});const baseline=owner.getState().envelope;
+  const actions:Command[]=[{type:'interest',classId:'yoga-free'},{type:'interest',classId:'yoga-free'},{type:'intention',classId:'yoga-free'},{type:'intention',classId:'yoga-free'},{type:'intention',classId:'cal-paid'}];
+  const results=actions.map(a=>owner.dispatch(a));expect(results).toEqual([true,false,true,false,true]);
+  expect(Object.keys(owner.getState().envelope.interests)).toHaveLength(4);expect(owner.getState().envelope.intention?.classSnapshot).toEqual(content.classes.find(c=>c.id==='cal-paid'));
+  const before=owner.getState().envelope;const records=JSON.stringify({...before,preference:null});owner.dispatch({type:'editSituation',situationId:'regular'});expect(JSON.stringify({...owner.getState().envelope,preference:null})).toBe(records);expect(owner.getState().envelope.journey).toEqual(baseline.journey);
+  const bytes=s.values.get(storageKey);owner.dispatch({type:'navigate',hash:'#/first/home'});expect(owner.getState().envelope.preference?.situationId).toBe('regular');expect(s.values.get(storageKey)).toBe(bytes);
+  console.log('actual actions',actions,'results',results,'actual bytes',bytes);
+});
+test('actual command custody preview rejects direct mutations, serializes no transients, exit has no pending replay',()=>{
+  const s=storage();const owner=createCommandOwner(content,s.port,'',()=>now,()=> 'actual-uuid');owner.dispatch({type:'chooseSituation',situationId:'returning'});owner.dispatch({type:'intention',classId:'yoga-free'});
+  const bytes=s.values.get(storageKey);owner.dispatch({type:'enterScenario',scenarioId:'missed-class'});owner.dispatch({type:'answer',answerId:'interruption'});
+  const blocked:Command[]=[{type:'editSituation',situationId:'regular'},{type:'chooseSituation',situationId:'first'},{type:'reset',confirmed:true,entry:'profile'},{type:'reset',confirmed:true,entry:'recovery'},{type:'interest',classId:'cal-free'},{type:'intention',classId:'cal-paid'},{type:'start',planId:'cal-returning'},{type:'accept',attemptId:'forged',stepId:'forged'},{type:'affirm',key:'canSwim',value:true}];
+  for(const action of blocked){expect(owner.dispatch(action),JSON.stringify(action)).toBe(false);expect(s.values.get(storageKey)).toBe(bytes);console.log('preview rejected',JSON.stringify(action));}
+  owner.dispatch({type:'navigate',hash:'#/first/yoga/classes/yoga-free'});expect(owner.getState().mode).toMatchObject({kind:'preview',answerId:'interruption'});expect(s.values.get(storageKey)).toBe(bytes);
+  owner.dispatch({type:'exitPreview'});expect(owner.getState()).toMatchObject({mode:{kind:'actual'},attempt:null,canSwim:false,safePool:false});expect(s.values.get(storageKey)).toBe(bytes);
+  owner.dispatch({type:'affirm',key:'canSwim',value:true});owner.dispatch({type:'affirm',key:'safePool',value:true});owner.dispatch({type:'start',planId:'swim-water-returning'});expect(owner.getState().attempt).not.toBeNull();expect(s.values.get(storageKey)).toBe(bytes);
+  for(const key of ['mode','answerId','answers','canSwim','safePool','attempt','cursor','preview'])expect(Object.keys(JSON.parse(bytes!))).not.toContain(key);
+  console.log('preview/affirmations/attempt all excluded, exact actual bytes',bytes);
+});
+test('actual command custody storage key and clear invalidate all transients before actual reread, unrelated key does nothing',()=>{
+  for(const key of [storageKey,null]){
+    const s=storage();let owner:ReturnType<typeof createCommandOwner>;let reading=false;
+    const port:StoragePort={...s.port,getItem(k){if(reading)expect(owner.getState()).toMatchObject({attempt:null,mode:{kind:'actual'},canSwim:false,safePool:false});return s.port.getItem(k);}};
+    owner=createCommandOwner(content,port,'',()=>now);owner.dispatch({type:'chooseSituation',situationId:'first'});owner.dispatch({type:'affirm',key:'canSwim',value:true});owner.dispatch({type:'start',planId:'cal-first'});
+    const before=owner.getState();expect(owner.dispatch({type:'storageEvent',key:'unrelated'})).toBe(false);expect(owner.getState()).toBe(before);
+    reading=true;owner.dispatch({type:'storageEvent',key});expect(owner.getState().attempt).toBeNull();
+    owner.dispatch({type:'enterScenario',scenarioId:'inactive'});owner.dispatch({type:'answer',answerId:'skip'});s.values.set(storageKey,JSON.stringify(legacyFixture()));
+    owner.dispatch({type:'storageEvent',key});expect(owner.getState()).toMatchObject({mode:{kind:'actual'},route:{screen:'onboarding'},envelope:{preference:null,intention:null}});
+    console.log('event',key,'cleared before getItem; no inferred preference/scenario',JSON.stringify(owner.getState().mode));
+  }
+});
+test('session integrity ordered explicit events, snapshots, replay, abandonment and atomic completion',()=>{
+  let e=materialize();let a=startSession(content,input,()=> 'attempt-one')!;const original=structuredClone(a);
+  for(const [id,step] of [['wrong',a.steps[0].id],[a.attemptId,'wrong'],[a.attemptId,a.steps.at(-1)!.id]])expect(completeStep(a,e,id,step,now)).toEqual({attempt:a,envelope:e});
+  const edited=structuredClone(content);edited.exercises[0].title='Otro título';expect(a.steps).toEqual(original.steps);
+  for(const step of original.steps){const r=completeStep(a,e,a.attemptId,step.id,now);a=r.attempt!;e=r.envelope;expect(completeStep(a,e,original.attemptId,step.id,now)).toEqual({attempt:a,envelope:e});console.log('accepted',step.id,a.cursor,Object.keys(e.journey));}
+  expect(a.status).toBe('completed');expect(Object.keys(e.journey)).toEqual([sourceKey('actual','completion','attempt-one')]);expect(Object.values(e.journey)[0].completedStepIds).toEqual(original.steps.map(s=>s.id));
+  const s=storage();expect(saveEnvelope(e,s.port,{status:'ready',readBlocked:false})).toBe('ready');expect(loadEnvelope(content,s.port).envelope).toEqual(e);
+  const partial=startSession(content,input,()=> 'partial')!;const advanced=completeStep(partial,e,partial.attemptId,partial.steps[0].id,now).attempt!;expect(completeStep(abandonSession(advanced),e,partial.attemptId,partial.steps[1].id,now).envelope).toBe(e);
+  const chosen={...e,preference:{situationId:'first' as const,confirmed:true as const}};expect(guardHash('#/first/calisthenics/session/cal-first/partial',content,{attempt:null,envelope:chosen}).screen).toBe('plan');
+});
+test('swimming start guard every situation and four affirmations, production boundary rechecks and dry stays safe',()=>{
+  for(const p of profiles)for(const canSwim of [false,true])for(const safePool of [false,true]){
+    expect(!!startSession(content,{profileId:p,sportId:'swimming',planId:`swim-water-${p}`,canSwim,safePool})).toBe(canSwim&&safePool);
+    const owner=createCommandOwner(content,storage().port);owner.dispatch({type:'chooseSituation',situationId:p});owner.dispatch({type:'affirm',key:'canSwim',value:canSwim});owner.dispatch({type:'affirm',key:'safePool',value:safePool});expect(owner.dispatch({type:'start',planId:`swim-water-${p}`})).toBe(canSwim&&safePool);
+    owner.dispatch({type:'navigate',hash:`#/${p}/home`});expect(owner.getState()).toMatchObject({canSwim:false,safePool:false,attempt:null});expect(owner.dispatch({type:'start',planId:`swim-dry-${p}`})).toBe(true);
+    console.log('swim',p,canSwim,safePool,'water allowed',canSwim&&safePool);
+  }
+  expect(startSession(content,{...input,planId:'swim-water-first',canSwim:true,safePool:true})).toBeNull();
+});
+
+test('one-person progress dates BA midnight, Monday week and month windows use independent exact numeric oracle; rest retains lifetime',()=>{
+  expect(activityDate(new Date('2026-11-02T02:59:59Z'))).toBe('2026-11-01');expect(activityDate(new Date('2026-11-02T03:00:00Z'))).toBe('2026-11-02');expect(weekKey('2026-11-01')).toBe('2026-10-26');expect(weekKey('2026-11-02')).toBe('2026-11-02');expect(monthKey('2026-10-31')).toBe('2026-10');
+  const legacy=legacyFixture();for(const p of profiles){legacy.profiles[p].baselineHistory=[];legacy.profiles[p].completions={};legacy.profiles[p].interests={};}legacy.scenarioReferenceDate='2026-11-03';
+  const dates=['2026-10-25','2026-10-26','2026-10-31','2026-11-01','2026-11-02'];
+  for(const p of profiles)legacy.profiles[p].baselineHistory=dates.map((d,i)=>({id:`same-${i}`,profileId:p,sportId:'yoga',planId:'retired',planTitle:`Histórica ${p}`,sportTitle:'Yoga',medium:'dry-land',activityDate:d,origin:'seed'}));
+  const e=normalizeLegacy(legacy);const c=structuredClone(content);c.rules.challenges=[
+    {id:'week-sessions',title:'Semana',description:'Ejemplo',metric:'sessions',period:'week',target:1},
+    {id:'month-sessions',title:'Mes',description:'Ejemplo',metric:'sessions',period:'month',target:1},
+    {id:'week-weeks',title:'Semanas',description:'Ejemplo',metric:'activeWeeks',period:'week',target:1},
+    {id:'month-weeks',title:'Mes y semanas',description:'Ejemplo',metric:'activeWeeks',period:'month',target:1},
+  ];
+  const allIds=profiles.flatMap(p=>dates.map((_,i)=>sourceKey('legacy',p,'baseline',`same-${i}`))).sort();expect(Object.keys(e.journey).sort()).toEqual(allIds);
+  for(const [instant,today,numerators,weeklyIds,monthlyIds] of [
+    ['2026-11-01T02:59:59Z','2026-10-31',[6,9,1,2],[1,2],[0,1,2]],
+    ['2026-11-01T03:00:00Z','2026-11-01',[9,3,1,1],[1,2,3],[3]],
+    ['2026-11-02T02:59:59Z','2026-11-01',[9,3,1,1],[1,2,3],[3]],
+    ['2026-11-02T03:00:00Z','2026-11-02',[3,6,1,2],[4],[3,4]],
+    ['2026-12-01T15:00:00Z','2026-12-01',[0,0,0,0],[],[]],
+  ] as const){
+    const actual=selectJourney(c,e,'first',new Date(instant));expect(actual.today).toBe(today);expect(actual.sessions).toBe(15);expect(actual.points).toBe(150);expect(actual.activeWeeks).toBe(3);expect(actual.weeklySessions).toBe(numerators[0]);expect(actual.challenges.map(r=>r.value)).toEqual(numerators);expect(actual.badges.map(b=>b.earned)).toEqual([true,true]);expect(actual.benefits.map(b=>b.eligible)).toEqual([true]);
+    const expectedWeek=profiles.flatMap(p=>weeklyIds.map(i=>sourceKey('legacy',p,'baseline',`same-${i}`))).sort();
+    const expectedMonth=profiles.flatMap(p=>monthlyIds.map(i=>sourceKey('legacy',p,'baseline',`same-${i}`))).sort();
+    expect(actual.history.filter(r=>r.activityDate<=today&&weekKey(r.activityDate)===weekKey(today)).map(r=>r.sourceKey).sort()).toEqual(expectedWeek);
+    expect(actual.history.filter(r=>r.activityDate<=today&&monthKey(r.activityDate)===monthKey(today)).map(r=>r.sourceKey).sort()).toEqual(expectedMonth);
+    expect(actual.weekKeys).toEqual(['2026-10-19','2026-10-26','2026-11-02']);
+    console.log('instant',instant,'BA date',today,'eligible lifetime tuples',allIds,'week tuples',expectedWeek,'month tuples',expectedMonth,'exact metrics',{sessions:actual.sessions,points:actual.points,activeWeeks:actual.activeWeeks,challenges:actual.challenges.map(r=>r.value),badges:actual.badges.map(b=>b.earned)},'bar only',Math.min(actual.weeklySessions,actual.weeklyGoal));
+  }
+  const s=storage(JSON.stringify(e));const owner=createCommandOwner(c,s.port,'',()=>now);const before=selectJourney(c,e,'first',now);
+  owner.dispatch({type:'chooseSituation',situationId:'regular'});owner.dispatch({type:'interest',classId:'yoga-free'});owner.dispatch({type:'intention',classId:'yoga-free'});owner.dispatch({type:'enterScenario',scenarioId:'inactive'});owner.dispatch({type:'answer',answerId:'skip'});owner.dispatch({type:'exitPreview'});
+  const after=selectJourney(c,owner.getState().envelope,'first',now);expect(after.history).toEqual(before.history);expect(after.points).toBe(before.points);expect(after.badges).toEqual(before.badges);expect(after.weeklyGoal).toBe(c.profiles.find(p=>p.id==='regular')!.weeklyGoal);
+  const actualBytes=s.values.get(storageKey);for(const scenario of c.previewScenarios){const preview=selectPreviewJourney(c,scenario.id)!;expect(preview.today).toBe(scenario.referenceDate);expect(preview.sessions).toBe(scenario.history.length);expect(s.values.get(storageKey)).toBe(actualBytes);}
+  expect(selectPreviewJourney(c,'unknown')).toBeNull();expect(validateEnvelope(owner.getState().envelope)).toEqual(owner.getState().envelope);
+});
+test('actual command custody current-state start/accept cannot credit twice or use stale identity, intention retirement retains exact snapshot',()=>{
+  const s=storage();let sequence=0;const owner=createCommandOwner(content,s.port,'',()=>now,()=>`uuid-${++sequence}`);owner.dispatch({type:'chooseSituation',situationId:'first'});
+  owner.dispatch({type:'intention',classId:'yoga-free'});const saved=owner.getState().envelope.intention;const removed=structuredClone(content);removed.classes=removed.classes.filter(c=>c.id!=='yoga-free');expect(validateEnvelope(owner.getState().envelope,removed).intention).toEqual(saved);
+  const before=s.values.get(storageKey);expect(owner.dispatch({type:'intention',classId:'unknown'})).toBe(false);expect(s.values.get(storageKey)).toBe(before);
+  owner.dispatch({type:'start',planId:'cal-first'});const attempt=owner.getState().attempt!;
+  for(const command of [{type:'accept',attemptId:'stale',stepId:attempt.steps[0].id},{type:'accept',attemptId:attempt.attemptId,stepId:attempt.steps.at(-1)!.id}] as Command[])expect(owner.dispatch(command)).toBe(false);
+  expect(s.values.get(storageKey)).toBe(before);for(const step of attempt.steps){expect(owner.dispatch({type:'accept',attemptId:attempt.attemptId,stepId:step.id})).toBe(true);expect(owner.dispatch({type:'accept',attemptId:attempt.attemptId,stepId:step.id})).toBe(false);}
+  expect(Object.keys(owner.getState().envelope.journey)).toEqual([sourceKey('actual','completion','uuid-1')]);expect(owner.getState().route.screen).toBe('success');
+  const bytes=s.values.get(storageKey);owner.dispatch({type:'navigate',hash:'#/first/calisthenics/session/cal-first/uuid-1'});expect(owner.getState().attempt).toBeNull();expect(s.values.get(storageKey)).toBe(bytes);
+  owner.dispatch({type:'start',planId:'cal-first'});expect(owner.getState().attempt?.attemptId).toBe('uuid-2');owner.dispatch({type:'navigate',hash:'#/first/home'});expect(Object.keys(owner.getState().envelope.journey)).toHaveLength(1);
+  console.log('explicit IDs uuid-1 complete exactly once; uuid-2 abandoned, bytes',bytes);
+});
+test('one-person storage reset canonical validation rejects forged source tuples, archive loss, timestamps, unknown transients and intention snapshots',()=>{
+  const base=normalizeLegacy(legacyFixture());
+  const mutations:((e:Envelope)=>void)[]=[
+    e=>{(e as any).canSwim=true;},e=>{delete (e as any).preference;},e=>{delete e.journey[Object.keys(e.journey)[0]];},
+    e=>{e.journey[Object.keys(e.journey)[0]].planTitle='Reescrito';},e=>{delete e.legacySource;},
+    e=>{e.journey['["actual","completion","forged"]']=Object.values(e.journey)[0];},
+    e=>{e.interests['["actual","interest","wrong"]']=Object.values(e.interests)[0];},
+  ];
+  for(const mutate of mutations){const e=structuredClone(base);mutate(e);const raw=JSON.stringify(e);const s=storage(raw);expect(loadEnvelope(content,s.port).status).toBe('invalid');expect(s.values.get(storageKey)).toBe(raw);expect(s.writes()).toHaveLength(0);}
+});
+
+test('actual command custody exact class identity survives reorder and retirement; interest remains idempotent and noncrediting',()=>{
+  const reordered={...content,classes:[...content.classes].reverse()};const s=storage();const owner=createCommandOwner(reordered,s.port,'',()=>now);owner.dispatch({type:'chooseSituation',situationId:'first'});
+  for(const sport of content.sports)for(const kind of ['free','paid']){
+    const item=content.classes.find(c=>c.sportId===sport.id&&c.price.kind===kind)!;expect(item.price.currency).toBe('ARS');expect(item.fictional).toBe(true);expect(item.price.amount).toBe(kind==='free'?0:item.price.amount);if(kind==='paid')expect(item.price.amount).toBeGreaterThan(0);
+    for(const field of ['title','schedule','venue','locality','level','description','receiver','contactCopy'] as const)expect(item[field]).not.toBe('');expect(item.requirements.length).toBeGreaterThan(0);
+    owner.dispatch({type:'navigate',hash:`#/first/${sport.id}/classes/${item.id}`});expect(owner.getState().route).toMatchObject({screen:'detail',classId:item.id,sportId:item.sportId});
+    expect(owner.dispatch({type:'interest',classId:item.id})).toBe(true);expect(owner.dispatch({type:'interest',classId:item.id})).toBe(false);expect(owner.getState().envelope.journey).toEqual({});
+  }
+  expect(Object.keys(owner.getState().envelope.interests)).toHaveLength(6);
+  const removed={...content,classes:content.classes.filter(c=>c.id!=='yoga-free')};expect(guardHash('#/first/yoga/classes/yoga-free',removed,{attempt:null,envelope:owner.getState().envelope}).screen).toBe('catalog');expect(guardHash('#/first/swimming/classes/yoga-free',content,{attempt:null,envelope:owner.getState().envelope}).screen).toBe('catalog');
+  expect(Object.values(validateEnvelope(owner.getState().envelope,removed).interests).find(i=>i.classId==='yoga-free')?.classTitle).toBe(content.classes.find(c=>c.id==='yoga-free')!.title);
 });

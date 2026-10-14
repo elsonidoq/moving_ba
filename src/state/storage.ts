@@ -1,80 +1,129 @@
-import type { Content, Medium, ProfileId, SportId } from '../content/types';
-import { activityDate } from './dates';
+import type { ClassListing, Content, ProfileId, SportId } from '../content/types';
+import { validateLegacyEnvelope, type HistoryRecord, type Interest, type LegacyEnvelope } from './legacy';
+export type { HistoryRecord, Interest, LegacyEnvelope } from './legacy';
 export { activityDate } from './dates';
-
+export { validateLegacyEnvelope } from './legacy';
 export const storageKey = 'ba-en-movimiento:demo:v1';
-export interface HistoryRecord {
-  id: string; profileId: ProfileId; sportId: SportId; planId: string;
-  planTitle: string; sportTitle: string; medium: Medium; activityDate: string;
-  origin: 'seed' | 'user-simulated'; attemptId?: string; completedStepIds?: string[]; timestamp?: string;
-}
-export interface Interest {
-  classId: string; profileId: ProfileId; sportId: SportId; classTitle: string; sportTitle: string;
-  timestamp: string; origin: 'simulated-interest';
-}
-export interface Envelope {
-  schemaVersion: 1; selectedProfileId: ProfileId; scenarioReferenceDate: string;
-  profiles: Record<ProfileId, { baselineHistory: HistoryRecord[]; completions: Record<string, HistoryRecord>; interests: Record<string, Interest> }>;
-}
 export type StorageStatus = 'ready' | 'invalid' | 'unavailable';
 export type StoragePort = Pick<Storage, 'getItem' | 'setItem'>;
-export function materialize(content: Content): Envelope {
-  const profiles = Object.fromEntries(content.profiles.map(profile => [profile.id, {
-    baselineHistory: content.scenarios.profiles.find(s => s.profileId === profile.id)!.history.map(seed => {
-      const plan = content.plans.find(p => p.id === seed.planId)!;
-      return { ...seed, profileId: profile.id, planTitle: plan.name, sportTitle: content.sports.find(s => s.id === seed.sportId)!.name, medium: plan.medium, origin: 'seed' };
-    }), completions: {}, interests: {},
-  }])) as Envelope['profiles'];
-  return { schemaVersion: 1, selectedProfileId: content.scenarios.defaultProfileId, scenarioReferenceDate: content.scenarios.referenceDate, profiles };
+export interface Envelope {
+  schemaVersion: 1; layout: 'one-person';
+  preference: null | { situationId: ProfileId; confirmed: true };
+  journey: Record<string, HistoryRecord>;
+  interests: Record<string, Interest>;
+  intention: null | { classId: string; sportId: SportId; classSnapshot: ClassListing; chosenAt: string; origin: 'simulated-intention' };
+  legacySource?: LegacyEnvelope;
 }
+const profileIds: ProfileId[] = ['first', 'returning', 'regular'];
+const sportIds = ['calisthenics', 'yoga', 'swimming'];
 const object = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
-const text = (v: unknown): v is string => typeof v === 'string' && v.trim().length > 0;
-const date = (v: unknown): v is string => text(v) && /^\d{4}-\d{2}-\d{2}$/.test(v) && Number.isFinite(Date.parse(v)) && new Date(v).toISOString().slice(0, 10) === v;
-const timestamp = (v: unknown) => text(v) && Number.isFinite(Date.parse(v)) && new Date(v).toISOString() === v;
-/** Retired plan/class IDs are valid history; unknown profile/sport identities are not. */
-export function validateEnvelope(value: unknown, content: Content): Envelope {
-  const fail = (): never => { throw new Error(content.ui.storageRecovery); };
-  if (!object(value) || value.schemaVersion !== 1 || !content.profiles.some(p => p.id === value.selectedProfileId) || !date(value.scenarioReferenceDate) || !object(value.profiles)) return fail();
-  if (Object.keys(value).some(k => !['schemaVersion', 'selectedProfileId', 'scenarioReferenceDate', 'profiles'].includes(k)) || Object.keys(value.profiles).length !== content.profiles.length) return fail();
-  for (const profile of content.profiles) {
-    const data = value.profiles[profile.id];
-    if (!object(data) || !Array.isArray(data.baselineHistory) || !object(data.completions) || !object(data.interests) || Object.keys(data).some(k => !['baselineHistory', 'completions', 'interests'].includes(k))) return fail();
-    const ids = new Set<string>();
-    const record = (r: unknown, origin: HistoryRecord['origin'], key?: string) => {
-      if (!object(r) || !text(r.id) || ids.has(r.id) || r.profileId !== profile.id || !content.sports.some(s => s.id === r.sportId) || !text(r.planId) || !text(r.planTitle) || !text(r.sportTitle) || !['dry-land', 'water'].includes(String(r.medium)) || (r.medium === 'water' && r.sportId !== 'swimming') || !date(r.activityDate) || r.origin !== origin) return fail();
-      const fields = ['id', 'profileId', 'sportId', 'planId', 'planTitle', 'sportTitle', 'medium', 'activityDate', 'origin', ...(origin === 'user-simulated' ? ['attemptId', 'completedStepIds', 'timestamp'] : [])];
-      if (Object.keys(r).some(k => !fields.includes(k))) return fail();
-      if (origin === 'seed' && r.activityDate > String(value.scenarioReferenceDate)) return fail();
-      if (origin === 'user-simulated' && (r.attemptId !== key || r.id !== key || !timestamp(r.timestamp) || activityDate(new Date(String(r.timestamp))) !== r.activityDate || !Array.isArray(r.completedStepIds) || !r.completedStepIds.length || !r.completedStepIds.every(text) || new Set(r.completedStepIds).size !== r.completedStepIds.length)) return fail();
-      ids.add(r.id);
-    };
-    data.baselineHistory.forEach(r => record(r, 'seed'));
-    Object.entries(data.completions).forEach(([key, r]) => record(r, 'user-simulated', key));
-    for (const [key, r] of Object.entries(data.interests)) {
-      if (!object(r) || Object.keys(r).some(k => !['classId', 'profileId', 'sportId', 'classTitle', 'sportTitle', 'timestamp', 'origin'].includes(k)) || r.classId !== key || !text(key) || r.profileId !== profile.id || !content.sports.some(s => s.id === r.sportId) || !text(r.classTitle) || !text(r.sportTitle) || !timestamp(r.timestamp) || r.origin !== 'simulated-interest') return fail();
+const text = (v: unknown): v is string => typeof v === 'string' && !!v.trim();
+const stamp = (v: unknown): v is string => text(v) && Number.isFinite(Date.parse(v)) && new Date(v).toISOString() === v;
+const logicalJSON = (v: unknown): string => JSON.stringify(v, (_key, item: unknown) => object(item) ? Object.fromEntries(Object.keys(item).sort().map(k => [k,item[k]])) : item);
+const only = (v: Record<string, unknown>, keys: string[]) => Object.keys(v).every(k => keys.includes(k));
+function fail(): never { throw new Error('No pudimos validar los datos guardados. Confirmá el reinicio de esta demo para continuar.'); }
+export const sourceKey = (...tuple: string[]) => JSON.stringify(tuple);
+/** New/reset actual state is deliberately independent of demo fixtures. */
+export function materialize(_content?: Content): Envelope {
+  return { schemaVersion: 1, layout: 'one-person', preference: null, journey: {}, interests: {}, intention: null };
+}
+export function normalizeLegacy(input: LegacyEnvelope): Envelope {
+  const legacy = validateLegacyEnvelope(input);
+  const e = materialize();
+  for (const p of profileIds) {
+    const data = legacy.profiles[p];
+    for (const r of [...data.baselineHistory].sort((a,b) => a.id.localeCompare(b.id))) e.journey[sourceKey('legacy',p,'baseline',r.id)] = structuredClone(r);
+    for (const id of Object.keys(data.completions).sort()) e.journey[sourceKey('legacy',p,'completion',id)] = structuredClone(data.completions[id]);
+    for (const id of Object.keys(data.interests).sort()) e.interests[sourceKey('legacy',p,'interest',id)] = structuredClone(data.interests[id]);
+  }
+  e.legacySource = structuredClone(legacy);
+  return e;
+}
+/** Compatibility projection for not-yet-migrated screens only; never serialized or counted as another ledger. */
+export function legacyView(e: Envelope): LegacyEnvelope {
+  const profiles = Object.fromEntries(profileIds.map(p => [p,{baselineHistory:[],completions:{},interests:{}}])) as unknown as LegacyEnvelope['profiles'];
+  const p = e.preference?.situationId ?? 'first';
+  for (const [key,r] of Object.entries(e.journey)) {
+    if (r.origin === 'seed') profiles[p].baselineHistory.push(r);
+    else profiles[p].completions[key === sourceKey('actual','completion',r.attemptId ?? '') ? r.id : key] = r;
+  }
+  for (const [key,r] of Object.entries(e.interests)) profiles[p].interests[key] = r;
+  // Bare-ID aliases support the old detail screen; this view is never a selector input or durable state.
+  for (const r of Object.values(e.interests)) if (!profiles[p].interests[r.classId]) profiles[p].interests[r.classId] = r;
+  return {schemaVersion:1,selectedProfileId:p,scenarioReferenceDate:e.legacySource?.scenarioReferenceDate ?? '2026-10-14',profiles};
+}
+function recordValid(record: unknown, interest: boolean): void {
+  if (!object(record) || !profileIds.includes(record.profileId as ProfileId)) fail();
+  const skeleton: LegacyEnvelope = {schemaVersion:1,selectedProfileId:'first',scenarioReferenceDate:'9999-12-31',profiles:{first:{baselineHistory:[],completions:{},interests:{}},returning:{baselineHistory:[],completions:{},interests:{}},regular:{baselineHistory:[],completions:{},interests:{}}}};
+  const data = skeleton.profiles[record.profileId as ProfileId];
+  if (interest) data.interests[String(record.classId)] = record as unknown as Interest;
+  else if (record.origin === 'seed') data.baselineHistory.push(record as unknown as HistoryRecord);
+  else data.completions[String(record.attemptId)] = record as unknown as HistoryRecord;
+  validateLegacyEnvelope(skeleton);
+}
+export function validateEnvelope(value: unknown, _content?: Content): Envelope {
+  if (!object(value) || value.layout !== 'one-person' || value.schemaVersion !== 1 || !only(value,['schemaVersion','layout','preference','journey','interests','intention','legacySource']) || !object(value.journey) || !object(value.interests)) fail();
+  if (value.preference !== null && (!object(value.preference) || !only(value.preference,['situationId','confirmed']) || value.preference.confirmed !== true || !profileIds.includes(value.preference.situationId as ProfileId))) fail();
+  const imported = value.legacySource === undefined ? null : normalizeLegacy(validateLegacyEnvelope(value.legacySource));
+  for (const [collection, kind] of [[value.journey,'completion'],[value.interests,'interest']] as const) {
+    for (const [key,record] of Object.entries(collection)) {
+      recordValid(record,kind === 'interest');
+      if (!object(record)) fail();
+      let tuple: unknown; try { tuple = JSON.parse(key); } catch { fail(); }
+      if (!Array.isArray(tuple) || tuple.some(x => typeof x !== 'string') || JSON.stringify(tuple) !== key) fail();
+      if (tuple[0] === 'legacy') {
+        const original = kind === 'interest' ? imported?.interests[key] : imported?.journey[key];
+        if (!original || logicalJSON(original) !== logicalJSON(record)) fail();
+      } else if (tuple[0] !== 'actual' || tuple.length !== 3 || tuple[1] !== kind || tuple[2] !== record[kind === 'interest' ? 'classId' : 'attemptId'] || (kind === 'completion' && record.origin !== 'user-simulated')) fail();
     }
+  }
+  const journey = value.journey; const interests = value.interests;
+  if (imported && (Object.keys(imported.journey).some(k => !(k in journey)) || Object.keys(imported.interests).some(k => !(k in interests)))) fail();
+  if (value.intention !== null) {
+    const i = value.intention;
+    if (!object(i) || !only(i,['classId','sportId','classSnapshot','chosenAt','origin']) || !text(i.classId) || !sportIds.includes(String(i.sportId)) || !stamp(i.chosenAt) || i.origin !== 'simulated-intention' || !object(i.classSnapshot)) fail();
+    const s = i.classSnapshot;
+    if (!only(s,['id','sportId','title','schedule','venue','locality','level','requirements','description','receiver','contactCopy','price','fictional']) || s.id !== i.classId || s.sportId !== i.sportId || s.fictional !== true || !['title','schedule','venue','locality','level','description','receiver','contactCopy'].every(k => text(s[k]) && !/[<>]/.test(String(s[k]))) || !Array.isArray(s.requirements) || !s.requirements.length || !s.requirements.every(text) || !object(s.price) || !only(s.price,['kind','amount','currency']) || s.price.currency !== 'ARS' || typeof s.price.amount !== 'number' || !Number.isFinite(s.price.amount) || (s.price.kind === 'free' ? s.price.amount !== 0 : s.price.kind !== 'paid' || s.price.amount <= 0)) fail();
   }
   return value as unknown as Envelope;
 }
-export function saveEnvelope(envelope: Envelope, port: StoragePort): StorageStatus {
-  try { port.setItem(storageKey, JSON.stringify(envelope)); return 'ready'; } catch { return 'unavailable'; }
-}
-export function loadEnvelope(content: Content, port: StoragePort): { envelope: Envelope; status: StorageStatus } {
+export interface Loaded { envelope: Envelope; status: StorageStatus; readBlocked: boolean }
+export function loadEnvelope(_content: Content, port: StoragePort): Loaded {
   let raw: string | null;
-  try { raw = port.getItem(storageKey); } catch { return { envelope: materialize(content), status: 'unavailable' }; }
-  if (raw === null) { const envelope = materialize(content); return { envelope, status: saveEnvelope(envelope, port) }; }
-  try { return { envelope: validateEnvelope(JSON.parse(raw), content), status: 'ready' }; }
-  catch { return { envelope: materialize(content), status: 'invalid' }; }
+  try { raw = port.getItem(storageKey); } catch { return {envelope:materialize(),status:'unavailable',readBlocked:true}; }
+  if (raw === null) return {envelope:materialize(),status:'ready',readBlocked:false};
+  try {
+    const value: unknown = JSON.parse(raw);
+    const envelope = object(value) && 'layout' in value ? validateEnvelope(value) : normalizeLegacy(validateLegacyEnvelope(value));
+    return {envelope,status:'ready',readBlocked:false};
+  } catch { return {envelope:materialize(),status:'invalid',readBlocked:true}; }
+}
+/** Caller must supply custody from the last read; invalid/unknown durable bytes cannot be overwritten. */
+export function saveEnvelope(envelope: Envelope, port: StoragePort, custody: {status: StorageStatus; readBlocked: boolean}): StorageStatus {
+  if (custody.status === 'invalid') return 'invalid';
+  if (custody.readBlocked) return 'unavailable';
+  validateEnvelope(envelope);
+  try { port.setItem(storageKey,JSON.stringify(envelope)); return 'ready'; } catch { return 'unavailable'; }
+}
+export function resetEnvelope(port: StoragePort, confirmed: boolean): Loaded | null {
+  if (!confirmed) return null;
+  const envelope = materialize();
+  const status = saveEnvelope(envelope,port,{status:'ready',readBlocked:false});
+  return {envelope,status,readBlocked:status !== 'ready'};
 }
 export function registerInterest(envelope: Envelope, content: Content, profileId: ProfileId, sportId: SportId, classId: string, now = new Date()): Envelope {
   const item = content.classes.find(c => c.id === classId && c.sportId === sportId);
-  const data = envelope.profiles[profileId];
-  if (!item || !data || data.interests[classId]) return envelope;
-  const interest: Interest = { classId, profileId, sportId, classTitle: item.title, sportTitle: content.sports.find(s => s.id === sportId)!.name, timestamp: now.toISOString(), origin: 'simulated-interest' };
-  return { ...envelope, profiles: { ...envelope.profiles, [profileId]: { ...data, interests: { ...data.interests, [classId]: interest } } } };
+  if (!item || Object.values(envelope.interests).some(i => i.classId === classId)) return envelope;
+  const record: Interest = {classId,profileId,sportId,classTitle:item.title,sportTitle:content.sports.find(s => s.id === sportId)!.name,timestamp:now.toISOString(),origin:'simulated-interest'};
+  return {...envelope,interests:{...envelope.interests,[sourceKey('actual','interest',classId)]:record}};
 }
 export function upsertCompletion(envelope: Envelope, record: HistoryRecord): Envelope {
-  const data = envelope.profiles[record.profileId];
-  if (data.completions[record.id]) return envelope;
-  return { ...envelope, profiles: { ...envelope.profiles, [record.profileId]: { ...data, completions: { ...data.completions, [record.id]: record } } } };
+  const key = sourceKey('actual','completion',record.attemptId!);
+  if (envelope.journey[key]) return envelope;
+  return {...envelope,journey:{...envelope.journey,[key]:record}};
+}
+export function setIntention(envelope: Envelope, content: Content, classId: string, now = new Date()): Envelope {
+  const item = content.classes.find(c => c.id === classId);
+  if (!item || envelope.intention?.classId === classId) return envelope;
+  return {...envelope,intention:{classId,sportId:item.sportId,classSnapshot:structuredClone(item),chosenAt:now.toISOString(),origin:'simulated-intention'}};
 }

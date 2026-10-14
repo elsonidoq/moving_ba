@@ -1,8 +1,10 @@
 import type { Content, ProfileId, SportId } from '../content/types';
 import type { Attempt } from './session';
-import type { Envelope } from './storage';
+import { sourceKey, type Envelope, type LegacyEnvelope } from './storage';
 
 export type Route =
+  | { screen: 'onboarding'; profileId: ProfileId }
+  | { screen: 'recovery'; profileId: ProfileId }
   | { screen: 'home'; profileId: ProfileId }
   | { screen: 'journey'; profileId: ProfileId }
   | { screen: 'challenges'; profileId: ProfileId }
@@ -20,9 +22,11 @@ export function safePlan(content: Content, profileId: ProfileId, sportId: SportI
 }
 
 /** URL identity is navigation only, never session or swimming eligibility. */
-export function guardHash(hash: string, content: Content, runtime?: { attempt: Attempt | null; envelope: Envelope }): Route {
+export function guardHash(hash: string, content: Content, runtime?: { attempt: Attempt | null; envelope: Envelope | LegacyEnvelope }): Route {
   const parts = hash.replace(/^#\/?/, '').split('/');
-  const profileId = content.profiles.find(p => p.id === parts[0])?.id ?? content.scenarios.defaultProfileId;
+  const actual = runtime?.envelope && 'layout' in runtime.envelope ? runtime.envelope : null;
+  const profileId = actual?.preference?.situationId ?? content.profiles.find(p => p.id === parts[0])?.id ?? 'first';
+  if (actual && !actual.preference) return {screen:'onboarding',profileId:'first'};
   if (!content.profiles.some(p => p.id === parts[0])) return { screen: 'home', profileId };
   if ((parts[1] === 'journey' || parts[1] === 'challenges') && parts.length === 2) return {screen:parts[1],profileId};
   const sportId = content.sports.find(s => s.id === parts[1])?.id;
@@ -34,7 +38,8 @@ export function guardHash(hash: string, content: Content, runtime?: { attempt: A
     if (plan && parts.length === 5) return { screen: 'plan', profileId, sportId, mode: 'solo', planId: plan.id };
   }
   if (parts[2] === 'success' && parts.length === 4) {
-    const r = runtime?.envelope.profiles[profileId].completions[parts[3]];
+    const e = runtime?.envelope;
+    const r = e && ('layout' in e ? e.journey[sourceKey('actual','completion',parts[3])] : e.profiles[profileId].completions[parts[3]]);
     if (r?.sportId === sportId) return { screen: 'success', profileId, sportId, attemptId: r.id };
   }
   if (parts[2] === 'classes') {
@@ -51,7 +56,7 @@ export function guardHash(hash: string, content: Content, runtime?: { attempt: A
 
 export function routeHash(route: Route): string {
   const base = `#/${route.profileId}`;
-  if (route.screen === 'home' || route.screen === 'journey' || route.screen === 'challenges') return `${base}/${route.screen}`;
+  if (route.screen === 'onboarding' || route.screen === 'recovery' || route.screen === 'home' || route.screen === 'journey' || route.screen === 'challenges') return `${base}/${route.screen}`;
   const sport = `${base}/${route.sportId}`;
   if (route.screen === 'detail') return `${sport}/classes/${route.classId}`;
   if (route.screen === 'session') return `${sport}/session/${route.planId}/${route.attemptId}`;
