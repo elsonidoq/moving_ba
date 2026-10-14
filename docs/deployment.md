@@ -38,6 +38,32 @@ valid: this serving seam is unchanged; final integration rechecks nondefault/roo
 JSON/hash behavior. [Tasks](../specs/001-ba-movement-demo/tasks.md) retain commands and
 observations; [architecture](architecture.md) owns implementation/dependency rationale.
 
+## Access through SSH and a phone
+
+With the built server running on the remote host at port 4173, use your usual SSH
+account, hostname and identity options from your computer:
+
+```sh
+ssh -N -L 4173:127.0.0.1:4173 USER@HOST
+```
+
+Open `http://localhost:4173` on that computer and keep the tunnel running.
+For a phone on the **same trusted Wi-Fi**, stop the first tunnel and use:
+
+```sh
+ssh -N -g -L 0.0.0.0:4173:127.0.0.1:4173 USER@HOST
+```
+
+Open `http://COMPUTER_WIFI_IP:4173` on the phone. If needed, allow TCP 4173 through
+that computer's firewall on the private network only; no router port forwarding is
+needed. The LAN-bound tunnel exposes the demo to other devices on that network,
+so do not use it on untrusted/public Wi-Fi. Stop it with Ctrl-C when finished.
+SSH/phone connectivity depends on your network and credentials and has not been
+verified end to end. Each browser/origin has its own demo localStorage.
+
+The remote static server itself binds all interfaces; tunneling does not restrict
+its remote exposure. Use the remote firewall if access should be tunnel-only.
+
 ## Railway-capable, not deployed
 
 A later authorized static service can build with `npm ci && npm run build`, start

@@ -173,6 +173,9 @@ Browser storage is demo convenience, not authenticated or physically verified da
 concurrent multi-tab transactions and universal device/accessibility support are
 not guaranteed. Training content needs qualified review before real-world use.
 Three high-severity npm audit warnings remain unassessed; no audit fix or upgrade.
+The canonical investigation is [OI-1](docs/open_issues.md#oi-1--assess-reported-dependency-audit-warnings).
+[SSH and phone access](docs/deployment.md#access-through-ssh-and-a-phone) describes
+optional tunnels; remote SSH and phone connectivity are not verified end to end.
 
 The approved Standard specification is retained at `c31871b`; corrected plan/tasks
 approval at `d8e14bc` renewed implementation and a bounded model-readiness exception.
@@ -186,8 +189,8 @@ SpecKit specify/plan/tasks/analyze provenance, including `setup-plan.sh --json` 
 not a new downstream planning run. Coding batches A T001–T002, B T003–T005 and
 C T006–T008 used `openai-codex/gpt-6.1-sol` configured `medium`; provider-internal effort
 is unknown under the explicit readiness exception. Independent final read-only
-`openai-codex/gpt-6-astra:medium` review is a separate parent-owned next step, not a
-coding or deployment claim.
+`openai-codex/gpt-6-astra:medium` review found no blocking issues for the approved
+local demo scope. This is not a human-user acceptance or deployment claim.
 
 T007's actual agent-led interactive 360×900 production-browser rehearsal took
 177.841 seconds (~2m58) including final reset observation; selected Calistenia-to-
@@ -208,6 +211,6 @@ failure variants/restoration. Dev and nondefault production commands were follow
 HTTP root/JSON/assets200, absent paths404, JSON no-store and hash reload passed.
 Focused visual/timed evidence remains T007's actual observations (only stat contrast
 and storage-action wording were later refined/re-viewed; no timing/path change).
-All required local items are verified; final independent review/owner acceptance is
-still separate. Live deployment, multi-browser/human-user study and security-audit
+All required local items are verified and independent final review passed; human
+owner acceptance remains separate. Live deployment, multi-browser/human-user study and security-audit
 remediation were not performed.
