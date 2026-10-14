@@ -4,6 +4,7 @@
 
 - [Specification](spec.md): consolidated Standard source, acceptance criteria, settled constraints, assumptions, and provenance.
 - [Plan](plan.md): unapproved architecture, delivery outcomes, acceptance mapping and managed-pass provenance.
+- [Tasks](tasks.md): create-only implementation outcomes and REQUIRED checks; independent overall review and final approval pending.
 - [Research](research.md): bounded decisions and canonical research pointer.
 - [Data model](data-model.md): state, history, dates, persistence and transitions.
 - [Quickstart](quickstart.md): intended validation/run guide; commands not executed.
