@@ -10,7 +10,7 @@ export default function Session() {
     <progress value={attempt.cursor} max={attempt.steps.length} aria-label={content.ui.stepProgress} />
     <div className="sport-hero compact"><img src={step.exercise.imageAsset} alt={step.exercise.imageAlt} /></div>
     <p className="quantity">{step.exercise.quantity}</p><p>{step.exercise.technique}</p>
-    <p className="medium-label">{content.ui[attempt.medium === 'water' ? 'water' : 'dryLand']}</p>
+    {attempt.sportId === 'swimming' && <p className="medium-label">{content.ui[attempt.medium === 'water' ? 'water' : 'dryLand']}</p>}
     <p className="safety">{content.legal.illustrativeTraining}</p>
     <button onClick={() => complete(attempt.attemptId, step.id)}>{content.ui.completeStep}</button>
   </article>;

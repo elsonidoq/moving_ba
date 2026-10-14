@@ -10,12 +10,14 @@ import ClassCatalog from './screens/ClassCatalog';
 import Session from './screens/Session';
 import Success from './screens/Success';
 import ClassDetail from './screens/ClassDetail';
+import Journey from './screens/Journey';
+import Challenges from './screens/Challenges';
 
 type Bootstrap = { status: 'loading' } | { status: 'ready'; content: Content } | { status: 'error'; hint: string };
 
 function Screens() {
   const { route } = useApp();
-  return <AppShell>{route.screen === 'home' ? <Home /> : route.screen === 'choice' ? <SportChoice /> : route.screen === 'plan' ? <Plan /> : route.screen === 'session' ? <Session /> : route.screen === 'success' ? <Success /> : route.screen === 'detail' ? <ClassDetail /> : <ClassCatalog />}</AppShell>;
+  return <AppShell>{route.screen === 'home' ? <Home /> : route.screen === 'choice' ? <SportChoice /> : route.screen === 'plan' ? <Plan /> : route.screen === 'session' ? <Session /> : route.screen === 'success' ? <Success /> : route.screen === 'detail' ? <ClassDetail /> : route.screen === 'journey' ? <Journey /> : route.screen === 'challenges' ? <Challenges /> : <ClassCatalog />}</AppShell>;
 }
 
 export default function App() {

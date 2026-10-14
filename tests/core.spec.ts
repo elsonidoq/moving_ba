@@ -61,7 +61,7 @@ test('storage envelope validation, scoped writes, retired snapshots and unavaila
   expect(loadEnvelope(edited,port).envelope).toEqual(loaded.envelope);
   const retired = structuredClone(loaded.envelope); retired.profiles.returning.baselineHistory[0].planId = 'retired-plan';
   expect(validateEnvelope(retired,content)).toEqual(retired);
-  for (const mutation of [(e: any) => e.schemaVersion=2, (e: any) => e.selectedProfileId='unknown', (e: any) => e.profiles.returning.baselineHistory[0].sportId='unknown', (e: any) => e.profiles.returning.baselineHistory[0].profileId='unknown']) {
+  for (const mutation of [(e: any) => e.schemaVersion=2, (e: any) => e.points=100, (e: any) => e.profiles.returning.baselineHistory[0].points=100, (e: any) => e.selectedProfileId='unknown', (e: any) => e.profiles.returning.baselineHistory[0].sportId='unknown', (e: any) => e.profiles.returning.baselineHistory[0].profileId='unknown']) {
     const invalid = structuredClone(loaded.envelope); mutation(invalid); values.set(storageKey,JSON.stringify(invalid));
     expect(loadEnvelope(content,port).status).toBe('invalid');
     expect(() => validateEnvelope(invalid,content)).toThrow(content.ui.storageRecovery);
@@ -98,4 +98,60 @@ test('class identity exact six fields, order independence, interest never credit
   expect(guardHash('#/first/yoga/classes/yoga-free',removed).screen).toBe('catalog');
   expect(validateEnvelope(envelope,removed).profiles.first.interests['yoga-free'].classTitle).toBe(content.classes.find(c=>c.id==='yoga-free')!.title);
   expect(registerInterest(envelope,content,'first','swimming','yoga-free',now)).toBe(envelope);
+});
+
+import { activityDate, weekKey, monthKey } from '../src/state/dates';
+import { eligibleHistory, selectJourney } from '../src/state/selectors';
+import type { HistoryRecord, Envelope } from '../src/state/storage';
+function independentWeek(date: string) {
+  const days = Math.floor(Date.parse(date+'T00:00:00Z') / 86400000);
+  return new Date((Math.floor((days+3)/7)*7-3)*86400000).toISOString().slice(0,10);
+}
+function independent(content: Content, e: Envelope, profileId: typeof input.profileId | 'returning' | 'regular', today: string) {
+  const p=e.profiles[profileId];
+  const records=[...new Map([...p.baselineHistory,...Object.values(p.completions)].map(r=>[r.id,r])).values()];
+  const weeks=(list:HistoryRecord[])=>new Set(list.map(r=>independentWeek(r.activityDate))).size;
+  const week=records.filter(r=>independentWeek(r.activityDate)===independentWeek(today)&&r.activityDate<=today);
+  const month=records.filter(r=>r.activityDate.slice(0,7)===today.slice(0,7)&&r.activityDate<=today);
+  return {ids:records.map(r=>r.id).sort(),points:records.length*content.rules.pointsPerCompletion,sessions:records.length,activeWeeks:weeks(records),weeklySessions:week.length,weeklyGoal:content.profiles.find(p=>p.id===profileId)!.weeklyGoal,
+    challenges:content.rules.challenges.map(r=>({id:r.id,value:r.metric==='sessions'?(r.period==='week'?week:month).length:weeks(r.period==='week'?week:month)})),
+    badges:content.rules.badges.map(r=>({id:r.id,earned:(r.metric==='sessions'?records.length:weeks(records))>=r.threshold})),weekKeys:[...new Set(records.map(r=>independentWeek(r.activityDate)))].sort()};
+}
+test('history rules dates baseline union unique completion, independent oracle, snapshots and rule/reset semantics',()=>{
+  let e=materialize(content);
+  for(const p of content.profiles) {
+    const baseline=selectJourney(content,e,p.id,now);
+    const baselineExpected=independent(content,e,p.id,'2026-10-14');
+    expect(baseline.points).toBe(baselineExpected.points);expect(baseline.activeWeeks).toBe(baselineExpected.activeWeeks);expect(baseline.weeklySessions).toBe(baselineExpected.weeklySessions);expect(baseline.badges.map(r=>({id:r.id,earned:r.earned}))).toEqual(baselineExpected.badges);
+    console.log('baseline oracle',p.id,JSON.stringify(baselineExpected));
+    let attempt=startSession(content,{...input,profileId:p.id,planId:p.defaultPlanId},()=>`new-${p.id}`)!;
+    for(const step of attempt.steps) { const next=completeStep(attempt,e,attempt.attemptId,step.id,now);attempt=next.attempt!;e=next.envelope; }
+    const actual=selectJourney(content,e,p.id,now);const expected=independent(content,e,p.id,'2026-10-14');
+    expect({ids:actual.history.map(r=>r.id).sort(),points:actual.points,sessions:actual.sessions,activeWeeks:actual.activeWeeks,weeklySessions:actual.weeklySessions,weeklyGoal:actual.weeklyGoal,challenges:actual.challenges.map(r=>({id:r.id,value:r.value})),badges:actual.badges.map(r=>({id:r.id,earned:r.earned})),weekKeys:actual.weekKeys}).toEqual(expected);
+    const later=selectJourney(content,e,p.id,new Date('2026-11-02T15:00:00Z'));
+    expect(later.weeklySessions).toBe(0); expect(later.points).toBe(actual.points); expect(later.badges).toEqual(actual.badges); expect(later.history).toEqual(actual.history);
+    console.log('history oracle',p.id,'date',actual.today,'rule',content.rules.pointsPerCompletion,'expected',JSON.stringify(expected),'actual',JSON.stringify(actual));
+  }
+  const changed=structuredClone(content);changed.plans[0].name='Nombre nuevo';changed.plans=changed.plans.filter(p=>p.id!=='cal-first');changed.rules.pointsPerCompletion=3;
+  changed.rules.badges[0].threshold=99;changed.rules.challenges[0].target=4;
+  expect(selectJourney(changed,e,'first',now).badges[0].earned).toBe(false);expect(selectJourney(changed,e,'first',now).challenges[0]).toMatchObject({value:1,target:4});
+  expect(selectJourney(changed,e,'first',now).points).toBe(3);expect(eligibleHistory(e,'first')[0].planTitle).toBe(content.plans[0].name);
+  const duplicated=structuredClone(e);duplicated.profiles.first.completions.duplicate=duplicated.profiles.first.completions['new-first'];
+  expect(eligibleHistory(duplicated,'first')).toHaveLength(1);
+  const port={getItem:()=>JSON.stringify(e),setItem:()=>{}};const fixtureEdit=structuredClone(content);fixtureEdit.scenarios.profiles[1].history.pop();
+  expect(loadEnvelope(fixtureEdit,port).envelope.profiles.returning.baselineHistory).toHaveLength(2);
+  expect(materialize(fixtureEdit).profiles.returning.baselineHistory).toHaveLength(1);
+  expect(materialize(content).profiles.first.baselineHistory).toHaveLength(0);
+});
+test('history rules dates BA local Monday/month boundaries, honest numerator and lifetime rest preservation',()=>{
+  expect(activityDate(new Date('2026-11-02T01:30:00Z'))).toBe('2026-11-01');
+  expect(activityDate(new Date('2026-11-02T03:00:00Z'))).toBe('2026-11-02');
+  expect(activityDate(new Date('2026-11-01T02:30:00Z'))).toBe('2026-10-31');
+  expect(weekKey('2026-11-01')).toBe('2026-10-26');expect(weekKey('2026-11-02')).toBe('2026-11-02');expect(monthKey('2026-10-31')).toBe('2026-10');
+  const e=materialize(content);e.profiles.first.baselineHistory=['2026-10-25','2026-10-26','2026-10-31','2026-11-01','2026-11-02'].map((d,i)=>({id:`boundary-${i}`,profileId:'first',sportId:'calisthenics',planId:'retired',planTitle:'Práctica histórica',sportTitle:'Calistenia',medium:'dry-land',activityDate:d,origin:'seed'}));
+  const c=structuredClone(content);c.rules.challenges=[{id:'week-sessions',title:'Semana',description:'Ejemplo',metric:'sessions',period:'week',target:1},{id:'month-sessions',title:'Mes',description:'Ejemplo',metric:'sessions',period:'month',target:1},{id:'week-weeks',title:'Semanas',description:'Ejemplo',metric:'activeWeeks',period:'week',target:1},{id:'month-weeks',title:'Mes y semanas',description:'Ejemplo',metric:'activeWeeks',period:'month',target:1}];
+  for(const [instant,today,numerators] of [['2026-11-01T02:30:00Z','2026-10-31',[2,3,1,2]],['2026-11-02T01:30:00Z','2026-11-01',[3,1,1,1]],['2026-11-02T03:00:00Z','2026-11-02',[1,2,1,2]]] as const) {
+    const actual=selectJourney(c,e,'first',new Date(instant));expect(actual.today).toBe(today);expect(actual.challenges.map(r=>r.value)).toEqual(numerators);expect(actual.challenges.map(r=>({id:r.id,value:r.value}))).toEqual(independent(c,e,'first',today).challenges);
+    expect(actual.points).toBe(50);expect(actual.activeWeeks).toBe(3);expect(actual.badges.every(r=>r.earned)).toBe(true);console.log('BA boundary',instant,today,actual.weekKeys,'numerators',actual.challenges.map(r=>r.value),'lifetime',actual.points,actual.badges.map(r=>r.earned));
+  }
 });

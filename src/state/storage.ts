@@ -1,4 +1,6 @@
 import type { Content, Medium, ProfileId, SportId } from '../content/types';
+import { activityDate } from './dates';
+export { activityDate } from './dates';
 
 export const storageKey = 'ba-en-movimiento:demo:v1';
 export interface HistoryRecord {
@@ -16,9 +18,6 @@ export interface Envelope {
 }
 export type StorageStatus = 'ready' | 'invalid' | 'unavailable';
 export type StoragePort = Pick<Storage, 'getItem' | 'setItem'>;
-export function activityDate(now: Date): string {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Argentina/Buenos_Aires', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
-}
 export function materialize(content: Content): Envelope {
   const profiles = Object.fromEntries(content.profiles.map(profile => [profile.id, {
     baselineHistory: content.scenarios.profiles.find(s => s.profileId === profile.id)!.history.map(seed => {
@@ -36,13 +35,15 @@ const timestamp = (v: unknown) => text(v) && Number.isFinite(Date.parse(v)) && n
 export function validateEnvelope(value: unknown, content: Content): Envelope {
   const fail = (): never => { throw new Error(content.ui.storageRecovery); };
   if (!object(value) || value.schemaVersion !== 1 || !content.profiles.some(p => p.id === value.selectedProfileId) || !date(value.scenarioReferenceDate) || !object(value.profiles)) return fail();
-  if (Object.keys(value.profiles).length !== content.profiles.length) return fail();
+  if (Object.keys(value).some(k => !['schemaVersion', 'selectedProfileId', 'scenarioReferenceDate', 'profiles'].includes(k)) || Object.keys(value.profiles).length !== content.profiles.length) return fail();
   for (const profile of content.profiles) {
     const data = value.profiles[profile.id];
     if (!object(data) || !Array.isArray(data.baselineHistory) || !object(data.completions) || !object(data.interests) || Object.keys(data).some(k => !['baselineHistory', 'completions', 'interests'].includes(k))) return fail();
     const ids = new Set<string>();
     const record = (r: unknown, origin: HistoryRecord['origin'], key?: string) => {
       if (!object(r) || !text(r.id) || ids.has(r.id) || r.profileId !== profile.id || !content.sports.some(s => s.id === r.sportId) || !text(r.planId) || !text(r.planTitle) || !text(r.sportTitle) || !['dry-land', 'water'].includes(String(r.medium)) || (r.medium === 'water' && r.sportId !== 'swimming') || !date(r.activityDate) || r.origin !== origin) return fail();
+      const fields = ['id', 'profileId', 'sportId', 'planId', 'planTitle', 'sportTitle', 'medium', 'activityDate', 'origin', ...(origin === 'user-simulated' ? ['attemptId', 'completedStepIds', 'timestamp'] : [])];
+      if (Object.keys(r).some(k => !fields.includes(k))) return fail();
       if (origin === 'seed' && r.activityDate > String(value.scenarioReferenceDate)) return fail();
       if (origin === 'user-simulated' && (r.attemptId !== key || r.id !== key || !timestamp(r.timestamp) || activityDate(new Date(String(r.timestamp))) !== r.activityDate || !Array.isArray(r.completedStepIds) || !r.completedStepIds.length || !r.completedStepIds.every(text) || new Set(r.completedStepIds).size !== r.completedStepIds.length)) return fail();
       ids.add(r.id);
@@ -50,7 +51,7 @@ export function validateEnvelope(value: unknown, content: Content): Envelope {
     data.baselineHistory.forEach(r => record(r, 'seed'));
     Object.entries(data.completions).forEach(([key, r]) => record(r, 'user-simulated', key));
     for (const [key, r] of Object.entries(data.interests)) {
-      if (!object(r) || r.classId !== key || !text(key) || r.profileId !== profile.id || !content.sports.some(s => s.id === r.sportId) || !text(r.classTitle) || !text(r.sportTitle) || !timestamp(r.timestamp) || r.origin !== 'simulated-interest') return fail();
+      if (!object(r) || Object.keys(r).some(k => !['classId', 'profileId', 'sportId', 'classTitle', 'sportTitle', 'timestamp', 'origin'].includes(k)) || r.classId !== key || !text(key) || r.profileId !== profile.id || !content.sports.some(s => s.id === r.sportId) || !text(r.classTitle) || !text(r.sportTitle) || !timestamp(r.timestamp) || r.origin !== 'simulated-interest') return fail();
     }
   }
   return value as unknown as Envelope;

@@ -103,3 +103,11 @@ footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--line);
 .affirmation input { width: 24px; height: 24px; flex-shrink: 0; }
 progress { width: 100%; accent-color: #29bdef; }
 button:disabled { opacity: .5; cursor: not-allowed; }
+.journey-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.journey-stats div { padding: 14px 10px; border-radius: 18px; background: var(--mint); }
+.journey-stats dt { font-size: .85rem; }
+.journey-stats dd { margin: 8px 0 0; font-size: 1.7rem; font-weight: 800; }
+.history-list { padding-left: 24px; }
+.history-list li { margin: 16px 0; padding: 16px; border: 1px solid var(--line); border-radius: 18px; }
+.history-list p { margin-bottom: 0; }
+.button-link.secondary, button.secondary { background: white; color: #171b1e; border: 1px solid var(--line); margin-top: 12px; }

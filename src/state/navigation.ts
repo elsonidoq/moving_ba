@@ -4,6 +4,8 @@ import type { Envelope } from './storage';
 
 export type Route =
   | { screen: 'home'; profileId: ProfileId }
+  | { screen: 'journey'; profileId: ProfileId }
+  | { screen: 'challenges'; profileId: ProfileId }
   | { screen: 'choice'; profileId: ProfileId; sportId: SportId }
   | { screen: 'plan'; profileId: ProfileId; sportId: SportId; mode: 'solo'; planId: string }
   | { screen: 'catalog'; profileId: ProfileId; sportId: SportId; mode: 'classes' }
@@ -22,6 +24,7 @@ export function guardHash(hash: string, content: Content, runtime?: { attempt: A
   const parts = hash.replace(/^#\/?/, '').split('/');
   const profileId = content.profiles.find(p => p.id === parts[0])?.id ?? content.scenarios.defaultProfileId;
   if (!content.profiles.some(p => p.id === parts[0])) return { screen: 'home', profileId };
+  if ((parts[1] === 'journey' || parts[1] === 'challenges') && parts.length === 2) return {screen:parts[1],profileId};
   const sportId = content.sports.find(s => s.id === parts[1])?.id;
   if (!sportId) return { screen: 'home', profileId };
   if (parts[2] === 'session') {
@@ -48,7 +51,7 @@ export function guardHash(hash: string, content: Content, runtime?: { attempt: A
 
 export function routeHash(route: Route): string {
   const base = `#/${route.profileId}`;
-  if (route.screen === 'home') return `${base}/home`;
+  if (route.screen === 'home' || route.screen === 'journey' || route.screen === 'challenges') return `${base}/${route.screen}`;
   const sport = `${base}/${route.sportId}`;
   if (route.screen === 'detail') return `${sport}/classes/${route.classId}`;
   if (route.screen === 'session') return `${sport}/session/${route.planId}/${route.attemptId}`;

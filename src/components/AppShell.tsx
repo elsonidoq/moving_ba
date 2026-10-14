@@ -39,12 +39,16 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <a href={routeHash({ screen: 'home', profileId: route.profileId })}>{ui.home}</a>
     </nav>}
     {status !== 'ready' && <section role="alert" className="safety"><p>{status === 'invalid' ? ui.storageRecovery : ui.storageWarning}</p><button onClick={recover}>{ui.storageRecovery}</button></section>}
+    <nav className="breadcrumbs" aria-label={ui.journey}>
+      <a href={routeHash({screen:'journey',profileId:route.profileId})}>{ui.journey}</a>
+      <a href={routeHash({screen:'challenges',profileId:route.profileId})}>{ui.challenges}</a>
+    </nav>
     <main id="main-content" tabIndex={-1} ref={main} data-profile-id={route.profileId} data-sport-id={'sportId' in route ? route.sportId : undefined} data-mode={'mode' in route ? route.mode : undefined}>{children}</main>
     <footer>
       <p>{content.legal.illustrativeTraining}</p>
       <p>{content.legal.professionalReview}</p>
       <p>{content.legal.noOfficialStatus}</p>
-      <button onClick={() => { if (window.confirm(ui.resetConfirm)) recover(); }}>{ui.reset}</button>
+      <button className="secondary" onClick={() => { if (window.confirm(ui.resetConfirm)) recover(); }}>{ui.reset}</button>
     </footer>
   </div>;
 }

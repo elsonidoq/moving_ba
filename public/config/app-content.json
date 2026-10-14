@@ -68,7 +68,13 @@
     "sessionAbandoned": "Saliste de la práctica sin completarla. No se sumó una sesión.",
     "notAvailable": "Esta opción ya no está disponible. Elegí otra para seguir.",
     "startWater": "Iniciar variante en el agua",
-    "viewClass": "Ver esta clase"
+    "viewClass": "Ver esta clase",
+    "sessions": "Prácticas completadas",
+    "weekOf": "Semana del",
+    "thisWeek": "Esta semana",
+    "thisMonth": "Este mes",
+    "earned": "Logro alcanzado",
+    "nextAchievement": "Un próximo logro posible"
   },
   "legal": {
     "illustrativeTraining": "Prácticas ilustrativas: esta demo no verifica actividad física ni da indicaciones personales. No hagas ejercicios con dolor.",

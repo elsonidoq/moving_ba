@@ -13,6 +13,7 @@ export const uiKeys = [
   'seedOrigin', 'simulatedOrigin', 'points', 'activeWeeks', 'weeklyGoal', 'badges',
   'benefits', 'reset', 'resetConfirm', 'storageWarning', 'storageRecovery',
   'canSwim', 'safePool', 'loading', 'retry', 'configurationError', 'skipToContent',
+  'sessions', 'weekOf', 'thisWeek', 'thisMonth', 'earned', 'nextAchievement',
   'rest', 'pause', 'history', 'sessionAbandoned', 'notAvailable',
 ] as const;
 export type UI = Record<typeof uiKeys[number], string>;

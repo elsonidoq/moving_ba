@@ -297,9 +297,11 @@ test('class identity rendered exact six fictional details',async({page})=>{
   }
 });
 test('yoga interest both exact free/paid persist without training credit',async({page})=>{
+  await page.clock.setFixedTime(new Date('2026-10-14T15:00:00Z'));
   await page.route('**/config/app-content.json',async route=>{ const response=await route.fetch(); const json=await response.json();json.classes.reverse();await route.fulfill({response,json}); });
   await page.goto('/#/first/yoga/classes'); await expect(page.locator('main')).toBeVisible();
   const before=JSON.stringify((await envelope(page)).profiles.first.completions);
+  const beforeRewards=await assertDerived(page,'first');
   for(const id of ['yoga-free','yoga-paid']) {
     await page.goto('/#/first/yoga/classes');
     await page.locator(`[data-class-id="${id}"]`).getByRole('link',{name:content.ui.viewClass}).click();
@@ -313,11 +315,13 @@ test('yoga interest both exact free/paid persist without training credit',async(
     await page.reload(); await expect(page.locator('[data-detail-class-id]')).toHaveAttribute('data-detail-class-id',id);
     await expect(page.getByRole('status')).toHaveText(content.ui.interestSuccess);
     expect(JSON.stringify((await envelope(page)).profiles.first.completions)).toBe(before);
+    expect(await assertDerived(page,'first')).toEqual(beforeRewards);
   }
   expect(Object.keys((await envelope(page)).profiles.first.interests)).toEqual(['yoga-free','yoga-paid']);
   console.log('Yoga IDs',JSON.stringify((await envelope(page)).profiles.first),'training unchanged',before);
 });
 test('profile reset all three isolated refresh, fixtures restored, unrelated sentinel retained',async({page})=>{
+  await page.clock.setFixedTime(new Date('2026-10-14T15:00:00Z'));
   await page.goto('/#/first/calisthenics/solo/cal-first');
   await finish(page);
   await page.goto('/#/first/yoga/classes/yoga-free'); await page.getByRole('button',{name:content.ui.interest,exact:true}).click();
@@ -333,6 +337,7 @@ test('profile reset all three isolated refresh, fixtures restored, unrelated sen
     expect(Object.keys(e.profiles[profile.id].completions)).toHaveLength(profile.id==='first'?1:0);
     expect(Object.keys(e.profiles[profile.id].interests)).toHaveLength(profile.id==='first'?1:0);
     console.log('profile',profile.id,JSON.stringify(e.profiles[profile.id]));
+    await assertDerived(page,profile.id);
   }
   page.once('dialog',dialog=>dialog.accept()); await page.getByRole('button',{name:content.ui.reset,exact:true}).click();
   await expect(page.getByRole('combobox')).toHaveValue('first');
@@ -343,6 +348,8 @@ test('profile reset all three isolated refresh, fixtures restored, unrelated sen
   }
   expect(await page.evaluate(()=>localStorage.getItem('unrelated'))).toBe('sentinel');
   await page.reload(); await expect(page.getByRole('combobox')).toHaveValue('first');
+  for(const profile of content.profiles) { await assertDerived(page,profile.id); }
+  await page.getByRole('combobox').selectOption('first');
   console.log('reset envelope',JSON.stringify(reset),'sentinel retained');
 });
 test('profile reset denied write preserves unrelated and Spanish limitation',async({page})=>{
@@ -354,4 +361,86 @@ test('profile reset denied write preserves unrelated and Spanish limitation',asy
   expect(await page.evaluate(()=>localStorage.getItem('unrelated'))).toBe('sentinel');
   expect(Object.keys((await envelope(page)).profiles.first.completions)).toHaveLength(1);
   console.log('reset write failed: memory reset, durable original retained, Spanish limitation, sentinel retained');
+});
+
+function oracleWeek(date:string) {
+  const n=Math.floor(Date.parse(date+'T00:00:00Z')/86400000);
+  return new Date((Math.floor((n+3)/7)*7-3)*86400000).toISOString().slice(0,10);
+}
+async function assertDerived(page:import('@playwright/test').Page,profileId:string,today='2026-10-14') {
+  const e=await envelope(page);const data=e.profiles[profileId];
+  const history=[...data.baselineHistory,...Object.values(data.completions)] as any[];
+  const weeks=[...new Set(history.map(r=>oracleWeek(r.activityDate)))].sort();
+  const week=history.filter(r=>oracleWeek(r.activityDate)===oracleWeek(today)&&r.activityDate<=today);
+  const month=history.filter(r=>r.activityDate.slice(0,7)===today.slice(0,7)&&r.activityDate<=today);
+  const points=history.length*content.rules.pointsPerCompletion;
+  const goal=content.profiles.find(p=>p.id===profileId)!.weeklyGoal;
+  await page.evaluate(p=>{location.hash=`#/${p}/journey`;},profileId);
+  await expect(page.getByRole('heading',{level:1})).toHaveText(content.ui.journey);
+  await expect(page.locator('[data-stat="sessions"]')).toHaveText(String(history.length));
+  await expect(page.locator('[data-stat="points"]')).toHaveText(String(points));
+  await expect(page.locator('[data-stat="activeWeeks"]')).toHaveText(String(weeks.length));
+  await expect(page.locator('[data-stat="weeklyGoal"]')).toHaveText(`${week.length} / ${goal}`);
+  await expect(page.locator('[data-history-id]')).toHaveCount(history.length);
+  for(const r of history) {
+    const row=page.locator(`[data-history-id="${r.id}"]`);await expect(row).toContainText(r.planTitle);await expect(row).toContainText(r.origin==='seed'?content.ui.seedOrigin:content.ui.simulatedOrigin);
+    await expect(row.locator('time')).toHaveAttribute('datetime',r.activityDate);
+  }
+  expect(await page.locator('[data-week-key]').evaluateAll(rows=>rows.map(r=>r.getAttribute('data-week-key')))).toEqual(weeks);
+  await expect(page.locator('main')).toContainText(content.ui.rest);
+  const next=content.plans.find(p=>p.id===content.profiles.find(p=>p.id===profileId)!.defaultPlanId)!;
+  await expect(page.locator('main').getByRole('link',{name:next.name,exact:true})).toHaveAttribute('href',`#/${profileId}/${next.sportId}/solo/${next.id}`);
+  await page.locator('main').getByRole('link',{name:content.ui.challenges,exact:true}).click();
+  await expect(page.getByRole('heading',{level:1})).toHaveText(content.ui.challenges);
+  await expect(page.locator('[data-stat="points"]')).toHaveText(String(points));
+  const challenges=[];
+  for(const rule of content.rules.challenges) {
+    const list=rule.period==='week'?week:month;
+    const value=rule.metric==='sessions'?list.length:new Set(list.map(r=>oracleWeek(r.activityDate))).size;
+    const row=page.locator(`[data-challenge-id="${rule.id}"]`);
+    await expect(row.locator('[data-challenge-value]')).toHaveText(`${value} / ${rule.target}`);
+    await expect(row.locator('progress')).toHaveAttribute('value',String(Math.min(value,rule.target)));
+    challenges.push([rule.id,value,rule.target]);
+  }
+  const badges=[];
+  for(const rule of content.rules.badges) {
+    const earned=(rule.metric==='sessions'?history.length:weeks.length)>=rule.threshold;
+    await expect(page.locator(`[data-badge-id="${rule.id}"]`)).toHaveAttribute('data-earned',String(earned));badges.push([rule.id,earned]);
+  }
+  await expect(page.locator('main')).toContainText(content.legal.noAgreement);
+  await expect(page.locator('main')).toContainText(content.legal.nonredeemable);
+  for(const benefit of content.rules.benefits)await expect(page.locator(`[data-benefit-id="${benefit.id}"]`)).toContainText(benefit.disclaimer);
+  const observed={profileId,ids:history.map(r=>r.id).sort(),points,activeWeeks:weeks.length,weeklyGoal:`${week.length} / ${goal}`,challenges,badges};console.log('rendered oracle',JSON.stringify(observed));return observed;
+}
+test('calisthenics journey rewards exactly once at composed boundaries, humane profiles and rest',async({page})=>{
+  await page.clock.setFixedTime(new Date('2026-10-14T15:00:00Z'));
+  await page.goto('/#/first/journey');
+  await expect(page.locator('main')).toContainText(content.ui.historyEmpty);
+  const empty=await assertDerived(page,'first');expect(empty.points).toBe(0);expect(empty.ids).toEqual([]);
+  await page.goto('/#/first/calisthenics/session/cal-first/forged');
+  await expect(page.locator('[data-plan-id]')).toHaveAttribute('data-plan-id','cal-first');
+  await page.getByRole('button',{name:content.ui.start,exact:true}).click();
+  await page.getByRole('button',{name:content.ui.completeStep,exact:true}).click();
+  await page.getByRole('link',{name:content.ui.journey,exact:true}).click();
+  expect(await assertDerived(page,'first')).toEqual(empty);
+  await page.goto('/#/first/calisthenics/solo/cal-first');
+  const first=await finish(page);const success=page.url();
+  const once=await assertDerived(page,'first');expect(once.ids).toEqual([first]);expect(once.points).toBe(content.rules.pointsPerCompletion);
+  await page.reload();expect(await assertDerived(page,'first')).toEqual(once);
+  await page.goto(success);await expect(page.locator('[data-completed-attempt-id]')).toHaveAttribute('data-completed-attempt-id',first);
+  await page.getByRole('link',{name:content.ui.next,exact:true}).click();await page.goBack();await page.goForward();
+  expect(await assertDerived(page,'first')).toEqual(once);
+  await page.goto('/#/first/calisthenics/solo/cal-first');const second=await finish(page);
+  const twice=await assertDerived(page,'first');expect(twice.ids).toEqual([first,second].sort());expect(twice.points).toBe(2*content.rules.pointsPerCompletion);
+  await page.reload();expect(await assertDerived(page,'first')).toEqual(twice);
+  mkdirSync(bEvidence,{recursive:true});await page.screenshot({path:`${bEvidence}/t005-first-challenges.png`,fullPage:true});
+  for(const id of ['returning','regular']) {
+    await page.getByRole('combobox').selectOption(id);await page.evaluate(p=>{location.hash=`#/${p}/journey`;},id);
+    await expect(page.getByRole('heading',{level:1})).toHaveText(content.ui.journey);
+    await expect(page.locator('main')).toContainText(content.profiles.find(p=>p.id===id)!.subtitle);
+    if(id==='returning')await expect(page.locator('main')).toContainText(content.ui.pause);
+    await assertDerived(page,id);
+  }
+  await page.clock.setFixedTime(new Date('2026-11-02T15:00:00Z'));
+  const rested=await assertDerived(page,'first','2026-11-02');expect(rested.points).toBe(twice.points);expect(rested.badges).toEqual(twice.badges);expect(rested.ids).toEqual(twice.ids);expect(rested.weeklyGoal).toBe('0 / 1');
 });

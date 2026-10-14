@@ -30,7 +30,8 @@ Swimming defaults to dry land: the water variant requires both swimming ability 
 a permitted supervised pool with guardavidas and venue rules. Profiles never grant ability.
 Open `Ver esta clase` for its exact fictional details. `Me interesa esta clase`
 records one simulated interest per profile/class; it sends nothing, reserves nothing
-and never changes completion history. Derived journey screens are not delivered yet.
+and never changes completion history or rewards. `Mi camino` is available throughout
+the app, with history, weekly goal, a concrete next practice and `Desafíos y logros`.
 
 Product copy, all twelve plans, six classes, rules and seed scenarios live in the
 human-editable `public/config/app-content.json`. The app fetches
@@ -58,6 +59,27 @@ fixtures, select `Primera vez`, discard active sessions/affirmations, and remove
 app-added completions/interests. Only the demo key is replaced; unrelated storage is
 untouched. A failed write resets this tab only and warns that durable data remains.
 
+## Journey rules and dates
+
+One history per profile combines materialized seed records with unique completed
+attempts, never class interests. Lifetime points are record count × configured
+`pointsPerCompletion` (currently 10). Active weeks count distinct Monday-start BA
+weeks. Weekly goals count current-week sessions; challenges count sessions or active
+weeks within their configured current week/calendar month. Numerators remain honest
+(e.g. 2 / 1); only progress bars are capped. Badges use lifetime configured thresholds,
+so rest/window rollover does not erase history, points or earned badges. Benefits are
+illustrative, nonredeemable and `sin convenio vigente`, not partner offers.
+
+Dates use `America/Argentina/Buenos_Aires`, not UTC or rolling windows. The fixture
+reference `2026-10-14` is not a frozen app clock: new completions and current windows
+use the actual current time. At that reference date the reset profiles have 0/2/4
+sessions, 0/20/40 points, 0/2/4 active weeks and weekly progress 0/1, 0/1, 1/2.
+Seeds display `Datos de demostración`; explicit app completions display
+`Práctica simulada por vos`. Historical Spanish snapshots survive content renames or
+retired plans. Rule edits recompute views after reload; fixture edits take effect only
+on deliberate reset, not every reload. Content-edit/failure browser acceptance and
+final presenter/visual rehearsal remain later tasks.
+
 ## Checks
 
 ```sh
@@ -79,9 +101,20 @@ npm run test:e2e -- --grep 'configured navigation'
 
 The latter covers all 18 profile/sport/branch selections, guarded hash/history/reload,
 HTTP public-file identity and early 360px/1280px visual/keyboard checks. Tests are added
-with their delivered functionality; later participation/persistence/rewards checks
-are not claimed by these previews. Dependency audit reported three high-severity
+with their delivered functionality; these navigation checks alone do not prove
+participation/persistence/rewards. Batch B separately validates actual transition,
+storage and date/rule helpers and the composed production-browser boundaries.
+Dependency audit reported three high-severity
 warnings, not assessed or fixed; exact approved pins are retained.
+
+```sh
+npm run test:core -- --grep 'session integrity|swimming start guard|storage envelope|class identity|history rules dates'
+npm run test:e2e -- --grep 'solo durable completion|swimming safety|yoga interest|profile reset|calisthenics journey rewards'
+```
+
+The rewards/profile tests freeze the browser clock to the fixture reference and
+compare stored record IDs with independently calculated rendered totals. App time
+is not frozen. No live deployment, request submission or real exercise is tested.
 
 [Architecture](docs/architecture.md) · [Deployment status](docs/deployment.md) ·
 [Approved feature](specs/001-ba-movement-demo/README.md)
