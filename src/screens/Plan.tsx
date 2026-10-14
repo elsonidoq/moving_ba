@@ -34,7 +34,7 @@ export default function Plan() {
     {sport.id === 'swimming' && <section className="support">
       <label className="affirmation"><input type="checkbox" checked={canSwim} onChange={e => affirm('canSwim', e.target.checked)} />{ui.canSwim}</label>
       <label className="affirmation"><input type="checkbox" checked={safePool} onChange={e => affirm('safePool', e.target.checked)} />{ui.safePool}</label>
-      <button disabled={!canSwim || !safePool || status === 'invalid'} onClick={() => start(true)}>{ui.startWater}</button>
-      <p>{ui.swimRedirect}</p><a className="button-link" href={routeHash({ screen: 'catalog', profileId: route.profileId, sportId: sport.id, mode: 'classes' })}>{ui.classes}</a></section>}
+      <button className="secondary" disabled={!canSwim || !safePool || status === 'invalid'} onClick={() => start(true)}>{ui.startWater}</button>
+      <p>{ui.swimRedirect}</p><a className="button-link secondary" href={routeHash({ screen: 'catalog', profileId: route.profileId, sportId: sport.id, mode: 'classes' })}>{ui.classes}</a></section>}
   </article>;
 }

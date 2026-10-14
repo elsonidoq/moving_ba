@@ -5,12 +5,14 @@ export default function ClassDetail() {
   if (route.screen !== 'detail') return null;
   const item = content.classes.find(c => c.id === route.classId && c.sportId === route.sportId)!;
   const { ui } = content;
+  const sport = content.sports.find(s => s.id === item.sportId)!;
   const interested = !!envelope.profiles[route.profileId].interests[item.id];
   const plan = safePlan(content, route.profileId, route.sportId);
   return <article data-detail-class-id={item.id}>
     <p className="eyebrow">{ui.classes}</p><h1 tabIndex={-1}>{item.title}</h1>
     <p className="safety">{content.legal.fictionalClasses}</p>
-    <p>{item.description}</p>
+    <div className="sport-hero compact"><img src={sport.heroAsset} alt={sport.heroAlt} /></div>
+    <p className="lead">{item.description}</p>
     <dl className="class-meta">
       <div><dt>{ui.schedule}</dt><dd>{item.schedule}</dd></div>
       <div><dt>{ui.venue}</dt><dd>{item.venue}</dd></div>
@@ -22,6 +24,6 @@ export default function ClassDetail() {
     <h2>{ui.requirements}</h2><ul>{item.requirements.map(text => <li key={text}>{text}</li>)}</ul>
     <h2>{ui.contact}</h2><p>{item.contactCopy}</p>
     {!interested ? <button disabled={status === 'invalid'} onClick={interest}>{ui.interest}</button> : <p role="status" className="support">{ui.interestSuccess}</p>}
-    <a className="button-link" href={routeHash({screen:'plan',profileId:route.profileId,sportId:route.sportId,mode:'solo',planId:plan.id})}>{ui.solo}</a>
+    <a className="button-link secondary" href={routeHash({screen:'plan',profileId:route.profileId,sportId:route.sportId,mode:'solo',planId:plan.id})}>{ui.solo}</a>
   </article>;
 }

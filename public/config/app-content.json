@@ -55,6 +55,7 @@
     "reset": "Restablecer demostración",
     "resetConfirm": "Se restablecerán los tres perfiles de esta demostración. Tus otros datos del navegador no cambian.",
     "storageWarning": "No pudimos guardar en este navegador. Podés seguir en esta pestaña, pero al recargar se perderán los cambios.",
+    "storageReset": "Restablecer sólo esta demo",
     "storageRecovery": "No pudimos leer los datos de esta demostración. Restablecé sólo la demo para seguir.",
     "canSwim": "Confirmo que ya sé nadar con autonomía.",
     "safePool": "Confirmo que estoy en una pileta habilitada, supervisada por guardavidas y que respeto las reglas del lugar.",

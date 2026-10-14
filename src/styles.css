@@ -111,3 +111,23 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .history-list li { margin: 16px 0; padding: 16px; border: 1px solid var(--line); border-radius: 18px; }
 .history-list p { margin-bottom: 0; }
 .button-link.secondary, button.secondary { background: white; color: #171b1e; border: 1px solid var(--line); margin-top: 12px; }
+
+/* Keep secondary navigation quiet and the current practice action prominent. */
+input:focus-visible { outline: 3px solid #006884; outline-offset: 4px; }
+button:not(.skip-link) { width: 100%; }
+.breadcrumbs a[aria-current="page"] { background: #fff3b0; border-color: #b19a24; }
+[data-current-step-id] .quantity { font-size: 1.4rem; font-weight: 800; color: #294f42; }
+[data-current-step-id] > button { background: var(--yellow); color: #171b1e; }
+[data-completed-attempt-id] { padding: 8px 0; }
+[data-completed-attempt-id] h1 { max-width: 16ch; }
+.journey-stats div:first-child { background: var(--yellow); }
+[data-stat="points"] { font-variant-numeric: tabular-nums; }
+.hero > [data-stat="points"] { font-size: 3.5rem; font-weight: 900; letter-spacing: -.05em; line-height: 1.1; }
+[data-badge-id][data-earned="true"] { border: 1px solid #559179; background: #e8f7ef; }
+[data-benefit-id] { border: 1px dashed #7d9389; background: #f7faf9; }
+@media (max-width: 480px) {
+  .journey-stats { gap: 7px; }
+  .journey-stats dt { font-size: .75rem; overflow-wrap: anywhere; }
+  .journey-stats dd { font-size: 1.65rem; }
+}
+.journey-stats dt { color: #294f42; }

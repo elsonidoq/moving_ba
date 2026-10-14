@@ -265,7 +265,7 @@ for (const mode of ['denied','corrupt','version','sport','profile']) {
       await expect(page.locator('[data-completed-attempt-id]')).toHaveCount(1);
       await expect(page.getByRole('alert')).toContainText(warning);
     } else {
-      await page.getByRole('button',{name:content.ui.storageRecovery,exact:true}).click();
+      await page.getByRole('button',{name:content.ui.storageReset,exact:true}).click();
       await expect(page.getByRole('alert')).toHaveCount(0);
       expect(Object.keys((await envelope(page)).profiles.first.completions)).toHaveLength(0);
       expect(await page.evaluate(()=>localStorage.getItem('unrelated'))).toBe('sentinel');
@@ -516,6 +516,7 @@ test('content failures real missing malformed reference-invalid files recover on
         await expect(alert).toContainText('Revisá la configuración e intentá de nuevo.');
         await expect(alert).toContainText(kind==='missing'?'404':kind==='malformed'?'formato JSON válido':'missing-editor-exercise');
         await expect(page.locator('[data-stat], [data-benefit-id]')).toHaveCount(0);
+        await page.screenshot({path:`${cEvidence}/content-error-${kind}.png`,fullPage:true});
         console.log('REAL failure',kind,'HTTP',response.status(),'Spanish blocking hint',await alert.innerText());
       } finally {writeFileSync(servedConfig,original);}
       expect(await (await request.get('/config/app-content.json')).body()).toEqual(original);
@@ -526,4 +527,83 @@ test('content failures real missing malformed reference-invalid files recover on
       console.log(kind,'restored HTTP exact baseline and retry rendered challenges successfully');
     }
   } finally {writeFileSync(servedConfig,original);}
+});
+
+test('inspection guards reject invented detail, session, success and skipped credit',async({page})=>{
+  await page.goto('/#/first/home');
+  const before=(await envelope(page)).profiles.first;
+  for(const route of ['first/yoga/classes/imaginary','first/yoga/classes/swim-paid','first/calisthenics/session/cal-first/skipped','first/calisthenics/success/skipped','regular/swimming/session/swim-water-regular/skipped','regular/swimming/solo/swim-water-regular']) {
+    await page.goto('/#/'+route);
+    await expect(page.locator('[data-attempt-id], [data-completed-attempt-id], [data-detail-class-id]')).toHaveCount(0);
+    console.log('inspection guard',route,'->',page.url());
+  }
+  expect((await envelope(page)).profiles.first).toEqual(before);
+  expect(Object.keys((await envelope(page)).profiles.regular.completions)).toHaveLength(0);
+  await page.goto('/#/first/swimming/solo/swim-dry-first');
+  await expect(page.getByRole('button',{name:content.ui.startWater,exact:true})).toBeDisabled();
+  await page.getByRole('link',{name:content.ui.classes,exact:true}).click();
+  await page.locator('[data-class-id="swim-free"]').getByRole('link',{name:content.ui.viewClass}).click();
+  await page.locator('main').getByRole('link',{name:content.ui.solo,exact:true}).click();
+  await expect(page.locator('[data-plan-id]')).toHaveAttribute('data-plan-id','swim-dry-first');
+  await page.getByRole('link',{name:content.ui.journey,exact:true}).click();
+  await page.locator('main').getByRole('link',{name:content.plans.find(p=>p.id==='cal-first')!.name,exact:true}).click();
+  await expect(page.locator('[data-plan-id]')).toHaveAttribute('data-plan-id','cal-first');
+  await page.getByRole('button',{name:content.ui.start,exact:true}).click();
+  await page.getByRole('link',{name:content.ui.back,exact:true}).click();
+  expect((await envelope(page)).profiles.first).toEqual(before);
+  await page.goto('/#/first/challenges');
+  await page.locator('main').getByRole('link',{name:content.ui.journey,exact:true}).click();
+  await expect(page.getByRole('heading',{level:1})).toHaveText(content.ui.journey);
+  console.log('retained instructor, detail-to-solo, next-practice, active back and challenges-to-journey links work without credit');
+});
+for(const width of [360,1280]) {
+  test(`presenter visual six concepts both branches ${width}px`,async({page})=>{
+    mkdirSync(cEvidence,{recursive:true});
+    await page.setViewportSize({width,height:900});await page.emulateMedia({reducedMotion:'reduce'});
+    const inspect=async(name:string)=>{
+      expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+      const targets=await page.locator('a:visible,button:visible,select:visible,label.affirmation:visible').evaluateAll(rows=>rows.filter(r=>r.className!=='skip-link').map(r=>({name:r.textContent,height:r.getBoundingClientRect().height})));
+      for(const t of targets)expect(t.height,`${name}: ${t.name}`).toBeGreaterThanOrEqual(44);
+      await page.evaluate(()=>scrollTo(0,0));
+      await page.screenshot({path:`${cEvidence}/${width}-${name}.png`,fullPage:true});
+      console.log('visual',width,name,'no overflow; targets >=44px; screenshot');
+    };
+    await page.goto('/');await expect(page.getByRole('heading',{level:1})).toHaveText(content.profiles[0].welcome);await inspect('home');
+    const cal=page.getByRole('link',{name:'Calistenia',exact:true});await cal.focus();
+    expect(await cal.evaluate(e=>getComputedStyle(e).outlineStyle)).toBe('solid');
+    expect(await cal.evaluate(e=>getComputedStyle(e).transitionDuration)).toBe('0s');
+    await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toHaveText('Calistenia');await inspect('choice');
+    await page.getByRole('link',{name:new RegExp(content.ui.solo)}).click();await inspect('plan');
+    await page.getByRole('button',{name:content.ui.start,exact:true}).click();await expect(page.locator('[data-attempt-id]')).toHaveCount(1);await inspect('session');
+    for(const step of content.plans.find(p=>p.id==='cal-first')!.steps) {await expect(page.locator('[data-current-step-id]')).toHaveAttribute('data-current-step-id',step.id);await page.getByRole('button',{name:content.ui.completeStep,exact:true}).click();}
+    await expect(page.getByRole('heading',{level:1})).toHaveText(content.ui.success);await inspect('success');
+    await page.goto('/#/first/yoga/classes');await expect(page.locator('[data-class-id]')).toHaveCount(2);await inspect('catalog');
+    await page.locator('[data-class-id="yoga-free"]').getByRole('link',{name:content.ui.viewClass}).click();await inspect('detail');
+    await page.getByRole('button',{name:content.ui.interest,exact:true}).click();await expect(page.getByRole('status')).toHaveText(content.ui.interestSuccess);await inspect('interest');
+    await page.goto('/#/first/journey');await expect(page.getByRole('heading',{level:1})).toHaveText(content.ui.journey);await inspect('journey');
+    await page.goto('/#/first/challenges');await expect(page.getByRole('heading',{level:1})).toHaveText(content.ui.challenges);await inspect('challenges');
+    await page.goto('/#/first/swimming/solo/swim-dry-first');
+    const checkbox=page.getByRole('checkbox',{name:content.ui.canSwim});await page.keyboard.press('Tab');await checkbox.focus();expect(await checkbox.evaluate(e=>getComputedStyle(e).outlineStyle)).toBe('solid');await inspect('swimming');
+    await page.evaluate(key=>localStorage.setItem(key,'{'),demoKey);await page.reload();await expect(page.getByRole('alert')).toContainText(content.ui.storageRecovery);await inspect('storage-error');
+    await page.getByRole('button',{name:content.ui.storageReset,exact:true}).click();await page.goto('/#/first/journey');await expect(page.locator('main')).toContainText(content.ui.historyEmpty);await inspect('empty');
+  });
+}
+
+test('presenter bootstrap and storage language with useful Spanish feedback',async({page})=>{
+  await page.setViewportSize({width:360,height:900});
+  let release!:()=>void;
+  const pending=new Promise<void>(resolve=>{release=resolve;});
+  await page.route('**/config/app-content.json',async route=>{await pending;await route.continue();});
+  await page.goto('/');await expect(page.getByRole('status')).toHaveText('Estamos cargando el contenido…');
+  await page.screenshot({path:`${cEvidence}/360-loader.png`,fullPage:true});release();
+  await expect(page.getByRole('heading',{level:1})).toHaveText(content.profiles[0].welcome);
+  await page.unroute('**/config/app-content.json');
+  await page.addInitScript(()=>{Storage.prototype.setItem=()=>{throw Error('denied');};});
+  await page.reload();await page.getByRole('combobox').selectOption('returning');
+  await expect(page.getByRole('alert')).toContainText(content.ui.storageWarning);
+  await page.screenshot({path:`${cEvidence}/360-storage-warning.png`,fullPage:true});
+  await page.keyboard.press('Tab');const skip=page.getByRole('button',{name:content.ui.skipToContent});await skip.focus();await page.keyboard.press('Enter');
+  await expect(page.locator('main')).toBeFocused();
+  await page.locator('.brand').click();await expect(page).toHaveURL(/returning\/home$/);
+  console.log('Spanish loader, persistence limitation, keyboard skip-to-main and brand navigation observed');
 });

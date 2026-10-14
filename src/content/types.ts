@@ -11,7 +11,7 @@ export const uiKeys = [
   'water', 'startWater', 'swimRedirect', 'start', 'completeStep', 'stepProgress', 'success',
   'next', 'interest', 'interestSuccess', 'journey', 'challenges', 'historyEmpty',
   'seedOrigin', 'simulatedOrigin', 'points', 'activeWeeks', 'weeklyGoal', 'badges',
-  'benefits', 'reset', 'resetConfirm', 'storageWarning', 'storageRecovery',
+  'benefits', 'reset', 'resetConfirm', 'storageWarning', 'storageRecovery', 'storageReset',
   'canSwim', 'safePool', 'loading', 'retry', 'configurationError', 'skipToContent',
   'sessions', 'weekOf', 'thisWeek', 'thisMonth', 'earned', 'nextAchievement',
   'rest', 'pause', 'history', 'sessionAbandoned', 'notAvailable',

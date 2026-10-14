@@ -118,3 +118,34 @@ is not frozen. No live deployment, request submission or real exercise is tested
 
 [Architecture](docs/architecture.md) · [Deployment status](docs/deployment.md) ·
 [Approved feature](specs/001-ba-movement-demo/README.md)
+
+## Presenter route (no real exercise)
+
+Use a built local app on a 360px phone viewport or centered desktop. Start with
+**Restablecer demostración** and accept. Narrate the story rather than performing
+exercise or waiting for a workout timer; the controls remain immediately usable.
+
+1. **Primera vez** → **Calistenia** → **Entrenar por mi cuenta**: explain the park
+   illustration, supported movements, quantities and qualified-review disclaimer.
+2. **Empezar práctica simulada** → **Completé este paso** for each of three steps.
+   Success → **Mi camino** shows that one attempt; **Desafíos y logros** shows the
+   same history's points, flexible targets and illustrative, nonredeemable benefit.
+   Reload to show durability. A partial practice or direct URL earns nothing.
+3. **Inicio** → **Yoga** → **Sumarme a una clase** → **Ver esta clase**: compare
+   free/paid fictional details, register **Me interesa esta clase**, reload and
+   show interest feedback. No booking, sent request, attendance or reward.
+4. **Inicio** → **Natación** → solo: dry-land default; swimming ability alone is
+   insufficient. Both separate affirmations are required for the water variant.
+   For learning, use the instructor/class redirect; never simulate real permission.
+5. Select **Retomando**, then **Ya entreno** and open **Mi camino** for each:
+   labeled historical fixtures, pause without shame, control and recovery.
+   Current-week progress depends on today's Buenos Aires clock, not the fixture date.
+6. **Restablecer demostración**, accept, inspect first-time empty history again.
+
+Aim for a narrated 3–5 minute story; a selected eligible practice has no forced waits
+and should take well under 90 seconds to tap through. Header profile, back/home and
+journey/log links are the inspection controls: no stage shortcut can fabricate a
+class or complete a skipped session. All routes remain subject to identity/safety guards.
+
+[Content editing guide](docs/CONTENT_CONFIGURATION.md) documents independent JSON
+editing, real-file failure/retry checks, fixtures and the rebuild/redeploy boundary.

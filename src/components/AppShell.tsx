@@ -14,7 +14,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
     : { screen: 'home' as const, profileId: route.profileId };
   useEffect(() => {
     main.current?.querySelector<HTMLElement>('h1')?.focus();
-  }, [route.screen, route.profileId, 'sportId' in route ? route.sportId : null]);
+  }, [route.screen, route.profileId, 'sportId' in route ? route.sportId : null, attempt?.cursor]);
   return <div className="app" onClickCapture={event => {
     const link = (event.target as HTMLElement).closest('a');
     const hash = link?.getAttribute('href');
@@ -38,10 +38,10 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <a href={routeHash(back)}><span aria-hidden="true">← </span>{ui.back}</a>
       <a href={routeHash({ screen: 'home', profileId: route.profileId })}>{ui.home}</a>
     </nav>}
-    {status !== 'ready' && <section role="alert" className="safety"><p>{status === 'invalid' ? ui.storageRecovery : ui.storageWarning}</p><button onClick={recover}>{ui.storageRecovery}</button></section>}
+    {status !== 'ready' && <section role="alert" className="safety"><p>{status === 'invalid' ? ui.storageRecovery : ui.storageWarning}</p><button onClick={recover}>{ui.storageReset}</button></section>}
     <nav className="breadcrumbs" aria-label={ui.journey}>
-      <a href={routeHash({screen:'journey',profileId:route.profileId})}>{ui.journey}</a>
-      <a href={routeHash({screen:'challenges',profileId:route.profileId})}>{ui.challenges}</a>
+      <a aria-current={route.screen === 'journey' ? 'page' : undefined} href={routeHash({screen:'journey',profileId:route.profileId})}>{ui.journey}</a>
+      <a aria-current={route.screen === 'challenges' ? 'page' : undefined} href={routeHash({screen:'challenges',profileId:route.profileId})}>{ui.challenges}</a>
     </nav>
     <main id="main-content" tabIndex={-1} ref={main} data-profile-id={route.profileId} data-sport-id={'sportId' in route ? route.sportId : undefined} data-mode={'mode' in route ? route.mode : undefined}>{children}</main>
     <footer>
