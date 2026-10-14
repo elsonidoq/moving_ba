@@ -28,7 +28,9 @@ the final accepted step stores one completion. Leaving or refreshing an unfinish
 practice abandons it without credit. A new explicit start makes a new attempt.
 Swimming defaults to dry land: the water variant requires both swimming ability and
 a permitted supervised pool with guardavidas and venue rules. Profiles never grant ability.
-Class interest, normal reset and derived journey screens are not delivered yet.
+Open `Ver esta clase` for its exact fictional details. `Me interesa esta clase`
+records one simulated interest per profile/class; it sends nothing, reserves nothing
+and never changes completion history. Derived journey screens are not delivered yet.
 
 Product copy, all twelve plans, six classes, rules and seed scenarios live in the
 human-editable `public/config/app-content.json`. The app fetches
@@ -50,6 +52,11 @@ Invalid storage offers scoped recovery; denied writes warn in Spanish and retain
 in-memory dedup only, without a reload-persistence promise. Storage events reload the
 envelope and abandon active work; concurrent multi-tab transactions are not guaranteed.
 All exercise/completion actions are simulations, not verified training.
+
+Use `Restablecer demostración` and accept the confirmation to restore all three
+fixtures, select `Primera vez`, discard active sessions/affirmations, and remove
+app-added completions/interests. Only the demo key is replaced; unrelated storage is
+untouched. A failed write resets this tab only and warns that durable data remains.
 
 ## Checks
 

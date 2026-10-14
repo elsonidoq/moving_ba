@@ -280,3 +280,78 @@ test('storage envelope browser external event abandons transient session',async(
   await expect(page.locator('[data-attempt-id]')).toHaveCount(0);
   expect(Object.keys((await envelope(page)).profiles.first.completions)).toHaveLength(0);
 });
+
+test('class identity rendered exact six fictional details',async({page})=>{
+  for(const item of content.classes) {
+    await page.goto(`/#/first/${item.sportId}/classes`);
+    await page.locator(`[data-class-id="${item.id}"]`).getByRole('link',{name:content.ui.viewClass}).click();
+    const detail=page.locator('[data-detail-class-id]');
+    await expect(detail).toHaveAttribute('data-detail-class-id',item.id);
+    await expect(page.getByRole('heading',{level:1})).toHaveText(item.title);
+    for(const field of ['schedule','venue','locality','level','description','receiver','contactCopy'] as const)await expect(detail).toContainText(item[field]);
+    for(const requirement of item.requirements) await expect(detail).toContainText(requirement);
+    await expect(detail).toContainText(content.ui[item.price.kind]);
+    if(item.price.kind==='paid') await expect(detail).toContainText(`${new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(item.price.amount)} ARS`);
+    await expect(detail).toContainText(content.legal.fictionalClasses);
+    console.log('rendered class',item.id,item.title,item.schedule,item.price.amount,item.receiver);
+  }
+});
+test('yoga interest both exact free/paid persist without training credit',async({page})=>{
+  await page.route('**/config/app-content.json',async route=>{ const response=await route.fetch(); const json=await response.json();json.classes.reverse();await route.fulfill({response,json}); });
+  await page.goto('/#/first/yoga/classes'); await expect(page.locator('main')).toBeVisible();
+  const before=JSON.stringify((await envelope(page)).profiles.first.completions);
+  for(const id of ['yoga-free','yoga-paid']) {
+    await page.goto('/#/first/yoga/classes');
+    await page.locator(`[data-class-id="${id}"]`).getByRole('link',{name:content.ui.viewClass}).click();
+    const item=content.classes.find(c=>c.id===id)!;
+    await expect(page.getByRole('heading',{level:1})).toHaveText(item.title);
+    await expect(page.locator('main')).toContainText(item.schedule);
+    await expect(page.locator('main')).toContainText(item.venue);
+    await expect(page.locator('main')).toContainText(content.legal.fictionalClasses);
+    await page.getByRole('button',{name:content.ui.interest,exact:true}).click();
+    await expect(page.getByRole('status')).toHaveText(content.ui.interestSuccess);
+    await page.reload(); await expect(page.locator('[data-detail-class-id]')).toHaveAttribute('data-detail-class-id',id);
+    await expect(page.getByRole('status')).toHaveText(content.ui.interestSuccess);
+    expect(JSON.stringify((await envelope(page)).profiles.first.completions)).toBe(before);
+  }
+  expect(Object.keys((await envelope(page)).profiles.first.interests)).toEqual(['yoga-free','yoga-paid']);
+  console.log('Yoga IDs',JSON.stringify((await envelope(page)).profiles.first),'training unchanged',before);
+});
+test('profile reset all three isolated refresh, fixtures restored, unrelated sentinel retained',async({page})=>{
+  await page.goto('/#/first/calisthenics/solo/cal-first');
+  await finish(page);
+  await page.goto('/#/first/yoga/classes/yoga-free'); await page.getByRole('button',{name:content.ui.interest,exact:true}).click();
+  await page.evaluate(()=>localStorage.setItem('unrelated','sentinel'));
+  for(const profile of content.profiles) {
+    await page.getByRole('combobox').selectOption(profile.id);
+    await expect(page).toHaveURL(new RegExp(`${profile.id}/home$`));
+    await page.reload(); await expect(page.getByRole('combobox')).toHaveValue(profile.id);
+    await page.getByRole('link',{name:'Yoga',exact:true}).click();
+    await page.getByRole('link',{name:new RegExp(content.ui.solo)}).click();
+    await expect(page.locator('[data-plan-id]')).toHaveAttribute('data-plan-id',`yoga-${profile.id}`);
+    const e=await envelope(page);
+    expect(Object.keys(e.profiles[profile.id].completions)).toHaveLength(profile.id==='first'?1:0);
+    expect(Object.keys(e.profiles[profile.id].interests)).toHaveLength(profile.id==='first'?1:0);
+    console.log('profile',profile.id,JSON.stringify(e.profiles[profile.id]));
+  }
+  page.once('dialog',dialog=>dialog.accept()); await page.getByRole('button',{name:content.ui.reset,exact:true}).click();
+  await expect(page.getByRole('combobox')).toHaveValue('first');
+  const reset=await envelope(page);
+  for(const profile of content.profiles) {
+    expect(reset.profiles[profile.id].completions).toEqual({}); expect(reset.profiles[profile.id].interests).toEqual({});
+    expect(reset.profiles[profile.id].baselineHistory.map((r:any)=>r.id)).toEqual(content.scenarios.profiles.find(s=>s.profileId===profile.id)!.history.map(r=>r.id));
+  }
+  expect(await page.evaluate(()=>localStorage.getItem('unrelated'))).toBe('sentinel');
+  await page.reload(); await expect(page.getByRole('combobox')).toHaveValue('first');
+  console.log('reset envelope',JSON.stringify(reset),'sentinel retained');
+});
+test('profile reset denied write preserves unrelated and Spanish limitation',async({page})=>{
+  await page.goto('/#/first/calisthenics/solo/cal-first'); await finish(page);
+  await page.evaluate(()=>{localStorage.setItem('unrelated','sentinel');Storage.prototype.setItem=()=>{throw Error('denied');};});
+  page.once('dialog',dialog=>dialog.accept()); await page.getByRole('button',{name:content.ui.reset,exact:true}).click();
+  await expect(page.getByRole('alert')).toContainText(content.ui.storageWarning);
+  await expect(page.getByRole('combobox')).toHaveValue('first');
+  expect(await page.evaluate(()=>localStorage.getItem('unrelated'))).toBe('sentinel');
+  expect(Object.keys((await envelope(page)).profiles.first.completions)).toHaveLength(1);
+  console.log('reset write failed: memory reset, durable original retained, Spanish limitation, sentinel retained');
+});

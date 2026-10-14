@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import type { Content } from '../src/content/types';
 import { startSession, completeStep, abandonSession } from '../src/state/session';
-import { materialize, loadEnvelope, saveEnvelope, validateEnvelope, storageKey } from '../src/state/storage';
+import { materialize, loadEnvelope, saveEnvelope, validateEnvelope, storageKey, registerInterest } from '../src/state/storage';
 import { guardHash } from '../src/state/navigation';
 const content = JSON.parse(readFileSync('public/config/app-content.json', 'utf8')) as Content;
 const now = new Date('2026-10-14T15:00:00.000Z');
@@ -72,4 +72,30 @@ test('storage envelope validation, scoped writes, retired snapshots and unavaila
   expect(saveEnvelope(loaded.envelope,denied)).toBe('unavailable');
   expect(values.get('unrelated')).toBe(sentinel); expect(new Set(writes)).toEqual(new Set([storageKey]));
   console.log('one-key writes', writes, 'sentinel',values.get('unrelated'),'invalid Spanish',content.ui.storageRecovery,'unavailable',content.ui.storageWarning);
+});
+
+test('class identity exact six fields, order independence, interest never credit', () => {
+  let envelope = materialize(content);
+  const before = JSON.stringify(content.profiles.map(p => [envelope.profiles[p.id].baselineHistory,envelope.profiles[p.id].completions]));
+  const reordered = {...content, classes:[...content.classes].reverse()};
+  for (const sport of content.sports) for (const kind of ['free','paid']) {
+    const item = content.classes.find(c=>c.sportId===sport.id && c.price.kind===kind)!;
+    expect(item).toBeTruthy(); expect(item.price.amount).toBe(kind==='free'?0:item.price.amount);
+    if(kind==='paid')expect(item.price.amount).toBeGreaterThan(0);
+    expect(item.price.currency).toBe('ARS');expect(item.fictional).toBe(true);expect(item.receiver).toBe('A confirmar');
+    for(const field of ['title','schedule','venue','locality','level','description','receiver','contactCopy'] as const)expect(item[field]).not.toBe('');
+    expect(item.requirements.length).toBeGreaterThan(0);
+    const hash=`#/first/${sport.id}/classes/${item.id}`;
+    expect(guardHash(hash,reordered)).toEqual({screen:'detail',profileId:'first',sportId:sport.id,mode:'classes',classId:item.id});
+    envelope=registerInterest(envelope,reordered,'first',sport.id,item.id,now);
+    expect(registerInterest(envelope,reordered,'first',sport.id,item.id,now)).toBe(envelope);
+    expect(envelope.profiles.first.interests[item.id].classTitle).toBe(item.title);
+    console.log('class',JSON.stringify(item),'interest key',item.id);
+  }
+  expect(JSON.stringify(content.profiles.map(p => [envelope.profiles[p.id].baselineHistory,envelope.profiles[p.id].completions]))).toBe(before);
+  expect(Object.keys(envelope.profiles.first)).toEqual(['baselineHistory','completions','interests']);
+  const removed={...content,classes:content.classes.filter(c=>c.id!=='yoga-free')};
+  expect(guardHash('#/first/yoga/classes/yoga-free',removed).screen).toBe('catalog');
+  expect(validateEnvelope(envelope,removed).profiles.first.interests['yoga-free'].classTitle).toBe(content.classes.find(c=>c.id==='yoga-free')!.title);
+  expect(registerInterest(envelope,content,'first','swimming','yoga-free',now)).toBe(envelope);
 });

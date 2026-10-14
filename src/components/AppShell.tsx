@@ -7,7 +7,9 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const { content, route, navigate, status, recover, attempt, envelope } = useApp();
   const main = useRef<HTMLElement>(null);
   const { ui } = content;
-  const back = route.screen === 'plan' || route.screen === 'catalog'
+  const back = route.screen === 'detail'
+    ? { screen: 'catalog' as const, profileId: route.profileId, sportId: route.sportId, mode: 'classes' as const }
+    : route.screen === 'plan' || route.screen === 'catalog'
     ? { screen: 'choice' as const, profileId: route.profileId, sportId: route.sportId }
     : { screen: 'home' as const, profileId: route.profileId };
   useEffect(() => {
@@ -42,6 +44,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <p>{content.legal.illustrativeTraining}</p>
       <p>{content.legal.professionalReview}</p>
       <p>{content.legal.noOfficialStatus}</p>
+      <button onClick={() => { if (window.confirm(ui.resetConfirm)) recover(); }}>{ui.reset}</button>
     </footer>
   </div>;
 }

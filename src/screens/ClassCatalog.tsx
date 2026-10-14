@@ -1,4 +1,5 @@
 import { useApp } from '../state/context';
+import { routeHash } from '../state/navigation';
 
 export default function ClassCatalog() {
   const { content, route } = useApp();
@@ -23,6 +24,7 @@ export default function ClassCatalog() {
         </dl>
         <h3>{ui.requirements}</h3><ul>{item.requirements.map(text => <li key={text}>{text}</li>)}</ul>
         <p className="muted">{item.contactCopy}</p>
+        <a className="button-link" href={routeHash({screen:'detail',profileId:route.profileId,sportId:sport.id,mode:'classes',classId:item.id})}>{ui.viewClass}</a>
       </article>)}
     </div>
     <p className="support">{content.legal.locationNotice}</p>

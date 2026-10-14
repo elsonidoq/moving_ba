@@ -65,6 +65,13 @@ export function loadEnvelope(content: Content, port: StoragePort): { envelope: E
   try { return { envelope: validateEnvelope(JSON.parse(raw), content), status: 'ready' }; }
   catch { return { envelope: materialize(content), status: 'invalid' }; }
 }
+export function registerInterest(envelope: Envelope, content: Content, profileId: ProfileId, sportId: SportId, classId: string, now = new Date()): Envelope {
+  const item = content.classes.find(c => c.id === classId && c.sportId === sportId);
+  const data = envelope.profiles[profileId];
+  if (!item || !data || data.interests[classId]) return envelope;
+  const interest: Interest = { classId, profileId, sportId, classTitle: item.title, sportTitle: content.sports.find(s => s.id === sportId)!.name, timestamp: now.toISOString(), origin: 'simulated-interest' };
+  return { ...envelope, profiles: { ...envelope.profiles, [profileId]: { ...data, interests: { ...data.interests, [classId]: interest } } } };
+}
 export function upsertCompletion(envelope: Envelope, record: HistoryRecord): Envelope {
   const data = envelope.profiles[record.profileId];
   if (data.completions[record.id]) return envelope;

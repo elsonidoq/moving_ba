@@ -5,7 +5,7 @@ export type Mode = 'solo' | 'classes';
 
 export const uiKeys = [
   'home', 'back', 'profile', 'chooseSport', 'choosePath', 'solo', 'soloDescription',
-  'classes', 'classesDescription', 'planPreview', 'classCatalog', 'steps', 'duration',
+  'classes', 'classesDescription', 'planPreview', 'classCatalog', 'viewClass', 'steps', 'duration',
   'level', 'environment', 'prerequisites', 'safety', 'free', 'paid', 'price',
   'schedule', 'venue', 'locality', 'requirements', 'receiver', 'contact', 'dryLand',
   'water', 'startWater', 'swimRedirect', 'start', 'completeStep', 'stepProgress', 'success',

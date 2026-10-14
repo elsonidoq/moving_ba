@@ -2,10 +2,10 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode 
 import type { Content } from '../content/types';
 import { guardHash, routeHash, type Route } from './navigation';
 import { abandonSession, completeStep, startSession, type Attempt } from './session';
-import { loadEnvelope, materialize, saveEnvelope, storageKey, type Envelope, type StorageStatus } from './storage';
+import { loadEnvelope, materialize, registerInterest, saveEnvelope, storageKey, type Envelope, type StorageStatus } from './storage';
 
 type Runtime = { route: Route; attempt: Attempt | null; envelope: Envelope; status: StorageStatus; canSwim: boolean; safePool: boolean };
-type AppState = Runtime & { content: Content; navigate: (route: Route) => void; affirm: (key: 'canSwim' | 'safePool', value: boolean) => void; start: (water?: boolean) => void; complete: (attemptId: string, stepId: string) => void; recover: () => void };
+type AppState = Runtime & { content: Content; navigate: (route: Route) => void; affirm: (key: 'canSwim' | 'safePool', value: boolean) => void; start: (water?: boolean) => void; complete: (attemptId: string, stepId: string) => void; recover: () => void; interest: () => void };
 const AppContext = createContext<AppState | null>(null);
 const browserStorage = { getItem: (key: string) => window.localStorage.getItem(key), setItem: (key: string, value: string) => window.localStorage.setItem(key, value) };
 export function AppProvider({ content, children }: { content: Content; children: ReactNode }) {
@@ -60,12 +60,18 @@ export function AppProvider({ content, children }: { content: Content; children:
     if (result.attempt?.status === 'completed') next.route = { screen: 'success', profileId: result.attempt.profileId, sportId: result.attempt.sportId, attemptId };
     update(next); window.location.hash = routeHash(next.route);
   };
+  const interest = () => {
+    const s = current.current;
+    if (s.route.screen !== 'detail' || s.status === 'invalid') return;
+    const envelope = registerInterest(s.envelope, content, s.route.profileId, s.route.sportId, s.route.classId);
+    if (envelope !== s.envelope) update(persist(s, envelope));
+  };
   const recover = () => {
     const envelope = materialize(content);
     const next: Runtime = { envelope, status: saveEnvelope(envelope, browserStorage), attempt: null, canSwim: false, safePool: false, route: { screen: 'home', profileId: envelope.selectedProfileId } };
     update(next); window.location.hash = routeHash(next.route);
   };
-  return <AppContext.Provider value={{ ...state, content, navigate, start, complete, recover, affirm: (key, value) => update({ ...current.current, [key]: value }) }}>{children}</AppContext.Provider>;
+  return <AppContext.Provider value={{ ...state, content, navigate, start, complete, recover, interest, affirm: (key, value) => update({ ...current.current, [key]: value }) }}>{children}</AppContext.Provider>;
 }
 export function useApp() {
   const context = useContext(AppContext);
