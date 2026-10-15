@@ -1871,8 +1871,8 @@
         }
       ],
       "chatId": "inactive-chat",
-      "notice": "Situación elegida por vos. Explorá una alternativa sin compromiso.",
-      "activationLabel": "Ver opciones"
+      "notice": "¿Te gustaría retomar a tu ritmo?",
+      "activationLabel": "Tocá para conversar"
     },
     {
       "id": "missed-class",
@@ -1897,8 +1897,8 @@
         }
       ],
       "chatId": "missed-class-chat",
-      "notice": "Situación elegida por vos. Explorá una alternativa sin compromiso.",
-      "activationLabel": "Ver opciones"
+      "notice": "Si no pudiste ir a la clase, podemos explorar otra opción.",
+      "activationLabel": "Tocá para conversar"
     }
   ],
   "destinations": [

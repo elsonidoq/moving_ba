@@ -169,9 +169,6 @@ legend { line-height: 1.5; margin-bottom: 12px; }
 .step-photo { width: 73px; height: 56px; object-fit: cover; border-radius: 9px; }
 .exercise-list .step-number { position: absolute; left: 8px; top: 8px; width: 22px; height: 22px; font-size: 12px; background: #fffdf0ee; }
 .exercise-list li > div { min-width: 0; }
-.notice-photo { position: relative; border-radius: 22px; overflow: hidden; margin: 20px 0; }
-.notice-photo img { display: block; width: 100%; height: 330px; object-fit: cover; }
-.notice-photo p { position: absolute; bottom: 0; left: 0; right: 0; margin: 0; padding: 40px 20px 20px; background: linear-gradient(transparent, #01101be8); color: white; font-size: 21px; font-weight: 750; }
 @media (max-width: 480px) {
   .sport-card img { width: 100px; height: 88px; }
   .sport-hero img, .sport-hero.compact img { height: 184px; }
@@ -215,16 +212,28 @@ button.profile-reset { font-size: 13px; color: var(--muted); margin-top: 24px; }
 .home-hero-copy h2 { margin: 10px 0; font-size: 27px; }
 .home-hero > [role="status"] { padding: 16px; }
 
-/* In-app, person-selected notices: no device chrome or delivery claims. */
-.notice-photo { background: #dcebe4; isolation: isolate; padding-bottom: 16px; }
-.notice-photo img { height: 350px; }
-.notice-photo::after { content: ''; position: absolute; inset: 0; z-index: -1; background: #dcebe4; }
-button.notice-card { position: relative; display: grid; justify-content: stretch; text-align: left; gap: 12px; width: calc(100% - 32px); margin: -165px 16px 0; padding: 18px; border: 1px solid #ffffff; border-radius: 17px; background: #fffffff0; color: #203349; box-shadow: 0 6px 24px #102c3633; backdrop-filter: blur(8px); }
+/* Scenario-only wallpaper scene; the fixed clock is decorative, not live. */
+.app:has([data-notice-id]) { display: flex; flex-direction: column; max-width: 389px; min-height: calc(100dvh - 48px); padding: 24px 16px max(24px, env(safe-area-inset-bottom)); }
+.app:has([data-notice-id]) .app-header { display: none; }
+.app:has([data-notice-id]) main,
+.app:has([data-notice-id]) [data-preview-content],
+[data-notice-id] { display: flex; flex-direction: column; flex: 1; }
+.app:has([data-notice-id]) [data-preview-exit] { margin-top: 12px; padding-top: 0; border: 0; }
+.app:has([data-notice-id]) [data-preview-exit] button { background: white; color: #203349; border: 1px solid #d3dde7; border-radius: 24px; font-size: 14px; }
+.notice-photo { position: relative; flex: 1; min-height: 590px; border-radius: 22px; overflow: hidden; background: #235575; }
+.notice-photo > img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; filter: brightness(.65); }
+.notice-time { position: absolute; top: 55px; left: 0; right: 0; color: white; text-align: center; text-shadow: 0 2px 9px #0003; }
+.notice-time strong { display: block; font-size: 74px; line-height: .95; font-weight: 300; }
+.notice-time span { font-size: 16px; }
+button.notice-card { position: absolute; top: 216px; left: 15px; right: 15px; display: grid; justify-content: stretch; text-align: left; gap: 7px; width: auto; padding: 13px; border: 1px solid #ffffff99; border-radius: 17px; background: #f5faffe8; color: #203349; backdrop-filter: blur(8px); }
 .notice-card:focus-visible { outline-offset: 4px; }
-.notice-brand { display: flex; align-items: center; gap: 9px; font-size: 13px; }
-.notice-brand > span { display: grid; place-items: center; background: var(--yellow); color: #171b1e; border-radius: 8px; width: 30px; height: 30px; }
-.notice-message { font-size: 18px; line-height: 1.45; font-weight: 650; }
-.notice-action { color: #275d6c; font-size: 14px; }
+.notice-brand { display: flex; align-items: center; gap: 5px; font-size: 12px; }
+.notice-brand > span { color: #b99b00; }
+.notice-message { font-size: 12px; line-height: 1.5; font-weight: 400; color: #3f5b71; }
+.notice-action { color: #006b98; font-size: 12px; }
+@media (max-width: 480px) {
+  .app:has([data-notice-id]) { max-width: none; min-height: 100dvh; }
+}
 .chat-bubble { padding: 14px; border-radius: 15px; line-height: 1.5; font-size: 15px; max-width: 92%; margin: 14px 0; }
 .chat-bubble.bot { background: #edf4f7; border-top-left-radius: 4px; }
 .chat-bubble.me { background: #fff4b5; border-top-right-radius: 4px; margin-left: auto; }

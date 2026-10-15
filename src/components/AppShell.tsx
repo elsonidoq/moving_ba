@@ -20,7 +20,7 @@ export default function AppShell({children}:{children:ReactNode}) {
  </header>
  {(!hidden||route.screen==='chat')&&route.screen!=='home'&&<nav className="breadcrumbs" aria-label={ui.back}><a onFocus={e=>e.currentTarget.scrollIntoView({block:'nearest'})} href={routeHash(back)}><span aria-hidden="true">← </span>{ui.back}</a></nav>}
  {status==='unavailable'&&<p role="alert" className="safety">{message??ui.storageWarning}</p>}
- <main ref={main} id="main-content" tabIndex={-1} data-profile-id={route.profileId} data-sport-id={'sportId' in route?route.sportId:undefined} data-mode={'mode' in route?route.mode:undefined}>{mode.kind==='preview'&&<p className="preview-badge" data-preview-badge>{ui.previewBadge} · {scenario?.title}</p>}<div data-preview-content>{children}</div>{mode.kind==='preview'&&<section data-preview-exit><button onClick={()=>command({type:'exitPreview'})}>{ui.exitPreview}</button></section>}</main>
+ <main ref={main} id="main-content" tabIndex={-1} data-profile-id={route.profileId} data-sport-id={'sportId' in route?route.sportId:undefined} data-mode={'mode' in route?route.mode:undefined}>{mode.kind==='preview'&&route.screen!=='notice'&&<p className="preview-badge" data-preview-badge>{ui.previewBadge} · {scenario?.title}</p>}<div data-preview-content>{children}</div>{mode.kind==='preview'&&<section data-preview-exit><button onClick={()=>command({type:'exitPreview'})}>{ui.exitPreview}</button></section>}</main>
  {!hidden&&<nav className="bottom-tabs" aria-label="Principal">{(['home','sports','classes'] as const).map(screen=><a key={screen} aria-current={route.screen===screen?'page':undefined} href={routeHash({screen,profileId:route.profileId})}>{ui[screen]}</a>)}</nav>}
  </div>;
 }

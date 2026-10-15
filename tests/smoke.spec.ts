@@ -194,7 +194,8 @@ test('ordered practice review failed local photo remains honestly unavailable wi
 async function previewExitEvidence(page:Page,id:string,width:number) {
  mkdirSync('/tmp/ba-refresh-t004',{recursive:true});await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:`/tmp/ba-refresh-t004/${width}-${id}.png`,fullPage:true});
  const exit=page.getByRole('button',{name:content.ui.exitPreview,exact:true});
- await expect(page.locator('[data-preview-badge]')).toBeVisible();
+ if(await page.locator('[data-notice-id]').count())await expect(page.locator('[data-preview-badge]')).toHaveCount(0);
+ else await expect(page.locator('[data-preview-badge]')).toBeVisible();
  expect(await page.locator('main').evaluate(m=>m.lastElementChild?.hasAttribute('data-preview-exit'))).toBe(true);
  const preceding=page.locator('[data-preview-content] a[href], [data-preview-content] button:not(:disabled), [data-preview-content] input:not(:disabled), [data-preview-content] select:not(:disabled)');
  if(await preceding.count())await preceding.last().focus();else await page.locator('main h1').focus();
@@ -212,7 +213,7 @@ for(const width of [360,1280])test(`ephemeral same-person scenarios ${width}`,as
  for(const scenario of content.previewScenarios){
   await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await page.getByRole('button',{name:scenario.title,exact:true}).click();
   await expect(page.locator('[data-preview-scenario]')).toHaveAttribute('data-preview-scenario',scenario.id);await expect(page.locator('[data-intended-class-id]')).toHaveCount(0);
-  if(scenario.kind==='notice'){await expect(page.locator('[data-notice-id]')).toHaveAttribute('data-notice-id',scenario.id);await expect(page.locator('.notice-photo .notice-card')).toHaveAttribute('aria-label',scenario.activationLabel!);await expect(page.locator('.notice-card')).toContainText('Situación elegida por vos');await expect(page.locator('main')).toContainText(scenario.notice!);await expect(page.getByRole('navigation',{name:'Principal'})).toHaveCount(0);}
+  if(scenario.kind==='notice'){await expect(page.locator('[data-notice-id]')).toHaveAttribute('data-notice-id',scenario.id);await expect(page.locator('.notice-photo .notice-card')).toHaveAttribute('aria-label',scenario.activationLabel!);await expect(page.locator('.notice-card')).toContainText(scenario.notice!);await expect(page.locator('main')).toContainText(scenario.notice!);await expect(page.getByRole('navigation',{name:'Principal'})).toHaveCount(0);}
   else {await expect(page.locator('main')).toContainText(scenario.guidance);await expect(page.locator('[data-stat="sessions"]')).toHaveText(String(scenario.history.length));}
   await previewExitEvidence(page,scenario.id,width);await page.keyboard.press('Enter');await expect(page.locator('[data-intended-class-id]')).toHaveAttribute('data-intended-class-id','yoga-free');expect(await raw(page)).toBe(bytes);
  }
@@ -350,7 +351,7 @@ for(const width of [360,1280])test(`all mockup photo roles exact local delivery 
    for(const step of plan.steps){const e=content.exercises.find(e=>e.id===step.exerciseId)!;const image=content.images.find(i=>i.id===e.imageId)!;await photo('.exercise-photo img',image.path!,image.alt);await shot(`${e.id}-session`);await page.getByRole('button',{name:content.ui.completeStep,exact:true}).click();}
   }
  }
- const notice=content.previewScenarios.find(s=>s.kind==='notice')!;await page.goto('/#/profile');await page.getByRole('button',{name:notice.title,exact:true}).click();await photo('.notice-photo img',mockupPhotos.city_park.src,mockupPhotos.city_park.alt);await shot('notice');await page.getByRole('button',{name:notice.activationLabel!,exact:true}).click();
+ const notice=content.previewScenarios.find(s=>s.kind==='notice')!;await page.goto('/#/profile');await page.getByRole('button',{name:notice.title,exact:true}).click();await photo('.notice-photo img',mockupPhotos.city_park.src,'');await shot('notice');await page.getByRole('button',{name:notice.activationLabel!,exact:true}).click();
  const chat=content.chats.find(c=>c.id===notice.chatId)!;
  for(const answer of chat.answers){await page.getByRole('button',{name:answer.label,exact:true}).click();const dest=content.destinations.find(d=>d.id===answer.destinationId)!;await page.locator(`[data-destination-id="${dest.id}"]`).click();const p=dest.kind==='class'?classPhotos[dest.classId]:sportPhotos[dest.sportId].hero;await photo('.sport-hero img',p.src,p.alt);await shot(`preview-${dest.id}`);await page.evaluate(h=>location.hash=h,`#/chat/${chat.id}`);await expect(page.locator('[data-chat-id]')).toBeVisible();}
  expect(remote).toEqual([]);writeFileSync(`${folder}/${width}-served.json`,JSON.stringify(served,null,2));console.log('All 29 bundled photos decoded and byte-identical HTTP; all dry plan thumbnails, 36 active steps, exact class/sport roles; no remote requests',width);
@@ -470,4 +471,38 @@ for(const width of [360,1280])test(`duration local defaults focus and visual ${w
  const geometry=await selector.evaluate(el=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,height:r.height,header:document.querySelector('.app-header')!.getBoundingClientRect().bottom,tabs:document.querySelector('.bottom-tabs')!.getBoundingClientRect().top,outline:getComputedStyle(el).outlineStyle,overflow:document.documentElement.scrollWidth>innerWidth};});expect(geometry.height).toBeGreaterThanOrEqual(44);expect(geometry.top).toBeGreaterThan(geometry.header);expect(geometry.bottom+7).toBeLessThan(geometry.tabs);expect(geometry.outline).not.toBe('none');expect(geometry.overflow).toBe(false);await page.screenshot({path:`${folder}/${width}-selector-focus.png`});expect(await raw(page)).toBe(bytes);
  await page.goto('/#/profile');await page.getByRole('button',{name:'Entrenamiento sostenido',exact:true}).click();await page.goto('/#/sports/yoga/solo/yoga-regular');await selector.selectOption('30');await expect(page.getByRole('button',{name:content.ui.start,exact:true})).toBeDisabled();expect(await raw(page)).toBe(bytes);await page.screenshot({path:`${folder}/${width}-preview-selector.png`,fullPage:true});await page.getByRole('button',{name:content.ui.exitPreview,exact:true}).click();expect(await raw(page)).toBe(bytes);
  await page.goto('/#/profile');page.once('dialog',d=>d.accept());await page.getByRole('button',{name:content.ui.reset,exact:true}).click();await choose(page);await page.goto('/#/sports/yoga/solo/yoga-first');await expect(selector).toHaveValue('15');console.log('T005/V1,V2 leave/change/reload/reset defaults, actual/preview exact bytes, no credit, selector keyboard geometry',width,geometry,bytes);
+});
+
+for(const width of [360,1280])for(const scenario of content.previewScenarios.filter(s=>s.kind==='notice'))test(`notice wallpaper ${scenario.id} ${width} opens matching structured chat`,async({page})=>{
+ await page.setViewportSize({width,height:900});await page.goto('/');await choose(page);
+ const bytes=await raw(page);await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await page.getByRole('button',{name:scenario.title,exact:true}).click();
+ await expect(page.locator('[data-notice-id]')).toHaveAttribute('data-notice-id',scenario.id);
+ await expect(page.locator('[data-preview-badge]')).toHaveCount(0);
+ await expect(page.locator('.app-header')).toBeHidden();await expect(page.locator('.breadcrumbs')).toHaveCount(0);
+ await expect(page.getByRole('heading',{level:1})).toBeFocused();
+ await expect(page.locator('.notice-time')).toHaveAttribute('aria-hidden','true');await expect(page.locator('.notice-time strong')).toHaveText('9:41');
+ await expect(page.locator('[data-notice-id] > p:not(.visually-hidden)')).toHaveCount(0);
+ const photo=page.locator('.notice-photo > img');await expect(photo).toHaveAttribute('src','/assets/photos/city_park.jpg');await expect(photo).toHaveAttribute('alt','');await photo.evaluate((img:HTMLImageElement)=>img.decode());
+ const card=page.getByRole('button',{name:scenario.activationLabel!,exact:true});await expect(card).toContainText(scenario.notice!);await expect(card).toHaveAccessibleDescription(scenario.notice!);
+ const exit=page.getByRole('button',{name:content.ui.exitPreview,exact:true});await expect(exit).toHaveCount(1);
+ const geometry=await page.locator('.notice-photo').evaluate(el=>{
+  const box=(s:string)=>{const r=document.querySelector(s)!.getBoundingClientRect();return {top:r.top,bottom:r.bottom,height:r.height,width:r.width};};
+  return {scene:box('.notice-photo'),clock:box('.notice-time'),card:box('.notice-card'),exit:box('[data-preview-exit] button'),filter:getComputedStyle(el.querySelector('img')!).filter,overflow:document.documentElement.scrollWidth>innerWidth};
+ });
+ expect(geometry.scene.height).toBeGreaterThanOrEqual(590);expect(geometry.scene.width).toBeLessThanOrEqual(355);
+ expect(geometry.clock.top-geometry.scene.top).toBe(55);expect(geometry.card.top-geometry.scene.top).toBe(216);expect(geometry.card.height).toBeLessThan(150);
+ expect(geometry.exit.top).toBeGreaterThan(geometry.scene.bottom);expect(geometry.exit.height).toBeGreaterThanOrEqual(44);expect(geometry.exit.bottom).toBeLessThanOrEqual(900-24);expect(geometry.exit.bottom).toBeGreaterThan(820);expect(geometry.overflow).toBe(false);expect(geometry.filter).toBe('brightness(0.65)');
+ const path=`/tmp/ba-notice-correction/${width}-${scenario.id}`;await page.screenshot({path:`${path}.png`,fullPage:true});
+ await card.focus();await page.keyboard.press('Tab');await expect(exit).toBeFocused();await page.keyboard.press('Shift+Tab');await expect(card).toBeFocused();expect(await card.evaluate(el=>getComputedStyle(el).outlineStyle)).toBe('solid');await page.screenshot({path:`${path}-keyboard.png`});
+ await card.click();const chat=content.chats.find(c=>c.id===scenario.chatId)!;
+ await expect(page.locator('[data-chat-id]')).toHaveAttribute('data-chat-id',chat.id);await expect(page.locator('[data-answer-id]')).toHaveCount(chat.answers.length);
+ await expect(page.locator('[data-preview-badge]')).toBeVisible();await expect(page.locator('input,textarea')).toHaveCount(0);
+ for(const answer of chat.answers){const button=page.locator(`[data-answer-id="${answer.id}"]`);await expect(button).toHaveText(answer.label+'›');await button.click();await expect(page.getByRole('status')).toContainText(answer.response);}
+ await page.getByRole('link',{name:content.ui.back,exact:true}).click();await expect(page.locator('[data-notice-id]')).toHaveAttribute('data-notice-id',scenario.id);await expect(page.locator('[data-preview-badge]')).toHaveCount(0);
+ await card.focus();await page.keyboard.press('Enter');await expect(page.locator('[data-chat-id]')).toHaveAttribute('data-chat-id',chat.id);await expect(page.getByRole('status')).toHaveCount(0);
+ await page.getByRole('link',{name:content.ui.back,exact:true}).click();await page.setViewportSize({width,height:560});
+ const shortGeometry=await page.locator('[data-preview-exit]').evaluate(el=>({top:el.getBoundingClientRect().top,sceneBottom:document.querySelector('.notice-photo')!.getBoundingClientRect().bottom}));expect(shortGeometry.top).toBeGreaterThan(shortGeometry.sceneBottom);await page.screenshot({path:`${path}-short.png`,fullPage:true});
+ await card.focus();await page.keyboard.press('Tab');await expect(exit).toBeFocused();const focusBox=await exit.boundingBox();expect(focusBox!.y).toBeGreaterThanOrEqual(0);expect(focusBox!.y+focusBox!.height+4).toBeLessThanOrEqual(560);expect(await exit.evaluate(el=>getComputedStyle(el).outlineStyle)).toBe('solid');await page.screenshot({path:`${path}-exit-keyboard.png`});
+ await page.keyboard.press('Enter');await expect(page.locator('[data-notice-id],[data-preview-badge]')).toHaveCount(0);expect(await raw(page)).toBe(bytes);
+ console.log('notice wallpaper geometry / matching chat / preset answers / bottom exit',width,scenario.id,chat.id,geometry,'screenshot',`${path}.png`);
 });
