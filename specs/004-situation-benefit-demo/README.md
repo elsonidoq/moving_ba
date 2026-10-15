@@ -1,3 +1,5 @@
 # Situation-led illustrative benefit progress
 
-- [TinySpec](tiny-spec.md): revision 2, owner-selected compact what/how source; preparation only. Separate tasks, planner-owned source/task review and combined owner approval remain required before implementation; independent code review follows implementation.
+- [TinySpec](tiny-spec.md): revision 2, authoritative what/how source.
+- [Tasks](tasks.md): two ordered delivery outcomes and REQUIRED checks.
+- [Approval](approval.md): current-content local implementation authorization and exclusions.
