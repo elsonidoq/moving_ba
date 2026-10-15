@@ -39,11 +39,11 @@ export function guardHash(hash: string, content: Content, runtime?: { attempt: A
     }
     if (parts[0] === 'session') {
       const a = runtime?.attempt;
-      return a?.status === 'active' && a.attemptId === parts[1] ? {screen:'session',profileId,sportId:a.sportId,planId:a.planId,attemptId:a.attemptId} : {screen:'home',profileId};
+      return parts.length === 2 && a?.status === 'active' && a.attemptId === parts[1] ? {screen:'session',profileId,sportId:a.sportId,planId:a.planId,attemptId:a.attemptId} : {screen:'home',profileId};
     }
     if (parts[0] === 'success') {
       const r = actual?.journey[parts[1]];
-      return r?.origin === 'user-simulated' ? {screen:'success',profileId,sportId:r.sportId,attemptId:r.id} : {screen:'home',profileId};
+      return parts.length === 2 && r?.origin === 'user-simulated' ? {screen:'success',profileId,sportId:r.sportId,attemptId:r.id} : {screen:'home',profileId};
     }
     if (parts[0] === 'sports' && parts.length > 1) parts = [profileId,...parts.slice(1)];
     else return {screen:'home',profileId};

@@ -1,5 +1,5 @@
 import { uiKeys, type Content } from './types';
-import { verifiedImages } from './images';
+import { verifiedImages, validateImageRegistry } from './images';
 
 type RecordValue = Record<string, unknown>;
 const assets = ['/assets/calisthenics.svg', '/assets/yoga.svg', '/assets/swimming.svg'];
@@ -270,6 +270,7 @@ function validateExtensions(root: RecordValue, exercises: RecordValue[], plans: 
       if (d.kind === 'plan' && reference(plans, d.planId, ap).profileId !== scenario.recommendationSituationId) fail(ap, 'el plan no corresponde a la situación del escenario.');
     }
   }
+  validateImageRegistry(exercises.map(e => String(e.id)), sports.map(s => String(s.id)));
   const images = list(root.images, 'images', false).length ? entities(root.images, 'images') : [];
   for (const image of images) {
     const path = `images.${image.id}`;
@@ -286,8 +287,8 @@ function validateExtensions(root: RecordValue, exercises: RecordValue[], plans: 
     if (image.path !== null) {
       const local = text(image.path, `${path}.path`);
       const approval = verifiedImages[local];
-      if (!/^\/assets\/[a-zA-Z0-9/-]+\.(?:jpg|jpeg|png|webp)$/.test(local) || local.includes('..') || !approval) fail(`${path}.path`, 'ruta local no autorizada o no canónica.');
-      if (image.licenseStatus !== 'verified' || approval.subjectKind !== subject.kind || approval.subjectId !== subject.id || approval.evidence !== image.evidence) fail(path, 'falta verificación independiente de licencia y sujeto exacto.');
+      if (!/^\/assets\/[a-zA-Z0-9/_-]+\.(?:jpg|jpeg|png|webp)$/.test(local) || local.includes('..') || !approval) fail(`${path}.path`, 'ruta local no autorizada o no canónica.');
+      if (image.licenseStatus !== 'verified' || approval.subjectKind !== subject.kind || !approval.subjectIds.includes(String(subject.id)) || approval.evidence !== image.evidence) fail(path, 'falta verificación independiente de licencia y sujeto exacto.');
     } else if (image.licenseStatus === 'verified') fail(path, 'no se puede declarar verificada una imagen sin ruta autorizada.');
   }
   for (const e of exercises) {

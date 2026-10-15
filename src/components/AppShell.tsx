@@ -10,7 +10,7 @@ export default function AppShell({children}:{children:ReactNode}) {
  if(route.screen==='detail')back=parent && (parent.screen==='classes'||parent.screen==='catalog') ? parent : {screen:'catalog',profileId:route.profileId,sportId:route.sportId,mode:'classes'};
  if(route.screen==='plan'||route.screen==='catalog')back={screen:'choice',profileId:route.profileId,sportId:route.sportId};
  if(route.screen==='session')back={screen:'plan',profileId:route.profileId,sportId:route.sportId,mode:'solo',planId:route.planId};
- useEffect(()=>{main.current?.querySelector<HTMLElement>('h1')?.focus();},[route,attempt?.cursor]);
+ useEffect(()=>{main.current?.querySelector<HTMLElement>('h1')?.focus();},[route,attempt?.viewIndex]);
  return <div className="app" onClickCapture={e=>{const hash=(e.target as HTMLElement).closest('a')?.getAttribute('href');if(hash?.startsWith('#/')){e.preventDefault();navigate(guardHash(hash,content,{attempt,envelope}));}}}>
  <button className="skip-link" onClick={()=>main.current?.focus()}>{ui.skipToContent}</button>
  <header className="app-header"><a className="brand" href="#/home"><span className="brand-mark" aria-hidden="true">BA</span><span>{content.branding.name}</span></a>

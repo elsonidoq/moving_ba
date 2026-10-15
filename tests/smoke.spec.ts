@@ -1,5 +1,6 @@
+import { createHash } from 'node:crypto';
 import { test, expect, type Page } from '@playwright/test';
-import { readFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import type { Content } from '../src/content/types';
 import { normalizeLegacy, type LegacyEnvelope } from '../src/state/storage';
 const content=JSON.parse(readFileSync('public/config/app-content.json','utf8')) as Content;
@@ -118,4 +119,56 @@ for(const width of [360,1280])test(`one-person class intention visual and keyboa
  await page.locator('[data-class-id="cal-free"]').getByRole('link',{name:content.ui.viewClass}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();await page.getByRole('button',{name:content.ui.interest,exact:true}).focus();await page.keyboard.press('Enter');await page.getByRole('button',{name:content.ui.intention,exact:true}).focus();await page.keyboard.press('Enter');
  await page.screenshot({path:`${evidence}/t004-${width}-detail.png`,fullPage:true});await nav.getByRole('link',{name:content.ui.home,exact:true}).click();await page.screenshot({path:`${evidence}/t004-${width}-home.png`,fullPage:true});
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);console.log('class nav/detail/back/interest/intention keyboard, heading focus and no overflow',width);
+});
+
+test('ordered practice review explicit ordered acceptance, previous/next review and final double activation store one UUID only',async({page})=>{
+ await page.setViewportSize({width:360,height:900});await page.goto('/');await choose(page);await page.goto('/#/sports/calisthenics/solo/cal-first');await page.getByRole('button',{name:content.ui.start,exact:true}).click();
+ const plan=content.plans.find(p=>p.id==='cal-first')!;const uuid=await page.locator('[data-attempt-id]').getAttribute('data-attempt-id');expect(uuid).toMatch(/^[0-9a-f-]{36}$/);
+ const before=await raw(page);await expect(page.getByRole('button',{name:content.ui.reviewNext,exact:true})).toBeDisabled();
+ for(const [index,step]of plan.steps.entries()){
+  const exercise=content.exercises.find(e=>e.id===step.exerciseId)!;const image=content.images.find(i=>i.id===exercise.imageId)!;await expect(page.getByRole('heading',{level:1})).toHaveText(exercise.title);await expect(page.getByRole('heading',{level:1})).toBeFocused();await expect(page.locator('main')).toContainText(exercise.quantity);await expect(page.locator('main')).toContainText(exercise.technique);await expect(page.locator('.exercise-photo img')).toHaveAttribute('src',image.path!);await expect(page.locator('.exercise-photo img')).toHaveAttribute('alt',image.alt);
+  await expect(page.locator('[data-attempt-id]')).toHaveAttribute('data-accepted-count',String(index));
+  if(index===1){await page.getByRole('button',{name:content.ui.previous,exact:true}).focus();await page.keyboard.press('Enter');await expect(page.locator('[data-attempt-id]')).toHaveAttribute('data-view-index','0');await expect(page.locator('[data-attempt-id]')).toHaveAttribute('data-accepted-count','1');await expect(page.getByRole('button',{name:content.ui.completeStep,exact:true})).toBeDisabled();expect(await raw(page)).toBe(before);await page.getByRole('button',{name:content.ui.reviewNext,exact:true}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();await expect(page.getByRole('button',{name:content.ui.reviewNext,exact:true})).toBeDisabled();}
+  await page.screenshot({path:`${evidence}/t005-practice-${index}.png`,fullPage:true});
+  const button=page.getByRole('button',{name:content.ui.completeStep,exact:true});if(index===plan.steps.length-1)await button.evaluate((b:HTMLButtonElement)=>{b.click();b.click();});else await button.click();console.log('ordered explicit',uuid,index,step.id,exercise.id,image.path);
+ }
+ await expect(page.locator('[data-completed-attempt-id]')).toHaveAttribute('data-completed-attempt-id',uuid!);const successURL=page.url();const completed=JSON.parse((await raw(page))!);expect(Object.keys(completed.journey)).toEqual([JSON.stringify(['actual','completion',uuid])]);expect(Object.values(completed.journey)[0]).toMatchObject({attemptId:uuid,completedStepIds:plan.steps.map(s=>s.id),origin:'user-simulated'});
+ await page.goBack();await expect(page.locator('[data-attempt-id]')).toHaveCount(0);await page.goto(successURL);await page.reload();await expect(page.locator('[data-completed-attempt-id]')).toHaveAttribute('data-completed-attempt-id',uuid!);expect(JSON.parse((await raw(page))!).journey).toEqual(completed.journey);
+ await page.goto(`/#/session/${uuid}`);await expect(page.locator('[data-attempt-id]')).toHaveCount(0);await page.goto('/#/profile');await expect(page.locator('[data-stat="sessions"]')).toHaveText('1');await expect(page.locator('[data-stat="points"]')).toHaveText('10');
+ await page.goto('/#/sports/calisthenics/solo/cal-first');await page.getByRole('button',{name:content.ui.start,exact:true}).click();const second=await page.locator('[data-attempt-id]').getAttribute('data-attempt-id');expect(second).not.toBe(uuid);await page.getByRole('button',{name:content.ui.completeStep,exact:true}).click();await page.reload();await expect(page.locator('[data-attempt-id]')).toHaveCount(0);expect(JSON.parse((await raw(page))!).journey).toEqual(completed.journey);
+ await page.goto('/#/success/forged');await expect(page.locator('[data-completed-attempt-id]')).toHaveCount(0);console.log('completed once',uuid,'new partial abandoned',second,'bytes',JSON.stringify(completed));
+});
+for(const canSwim of [false,true])for(const safePool of [false,true])test(`swimming safety ability=${canSwim} pool=${safePool} start and transient clearing`,async({page})=>{
+ await page.goto('/');await choose(page);await page.goto('/#/sports/swimming/solo/swim-dry-first');await expect(page.locator('[data-plan-id]')).toHaveAttribute('data-plan-id','swim-dry-first');await expect(page.locator('main')).toContainText(content.ui.swimRedirect);
+ await page.getByRole('checkbox',{name:content.ui.canSwim,exact:true}).setChecked(canSwim);await page.getByRole('checkbox',{name:content.ui.safePool,exact:true}).setChecked(safePool);const water=page.getByRole('button',{name:content.ui.startWater,exact:true});
+ if(canSwim&&safePool){await expect(water).toBeEnabled();await water.focus();await page.keyboard.press('Enter');await expect(page.locator('.medium-label')).toHaveText(content.ui.water);await expect(page.getByRole('heading',{level:1})).toBeFocused();await page.getByRole('link',{name:content.ui.back,exact:true}).click();await page.goto('/#/sports/swimming/solo/swim-dry-first');await expect(page.getByRole('checkbox',{checked:true})).toHaveCount(0);}
+ else await expect(water).toBeDisabled();
+ await page.getByRole('button',{name:content.ui.start,exact:true}).click();await expect(page.locator('.medium-label')).toHaveText(content.ui.dryLand);await page.reload();await expect(page.locator('[data-attempt-id]')).toHaveCount(0);await page.goto('/#/sports/swimming/solo/swim-dry-first');await expect(page.getByRole('checkbox',{checked:true})).toHaveCount(0);
+ await page.locator('main').getByRole('link',{name:content.ui.classes,exact:true}).click();await expect(page.locator('[data-class-id]')).toHaveCount(2);expect(JSON.parse((await raw(page))!).journey).toEqual({});console.log('water actual start boundary',canSwim,safePool,'allowed',canSwim&&safePool,'dry/instructor routes accessible, leave/reload cleared');
+});
+test('swimming safety reset and demo-key storage event discard both transient affirmations',async({page})=>{
+ await page.goto('/');await choose(page);await page.goto('/#/sports/swimming/solo/swim-dry-first');for(const box of await page.getByRole('checkbox').all())await box.check();
+ await page.evaluate(k=>window.dispatchEvent(new StorageEvent('storage',{key:k})),key);await page.goto('/#/sports/swimming/solo/swim-dry-first');await expect(page.getByRole('checkbox',{checked:true})).toHaveCount(0);
+ for(const box of await page.getByRole('checkbox').all())await box.check();await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();page.once('dialog',d=>d.accept());await page.getByRole('button',{name:content.ui.reset,exact:true}).click();await choose(page);await page.goto('/#/sports/swimming/solo/swim-dry-first');await expect(page.getByRole('checkbox',{checked:true})).toHaveCount(0);expect(JSON.parse((await raw(page))!).journey).toEqual({});
+});
+test('ordered practice review matching JPEG delivery for all configured snapshots and no remote runtime requests',async({page,request})=>{
+ test.setTimeout(60000);const remote:string[]=[];page.on('request',r=>{if(r.resourceType()==='image'&&!r.url().startsWith('http://127.0.0.1:4173/'))remote.push(r.url());});
+ const observations:any[]=[];const paths=[...new Set(content.images.map(i=>i.path!))];
+ for(const path of paths){const response=await request.get(path);expect(response.status()).toBe(200);expect(response.headers()['content-type']).toContain('image/jpeg');const body=await response.body(),local=readFileSync('public'+path);expect(body.equals(local)).toBe(true);expect(body.subarray(0,3).toString('hex')).toBe('ffd8ff');observations.push({path,status:response.status(),mime:response.headers()['content-type'],byteLength:body.length,sha256:createHash('sha256').update(body).digest('hex'),magicHex:body.subarray(0,12).toString('hex')});}
+ await page.goto('/');await choose(page);const captured=new Set<string>();
+ for(const profile of content.profiles){if(profile.id!=='first'){await page.goto('/#/profile');await page.getByRole('button',{name:content.ui.editSituation}).click();await choose(page,profile.id);}
+  for(const plan of content.plans.filter(p=>p.profileId===profile.id)){
+   const dry=content.plans.find(p=>p.profileId===profile.id&&p.sportId===plan.sportId&&p.medium==='dry-land')!;await page.goto(`/#/sports/${plan.sportId}/solo/${dry.id}`);
+   if(plan.medium==='water'){for(const box of await page.getByRole('checkbox').all())await box.check();await page.getByRole('button',{name:content.ui.startWater,exact:true}).click();}else await page.getByRole('button',{name:content.ui.start,exact:true}).click();
+   for(const step of plan.steps){const e=content.exercises.find(e=>e.id===step.exerciseId)!;const i=content.images.find(i=>i.id===e.imageId)!;await expect(page.getByRole('heading',{level:1})).toHaveText(e.title);await expect(page.locator('main')).toContainText(e.quantity);await expect(page.locator('main')).toContainText(e.technique);const img=page.locator('.exercise-photo img');await expect(img).toHaveAttribute('src',i.path!);await expect(img).toHaveAttribute('alt',i.alt);const decoded=await img.evaluate(async(img:HTMLImageElement)=>{await img.decode();return{width:img.naturalWidth,height:img.naturalHeight};});expect(decoded.width).toBeGreaterThan(0);expect(decoded.height).toBeGreaterThan(0);
+    const record=observations.find(o=>o.path===i.path);record.decodeStatus='pass';record.dimensions=decoded;record.exerciseIds??=[];record.exerciseIds.push(e.id);
+    if(!captured.has(i.path!)){const name=i.path!.split('/').at(-1)!.replace('.jpg','');await page.screenshot({path:`${evidence}/t005-mapping-${name}.png`,fullPage:true});record.renderedScreenshot=`${evidence}/t005-mapping-${name}.png`;captured.add(i.path!);}
+    await page.getByRole('button',{name:content.ui.completeStep,exact:true}).click();
+   }
+  }
+ }
+ expect(remote).toEqual([]);expect(observations.every(o=>o.decodeStatus==='pass')).toBe(true);writeFileSync(`${evidence}/t005-photo-http.json`,JSON.stringify(observations,null,2));console.log('every mapping decoded/rendered + local HTTP exact bytes',JSON.stringify(observations),'remote images',remote);
+});
+test('ordered practice review failed local photo remains honestly unavailable with instructions and no fallback',async({page})=>{
+ await page.route('**/assets/photos/cali_warmup.jpg',r=>r.abort());await page.goto('/');await choose(page);await page.goto('/#/sports/calisthenics/solo/cal-first');await page.getByRole('button',{name:content.ui.start,exact:true}).click();await expect(page.getByRole('status')).toHaveText(content.ui.imageUnavailable);await expect(page.locator('main')).toContainText(content.exercises.find(e=>e.id==='cal-first-shoulders')!.technique);await expect(page.locator('.exercise-photo img')).toHaveCount(0);
 });

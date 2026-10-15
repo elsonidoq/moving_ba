@@ -204,434 +204,434 @@
     {
       "id": "cal-first-shoulders",
       "sportId": "calisthenics",
-      "title": "Movilidad de hombros",
-      "quantity": "4 círculos suaves por lado",
-      "technique": "Dejá los hombros bajos y mové dentro de un rango cómodo, sin dolor.",
+      "title": "Estiramiento suave de hombro cruzado",
+      "quantity": "4 respiraciones cómodas por lado",
+      "technique": "De pie, acercá un brazo al pecho y sostenelo con el otro sin tirar del codo. Apoyos estables, hombros bajos y sin dolor; soltá y descansá antes de cambiar de lado.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer de pie estirando un hombro con el brazo cruzado frente al pecho.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "cal-first-shoulders-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "cal-first-row",
       "sportId": "calisthenics",
-      "title": "Remo australiano con apoyo",
+      "title": "Flexión inclinada con apoyo",
       "quantity": "1 serie de 4 repeticiones",
-      "technique": "Usá una barra baja firme, pies cerca del cuerpo y apoyo cómodo. No necesitás hacer dominadas.",
+      "technique": "Apoyá las manos en un banco firme y estable, pies cerca para reducir el esfuerzo. Flexioná poco los codos y volvé sin dolor. Podés usar una pared y descansar; no necesitás hacer dominadas.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer haciendo una flexión inclinada con ambas manos sobre un banco de madera.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "cal-first-row-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "cal-first-squat",
       "sportId": "calisthenics",
-      "title": "Sentadilla asistida",
-      "quantity": "1 serie de 4 repeticiones",
-      "technique": "Sujetate de un apoyo estable y bajá sólo lo que puedas controlar.",
+      "title": "Flexión de piernas con apoyo de manos",
+      "quantity": "1 serie de 4 movimientos cortos",
+      "technique": "Con apoyo firme para las manos, flexioná las piernas sólo hasta donde resulte cómodo. No hace falta bajar tanto como en la foto: usá un apoyo elevado y revisión profesional. Sin dolor, con pausa entre movimientos.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Hombre con piernas flexionadas y manos apoyadas en el suelo del parque.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "cal-first-squat-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "yoga-first-breath",
       "sportId": "yoga",
       "title": "Respiración consciente sentada",
       "quantity": "5 respiraciones cómodas",
-      "technique": "Apoyá los pies y respirá a tu ritmo, sin retenciones.",
+      "technique": "Sentate con el tronco cómodo y las manos descansando sobre las piernas. No fuerces el cruce de piernas: podés usar almohadón o silla firme. Respirá a tu ritmo, sin retenciones ni dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer sentada con piernas cruzadas y manos sobre las rodillas en una colchoneta.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "yoga-first-breath-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "yoga-first-mobility",
       "sportId": "yoga",
-      "title": "Gato y vaca adaptado",
-      "quantity": "5 movimientos suaves",
-      "technique": "Usá una silla firme si hace falta y mové sólo dentro de un rango cómodo.",
+      "title": "Inclinación lateral sentada",
+      "quantity": "4 respiraciones suaves, alternando lados",
+      "technique": "Sentate con comodidad, apoyá una mano y elevá la otra mientras inclinás suavemente el tronco. Usá silla firme o almohadón si hace falta; no fuerces el hombro ni la flexión. Descansá entre lados.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer sentada inclinando el tronco a un lado, con un brazo elevado y la otra mano apoyada.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "yoga-first-mobility-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "yoga-first-rest",
       "sportId": "yoga",
-      "title": "Descanso con apoyo",
+      "title": "Descanso en postura del niño adaptada",
       "quantity": "4 respiraciones cómodas",
-      "technique": "Elegí una posición sin dolor, con almohadón o respaldo. No fuerces la flexión.",
+      "technique": "Desde rodillas apoyadas, acercá el tronco hacia un apoyo cómodo y descansá los brazos adelante. No fuerces rodillas ni cadera: usá almohadón o descansá sentado en una silla firme. Pará si hay dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer arrodillada en postura del niño, tronco inclinado y brazos extendidos sobre la colchoneta.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "yoga-first-rest-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-dry-first-shoulders",
       "sportId": "swimming",
-      "title": "Movilidad de hombros en seco",
-      "quantity": "5 círculos por lado",
-      "technique": "Lejos del borde, mové brazos y hombros sin dolor.",
+      "title": "Estiramiento de hombro cruzado en seco",
+      "quantity": "5 respiraciones cómodas por lado",
+      "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-dry-first-shoulders-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-dry-first-breath",
       "sportId": "swimming",
-      "title": "Respiración en seco",
-      "quantity": "5 respiraciones cómodas",
-      "technique": "De pie con apoyo, soltá el aire sin retenciones. No sumerjas la cara.",
+      "title": "Estiramiento de hombro cruzado en seco",
+      "quantity": "5 respiraciones cómodas por lado",
+      "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-dry-first-breath-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-dry-first-coordination",
       "sportId": "swimming",
-      "title": "Coordinación de brazos en seco",
-      "quantity": "3 alternancias lentas",
-      "technique": "Con pies quietos y apoyo estable, coordiná los brazos sin entrar al agua. Descansá al cerrar.",
+      "title": "Estiramiento de hombro cruzado en seco",
+      "quantity": "4 cambios suaves de lado, con pausa",
+      "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-dry-first-coordination-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-water-first-warmup",
       "sportId": "swimming",
-      "title": "Desplazamiento cómodo en el agua",
+      "title": "Crol cómodo de entrada",
       "quantity": "1 tramo corto de hasta 10 m",
-      "technique": "Sólo si ya nadás con autonomía, con permiso del lugar y guardavidas. Descansá al llegar.",
+      "technique": "Sólo si ya nadás crol con autonomía, con permiso del lugar y guardavidas. Hacé un tramo corto sin buscar velocidad; respetá las reglas y descansá al llegar. Si no es cómodo, elegí preparación en seco o una clase.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadadora haciendo crol en un carril de pileta, con un brazo extendido y la cara hacia un lado.",
       "medium": "water",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-water-first-warmup-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-water-first-technique",
       "sportId": "swimming",
-      "title": "Nado cómodo con atención a la técnica",
+      "title": "Espalda suave en estilo conocido",
       "quantity": "1 tramo de hasta 15 m",
-      "technique": "No busques velocidad. Elegí un estilo conocido y descansá entre tramos; respetá las reglas de la pileta.",
+      "technique": "Sólo si ya nadás espalda con autonomía y está permitido en esa pileta con guardavidas. No busques velocidad ni aprendas un estilo nuevo acá; respetá las reglas, evitá dolor y descansá entre tramos. Ante dudas, elegí clase o preparación en seco.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Vista desde arriba de un nadador de espalda con un brazo extendido sobre la cabeza.",
       "medium": "water",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-water-first-technique-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-water-first-rest",
       "sportId": "swimming",
-      "title": "Pausa de recuperación segura",
+      "title": "Recuperación erguida en zona permitida",
       "quantity": "1 pausa completa en zona permitida",
-      "technique": "Salí o apoyate sólo donde esté permitido. Terminá antes si perdés comodidad; nunca sigas con dolor.",
+      "technique": "Recuperá la respiración erguido sólo en una zona donde el lugar permita apoyo estable y seguro. No supongas que podés tocar fondo: si no hay apoyo permitido, salí por el acceso habilitado. Sin retener aire ni seguir con dolor; respetá al guardavidas.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadador erguido dentro de la pileta, con las manos juntas delante del cuerpo.",
       "medium": "water",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-water-first-rest-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "cal-returning-shoulders",
       "sportId": "calisthenics",
-      "title": "Movilidad de hombros suave",
-      "quantity": "3 círculos suaves por lado",
-      "technique": "Buscá comodidad y hacé pausas cuando lo necesites.",
+      "title": "Estiramiento suave de hombro cruzado",
+      "quantity": "3 respiraciones cómodas por lado",
+      "technique": "De pie, acercá un brazo al pecho y sostenelo con el otro sin tirar del codo. Apoyos estables, hombros bajos y sin dolor; soltá y descansá antes de cambiar de lado.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer de pie estirando un hombro con el brazo cruzado frente al pecho.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "cal-returning-shoulders-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "cal-returning-row",
       "sportId": "calisthenics",
-      "title": "Remo australiano muy asistido",
+      "title": "Flexión inclinada con apoyo",
       "quantity": "1 serie de 3 repeticiones",
-      "technique": "Acercá los pies para descargar esfuerzo y usá un recorrido corto. No requiere dominadas.",
+      "technique": "Apoyá las manos en un banco firme y estable, pies cerca para reducir el esfuerzo. Flexioná poco los codos y volvé sin dolor. Podés usar una pared y descansar; no necesitás hacer dominadas.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer haciendo una flexión inclinada con ambas manos sobre un banco de madera.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "cal-returning-row-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "cal-returning-squat",
       "sportId": "calisthenics",
-      "title": "Sentadilla asistida corta",
-      "quantity": "1 serie de 3 repeticiones",
-      "technique": "Usá apoyo firme, menos profundidad y descansá entre movimientos.",
+      "title": "Flexión de piernas con apoyo de manos",
+      "quantity": "1 serie de 3 movimientos cortos",
+      "technique": "Con apoyo firme para las manos, flexioná las piernas sólo hasta donde resulte cómodo. No hace falta bajar tanto como en la foto: usá un apoyo elevado y revisión profesional. Sin dolor, con pausa entre movimientos.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Hombre con piernas flexionadas y manos apoyadas en el suelo del parque.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "cal-returning-squat-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "yoga-returning-breath",
       "sportId": "yoga",
       "title": "Respiración consciente sentada",
       "quantity": "3 respiraciones cómodas",
-      "technique": "Apoyá los pies y respirá a tu ritmo, sin retenciones.",
+      "technique": "Sentate con el tronco cómodo y las manos descansando sobre las piernas. No fuerces el cruce de piernas: podés usar almohadón o silla firme. Respirá a tu ritmo, sin retenciones ni dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer sentada con piernas cruzadas y manos sobre las rodillas en una colchoneta.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "yoga-returning-breath-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "yoga-returning-mobility",
       "sportId": "yoga",
-      "title": "Movilidad de columna sentada",
-      "quantity": "3 movimientos suaves",
-      "technique": "Usá una silla firme si hace falta y mové sólo dentro de un rango cómodo.",
+      "title": "Inclinación lateral sentada",
+      "quantity": "3 respiraciones suaves, alternando lados",
+      "technique": "Sentate con comodidad, apoyá una mano y elevá la otra mientras inclinás suavemente el tronco. Usá silla firme o almohadón si hace falta; no fuerces el hombro ni la flexión. Descansá entre lados.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer sentada inclinando el tronco a un lado, con un brazo elevado y la otra mano apoyada.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "yoga-returning-mobility-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "yoga-returning-rest",
       "sportId": "yoga",
-      "title": "Descanso con apoyo",
+      "title": "Descanso en postura del niño adaptada",
       "quantity": "2 respiraciones cómodas",
-      "technique": "Elegí una posición sin dolor, con almohadón o respaldo. No fuerces la flexión.",
+      "technique": "Desde rodillas apoyadas, acercá el tronco hacia un apoyo cómodo y descansá los brazos adelante. No fuerces rodillas ni cadera: usá almohadón o descansá sentado en una silla firme. Pará si hay dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer arrodillada en postura del niño, tronco inclinado y brazos extendidos sobre la colchoneta.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "yoga-returning-rest-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-dry-returning-shoulders",
       "sportId": "swimming",
-      "title": "Movilidad de hombros en seco",
-      "quantity": "3 círculos por lado",
-      "technique": "Lejos del borde, mové brazos y hombros sin dolor.",
+      "title": "Estiramiento de hombro cruzado en seco",
+      "quantity": "3 respiraciones cómodas por lado",
+      "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-dry-returning-shoulders-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-dry-returning-breath",
       "sportId": "swimming",
-      "title": "Respiración en seco",
-      "quantity": "3 respiraciones cómodas",
-      "technique": "De pie con apoyo, soltá el aire sin retenciones. No sumerjas la cara.",
+      "title": "Estiramiento de hombro cruzado en seco",
+      "quantity": "3 respiraciones cómodas por lado",
+      "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-dry-returning-breath-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-dry-returning-coordination",
       "sportId": "swimming",
-      "title": "Coordinación de brazos en seco",
-      "quantity": "3 alternancias lentas",
-      "technique": "Con pies quietos y apoyo estable, coordiná los brazos sin entrar al agua. Descansá al cerrar.",
+      "title": "Estiramiento de hombro cruzado en seco",
+      "quantity": "3 cambios suaves de lado, con pausa",
+      "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-dry-returning-coordination-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-water-returning-warmup",
       "sportId": "swimming",
-      "title": "Desplazamiento cómodo en el agua",
+      "title": "Crol cómodo de entrada",
       "quantity": "1 tramo corto de hasta 10 m",
-      "technique": "Sólo si ya nadás con autonomía, con permiso del lugar y guardavidas. Descansá al llegar.",
+      "technique": "Sólo si ya nadás crol con autonomía, con permiso del lugar y guardavidas. Hacé un tramo corto sin buscar velocidad; respetá las reglas y descansá al llegar. Si no es cómodo, elegí preparación en seco o una clase.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadadora haciendo crol en un carril de pileta, con un brazo extendido y la cara hacia un lado.",
       "medium": "water",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-water-returning-warmup-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-water-returning-technique",
       "sportId": "swimming",
-      "title": "Nado cómodo con atención a la técnica",
+      "title": "Espalda suave en estilo conocido",
       "quantity": "1 tramo de hasta 10 m",
-      "technique": "No busques velocidad. Elegí un estilo conocido y descansá entre tramos; respetá las reglas de la pileta.",
+      "technique": "Sólo si ya nadás espalda con autonomía y está permitido en esa pileta con guardavidas. No busques velocidad ni aprendas un estilo nuevo acá; respetá las reglas, evitá dolor y descansá entre tramos. Ante dudas, elegí clase o preparación en seco.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Vista desde arriba de un nadador de espalda con un brazo extendido sobre la cabeza.",
       "medium": "water",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-water-returning-technique-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-water-returning-rest",
       "sportId": "swimming",
-      "title": "Pausa de recuperación segura",
+      "title": "Recuperación erguida en zona permitida",
       "quantity": "1 pausa completa en zona permitida",
-      "technique": "Salí o apoyate sólo donde esté permitido. Terminá antes si perdés comodidad; nunca sigas con dolor.",
+      "technique": "Recuperá la respiración erguido sólo en una zona donde el lugar permita apoyo estable y seguro. No supongas que podés tocar fondo: si no hay apoyo permitido, salí por el acceso habilitado. Sin retener aire ni seguir con dolor; respetá al guardavidas.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadador erguido dentro de la pileta, con las manos juntas delante del cuerpo.",
       "medium": "water",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-water-returning-rest-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "cal-regular-shoulders",
       "sportId": "calisthenics",
-      "title": "Control escapular con apoyo",
-      "quantity": "1 serie de 6 repeticiones",
-      "technique": "Mové las escápulas sin encoger el cuello, con los pies apoyados.",
+      "title": "Estiramiento suave de hombro cruzado",
+      "quantity": "4 respiraciones cómodas por lado",
+      "technique": "De pie, acercá un brazo al pecho y sostenelo con el otro sin tirar del codo. Apoyos estables, hombros bajos y sin dolor; soltá y descansá antes de cambiar de lado.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer de pie estirando un hombro con el brazo cruzado frente al pecho.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "cal-regular-shoulders-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "cal-regular-row",
       "sportId": "calisthenics",
-      "title": "Remo australiano controlado",
-      "quantity": "2 series de 5 repeticiones",
-      "technique": "Elegí una inclinación que permita bajar lento y mantener el tronco estable. Descansá entre series.",
+      "title": "Flexión inclinada con apoyo",
+      "quantity": "1 serie de 4 repeticiones",
+      "technique": "Apoyá las manos en un banco firme y estable, pies cerca para reducir el esfuerzo. Flexioná poco los codos y volvé sin dolor. Podés usar una pared y descansar; no necesitás hacer dominadas.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer haciendo una flexión inclinada con ambas manos sobre un banco de madera.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "cal-regular-row-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "cal-regular-side",
       "sportId": "calisthenics",
-      "title": "Plancha lateral adaptada",
-      "quantity": "2 apoyos de 10 segundos por lado",
-      "technique": "Apoyá rodillas si hace falta; priorizá alineación y cerrá con recuperación.",
+      "title": "Plancha con apoyo y toque de hombro",
+      "quantity": "1 toque suave por lado, con descanso",
+      "technique": "En apoyo estable de manos y pies, acercá una mano al hombro contrario sólo si conservás comodidad. Apoyá rodillas o usá una pared si hace falta; sin dolor, sin competir y con recuperación entre lados.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Hombre en plancha con una mano apoyada y la otra junto al hombro contrario.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "cal-regular-side-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "yoga-regular-standing",
       "sportId": "yoga",
-      "title": "Secuencia de pie controlada",
-      "quantity": "3 transiciones lentas",
-      "technique": "Acortá el paso si lo necesitás y coordiná el movimiento con la respiración.",
+      "title": "Perro boca abajo adaptado",
+      "quantity": "Hasta 3 respiraciones cómodas",
+      "technique": "Con manos y pies sobre apoyos estables, elevá suavemente la cadera sin forzar los talones. Podés flexionar rodillas o llevar las manos a una pared. No busques profundidad; sin dolor y con revisión profesional, descansá al terminar.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer en perro boca abajo sobre una colchoneta, con cadera elevada y manos y pies apoyados.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "yoga-regular-standing-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "yoga-regular-balance",
       "sportId": "yoga",
-      "title": "Equilibrio con apoyo",
-      "quantity": "2 apoyos de 10 segundos por lado",
-      "technique": "Tené una pared cerca, sostené la mirada y evitá bloquear las rodillas.",
+      "title": "Inclinación lateral sentada",
+      "quantity": "4 respiraciones suaves, alternando lados",
+      "technique": "Sentate con comodidad, apoyá una mano y elevá la otra mientras inclinás suavemente el tronco. Usá silla firme o almohadón si hace falta; no fuerces el hombro ni la flexión. Descansá entre lados.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Mujer sentada inclinando el tronco a un lado, con un brazo elevado y la otra mano apoyada.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "yoga-regular-balance-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "yoga-regular-close",
       "sportId": "yoga",
-      "title": "Respiración y recuperación",
+      "title": "Recuperación boca arriba",
       "quantity": "4 respiraciones cómodas",
-      "technique": "Volvé a una postura estable y soltá el esfuerzo sin retener el aire.",
+      "technique": "Recostate boca arriba sobre una superficie cómoda y dejá las manos sobre el abdomen. Usá apoyos o una posición alternativa si hace falta. Soltá el esfuerzo sin retener el aire y terminá si aparece dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Hombre recostado boca arriba con ojos cerrados y manos sobre el abdomen.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "yoga-regular-close-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-dry-regular-shoulders",
       "sportId": "swimming",
-      "title": "Movilidad de hombros en seco",
-      "quantity": "5 círculos por lado",
-      "technique": "Lejos del borde, mové brazos y hombros sin dolor.",
+      "title": "Estiramiento de hombro cruzado en seco",
+      "quantity": "5 respiraciones cómodas por lado",
+      "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-dry-regular-shoulders-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-dry-regular-breath",
       "sportId": "swimming",
-      "title": "Respiración en seco",
-      "quantity": "5 respiraciones cómodas",
-      "technique": "De pie con apoyo, soltá el aire sin retenciones. No sumerjas la cara.",
+      "title": "Estiramiento de hombro cruzado en seco",
+      "quantity": "5 respiraciones cómodas por lado",
+      "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-dry-regular-breath-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-dry-regular-coordination",
       "sportId": "swimming",
-      "title": "Coordinación de brazos en seco",
-      "quantity": "6 alternancias lentas",
-      "technique": "Con pies quietos y apoyo estable, coordiná los brazos sin entrar al agua. Descansá al cerrar.",
+      "title": "Estiramiento de hombro cruzado en seco",
+      "quantity": "4 cambios suaves de lado, con pausa",
+      "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
       "medium": "dry-land",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-dry-regular-coordination-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-water-regular-warmup",
       "sportId": "swimming",
-      "title": "Desplazamiento cómodo en el agua",
+      "title": "Crol cómodo de entrada",
       "quantity": "1 tramo corto de hasta 10 m",
-      "technique": "Sólo si ya nadás con autonomía, con permiso del lugar y guardavidas. Descansá al llegar.",
+      "technique": "Sólo si ya nadás crol con autonomía, con permiso del lugar y guardavidas. Hacé un tramo corto sin buscar velocidad; respetá las reglas y descansá al llegar. Si no es cómodo, elegí preparación en seco o una clase.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadadora haciendo crol en un carril de pileta, con un brazo extendido y la cara hacia un lado.",
       "medium": "water",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-water-regular-warmup-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-water-regular-technique",
       "sportId": "swimming",
-      "title": "Nado cómodo con atención a la técnica",
+      "title": "Espalda suave en estilo conocido",
       "quantity": "2 tramos de hasta 15 m",
-      "technique": "No busques velocidad. Elegí un estilo conocido y descansá entre tramos; respetá las reglas de la pileta.",
+      "technique": "Sólo si ya nadás espalda con autonomía y está permitido en esa pileta con guardavidas. No busques velocidad ni aprendas un estilo nuevo acá; respetá las reglas, evitá dolor y descansá entre tramos. Ante dudas, elegí clase o preparación en seco.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Vista desde arriba de un nadador de espalda con un brazo extendido sobre la cabeza.",
       "medium": "water",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-water-regular-technique-photo",
+      "imageStatus": "verified"
     },
     {
       "id": "swim-water-regular-rest",
       "sportId": "swimming",
-      "title": "Pausa de recuperación segura",
+      "title": "Recuperación erguida en zona permitida",
       "quantity": "1 pausa completa en zona permitida",
-      "technique": "Salí o apoyate sólo donde esté permitido. Terminá antes si perdés comodidad; nunca sigas con dolor.",
+      "technique": "Recuperá la respiración erguido sólo en una zona donde el lugar permita apoyo estable y seguro. No supongas que podés tocar fondo: si no hay apoyo permitido, salí por el acceso habilitado. Sin retener aire ni seguir con dolor; respetá al guardavidas.",
       "imageAsset": "",
-      "imageAlt": "Imagen del ejercicio no disponible",
+      "imageAlt": "Nadador erguido dentro de la pileta, con las manos juntas delante del cuerpo.",
       "medium": "water",
-      "imageId": null,
-      "imageStatus": "unavailable"
+      "imageId": "swim-water-regular-rest-photo",
+      "imageStatus": "verified"
     }
   ],
   "plans": [
@@ -645,7 +645,7 @@
       "duration": "8 minutos",
       "environment": "Parque con barra baja y apoyo firme",
       "prerequisites": [
-        "Revisá la estabilidad de la barra y los apoyos.",
+        "Revisá la estabilidad del banco, la pared y los apoyos.",
         "Adaptá el esfuerzo con revisión profesional."
       ],
       "safetyCopy": "No uses estructuras inestables. Si aparece dolor, frená.",
@@ -765,7 +765,7 @@
       "duration": "5 minutos",
       "environment": "Parque con barra baja y apoyo firme",
       "prerequisites": [
-        "Revisá la estabilidad de la barra y los apoyos.",
+        "Revisá la estabilidad del banco, la pared y los apoyos.",
         "Adaptá el esfuerzo con revisión profesional."
       ],
       "safetyCopy": "No uses estructuras inestables. Si aparece dolor, frená.",
@@ -885,7 +885,7 @@
       "duration": "12 minutos",
       "environment": "Parque con barra baja y apoyo firme",
       "prerequisites": [
-        "Revisá la estabilidad de la barra y los apoyos.",
+        "Revisá la estabilidad del banco, la pared y los apoyos.",
         "Adaptá el esfuerzo con revisión profesional."
       ],
       "safetyCopy": "No uses estructuras inestables. Si aparece dolor, frená.",
@@ -910,7 +910,7 @@
       "sportId": "yoga",
       "profileId": "regular",
       "level": "Práctica habitual adaptada",
-      "name": "Yoga: transiciones y equilibrio",
+      "name": "Yoga: apoyos y recuperación",
       "description": "Explorá control y coordinación con apoyos, y reservá espacio para recuperar.",
       "duration": "10 minutos",
       "environment": "Casa o parque, superficie seca y estable",
@@ -1264,7 +1264,512 @@
       }
     ]
   },
-  "images": [],
+  "images": [
+    {
+      "id": "cal-first-shoulders-photo",
+      "path": "/assets/photos/cali_warmup.jpg",
+      "alt": "Mujer de pie estirando un hombro con el brazo cruzado frente al pecho.",
+      "subject": {
+        "kind": "exercise",
+        "id": "cal-first-shoulders"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/asian-sportswoman-stretching-arms-before-training-in-park-4426319/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#cali_warmup"
+    },
+    {
+      "id": "cal-first-row-photo",
+      "path": "/assets/photos/cali_incline.jpg",
+      "alt": "Mujer haciendo una flexión inclinada con ambas manos sobre un banco de madera.",
+      "subject": {
+        "kind": "exercise",
+        "id": "cal-first-row"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/woman-doing-push-ups-exercises-push-8401820/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#cali_incline"
+    },
+    {
+      "id": "cal-first-squat-photo",
+      "path": "/assets/photos/cali_squat.jpg",
+      "alt": "Hombre con piernas flexionadas y manos apoyadas en el suelo del parque.",
+      "subject": {
+        "kind": "exercise",
+        "id": "cal-first-squat"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/man-exercising-in-park-4803865/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#cali_squat"
+    },
+    {
+      "id": "yoga-first-breath-photo",
+      "path": "/assets/photos/yoga_breathe.jpg",
+      "alt": "Mujer sentada con piernas cruzadas y manos sobre las rodillas en una colchoneta.",
+      "subject": {
+        "kind": "exercise",
+        "id": "yoga-first-breath"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/woman-practicing-yoga-outdoors-in-park-35253327/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#yoga_breathe"
+    },
+    {
+      "id": "yoga-first-mobility-photo",
+      "path": "/assets/photos/yoga_sidebend.jpg",
+      "alt": "Mujer sentada inclinando el tronco a un lado, con un brazo elevado y la otra mano apoyada.",
+      "subject": {
+        "kind": "exercise",
+        "id": "yoga-first-mobility"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-woman-doing-yoga-4971621/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#yoga_sidebend"
+    },
+    {
+      "id": "yoga-first-rest-photo",
+      "path": "/assets/photos/yoga_child.jpg",
+      "alt": "Mujer arrodillada en postura del niño, tronco inclinado y brazos extendidos sobre la colchoneta.",
+      "subject": {
+        "kind": "exercise",
+        "id": "yoga-first-rest"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/woman-kneeling-on-a-yoga-mat-4534638/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#yoga_child"
+    },
+    {
+      "id": "swim-dry-first-shoulders-photo",
+      "path": "/assets/photos/swim_warmup.jpg",
+      "alt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-dry-first-shoulders"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-swimmer-doing-stretching-6539744/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_warmup"
+    },
+    {
+      "id": "swim-dry-first-breath-photo",
+      "path": "/assets/photos/swim_warmup.jpg",
+      "alt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-dry-first-breath"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-swimmer-doing-stretching-6539744/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_warmup"
+    },
+    {
+      "id": "swim-dry-first-coordination-photo",
+      "path": "/assets/photos/swim_warmup.jpg",
+      "alt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-dry-first-coordination"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-swimmer-doing-stretching-6539744/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_warmup"
+    },
+    {
+      "id": "swim-water-first-warmup-photo",
+      "path": "/assets/photos/swim_freestyle.jpg",
+      "alt": "Nadadora haciendo crol en un carril de pileta, con un brazo extendido y la cara hacia un lado.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-water-first-warmup"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/woman-swimming-in-a-lap-pool-6539731/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_freestyle"
+    },
+    {
+      "id": "swim-water-first-technique-photo",
+      "path": "/assets/photos/swim_backstroke.jpg",
+      "alt": "Vista desde arriba de un nadador de espalda con un brazo extendido sobre la cabeza.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-water-first-technique"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-person-swimming-in-the-pool-8688618/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_backstroke"
+    },
+    {
+      "id": "swim-water-first-rest-photo",
+      "path": "/assets/photos/swim_cooldown.jpg",
+      "alt": "Nadador erguido dentro de la pileta, con las manos juntas delante del cuerpo.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-water-first-rest"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-swimmer-training-on-a-pool-5903226/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_cooldown"
+    },
+    {
+      "id": "cal-returning-shoulders-photo",
+      "path": "/assets/photos/cali_warmup.jpg",
+      "alt": "Mujer de pie estirando un hombro con el brazo cruzado frente al pecho.",
+      "subject": {
+        "kind": "exercise",
+        "id": "cal-returning-shoulders"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/asian-sportswoman-stretching-arms-before-training-in-park-4426319/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#cali_warmup"
+    },
+    {
+      "id": "cal-returning-row-photo",
+      "path": "/assets/photos/cali_incline.jpg",
+      "alt": "Mujer haciendo una flexión inclinada con ambas manos sobre un banco de madera.",
+      "subject": {
+        "kind": "exercise",
+        "id": "cal-returning-row"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/woman-doing-push-ups-exercises-push-8401820/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#cali_incline"
+    },
+    {
+      "id": "cal-returning-squat-photo",
+      "path": "/assets/photos/cali_squat.jpg",
+      "alt": "Hombre con piernas flexionadas y manos apoyadas en el suelo del parque.",
+      "subject": {
+        "kind": "exercise",
+        "id": "cal-returning-squat"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/man-exercising-in-park-4803865/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#cali_squat"
+    },
+    {
+      "id": "yoga-returning-breath-photo",
+      "path": "/assets/photos/yoga_breathe.jpg",
+      "alt": "Mujer sentada con piernas cruzadas y manos sobre las rodillas en una colchoneta.",
+      "subject": {
+        "kind": "exercise",
+        "id": "yoga-returning-breath"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/woman-practicing-yoga-outdoors-in-park-35253327/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#yoga_breathe"
+    },
+    {
+      "id": "yoga-returning-mobility-photo",
+      "path": "/assets/photos/yoga_sidebend.jpg",
+      "alt": "Mujer sentada inclinando el tronco a un lado, con un brazo elevado y la otra mano apoyada.",
+      "subject": {
+        "kind": "exercise",
+        "id": "yoga-returning-mobility"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-woman-doing-yoga-4971621/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#yoga_sidebend"
+    },
+    {
+      "id": "yoga-returning-rest-photo",
+      "path": "/assets/photos/yoga_child.jpg",
+      "alt": "Mujer arrodillada en postura del niño, tronco inclinado y brazos extendidos sobre la colchoneta.",
+      "subject": {
+        "kind": "exercise",
+        "id": "yoga-returning-rest"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/woman-kneeling-on-a-yoga-mat-4534638/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#yoga_child"
+    },
+    {
+      "id": "swim-dry-returning-shoulders-photo",
+      "path": "/assets/photos/swim_warmup.jpg",
+      "alt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-dry-returning-shoulders"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-swimmer-doing-stretching-6539744/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_warmup"
+    },
+    {
+      "id": "swim-dry-returning-breath-photo",
+      "path": "/assets/photos/swim_warmup.jpg",
+      "alt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-dry-returning-breath"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-swimmer-doing-stretching-6539744/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_warmup"
+    },
+    {
+      "id": "swim-dry-returning-coordination-photo",
+      "path": "/assets/photos/swim_warmup.jpg",
+      "alt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-dry-returning-coordination"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-swimmer-doing-stretching-6539744/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_warmup"
+    },
+    {
+      "id": "swim-water-returning-warmup-photo",
+      "path": "/assets/photos/swim_freestyle.jpg",
+      "alt": "Nadadora haciendo crol en un carril de pileta, con un brazo extendido y la cara hacia un lado.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-water-returning-warmup"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/woman-swimming-in-a-lap-pool-6539731/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_freestyle"
+    },
+    {
+      "id": "swim-water-returning-technique-photo",
+      "path": "/assets/photos/swim_backstroke.jpg",
+      "alt": "Vista desde arriba de un nadador de espalda con un brazo extendido sobre la cabeza.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-water-returning-technique"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-person-swimming-in-the-pool-8688618/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_backstroke"
+    },
+    {
+      "id": "swim-water-returning-rest-photo",
+      "path": "/assets/photos/swim_cooldown.jpg",
+      "alt": "Nadador erguido dentro de la pileta, con las manos juntas delante del cuerpo.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-water-returning-rest"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-swimmer-training-on-a-pool-5903226/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_cooldown"
+    },
+    {
+      "id": "cal-regular-shoulders-photo",
+      "path": "/assets/photos/cali_warmup.jpg",
+      "alt": "Mujer de pie estirando un hombro con el brazo cruzado frente al pecho.",
+      "subject": {
+        "kind": "exercise",
+        "id": "cal-regular-shoulders"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/asian-sportswoman-stretching-arms-before-training-in-park-4426319/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#cali_warmup"
+    },
+    {
+      "id": "cal-regular-row-photo",
+      "path": "/assets/photos/cali_incline.jpg",
+      "alt": "Mujer haciendo una flexión inclinada con ambas manos sobre un banco de madera.",
+      "subject": {
+        "kind": "exercise",
+        "id": "cal-regular-row"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/woman-doing-push-ups-exercises-push-8401820/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#cali_incline"
+    },
+    {
+      "id": "cal-regular-side-photo",
+      "path": "/assets/photos/cali_plank.jpg",
+      "alt": "Hombre en plancha con una mano apoyada y la otra junto al hombro contrario.",
+      "subject": {
+        "kind": "exercise",
+        "id": "cal-regular-side"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/man-doing-core-exercises-4920466/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#cali_plank"
+    },
+    {
+      "id": "yoga-regular-standing-photo",
+      "path": "/assets/photos/yoga_downward.jpg",
+      "alt": "Mujer en perro boca abajo sobre una colchoneta, con cadera elevada y manos y pies apoyados.",
+      "subject": {
+        "kind": "exercise",
+        "id": "yoga-regular-standing"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/faceless-woman-practicing-downward-facing-dog-asana-7592992/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#yoga_downward"
+    },
+    {
+      "id": "yoga-regular-balance-photo",
+      "path": "/assets/photos/yoga_sidebend.jpg",
+      "alt": "Mujer sentada inclinando el tronco a un lado, con un brazo elevado y la otra mano apoyada.",
+      "subject": {
+        "kind": "exercise",
+        "id": "yoga-regular-balance"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-woman-doing-yoga-4971621/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#yoga_sidebend"
+    },
+    {
+      "id": "yoga-regular-close-photo",
+      "path": "/assets/photos/yoga_relax.jpg",
+      "alt": "Hombre recostado boca arriba con ojos cerrados y manos sobre el abdomen.",
+      "subject": {
+        "kind": "exercise",
+        "id": "yoga-regular-close"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/man-in-gray-tank-top-lying-on-black-carpet-4325489/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#yoga_relax"
+    },
+    {
+      "id": "swim-dry-regular-shoulders-photo",
+      "path": "/assets/photos/swim_warmup.jpg",
+      "alt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-dry-regular-shoulders"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-swimmer-doing-stretching-6539744/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_warmup"
+    },
+    {
+      "id": "swim-dry-regular-breath-photo",
+      "path": "/assets/photos/swim_warmup.jpg",
+      "alt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-dry-regular-breath"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-swimmer-doing-stretching-6539744/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_warmup"
+    },
+    {
+      "id": "swim-dry-regular-coordination-photo",
+      "path": "/assets/photos/swim_warmup.jpg",
+      "alt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-dry-regular-coordination"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-swimmer-doing-stretching-6539744/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_warmup"
+    },
+    {
+      "id": "swim-water-regular-warmup-photo",
+      "path": "/assets/photos/swim_freestyle.jpg",
+      "alt": "Nadadora haciendo crol en un carril de pileta, con un brazo extendido y la cara hacia un lado.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-water-regular-warmup"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/woman-swimming-in-a-lap-pool-6539731/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_freestyle"
+    },
+    {
+      "id": "swim-water-regular-technique-photo",
+      "path": "/assets/photos/swim_backstroke.jpg",
+      "alt": "Vista desde arriba de un nadador de espalda con un brazo extendido sobre la cabeza.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-water-regular-technique"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-person-swimming-in-the-pool-8688618/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_backstroke"
+    },
+    {
+      "id": "swim-water-regular-rest-photo",
+      "path": "/assets/photos/swim_cooldown.jpg",
+      "alt": "Nadador erguido dentro de la pileta, con las manos juntas delante del cuerpo.",
+      "subject": {
+        "kind": "exercise",
+        "id": "swim-water-regular-rest"
+      },
+      "sourceUrl": "https://www.pexels.com/photo/a-swimmer-training-on-a-pool-5903226/",
+      "attribution": "Pexels · Pexels License (consultar términos)",
+      "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
+      "licenseStatus": "verified",
+      "evidence": "/assets/photos/provenance.json#swim_cooldown"
+    }
+  ],
   "previewScenarios": [
     {
       "id": "sustained",

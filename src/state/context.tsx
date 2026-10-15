@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import type { Content, ProfileId } from '../content/types';
 import { guardHash, routeHash, type Route } from './navigation';
-import { completeStep, startSession, type Attempt } from './session';
-import { legacyView, loadEnvelope, registerInterest, resetEnvelope, saveEnvelope, setIntention, storageKey, type Envelope, type LegacyEnvelope, type Loaded } from './storage';
+import { completeStep, reviewStep, startSession, type Attempt } from './session';
+import { loadEnvelope, registerInterest, resetEnvelope, saveEnvelope, setIntention, storageKey, type Envelope, type Loaded } from './storage';
 
 export type Runtime = Loaded & {
   route: Route; parent: Route | null; attempt: Attempt | null; canSwim: boolean; safePool: boolean;
@@ -16,6 +16,7 @@ export type Command =
   | {type:'affirm';key:'canSwim' | 'safePool';value:boolean}
   | {type:'start';planId:string}
   | {type:'accept';attemptId:string;stepId:string}
+  | {type:'review';attemptId:string;direction:'previous'|'next'}
   | {type:'enterScenario';scenarioId:string}
   | {type:'answer';answerId:string}
   | {type:'exitPreview'}
@@ -65,7 +66,8 @@ export function createCommandOwner(content: Content, port: Parameters<typeof loa
       } else if (command.type === 'navigate') {
         const route = state.status === 'invalid' ? landing(state.envelope,true) : guardHash(command.hash,content,state);
         const parent = route.screen === 'detail' ? (state.route.screen === 'classes' || state.route.screen === 'catalog' ? state.route : state.route.screen === 'detail' ? state.parent : null) : state.parent;
-        state = {...state,route,parent,attempt:null,canSwim:false,safePool:false};
+        const sameSession = route.screen === 'session' && state.attempt?.status === 'active' && state.attempt.attemptId === route.attemptId;
+        state = {...state,route,parent,attempt:sameSession?state.attempt:null,canSwim:sameSession&&state.canSwim,safePool:sameSession&&state.safePool};
       } else if (command.type === 'chooseSituation' || command.type === 'editSituation') {
         if (state.mode.kind !== 'actual' || state.status === 'invalid' || !content.profiles.some(p => p.id === command.situationId) || (command.type === 'editSituation' && !state.envelope.preference)) return false;
         if (state.envelope.preference?.situationId === command.situationId) return false;
@@ -86,6 +88,11 @@ export function createCommandOwner(content: Content, port: Parameters<typeof loa
           const attempt = startSession(content,{profileId,sportId:plan.sportId,planId:plan.id,canSwim:state.canSwim,safePool:state.safePool},uuid);
           if (!attempt) return false;
           state = {...state,attempt,route:{screen:'session',profileId,sportId:plan.sportId,planId:plan.id,attemptId:attempt.attemptId}};
+        } else if (command.type === 'review') {
+          if (state.route.screen !== 'session') return false;
+          const attempt = reviewStep(state.attempt,command.attemptId,command.direction);
+          if (attempt === state.attempt) return false;
+          state = {...state,attempt};
         } else if (command.type === 'accept') {
           if (state.route.screen !== 'session') return false;
           const result = completeStep(state.attempt,state.envelope,command.attemptId,command.stepId,clock());
@@ -99,7 +106,7 @@ export function createCommandOwner(content: Content, port: Parameters<typeof loa
   };
 }
 type Owner = ReturnType<typeof createCommandOwner>;
-type AppState = Omit<Runtime,'envelope'> & {envelope:Envelope & {profiles:LegacyEnvelope['profiles']};content:Content;navigate:(r:Route)=>void;affirm:(key:'canSwim'|'safePool',v:boolean)=>void;start:(water?:boolean)=>void;complete:(id:string,step:string)=>void;recover:()=>void;interest:()=>void;commands:Owner;command:(command:Command)=>void};
+type AppState = Runtime & {content:Content;navigate:(r:Route)=>void;affirm:(key:'canSwim'|'safePool',v:boolean)=>void;start:(water?:boolean)=>void;complete:(id:string,step:string)=>void;recover:()=>void;interest:()=>void;commands:Owner;command:(command:Command)=>void};
 const AppContext = createContext<AppState | null>(null);
 const browserStorage = {getItem:(k:string)=>window.localStorage.getItem(k),setItem:(k:string,v:string)=>window.localStorage.setItem(k,v)};
 export function AppProvider({content,children}:{content:Content;children:ReactNode}) {
@@ -123,7 +130,7 @@ export function AppProvider({content,children}:{content:Content;children:ReactNo
     window.addEventListener('hashchange',sync);window.addEventListener('storage',reload);
     return () => {window.removeEventListener('hashchange',sync);window.removeEventListener('storage',reload);};
   },[commands]);
-  return <AppContext.Provider value={{...state,envelope:{...state.envelope,profiles:legacyView(state.envelope).profiles},content,commands,command:dispatch,
+  return <AppContext.Provider value={{...state,content,commands,command:dispatch,
     navigate:r=>dispatch({type:'navigate',hash:routeHash(r)}),affirm:(key,value)=>dispatch({type:'affirm',key,value}),
     start:(water=false)=>{const s=commands.getState();if(s.route.screen!=='plan'||(water&&s.route.sportId!=='swimming'))return;const planId=water?content.plans.find(p=>p.profileId===s.envelope.preference?.situationId&&p.sportId==='swimming'&&p.medium==='water')?.id:s.route.planId;if(planId)dispatch({type:'start',planId});},
     complete:(attemptId,stepId)=>dispatch({type:'accept',attemptId,stepId}),recover:()=>dispatch({type:'reset',confirmed:true,entry:state.status==='invalid'?'recovery':'profile'}),

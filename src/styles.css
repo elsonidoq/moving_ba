@@ -146,3 +146,7 @@ legend { line-height: 1.5; margin-bottom: 12px; }
 .class-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
 .class-filters a { min-height: 44px; display: flex; align-items: center; padding: 10px; border: 1px solid var(--line); border-radius: 12px; }
 .class-filters a[aria-current] { background: var(--yellow); }
+.exercise-photo { margin: 18px 0; }
+.exercise-photo img { display: block; width: 100%; height: auto; max-height: 420px; object-fit: contain; background: #edf6f1; border-radius: 18px; }
+.exercise-photo figcaption { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 8px; }
+.review-controls { display: flex; gap: 12px; margin-bottom: 16px; }

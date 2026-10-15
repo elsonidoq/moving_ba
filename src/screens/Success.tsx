@@ -1,9 +1,10 @@
+import { sourceKey } from '../state/storage';
 import { useApp } from '../state/context';
 import { routeHash, safePlan } from '../state/navigation';
 export default function Success() {
   const { content, route, envelope } = useApp();
   if (route.screen !== 'success') return null;
-  const record = envelope.profiles[route.profileId].completions[route.attemptId];
+  const record = envelope.journey[sourceKey('actual','completion',route.attemptId)];
   if (!record) return null;
   const plan = safePlan(content, route.profileId, route.sportId);
   return <article data-completed-attempt-id={record.id}>

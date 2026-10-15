@@ -127,8 +127,8 @@ test.describe('content validation extended contract', () => {
       if (d.kind === 'plan') expect(c.plans.find(p => p.id === d.planId)).toMatchObject({ medium: 'dry-land', profileId: c.previewScenarios.find(s => s.id === chat.scenarioId)!.recommendationSituationId });
       console.log(`${chat.id}/${a.id}: ${a.response} -> ${JSON.stringify(d)}`);
     }
-    expect(c.exercises.every(e => e.imageStatus === 'unavailable' && e.imageId === null && e.imageAsset === '')).toBe(true);
-    console.log('All exact exercise images unavailable; no verified photos or asset approvals.');
+    expect(c.exercises.every(e => e.imageStatus === 'verified' && e.imageId !== null && e.imageAsset === '')).toBe(true);
+    console.log('All 36 exercises have explicit reviewed local JPEG subjects; general SVG imageAsset remains empty.');
   });
   const cases: [string, (c: Content) => void, string][] = [
     ['missing onboarding copy', c => { c.onboarding.editTitle = ''; }, 'onboarding.editTitle'],
@@ -155,7 +155,7 @@ test.describe('content validation extended contract', () => {
     ['wrong category plan', c => { (c.destinations.find(d => d.kind === 'plan') as {planId:string}).planId = 'yoga-first'; }, 'situación'],
     ['water destination', c => { const d = c.destinations.find(d => d.kind === 'plan')!; d.sportId = 'swimming'; (d as {planId:string}).planId = 'swim-water-returning'; }, 'medio seguro'],
     ['unknown image', c => { c.exercises[0].imageId = 'unknown'; }, 'imageId'],
-    ['false verified missing image', c => { c.exercises[0].imageStatus = 'verified'; }, 'no disponible'],
+    ['false verified missing image', c => { c.exercises[0].imageId = null; c.exercises[0].imageStatus = 'verified'; }, 'no disponible'],
     ['general SVG exact exercise', c => { c.exercises[0].imageAsset = '/assets/calisthenics.svg'; }, 'imageAsset'],
   ];
   for (const [name, mutate, hint] of cases) test(`rejects ${name}`, () => {
@@ -164,8 +164,8 @@ test.describe('content validation extended contract', () => {
   });
   function withUnverifiedImage() {
     const c = clone(); const e = c.exercises[0];
-    c.images.push({id:'pending',path:null,alt:'Imagen del ejercicio no disponible',subject:{kind:'exercise',id:e.id},sourceUrl:null,attribution:'Sin atribución verificada',provenance:'Sin permiso verificado',licenseStatus:'unverified',evidence:null});
-    e.imageId = 'pending'; return c;
+    c.images.unshift({id:'pending',path:null,alt:'Imagen del ejercicio no disponible',subject:{kind:'exercise',id:e.id},sourceUrl:null,attribution:'Sin atribución verificada',provenance:'Sin permiso verificado',licenseStatus:'unverified',evidence:null});
+    e.imageId = 'pending'; e.imageStatus = 'unavailable'; return c;
   }
   test('unverified exact assignment is honestly unavailable, not displayable', () => {
     const c = validateContent(withUnverifiedImage()); expect(c.exercises[0].imageStatus).toBe('unavailable'); expect(c.images[0].path).toBeNull();
@@ -182,4 +182,17 @@ test.describe('content validation extended contract', () => {
       try { validateContent(c); } catch(e) { console.log(`${JSON.stringify(path)} -> ${(e as Error).message}`); }
     });
   }
+});
+
+import { verifiedImages, validateImageRegistry, type ImageRegistry } from '../src/content/images';
+test('content validation shared JPEG admits only enumerated equivalent exercise subjects',()=>{
+ const c=validateContent(clone());const first=c.exercises.find(e=>e.id==='cal-first-shoulders')!;const returning=c.exercises.find(e=>e.id==='cal-returning-shoulders')!;
+ const image=c.images.find(i=>i.id===first.imageId)!;const other=c.images.find(i=>i.id===returning.imageId)!;expect(image.path).toBe(other.path);expect(verifiedImages[image.path!].subjectIds).toContain(first.id);expect(verifiedImages[image.path!].subjectIds).toContain(returning.id);
+ const mismatch=clone();mismatch.images.find(i=>i.id===first.imageId)!.path='/assets/photos/swim_warmup.jpg';expect(()=>validateContent(mismatch)).toThrow('sujeto exacto');
+ const missing=clone();missing.images.find(i=>i.id===first.imageId)!.subject.id='cal-first-row';expect(()=>validateContent(missing)).toThrow('sujeto exacto');
+ for(const ids of [undefined,[],['cal-first-shoulders','cal-first-shoulders'],['unknown'],['first'],['*']]){
+  const registry:ImageRegistry={'/assets/photos/cali_warmup.jpg':{subjectKind:'exercise',subjectIds:ids as string[],evidence:'review'}};
+  expect(()=>validateImageRegistry(c.exercises.map(e=>e.id),c.sports.map(s=>s.id),registry)).toThrow('subjectIds');console.log('registry rejects exact subject set',JSON.stringify(ids));
+ }
+ console.log('shared JPEG permitted explicit subjects',image.path,verifiedImages[image.path!].subjectIds);
 });

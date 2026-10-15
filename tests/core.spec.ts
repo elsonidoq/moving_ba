@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import type { Content, ProfileId } from '../src/content/types';
 import { validateContent } from '../src/content/validate';
-import { startSession, completeStep, abandonSession } from '../src/state/session';
+import { startSession, completeStep, reviewStep, abandonSession } from '../src/state/session';
 import { materialize, loadEnvelope, saveEnvelope, validateEnvelope, validateLegacyEnvelope, normalizeLegacy, sourceKey, resetEnvelope, storageKey, type Envelope, type LegacyEnvelope, type StoragePort } from '../src/state/storage';
 import { createCommandOwner, type Command } from '../src/state/context';
 import { guardHash } from '../src/state/navigation';
@@ -137,7 +137,7 @@ test('session integrity ordered explicit events, snapshots, replay, abandonment 
   let e=materialize();let a=startSession(content,input,()=> 'attempt-one')!;const original=structuredClone(a);
   for(const [id,step] of [['wrong',a.steps[0].id],[a.attemptId,'wrong'],[a.attemptId,a.steps.at(-1)!.id]])expect(completeStep(a,e,id,step,now)).toEqual({attempt:a,envelope:e});
   const edited=structuredClone(content);edited.exercises[0].title='Otro título';expect(a.steps).toEqual(original.steps);
-  for(const step of original.steps){const r=completeStep(a,e,a.attemptId,step.id,now);a=r.attempt!;e=r.envelope;expect(completeStep(a,e,original.attemptId,step.id,now)).toEqual({attempt:a,envelope:e});console.log('accepted',step.id,a.cursor,Object.keys(e.journey));}
+  for(const step of original.steps){const r=completeStep(a,e,a.attemptId,step.id,now);a=r.attempt!;e=r.envelope;expect(completeStep(a,e,original.attemptId,step.id,now)).toEqual({attempt:a,envelope:e});console.log('accepted',step.id,a.acceptedCount,Object.keys(e.journey));}
   expect(a.status).toBe('completed');expect(Object.keys(e.journey)).toEqual([sourceKey('actual','completion','attempt-one')]);expect(Object.values(e.journey)[0].completedStepIds).toEqual(original.steps.map(s=>s.id));
   const s=storage();expect(saveEnvelope(e,s.port,{status:'ready',readBlocked:false})).toBe('ready');expect(loadEnvelope(content,s.port).envelope).toEqual(e);
   const partial=startSession(content,input,()=> 'partial')!;const advanced=completeStep(partial,e,partial.attemptId,partial.steps[0].id,now).attempt!;expect(completeStep(abandonSession(advanced),e,partial.attemptId,partial.steps[1].id,now).envelope).toBe(e);
@@ -229,4 +229,26 @@ test('actual command custody intention same/different/retired exact snapshots pr
  expect(owner.dispatch({type:'intention',classId:'cal-free'})).toBe(true);const second=owner.getState().envelope;expect({...second,intention:null}).toEqual({...first,intention:null});expect(second.journey).toEqual(baseline.journey);expect(second.interests).toEqual(baseline.interests);
  const removed={...content,classes:content.classes.filter(c=>c.id!=='cal-free')};const loaded=createCommandOwner(removed,s.port,'',()=>now);const before=loaded.getState().envelope;expect(loaded.dispatch({type:'intention',classId:'cal-free'})).toBe(false);expect(loaded.getState().envelope.intention?.classSnapshot).toEqual(content.classes.find(c=>c.id==='cal-free'));expect(loaded.getState().envelope).toBe(before);
  console.log('intention same no write/different replacement/retired snapshot',JSON.stringify(second),'counts unchanged',selectJourney(content,second,'returning',now).sessions);
+});
+
+test('session integrity review separates accepted prefix from viewed exercise',()=>{
+ const a=startSession(content,input,()=> 'review-red')!;
+ expect(a).toMatchObject({acceptedCount:0,viewIndex:0});expect(reviewStep(a,a.attemptId,'previous')).toBe(a);expect(reviewStep(a,a.attemptId,'next')).toBe(a);
+});
+
+test('session integrity ordered review/next cannot skip or reaccept; immutable snapshots, stale UUID, partial and forged success give no extra credit',()=>{
+ let e=materialize();let a=startSession(content,input,()=> 'review-uuid')!;const snapshot=structuredClone(a.steps);expect(reviewStep(a,a.attemptId,'next')).toBe(a);expect(reviewStep(a,'stale','previous')).toBe(a);
+ ({attempt:a,envelope:e}=completeStep(a,e,a.attemptId,a.steps[0].id,now) as {attempt:typeof a;envelope:typeof e});expect(a).toMatchObject({acceptedCount:1,viewIndex:1});
+ a=reviewStep(a,a.attemptId,'previous')!;expect(a).toMatchObject({acceptedCount:1,viewIndex:0});expect(completeStep(a,e,a.attemptId,a.steps[0].id,now)).toEqual({attempt:a,envelope:e});expect(completeStep(a,e,a.attemptId,a.steps[1].id,now)).toEqual({attempt:a,envelope:e});
+ a=reviewStep(a,a.attemptId,'next')!;expect(a.viewIndex).toBe(1);expect(reviewStep(a,a.attemptId,'next')).toBe(a);expect(e.journey).toEqual({});
+ const exercise=content.exercises.find(e=>e.id===a.steps[0].exercise.id)!;const image=content.images.find(i=>i.id===exercise.imageId)!;const title=exercise.title,alt=image.alt;const sourcePlan=content.plans.find(p=>p.id===a.planId)!;
+ try{exercise.title='Editado';image.alt='Otra imagen';sourcePlan.steps.reverse();expect(a.steps).toEqual(snapshot);}finally{exercise.title=title;image.alt=alt;sourcePlan.steps.reverse();}
+ for(const step of snapshot.slice(1)){const old=a;({attempt:a,envelope:e}=completeStep(a,e,a.attemptId,step.id,now) as {attempt:typeof a;envelope:typeof e});console.log('review prefix/view',old.acceptedCount,old.viewIndex,'accept',step.id,'->',a.acceptedCount,a.viewIndex,'status',a.status);}
+ expect(a.status).toBe('completed');expect(a.acceptedCount).toBe(snapshot.length);expect(Object.keys(e.journey)).toEqual([sourceKey('actual','completion','review-uuid')]);expect(completeStep(a,e,a.attemptId,snapshot.at(-1)!.id,now).envelope).toBe(e);expect(reviewStep(a,a.attemptId,'previous')).toBe(a);
+ const next=startSession(content,input,()=> 'fresh-uuid')!;expect(next.attemptId).not.toBe(a.attemptId);expect(completeStep(abandonSession(next),e,next.attemptId,next.steps[0].id,now).envelope).toBe(e);
+ const chosen={...e,preference:{situationId:'first' as const,confirmed:true as const}};expect(guardHash('#/success/forged',content,{attempt:null,envelope:chosen}).screen).toBe('home');expect(guardHash('#/session/fresh-uuid',content,{attempt:null,envelope:chosen}).screen).toBe('home');
+});
+test('swimming start guard actual owner clears both affirmations on every leave reload reset and storage event',()=>{
+ for(const action of ['navigate','reload','reset','storageEvent'] as const){const s=storage();const owner=createCommandOwner(content,s.port,'',()=>now);owner.dispatch({type:'chooseSituation',situationId:'regular'});owner.dispatch({type:'affirm',key:'canSwim',value:true});owner.dispatch({type:'affirm',key:'safePool',value:true});expect(owner.dispatch({type:'start',planId:'swim-water-regular'})).toBe(true);
+ if(action==='navigate')owner.dispatch({type:'navigate',hash:'#/home'});if(action==='reset')owner.dispatch({type:'reset',confirmed:true,entry:'profile'});if(action==='storageEvent')owner.dispatch({type:'storageEvent',key:storageKey});const result=action==='reload'?createCommandOwner(content,s.port).getState():owner.getState();expect(result).toMatchObject({canSwim:false,safePool:false,attempt:null});expect(result.envelope.journey).toEqual({});console.log('water affirmation clearing',action,JSON.stringify(result.envelope));}
 });

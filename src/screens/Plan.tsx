@@ -2,7 +2,7 @@ import { useApp } from '../state/context';
 import { routeHash } from '../state/navigation';
 
 export default function Plan() {
-  const { content, route, start, canSwim, safePool, affirm, status } = useApp();
+  const { content, route, start, canSwim, safePool, affirm, status, mode } = useApp();
   if (route.screen !== 'plan') return null;
   const plan = content.plans.find(p => p.id === route.planId)!;
   const sport = content.sports.find(s => s.id === route.sportId)!;
@@ -30,11 +30,11 @@ export default function Plan() {
       })}
     </ol>
     <section className="safety"><h2>{ui.safety}</h2><p>{plan.safetyCopy}</p></section>
-    <button disabled={status === 'invalid'} onClick={() => start()}>{ui.start}</button>
+    <button disabled={status === 'invalid' || mode.kind !== 'actual'} onClick={() => start()}>{ui.start}</button>
     {sport.id === 'swimming' && <section className="support">
       <label className="affirmation"><input type="checkbox" checked={canSwim} onChange={e => affirm('canSwim', e.target.checked)} />{ui.canSwim}</label>
       <label className="affirmation"><input type="checkbox" checked={safePool} onChange={e => affirm('safePool', e.target.checked)} />{ui.safePool}</label>
-      <button className="secondary" disabled={!canSwim || !safePool || status === 'invalid'} onClick={() => start(true)}>{ui.startWater}</button>
+      <button className="secondary" disabled={!canSwim || !safePool || status === 'invalid' || mode.kind !== 'actual'} onClick={() => start(true)}>{ui.startWater}</button>
       <p>{ui.swimRedirect}</p><a className="button-link secondary" href={routeHash({ screen: 'catalog', profileId: route.profileId, sportId: sport.id, mode: 'classes' })}>{ui.classes}</a></section>}
   </article>;
 }
