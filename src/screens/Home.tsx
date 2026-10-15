@@ -10,7 +10,7 @@ export default function Home() {
   const profile = content.profiles.find(p => p.id === route.profileId)!;
   const intention = mode.kind === 'actual' ? envelope.intention : null;
   return <>
-    {scenario && <section data-preview-scenario={scenario.id} className="support"><h2>{scenario.title}</h2><p>{scenario.guidance}</p><p>{scenario.disclosure}</p><dl className="journey-stats"><div><dt>{content.ui.sessions}</dt><dd data-stat="sessions">{preview!.sessions}</dd></div><div><dt>{content.ui.activeWeeks}</dt><dd>{preview!.activeWeeks}</dd></div><div><dt>{content.ui.points}</dt><dd>{preview!.points}</dd></div></dl></section>}
+    {scenario && <section data-preview-scenario={scenario.id} className="support"><h2>{scenario.title}</h2><p>{scenario.guidance}</p><dl className="journey-stats"><div><dt>{content.ui.sessions}</dt><dd data-stat="sessions">{preview!.sessions}</dd></div><div><dt>{content.ui.activeWeeks}</dt><dd>{preview!.activeWeeks}</dd></div><div><dt>{content.ui.points}</dt><dd>{preview!.points}</dd></div></dl></section>}
     <p className="eyebrow">{profile.title}</p>
     <h1 tabIndex={-1}>{profile.welcome}</h1>
     <p className="lead">{profile.subtitle}</p>

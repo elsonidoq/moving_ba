@@ -15,7 +15,7 @@ export default function Profile() {
  <a className="button-link" href={routeHash({screen:'journey',profileId:route.profileId})}>{content.ui.journey}</a>
  <a className="button-link secondary" href={routeHash({screen:'challenges',profileId:route.profileId})}>{content.ui.challenges} · {content.ui.badges} · {content.ui.benefits}</a>
  <button className="secondary" disabled={mode.kind!=='actual'} onClick={()=>command({type:'reset',confirmed:window.confirm(content.ui.resetConfirm),entry:'profile'})}>{content.ui.reset}</button>
- <section aria-label={content.ui.previewBadge}>{content.previewScenarios.map(s=><button className="secondary" key={s.id} disabled={mode.kind!=='actual'} onClick={()=>command({type:'enterScenario',scenarioId:s.id})}>{s.title}</button>)}</section>
+ <section aria-label={content.ui.exploreSituations}><h2>{content.ui.exploreSituations}</h2>{content.previewScenarios.map(s=><button className="secondary" key={s.id} disabled={mode.kind!=='actual'} onClick={()=>command({type:'enterScenario',scenarioId:s.id})}>{s.title}</button>)}</section>
  </>}
  </>;
 }

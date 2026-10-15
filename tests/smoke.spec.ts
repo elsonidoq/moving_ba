@@ -216,7 +216,7 @@ for(const width of [360,1280])test(`scripted support alternatives ${width}`,asyn
   for(const answer of chat.answers){
    await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await page.getByRole('button',{name:scenario.title,exact:true}).click();await expect(page).toHaveURL(new RegExp('#/notice/'+scenario.id+'$'));await previewExitEvidence(page,`notice-${chat.id}`,width);
    await page.getByRole('button',{name:scenario.activationLabel!,exact:true}).focus();await page.keyboard.press('Enter');await expect(page.locator('[data-chat-id]')).toHaveAttribute('data-chat-id',chat.id);await expect(page.getByRole('heading',{level:1})).toBeFocused();await expect(page.getByRole('navigation',{name:'Principal'})).toHaveCount(0);await expect(page.locator('[data-answer-id]')).toHaveCount(chat.answers.length);
-   for(const a of chat.answers)await expect(page.getByRole('button',{name:a.label,exact:true})).toBeVisible();await expect(page.locator('input,textarea')).toHaveCount(0);await expect(page.locator('main')).toContainText(chat.disclosure);await expect(page.locator('main')).toContainText(content.ui.futureAI);
+   for(const a of chat.answers)await expect(page.getByRole('button',{name:a.label,exact:true})).toBeVisible();await expect(page.locator('input,textarea')).toHaveCount(0);await expect(page.locator('main')).toContainText(content.ui.scriptedDisclosure);await expect(page.locator('main')).not.toContainText(content.ui.futureAI);
    await page.getByRole('button',{name:answer.label,exact:true}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('status')).toContainText(answer.response);await previewExitEvidence(page,`chat-${chat.id}-${answer.id}`,width);
    const destination=content.destinations.find(d=>d.id===answer.destinationId)!;const link=page.locator(`[data-destination-id="${destination.id}"]`);await link.focus();await page.keyboard.press('Enter');await expect(page.locator('[data-chat-id]')).toHaveCount(0);await expect(page.locator('[data-intended-class-id]')).toHaveCount(0);
    if(destination.kind==='class')await expect(page.locator('[data-detail-class-id]')).toHaveAttribute('data-detail-class-id',destination.classId);else if(destination.kind==='plan')await expect(page.locator('[data-plan-id]')).toHaveAttribute('data-plan-id',destination.planId);else await expect(page.locator('main')).toHaveAttribute('data-sport-id',destination.sportId);
@@ -272,11 +272,11 @@ for(const width of [360,1280])test(`profile presentation convergence keyboard re
   await expect(page.getByRole('heading',{level:1})).toBeFocused();await page.getByRole('button',{name:content.ui.skipToContent}).focus();await page.keyboard.press('Enter');await expect(page.locator('main')).toBeFocused();
   await previewExitEvidence(page,`convergence-${surface}`,width);
   for(const b of await page.locator('button:not(.skip-link),a').all()){if(await b.isVisible()){const box=await b.boundingBox();expect(box!.height).toBeGreaterThanOrEqual(44);}}
-  expect(await page.locator('.app').evaluate(el=>getComputedStyle(el).transitionDuration)).toBe('0s');await expect(page.locator('footer')).toContainText(content.legal.professionalReview);await expect(page.locator('footer')).toContainText(content.legal.noOfficialStatus);
+  expect(await page.locator('.app').evaluate(el=>getComputedStyle(el).transitionDuration)).toBe('0s');await expect(page.locator('footer')).toHaveCount(0);
   if(surface==='notice'){await page.getByRole('button',{name:scenario.activationLabel!,exact:true}).focus();await page.keyboard.press('Enter');}
  }
  await page.getByRole('button',{name:content.ui.exitPreview,exact:true}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();await page.goto('/#/sports/calisthenics/solo/cal-first');await page.getByRole('button',{name:content.ui.start,exact:true}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();
- const exercise=content.exercises.find(e=>e.id==='cal-first-shoulders')!,image=content.images.find(i=>i.id===exercise.imageId)!;await expect(page.locator('.exercise-photo img')).toHaveAttribute('alt',image.alt);await expect(page.locator('main')).toContainText(content.legal.illustrativeTraining);await expect(page.locator('footer')).toContainText(content.legal.professionalReview);
+ const exercise=content.exercises.find(e=>e.id==='cal-first-shoulders')!,image=content.images.find(i=>i.id===exercise.imageId)!;await expect(page.locator('.exercise-photo img')).toHaveAttribute('alt',image.alt);await expect(page.locator('main')).toContainText(content.legal.illustrativeTraining);await expect(page.locator('footer')).toHaveCount(0);
  await page.getByRole('button',{name:content.ui.completeStep,exact:true}).focus();const measurement=await page.getByRole('button',{name:content.ui.completeStep,exact:true}).evaluate(el=>{const r=el.getBoundingClientRect();return {height:r.height,bottom:r.bottom,tabTop:document.querySelector('.bottom-tabs')!.getBoundingClientRect().top,outline:getComputedStyle(el).outlineStyle,width:document.documentElement.scrollWidth,viewport:innerWidth};});expect(measurement.height).toBeGreaterThanOrEqual(44);expect(measurement.bottom+4).toBeLessThan(measurement.tabTop);expect(measurement.outline).not.toBe('none');expect(measurement.width).toBeLessThanOrEqual(measurement.viewport);await page.screenshot({path:`/tmp/ba-batch3/t008-${width}-practice.png`,fullPage:true});await page.screenshot({path:`/tmp/ba-batch3/t008-${width}-practice-focus.png`});await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();console.log('T008 keyboard exercise focus, skip, disclosures, reduced motion',width,measurement);
 });
 
@@ -334,4 +334,65 @@ for(const width of [360,1280])test(`all mockup photo roles exact local delivery 
  const chat=content.chats.find(c=>c.id===notice.chatId)!;
  for(const answer of chat.answers){await page.getByRole('button',{name:answer.label,exact:true}).click();const dest=content.destinations.find(d=>d.id===answer.destinationId)!;await page.locator(`[data-destination-id="${dest.id}"]`).click();const p=dest.kind==='class'?classPhotos[dest.classId]:sportPhotos[dest.sportId].hero;await photo('.sport-hero img',p.src,p.alt);await shot(`preview-${dest.id}`);await page.evaluate(h=>location.hash=h,`#/chat/${chat.id}`);await expect(page.locator('[data-chat-id]')).toBeVisible();}
  expect(remote).toEqual([]);writeFileSync(`${folder}/${width}-served.json`,JSON.stringify(served,null,2));console.log('All 29 bundled photos decoded and byte-identical HTTP; all dry plan thumbnails, 36 active steps, exact class/sport roles; no remote requests',width);
+});
+
+// T001: the document, not a device-sized child, owns scrolling.
+async function shellCopy(page:Page) {
+ const visible=await page.locator('body').innerText();
+ const accessible=await page.locator('body').ariaSnapshot();
+ for(const text of [visible,accessible]){
+  expect(text).not.toMatch(/demo|demostración|inteligencia artificial/i);
+  for(const paragraph of ['Antes de entrenar de verdad, estas propuestas requieren revisión','Propuesta conceptual, no es un servicio oficial','Prácticas ilustrativas: esta demo'])expect(text).not.toContain(paragraph);
+ }
+ await expect(page.locator('footer')).toHaveCount(0);
+}
+for(const width of [360,1280])test(`compact pinned shell geometry and contextual back ${width}`,async({page})=>{
+ test.setTimeout(120000);mkdirSync('/tmp/ba-refresh-t001',{recursive:true});
+ await page.setViewportSize({width,height:900});await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');await choose(page);
+ const visit=async(hash:string)=>{await page.evaluate(h=>location.hash=h,hash);await page.waitForTimeout(80);};
+ const inspect=async(name:string)=>{
+  await shellCopy(page);
+  for(const benefit of await page.locator('[data-benefit-id]').all()){await expect(benefit.locator('[data-benefit-limitation]')).toHaveCount(1);await expect(benefit.locator('[data-benefit-limitation]')).toHaveText('Beneficio de ejemplo, sin convenio vigente. Sin canje.');await expect(benefit.locator('p')).toHaveCount(3);}
+  const maximum=await page.evaluate(()=>document.documentElement.scrollHeight-innerHeight);
+  const measurements=[];
+  for(const fraction of [0,.5,1]){
+   await page.evaluate(y=>window.scrollTo(0,y),Math.max(0,maximum)*fraction);
+   const m=await page.locator('.app-header').evaluate(el=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,y:scrollY,height:r.height,viewport:innerHeight,width:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth,nested:[...document.querySelectorAll('.app,main,[data-preview-content]')].some(e=>['auto','scroll','hidden'].includes(getComputedStyle(e).overflowY)),motion:getComputedStyle(el).transitionDuration};});
+   expect(m.top).toBeGreaterThanOrEqual(0);expect(m.bottom).toBeLessThan(m.viewport);expect(m.left).toBeGreaterThanOrEqual(0);expect(m.right).toBeLessThanOrEqual(width);expect(m.overflow).toBe(false);expect(m.nested).toBe(false);expect(m.motion).toBe('0s');
+   if(maximum*fraction>m.height)expect(m.top).toBe(0);
+   if(maximum>0&&fraction>0)expect(m.y).toBeGreaterThan(0);
+   measurements.push(m);
+  }
+  await page.screenshot({path:`/tmp/ba-refresh-t001/${width}-${name}-bottom.png`});
+  const back=page.locator('.breadcrumbs a');
+  if(await back.count()){
+   for(const position of ['initial','scrolled-focus']){
+    await page.evaluate(p=>scrollTo(0,p==='initial'?0:document.documentElement.scrollHeight),position);
+    await page.keyboard.press('Tab');await page.locator('h1').focus({preventScroll:true});await back.focus();
+    const b=await back.evaluate(el=>{const r=el.getBoundingClientRect(),h=document.querySelector('.app-header')!.getBoundingClientRect(),s=getComputedStyle(el);const extra=parseFloat(s.outlineWidth)+parseFloat(s.outlineOffset);return {top:r.top,bottom:r.bottom,height:r.height,width:r.width,divider:h.bottom,outline:extra,style:s.outlineStyle,hits:[[r.left+2,(r.top+r.bottom)/2],[r.right-2,(r.top+r.bottom)/2],[(r.left+r.right)/2,(r.top+r.bottom)/2]].map(([x,y])=>el.contains(document.elementFromPoint(x,y))) };});
+    expect(b.height).toBeGreaterThanOrEqual(44);expect(b.width).toBeGreaterThanOrEqual(44);expect(b.top-b.outline).toBeGreaterThan(b.divider);expect(b.style).not.toBe('none');expect(b.hits).toEqual([true,true,true]);console.log('T001/V3',width,name,position,b);
+   }
+   await page.screenshot({path:`/tmp/ba-refresh-t001/${width}-${name}-back-focus.png`});
+  }
+  await page.locator('h1').focus();await page.locator('h1').evaluate(el=>el.scrollIntoView({block:'start'}));
+  const focus=await page.locator('h1').evaluate(el=>({top:el.getBoundingClientRect().top,bottom:el.getBoundingClientRect().bottom,header:document.querySelector('.app-header')!.getBoundingClientRect().bottom,tabs:document.querySelector('.bottom-tabs')?.getBoundingClientRect().top??innerHeight}));
+  expect(focus.top).toBeGreaterThanOrEqual(focus.header);expect(focus.bottom).toBeLessThan(focus.tabs);
+  await page.getByRole('button',{name:content.ui.skipToContent}).focus();await expect(page.getByRole('button',{name:content.ui.skipToContent})).toBeInViewport();await page.keyboard.press('Enter');await expect(page.locator('main')).toBeFocused();
+  console.log('T001/V1,V2',width,name,{maximum,measurements,focus});
+ };
+ const routes=[['home','#/home'],['profile','#/profile'],['journey','#/profile/journey'],['challenges','#/profile/challenges'],['sports','#/sports'],['choice','#/sports/yoga'],['classes','#/classes'],['catalog','#/sports/yoga/classes'],['class','#/sports/yoga/classes/yoga-free'],['plan','#/sports/yoga/solo/yoga-first']] as const;
+ for(const [name,hash] of routes){await visit(hash);await inspect(`actual-${name}`);const back=page.locator('.breadcrumbs a');if(await back.count()){const target=await back.getAttribute('href');await back.focus();await page.keyboard.press('Enter');await expect(page).toHaveURL(new RegExp(target!.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'$'));}}
+ await visit('#/sports/calisthenics/solo/cal-first');await page.getByRole('button',{name:content.ui.start,exact:true}).click();await inspect('actual-practice');await expect(page.locator('main')).toContainText('No hagas ejercicios con dolor');
+ await visit('#/sports/swimming/solo/swim-dry-first');await expect(page.getByRole('checkbox')).toHaveCount(2);await expect(page.getByRole('button',{name:content.ui.startWater})).toBeDisabled();await inspect('actual-water-safety');
+ for(const scenario of content.previewScenarios){
+  await visit('#/profile');await page.getByRole('button',{name:scenario.title,exact:true}).click();await inspect(`preview-${scenario.id}`);
+  if(scenario.kind==='notice'){
+   await page.getByRole('button',{name:scenario.activationLabel!,exact:true}).click();await inspect(`chat-${scenario.id}`);
+   const chat=content.chats.find(c=>c.scenarioId===scenario.id)!;await page.getByRole('button',{name:chat.answers[0].label,exact:true}).click();await page.locator('[data-destination-id]').click();await inspect(`destination-${scenario.id}`);
+  }else{
+   for(const [name,hash] of [['profile','#/profile'],['journey','#/profile/journey'],['challenges','#/profile/challenges'],['sports','#/sports'],['choice','#/sports/yoga'],['classes','#/classes'],['catalog','#/sports/yoga/classes'],['class','#/sports/yoga/classes/yoga-free'],['plan',`#/sports/yoga/solo/yoga-${scenario.recommendationSituationId}`]] as const){await visit(hash);await inspect(`preview-${scenario.id}-${name}`);const back=page.locator('.breadcrumbs a');if(await back.count()){const target=await back.getAttribute('href');await back.click();expect(new URL(page.url()).hash).toBe(target);}}
+  }
+  await page.getByRole('button',{name:content.ui.exitPreview,exact:true}).click();
+ }
+ await page.evaluate(k=>localStorage.setItem(k,'{invalid'),key);await page.reload();await shellCopy(page);await page.screenshot({path:`/tmp/ba-refresh-t001/${width}-recovery.png`});
 });

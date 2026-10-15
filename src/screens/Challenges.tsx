@@ -21,7 +21,7 @@ export default function Challenges() {
     <h2>{ui.benefits}</h2>
     {journey.benefits.map(rule => <section className="support" key={rule.id} data-benefit-id={rule.id}>
       <h3>{rule.title}</h3><p>{rule.description}</p><p>{ui.points} · {journey.points} / {rule.pointsThreshold}</p>
-      <p>{rule.disclaimer}</p><p>{content.legal.noAgreement}</p><p>{content.legal.nonredeemable}</p>
+      <p data-benefit-limitation>{content.legal.noAgreement}</p>
     </section>)}
     <a className="button-link" href={routeHash({screen:'journey',profileId:route.profileId})}>{ui.journey}</a>
   </>;

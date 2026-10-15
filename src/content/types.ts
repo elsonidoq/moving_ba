@@ -15,7 +15,7 @@ export const uiKeys = [
   'canSwim', 'safePool', 'loading', 'retry', 'configurationError', 'skipToContent',
   'sessions', 'weekOf', 'thisWeek', 'thisMonth', 'earned', 'nextAchievement',
   'rest', 'pause', 'history', 'sessionAbandoned', 'notAvailable',
-  'sports', 'profileAccessibleName', 'editSituation', 'previewBadge', 'exitPreview',
+  'sports', 'profileAccessibleName', 'editSituation', 'previewBadge', 'exploreSituations', 'exitPreview',
   'intention', 'intentionNotice', 'intentionEmpty', 'imageUnavailable', 'scriptedDisclosure',
   'futureAI', 'cancel', 'resetFailed', 'chooseRequired', 'previous', 'reviewNext', 'locationIllustration',
 ] as const;

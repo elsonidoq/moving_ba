@@ -160,7 +160,7 @@ export function validateContent(input: unknown): Content {
     const scenario = reference(scenariosProfiles, profile.scenarioId, `profiles.${profile.id}.scenarioId`);
     if (scenario.profileId !== profile.id) fail(`scenarios.${scenario.id}`, 'el escenario corresponde a otro perfil.');
     const history = list(scenario.history, `scenarios.${scenario.id}.history`, false);
-    if ((profile.id === 'first' && history.length !== 0) || (profile.id !== 'first' && history.length === 0)) fail(`scenarios.${scenario.id}`, 'la primera vez requiere historial vacío; los otros perfiles requieren antecedentes de demostración.');
+    if ((profile.id === 'first' && history.length !== 0) || (profile.id !== 'first' && history.length === 0)) fail(`scenarios.${scenario.id}`, 'la primera vez requiere historial vacío; los otros perfiles requieren antecedentes de ejemplo.');
     const dates: string[] = [];
     if (history.length) for (const item of entities(history, `scenarios.${scenario.id}.history`)) {
       const path = `scenarios.${scenario.id}.history.${item.id}`;

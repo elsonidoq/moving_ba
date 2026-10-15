@@ -45,18 +45,18 @@
     "journey": "Mi camino",
     "challenges": "Desafíos y logros",
     "historyEmpty": "Tu camino empieza con una primera práctica posible. Todavía no hay sesiones completadas.",
-    "seedOrigin": "Datos de demostración",
+    "seedOrigin": "Antecedentes de ejemplo",
     "simulatedOrigin": "Práctica simulada por vos",
     "points": "Puntos ilustrativos",
     "activeWeeks": "Semanas con movimiento",
     "weeklyGoal": "Tu objetivo de esta semana",
     "badges": "Logros de tu recorrido",
     "benefits": "Beneficios ilustrativos",
-    "reset": "Restablecer demostración",
-    "resetConfirm": "Se restablecerán los tres perfiles de esta demostración. Tus otros datos del navegador no cambian.",
+    "reset": "Restablecer mis datos",
+    "resetConfirm": "Se borrarán tu preferencia, recorrido e intereses guardados en esta app. Tus otros datos del navegador no cambian.",
     "storageWarning": "No pudimos guardar en este navegador. Podés seguir en esta pestaña, pero al recargar se perderán los cambios.",
-    "storageReset": "Restablecer sólo esta demo",
-    "storageRecovery": "No pudimos leer los datos de esta demostración. Restablecé sólo la demo para seguir.",
+    "storageReset": "Restablecer mis datos locales",
+    "storageRecovery": "No pudimos leer tus datos guardados. Restablecé los datos de esta app para seguir.",
     "canSwim": "Confirmo que ya sé nadar con autonomía.",
     "safePool": "Confirmo que estoy en una pileta habilitada, supervisada por guardavidas y que respeto las reglas del lugar.",
     "loading": "Estamos preparando tu próximo paso…",
@@ -79,28 +79,29 @@
     "sports": "Deportes",
     "profileAccessibleName": "Abrir mi perfil",
     "editSituation": "Editar mi situación",
-    "previewBadge": "Vista simulada de la misma persona",
+    "previewBadge": "Escenario simulado",
+    "exploreSituations": "Explorar situaciones",
     "exitPreview": "Volver a hoy",
     "intention": "Voy a ir",
     "intentionNotice": "Intención simulada: no es reserva ni asistencia.",
     "intentionEmpty": "Todavía no elegiste una próxima clase.",
     "imageUnavailable": "Imagen del ejercicio no disponible. Seguí las instrucciones escritas.",
-    "scriptedDisclosure": "Demostración con respuestas predefinidas, sin inteligencia artificial.",
+    "scriptedDisclosure": "Elegí una respuesta predefinida.",
     "futureAI": "La inteligencia artificial es una posibilidad futura, no una función de esta demo.",
     "cancel": "Cancelar",
     "resetFailed": "El borrado permanente no se confirmó. Los datos anteriores pueden volver al recargar.",
     "chooseRequired": "Elegí una situación para continuar.",
     "previous": "Anterior",
     "reviewNext": "Revisar siguiente",
-    "locationIllustration": "Ubicación y cercanía ilustrativas de la demo; no usamos tu ubicación."
+    "locationIllustration": "Ubicación de referencia; no usamos tu ubicación."
   },
   "legal": {
-    "illustrativeTraining": "Prácticas ilustrativas: esta demo no verifica actividad física ni da indicaciones personales. No hagas ejercicios con dolor.",
+    "illustrativeTraining": "No hagas ejercicios con dolor. Adaptá el movimiento a tus posibilidades y descansá cuando lo necesites. Consultá a una persona profesional para recibir orientación personal.",
     "professionalReview": "Antes de entrenar de verdad, estas propuestas requieren revisión de una persona profesional calificada y adaptación a tus necesidades.",
-    "fictionalClasses": "Todas las clases, docentes, lugares, horarios, precios y contactos son ficticios. No hay inscripción, cupos ni reservas reales.",
+    "fictionalClasses": "Clases de ejemplo · no hay inscripción ni reservas.",
     "noOfficialStatus": "Propuesta conceptual, no es un servicio oficial de GCBA ni tiene patrocinio confirmado.",
     "nonredeemable": "Los puntos y beneficios son ilustrativos, no se pueden canjear ni comprar.",
-    "noAgreement": "Beneficio de demostración, sin convenio vigente. No es una oferta real.",
+    "noAgreement": "Beneficio de ejemplo, sin convenio vigente. Sin canje.",
     "locationNotice": "Las zonas son referencias de Buenos Aires, no ubicaciones verificadas ni recomendaciones de lugares."
   },
   "profiles": [
@@ -1012,7 +1013,7 @@
       ],
       "description": "Exploración de barras bajas y sentadillas asistidas. No se requieren dominadas. Clase y disponibilidad ficticias: no es una oferta real.",
       "receiver": "A confirmar",
-      "contactCopy": "Contacto ficticio de demostración. No se envían mensajes ni solicitudes.",
+      "contactCopy": "Contacto de ejemplo. No se envían mensajes ni solicitudes.",
       "price": {
         "kind": "free",
         "amount": 0,
@@ -1035,7 +1036,7 @@
       ],
       "description": "Revisión ilustrativa de remos y control escapular con pausas. Clase y disponibilidad ficticias: no es una oferta real.",
       "receiver": "A confirmar",
-      "contactCopy": "Contacto ficticio de demostración. No se envían mensajes ni solicitudes.",
+      "contactCopy": "Contacto de ejemplo. No se envían mensajes ni solicitudes.",
       "price": {
         "kind": "paid",
         "amount": 4500,
@@ -1058,7 +1059,7 @@
       ],
       "description": "Respiración y movilidad con alternativas sentadas, sin exigir flexibilidad. Clase y disponibilidad ficticias: no es una oferta real.",
       "receiver": "A confirmar",
-      "contactCopy": "Contacto ficticio de demostración. No se envían mensajes ni solicitudes.",
+      "contactCopy": "Contacto de ejemplo. No se envían mensajes ni solicitudes.",
       "price": {
         "kind": "free",
         "amount": 0,
@@ -1081,7 +1082,7 @@
       ],
       "description": "Transiciones lentas y equilibrio con pared, con espacio para recuperar. Clase y disponibilidad ficticias: no es una oferta real.",
       "receiver": "A confirmar",
-      "contactCopy": "Contacto ficticio de demostración. No se envían mensajes ni solicitudes.",
+      "contactCopy": "Contacto de ejemplo. No se envían mensajes ni solicitudes.",
       "price": {
         "kind": "paid",
         "amount": 5000,
@@ -1104,7 +1105,7 @@
       ],
       "description": "Ejemplo de acompañamiento para aprender; no habilita una práctica autónoma. Clase y disponibilidad ficticias: no es una oferta real.",
       "receiver": "A confirmar",
-      "contactCopy": "Contacto ficticio de demostración. No se envían mensajes ni solicitudes.",
+      "contactCopy": "Contacto de ejemplo. No se envían mensajes ni solicitudes.",
       "price": {
         "kind": "free",
         "amount": 0,
@@ -1127,7 +1128,7 @@
       ],
       "description": "Revisión ilustrativa de coordinación y descansos en pileta supervisada. Clase y disponibilidad ficticias: no es una oferta real.",
       "receiver": "A confirmar",
-      "contactCopy": "Contacto ficticio de demostración. No se envían mensajes ni solicitudes.",
+      "contactCopy": "Contacto de ejemplo. No se envían mensajes ni solicitudes.",
       "price": {
         "kind": "paid",
         "amount": 6500,
@@ -1852,7 +1853,7 @@
         }
       ],
       "chatId": "inactive-chat",
-      "notice": "Esta es una notificación simulada. Si querés, explorá una alternativa sin compromiso.",
+      "notice": "Situación elegida por vos. Explorá una alternativa sin compromiso.",
       "activationLabel": "Ver opciones"
     },
     {
@@ -1878,7 +1879,7 @@
         }
       ],
       "chatId": "missed-class-chat",
-      "notice": "Esta es una notificación simulada. Si querés, explorá una alternativa sin compromiso.",
+      "notice": "Situación elegida por vos. Explorá una alternativa sin compromiso.",
       "activationLabel": "Ver opciones"
     }
   ],
@@ -1948,7 +1949,7 @@
       "id": "missed-class-chat",
       "scenarioId": "missed-class",
       "introduction": "¿Qué alternativa te gustaría explorar?",
-      "disclosure": "Demostración con respuestas predefinidas, sin inteligencia artificial. La inteligencia artificial es una posibilidad futura, no una función de esta demo.",
+      "disclosure": "Elegí una respuesta predefinida. La inteligencia artificial es una posibilidad futura, no una función de esta demo.",
       "answers": [
         {
           "id": "interruption",
@@ -1986,7 +1987,7 @@
       "id": "inactive-chat",
       "scenarioId": "inactive",
       "introduction": "¿Qué alternativa te gustaría explorar?",
-      "disclosure": "Demostración con respuestas predefinidas, sin inteligencia artificial. La inteligencia artificial es una posibilidad futura, no una función de esta demo.",
+      "disclosure": "Elegí una respuesta predefinida. La inteligencia artificial es una posibilidad futura, no una función de esta demo.",
       "answers": [
         {
           "id": "class",
