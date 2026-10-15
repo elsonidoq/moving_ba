@@ -58,6 +58,8 @@ export function guardHash(hash: string, content: Content, runtime?: { attempt: A
   if ((parts[1] === 'journey' || parts[1] === 'challenges') && parts.length === 2) return {screen:parts[1],profileId};
   const sportId = content.sports.find(s => s.id === parts[1])?.id;
   if (!sportId) return { screen: 'home', profileId };
+  // Legacy and normalized sport URLs must obey the same preview boundary as canonical routes.
+  if (scenario && (parts[2] === 'session' || parts[2] === 'success')) return {screen:'home',profileId};
   if (parts[2] === 'session') {
     const a = runtime?.attempt;
     if (a?.status === 'active' && a.profileId === profileId && a.sportId === sportId && a.planId === parts[3] && a.attemptId === parts[4] && parts.length === 5) return { screen: 'session', profileId, sportId, planId: a.planId, attemptId: a.attemptId };

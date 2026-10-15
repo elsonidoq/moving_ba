@@ -265,3 +265,18 @@ test('actual command custody all four explicit scenarios use projection dates an
  }
  expect(guardHash('#/notice/missed-class',content,owner.getState()).screen).toBe('profile');
 });
+
+test('actual command custody preview route isolation rejects genuine actual completion through canonical and legacy hashes',()=>{
+ const id='941932b5-dcf7-4ec1-bb02-3b32e318c682';const s=storage();const owner=createCommandOwner(content,s.port,'',()=>now,()=>id);
+ owner.dispatch({type:'chooseSituation',situationId:'first'});owner.dispatch({type:'start',planId:'cal-first'});
+ for(const step of content.plans.find(p=>p.id==='cal-first')!.steps)expect(owner.dispatch({type:'accept',attemptId:id,stepId:step.id})).toBe(true);
+ const canonical=`#/success/${encodeURIComponent(sourceKey('actual','completion',id))}`;const legacy=`#/first/calisthenics/success/${id}`;
+ const bytes=s.values.get(storageKey);const envelope=owner.getState().envelope;expect(envelope.journey[sourceKey('actual','completion',id)].attemptId).toBe(id);
+ for(const hash of [canonical,legacy]){owner.dispatch({type:'navigate',hash});expect(owner.getState().route).toMatchObject({screen:'success',attemptId:id});}
+ owner.dispatch({type:'enterScenario',scenarioId:'sustained'});
+ for(const hash of [legacy,canonical,`#/session/${id}`,`#/first/calisthenics/session/cal-first/${id}`,`#/sports/calisthenics/success/${id}`]){
+  owner.dispatch({type:'navigate',hash});const state=owner.getState();console.log('genuine completion preview route',hash,JSON.stringify({route:state.route,mode:state.mode,unchanged:s.values.get(storageKey)===bytes}));
+  expect(state.route).toEqual({screen:'home',profileId:'regular'});expect(state.mode).toEqual({kind:'preview',scenarioId:'sustained'});expect(state.envelope).toBe(envelope);expect(s.values.get(storageKey)).toBe(bytes);expect(owner.dispatch({type:'start',planId:'cal-regular'})).toBe(false);
+ }
+ owner.dispatch({type:'exitPreview'});owner.dispatch({type:'navigate',hash:canonical});expect(owner.getState().route).toMatchObject({screen:'success',attemptId:id});expect(s.values.get(storageKey)).toBe(bytes);
+});
