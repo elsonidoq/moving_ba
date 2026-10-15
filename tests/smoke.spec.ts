@@ -37,6 +37,17 @@ for(const choice of content.onboarding.choices) test(`one-person onboarding prof
  await expect(page.locator('.hero')).toContainText(profile.hero);await homePhoto(page);expect(JSON.parse((await raw(page))!).preference).toEqual({situationId:choice.id,confirmed:true});
  await page.reload();await expect(page.locator('.hero')).toContainText(profile.hero);await homePhoto(page);await expect(page.getByRole('button',{name:content.onboarding.startLabel,exact:true})).toHaveCount(0);await expect(page.getByRole('radio')).toHaveCount(0);const saved=await raw(page);await page.goto('/#/regular/home');await expect(page.locator('.hero')).toContainText(profile.hero);expect(await raw(page)).toBe(saved);console.log('choice',choice.id,'route',page.url(),'bytes',await raw(page));
 });
+for(const width of [360,1280]) test(`compact home card scrolls to activities at ${width}px`,async({page})=>{
+ await page.setViewportSize({width,height:700});await page.goto('/');await choose(page);
+ const card=page.locator('.home-hero');const target=page.locator('#activities');const before=await raw(page);
+ await expect(card).toContainText(content.profiles[0].hero);await expect(card).not.toContainText(content.profiles[0].nextPrompt);
+ expect((await card.boundingBox())!.height).toBeLessThan(180);
+ await card.focus();await expect(card).toBeFocused();await page.keyboard.press('Enter');
+ await expect(target).toBeFocused();expect(await target.evaluate(el=>el.getBoundingClientRect().top)).toBeGreaterThanOrEqual(0);
+ expect(await target.evaluate(el=>el.getBoundingClientRect().top)).toBeLessThan(200);
+ expect(await raw(page)).toBe(before);await expect(page).toHaveURL(/#\/home$/);
+ await card.click();await expect(target).toBeFocused();
+});
 test('one-person onboarding profile legacy collision choose reload edit preserves canonical history and lifetime',async({page})=>{
  const source=legacy();await page.addInitScript(({key,source})=>{if(!sessionStorage.getItem('seeded')){localStorage.setItem(key,JSON.stringify(source));sessionStorage.setItem('seeded','yes');}},{key,source});
  await page.goto('/#/regular/home');await expect(page.getByRole('button',{name:content.onboarding.startLabel,exact:true})).toBeVisible();await expect(page.getByRole('radio')).toHaveCount(0);expect(await raw(page)).toBe(JSON.stringify(source));
