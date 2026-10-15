@@ -146,6 +146,10 @@ export function validateContent(input: unknown): Content {
       integer(item[numeric], collection === 'benefits' ? 0 : 1, `${path}.${numeric}`);
       if (collection === 'benefits') {
         text(item.disclaimer, `${path}.disclaimer`);
+        const photo = object(item.photo, `${path}.photo`);
+        const photoPath = text(photo.path, `${path}.photo.path`);
+        text(photo.alt, `${path}.photo.alt`);
+        if (!/^\/assets\/photos\/[a-z0-9_-]+\.jpg$/.test(photoPath)) fail(path, 'la foto debe ser un JPEG local.');
         if (item.redeemable !== false) fail(path, 'los beneficios no pueden ser canjeables.');
       } else {
         choice(item.metric, ['sessions', 'activeWeeks'], `${path}.metric`);

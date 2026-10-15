@@ -90,8 +90,10 @@ focus and bottom Inicio/Deportes/Clases (hidden on onboarding/recovery/notice/ch
 The navigational header stays pinned during document scrolling. Positive breadcrumb
 spacing and scroll/focus offsets keep the back control and outline below its divider.
 There is no repeated disclaimer header/footer; actionable safety remains at practice
-decisions. Every preview surface uses the same shell badge and normal-flow bottom exit after
-content, with tab clearance and visible keyboard focus. Durable controls are disabled
+decisions. Preview screens retain a bottom exit and guarded transient custody; the
+mockup-inspired notice is an immersive wallpaper/clock/card scene without the shell
+header or top badge, and its card routes to the corresponding structured chat.
+Other preview surfaces use the compact context badge. Keyboard focus remains visible. Durable controls are disabled
 and independently guarded. Rounded yellow mobile-first pages use ordinary document
 scroll, Spanish labels/alts/status/errors, 44px targets and reduced-motion rules.
 Representative 360/1280 keyboard/visual checks are not universal accessibility proof.
@@ -109,7 +111,10 @@ general environment art and are not used on photo-required surfaces. The
 [provenance record](../public/assets/photos/provenance.json) retains owner-satisfied
 permission, original Pexels/license metadata for the mockup set, byte hashes and
 visual correspondence; its separate `welcomePhoto` entry records the owner-approved
-GetYourGuide image source and hash without implying a Pexels license.
+GetYourGuide image source and hash without implying a Pexels license. Two separate
+`benefitPhotos` records cover the owner-permitted Turismo BA Jardín Japonés photo and
+a Pexels coffee JPEG; a third card reuses the original yoga-class photo. Benefits
+show actual local point progress and photos, not a redemption flow.
 Home uses the documented Buenos Aires park photo (Pexels 31414914) with a separate
 readable yellow copy panel, including saved-user and preview homes. Failed Home photos
 show a Spanish unavailable status without remote fallback.

@@ -23,7 +23,7 @@ HTML. IDs match `[a-z][a-z0-9-]*`, unique within collection, never labels/positi
 | exercises | id,sportId,title,quantity,technique,medium (dry-land/water),imageAsset (empty),imageAlt,imageId (null or image ID),imageStatus (unavailable/verified) |
 | plans | id,sportId,profileId,level,name,description,duration,durationOptions,environment,prerequisites,safetyCopy,medium,ordered steps `{id,exerciseId}` |
 | classes | id,sportId,title,schedule,venue,locality,level,requirements,description,receiver,contactCopy,price `{kind:free/paid,amount,currency:ARS}`,fictional:true |
-| rules | pointsPerCompletion nonnegative integer; challenges `{id,title,description,metric:sessions/activeWeeks,period:week/month,target}`; badges `{id,title,description,metric,threshold}`; benefits `{id,title,description,disclaimer,pointsThreshold,redeemable:false}`; targets/thresholds positive except pointsThreshold nonnegative |
+| rules | pointsPerCompletion nonnegative integer; challenges `{id,title,description,metric:sessions/activeWeeks,period:week/month,target}`; badges `{id,title,description,metric,threshold}`; benefits `{id,title,description,photo:{path,alt},disclaimer,pointsThreshold,redeemable:false}`; targets/thresholds positive except pointsThreshold nonnegative |
 | scenarios | Retained legacy content fixtures: referenceDate, defaultProfileId:first, profiles `{id,profileId,history:[{id,sportId,planId,activityDate}]}`; not actual initialization/reset data |
 | previewScenarios | Exactly sustained/return/inactive/missed-class: id,title,disclosure,guidance,referenceDate,recommendationSituationId,kind (journey/notice),history; notice additionally chatId,notice,activationLabel |
 | chats | Exactly missed-class-chat/inactive-chat: id,scenarioId,introduction,disclosure,answers `{id,label,response,destinationId}` |
@@ -35,8 +35,7 @@ all nine category/sport dry plans and three swimming-water variants. Default and
 chat plans must be safe dry plans in the correct category/sport. Water exercises
 only enter swimming-water plans; dry warmups may enter water plans. Both runtime
 swimming affirmations remain mandatory regardless of copy. Each sport needs free
-(amount 0) and paid (finite positive amount) ARS fictional examples. Receiver/contact
-must stay explicitly fictional or `A confirmar`, never booking/contact integration.
+(amount 0) and paid (finite positive amount) ARS fictional examples. Receiver stays `A confirmar`; saved interest does not send a contact or make a booking.
 
 Plan `durationOptions` is a display-only ordered numeric list: exactly `[15,30]` for
 yoga/calisthenics, `[45,60]` for swimming water and `[15]` for separate dry preparation.
@@ -88,6 +87,8 @@ subjects. Do not infer correspondence from filenames/IDs: visible text matches a
 posture/equipment and stable IDs remain unchanged.
 
 Welcome, Home, notice, sport-card/hero and class photos are deliberately not JSON fields.
+Benefit-card photos use local JPEG paths and Spanish alt in `rules.benefits`;
+validation rejects remote paths and the page stays readable if a photo fails.
 `src/content/mockupPhotos.ts` retains the original 14 mockup-role assets and separately maps
 an owner-permitted Obelisk welcome JPEG. Home still uses the documented Buenos Aires
 city_park photo (31414914), with readable yellow text and local unavailable feedback.
@@ -100,8 +101,12 @@ permission for the complete set, original Pexels URLs, exact license label
 `Pexels License (consultar términos)`, acquisition/bytes/hashes/decoding/serving and
 visual correspondence observations. Its separate `welcomePhoto` entry records the
 GetYourGuide source, owner-confirmed public-use permission and exact bytes; the Pexels
-license label applies only to the original mockup set. Consume that evidence; no
-reacquisition or renewed rights gate is required for unchanged assets.
+license label applies only to the original mockup set. Separate `benefitPhotos`
+records the owner-permitted Turismo BA Jardín Japonés photo and the Pexels coffee
+photo, including sources, bytes and hashes. The yoga benefit reuses the approved
+class photo. Benefit cards show actual in-app point progress, not issued tickets;
+canjes remain unavailable. Consume this evidence; no reacquisition or renewed
+rights gate is required for unchanged assets.
 
 A verified assignment needs canonical allowlisted local path, exact subject,
 licenseStatus:verified, matching evidence and exercise imageStatus:verified. Spanish

@@ -373,7 +373,8 @@ for(const width of [360,1280])test(`compact pinned shell geometry and contextual
  const visit=async(hash:string)=>{await page.evaluate(h=>location.hash=h,hash);await page.waitForTimeout(80);};
  const inspect=async(name:string)=>{
   await shellCopy(page);
-  for(const benefit of await page.locator('[data-benefit-id]').all()){await expect(benefit.locator('[data-benefit-limitation]')).toHaveCount(1);await expect(benefit.locator('[data-benefit-limitation]')).toHaveText('Beneficio de ejemplo, sin convenio vigente. Sin canje.');await expect(benefit.locator('p')).toHaveCount(3);}
+  for(const benefit of await page.locator('[data-benefit-id]').all()){await expect(benefit.locator('img')).toHaveCount(1);await expect(benefit.locator('[data-benefit-limitation]')).toHaveCount(0);await expect(benefit.locator('progress')).toHaveCount(1);}
+  if(await page.locator('[data-benefit-id]').count())await expect(page.locator('[data-benefit-limitation]')).toHaveText(content.legal.nonredeemable);
   const maximum=await page.evaluate(()=>document.documentElement.scrollHeight-innerHeight);
   const measurements=[];
   for(const fraction of [0,.5,1]){
@@ -471,6 +472,23 @@ for(const width of [360,1280])test(`duration local defaults focus and visual ${w
  const geometry=await selector.evaluate(el=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,height:r.height,header:document.querySelector('.app-header')!.getBoundingClientRect().bottom,tabs:document.querySelector('.bottom-tabs')!.getBoundingClientRect().top,outline:getComputedStyle(el).outlineStyle,overflow:document.documentElement.scrollWidth>innerWidth};});expect(geometry.height).toBeGreaterThanOrEqual(44);expect(geometry.top).toBeGreaterThan(geometry.header);expect(geometry.bottom+7).toBeLessThan(geometry.tabs);expect(geometry.outline).not.toBe('none');expect(geometry.overflow).toBe(false);await page.screenshot({path:`${folder}/${width}-selector-focus.png`});expect(await raw(page)).toBe(bytes);
  await page.goto('/#/profile');await page.getByRole('button',{name:'Entrenamiento sostenido',exact:true}).click();await page.goto('/#/sports/yoga/solo/yoga-regular');await selector.selectOption('30');await expect(page.getByRole('button',{name:content.ui.start,exact:true})).toBeDisabled();expect(await raw(page)).toBe(bytes);await page.screenshot({path:`${folder}/${width}-preview-selector.png`,fullPage:true});await page.getByRole('button',{name:content.ui.exitPreview,exact:true}).click();expect(await raw(page)).toBe(bytes);
  await page.goto('/#/profile');page.once('dialog',d=>d.accept());await page.getByRole('button',{name:content.ui.reset,exact:true}).click();await choose(page);await page.goto('/#/sports/yoga/solo/yoga-first');await expect(selector).toHaveValue('15');console.log('T005/V1,V2 leave/change/reload/reset defaults, actual/preview exact bytes, no credit, selector keyboard geometry',width,geometry,bytes);
+});
+
+for(const width of [360,1280])test(`photo-led challenges and honest earned points ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:900});await page.goto('/');await choose(page);
+ await page.goto('/#/profile/challenges');await expect(page.locator('[data-stat="points"]')).toHaveText('0');
+ await expect(page.locator('[data-badge-id]')).toHaveCount(2);await expect(page.locator('[data-badge-id] .badge-icon svg')).toHaveCount(2);
+ await expect(page.locator('[data-benefit-id]')).toHaveCount(3);
+ await expect(page.locator('[data-benefit-limitation]')).toHaveCount(1);
+ await expect(page.locator('[data-benefit-limitation]')).toHaveText(content.legal.nonredeemable);
+ for(const rule of content.rules.benefits){const card=page.locator(`[data-benefit-id="${rule.id}"]`);const image=card.locator('img');await expect(card).toContainText(rule.title);await expect(image).toHaveAttribute('src',rule.photo.path);await expect(image).toHaveAttribute('alt',rule.photo.alt);await image.evaluate((img:HTMLImageElement)=>img.decode());await expect(card.locator('progress')).toHaveAttribute('value','0');}
+ await expect(page.locator('main')).not.toContainText(/demo|ilustrativ|ejemplo|fictici|simulad/i);
+ await page.screenshot({path:`/tmp/ba-rewards-${width}-empty.png`,fullPage:true});
+ const bytes=await raw(page);await page.goto('/#/profile');await page.getByRole('button',{name:'Entrenamiento sostenido',exact:true}).click();await page.goto('/#/profile/challenges');
+ const scenario=content.previewScenarios.find(s=>s.id==='sustained')!;const points=scenario.history.length*content.rules.pointsPerCompletion;
+ await expect(page.locator('[data-stat="points"]')).toHaveText(String(points));await expect(page.locator('[data-benefit-id="coffee"] .benefit-points')).toHaveText('Meta alcanzada');
+ await expect(page.locator('main')).not.toContainText(/demo|ilustrativ|ejemplo|fictici|simulad/i);
+ await page.screenshot({path:`/tmp/ba-rewards-${width}-progress.png`,fullPage:true});expect(await raw(page)).toBe(bytes);
 });
 
 for(const width of [360,1280])for(const scenario of content.previewScenarios.filter(s=>s.kind==='notice'))test(`notice wallpaper ${scenario.id} ${width} opens matching structured chat`,async({page})=>{

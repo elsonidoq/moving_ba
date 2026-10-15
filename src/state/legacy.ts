@@ -21,7 +21,7 @@ const date = (v: unknown): v is string => text(v) && /^\d{4}-\d{2}-\d{2}$/.test(
 const timestamp = (v: unknown) => text(v) && Number.isFinite(Date.parse(v)) && new Date(v).toISOString() === v;
 /** Retired plan/class IDs are valid history; unknown profile/sport identities are not. */
 export function validateLegacyEnvelope(value: unknown): LegacyEnvelope {
-  const fail = (): never => { throw new Error('No pudimos validar los datos guardados. Confirmá el reinicio de esta demo para continuar.'); };
+  const fail = (): never => { throw new Error('No pudimos validar los datos guardados. Confirmá el reinicio de tus datos para continuar.'); };
   if (!object(value) || value.schemaVersion !== 1 || !profileIds.includes(value.selectedProfileId as ProfileId) || !date(value.scenarioReferenceDate) || !object(value.profiles)) return fail();
   if (Object.keys(value).some(k => !['schemaVersion', 'selectedProfileId', 'scenarioReferenceDate', 'profiles'].includes(k)) || Object.keys(value.profiles).length !== profileIds.length) return fail();
   for (const id of profileIds) {

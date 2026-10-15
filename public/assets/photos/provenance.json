@@ -15,6 +15,24 @@
     "sha256": "f3c35a1561f07ed550991419b4feadaedb7fd1694d8dc498c08d830f423fccd2",
     "dimensions": { "width": 1280, "height": 1280 }
   },
+  "benefitPhotos": [
+    {
+      "path": "/assets/photos/benefit_coffee.jpg",
+      "source": "https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?w=1000",
+      "license": "Pexels License (consult terms)",
+      "byteLength": 75644,
+      "sha256": "223605ea58d7a623a0b5244f562c053121335d4adbea1e35e31fcf82547678f2",
+      "dimensions": { "width": 1000, "height": 1498 }
+    },
+    {
+      "path": "/assets/photos/benefit_jardin_japones.jpg",
+      "source": "https://turismo.buenosaires.gob.ar/sites/turismo/files/jardin-japones-gente-verano-1500x610.jpg",
+      "permission": "Owner confirmed permission to publicly serve this exact photo in the current Pi session; no third-party license terms inferred",
+      "byteLength": 313343,
+      "sha256": "5d4034f530566ea7690af7f34a33e9f9907b412a4d31405700e125394fe71582",
+      "dimensions": { "width": 1500, "height": 610 }
+    }
+  ],
   "assets": [
     {
       "manifestKey": "city_hero",

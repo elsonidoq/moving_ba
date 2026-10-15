@@ -71,6 +71,8 @@ test.describe('content validation', () => {
     ['invalid metric', c => { c.rules.challenges[0].metric = 'points' as never; }, 'metric'],
     ['invalid period', c => { c.rules.challenges[0].period = 'year' as never; }, 'period'],
     ['redeemable benefit', c => { c.rules.benefits[0].redeemable = true as never; }, 'canjeables'],
+    ['remote benefit photo', c => { c.rules.benefits[0].photo.path = 'https://example.com/photo.jpg'; }, 'JPEG local'],
+    ['missing benefit alt', c => { c.rules.benefits[0].photo.alt = ''; }, 'photo.alt'],
     ['free amount positive', c => { c.classes[0].price.amount = 100; }, 'price.amount'],
     ['paid amount zero', c => { c.classes[1].price.amount = 0; }, 'price.amount'],
     ['paid amount nonfinite', c => { c.classes[1].price.amount = Infinity; }, 'price.amount'],
@@ -241,6 +243,17 @@ test('all 29 mockup JPEG keys have intended exact local uses and factual provena
  expect(welcomePhoto.alt).toBe(welcome.alt);expect(welcome.path).toBe(welcomePhoto.src);
  expect(welcomeBytes.length).toBe(welcome.byteLength);
  expect(createHash('sha256').update(welcomeBytes).digest('hex')).toBe(welcome.sha256);
+ expect(content.rules.benefits).toHaveLength(3);
+ for(const benefit of content.rules.benefits){
+  expect(benefit.redeemable).toBe(false);
+  if(!benefit.photo.path.includes('benefit_'))continue; // Existing yoga class photo is already in the 29-photo set.
+  const record=provenance.benefitPhotos.find((p:any)=>p.path===benefit.photo.path);
+  expect(record?.source).toMatch(/^https:\/\//);
+  const bytes=readFileSync('public'+benefit.photo.path);
+  expect(bytes.subarray(0,3).toString('hex')).toBe('ffd8ff');
+  expect(bytes.length).toBe(record.byteLength);
+  expect(createHash('sha256').update(bytes).digest('hex')).toBe(record.sha256);
+ }
  expect(readFileSync('src/screens/Plan.tsx','utf8')).toContain('step-photo');
  expect(content.images.every(i=>i.subject.kind==='exercise')).toBe(true);
 });

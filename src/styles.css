@@ -248,3 +248,37 @@ button.chat-option[aria-pressed="true"] { border-color: #a88d00; background: #ff
 .duration-estimate select { background: #fff9dc; border-color: #a58e27; font-weight: 750; }
 .duration-estimate p { margin: 0; font-weight: 750; }
 [data-water-plan-id] > .duration-estimate { margin: 16px 0; padding: 14px; border-radius: 13px; background: white; border: 1px solid var(--line); }
+
+/* Rewards share the mockup's medals and the city's photo-led visual vocabulary. */
+.rewards-page h1 { margin-bottom: 18px; }
+.rewards-hero { display: flex; align-items: center; gap: 20px; padding: 22px; border-radius: 22px; background: linear-gradient(120deg, #ffd500, #fff1a0); color: #19272e; }
+.rewards-hero-icon { display: grid; place-items: center; flex: none; width: 72px; height: 72px; border-radius: 20px; background: #fff9d3; font-size: 43px; }
+.rewards-hero span:not(.rewards-hero-icon) { display: block; font-size: 14px; font-weight: 750; }
+.rewards-hero strong { display: block; font-size: 48px; line-height: 1.1; letter-spacing: -.055em; }
+.rewards-hero p { margin: 3px 0 0; font-size: 13px; }
+.challenge-list, .badge-list, .benefit-list { display: grid; gap: 12px; }
+.challenge-tile, .badge-tile { display: flex; align-items: flex-start; gap: 13px; border: 1px solid var(--line); border-radius: 17px; padding: 15px; }
+.challenge-icon, .badge-icon { display: grid; place-items: center; flex: none; width: 48px; height: 48px; border-radius: 13px; background: #fff2b1; font-size: 26px; }
+.badge-icon { background: #eaf4ff; font-size: 29px; }
+.badge-tile[data-earned="false"] .badge-icon { filter: grayscale(1); opacity: .72; }
+.challenge-tile > div, .badge-tile > div { flex: 1; min-width: 0; }
+.challenge-tile h3, .badge-tile h3, .benefit-card h3 { margin: 1px 0 5px; font-size: 17px; }
+.challenge-tile p, .badge-tile p, .benefit-card p { margin: 0 0 7px; font-size: 13px; color: #526368; }
+.challenge-tile .challenge-caption, .badge-tile .badge-progress { font-size: 12px; font-weight: 700; color: #355660; }
+.challenge-meter { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 800; }
+.challenge-meter progress { flex: 1; min-width: 0; }
+.rewards-page progress { height: 9px; accent-color: #d4b000; }
+.benefit-card { overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: #fff; }
+.benefit-card > img { display: block; width: 100%; height: 185px; object-fit: cover; background: #edf2ec; }
+.benefit-card > img[src$="benefit_coffee.jpg"] { object-position: center 57%; }
+.benefit-card > img[src$="benefit_jardin_japones.jpg"] { object-position: center 48%; }
+.benefit-card > img[hidden] { display: none; }
+.benefit-copy { padding: 15px 17px 17px; }
+.benefit-points { display: inline-block; border-radius: 99px; background: #fff2ad; color: #463c12; padding: 7px 12px; font-size: 12px; font-weight: 800; }
+.benefit-card progress { display: block; width: 100%; margin-top: 12px; }
+.benefit-availability { margin: 14px 0 21px; font-size: 12px; color: #526368; }
+@media (min-width: 520px) {
+  .benefit-card { display: grid; grid-template-columns: 42% 1fr; min-height: 170px; }
+  .benefit-card > img { height: 170px; min-height: 0; }
+  .benefit-copy { display: flex; flex-direction: column; justify-content: center; }
+}

@@ -21,7 +21,7 @@ const text = (v: unknown): v is string => typeof v === 'string' && !!v.trim();
 const stamp = (v: unknown): v is string => text(v) && Number.isFinite(Date.parse(v)) && new Date(v).toISOString() === v;
 const logicalJSON = (v: unknown): string => JSON.stringify(v, (_key, item: unknown) => object(item) ? Object.fromEntries(Object.keys(item).sort().map(k => [k,item[k]])) : item);
 const only = (v: Record<string, unknown>, keys: string[]) => Object.keys(v).every(k => keys.includes(k));
-function fail(): never { throw new Error('No pudimos validar los datos guardados. Confirmá el reinicio de esta demo para continuar.'); }
+function fail(): never { throw new Error('No pudimos validar los datos guardados. Confirmá el reinicio de tus datos para continuar.'); }
 export const sourceKey = (...tuple: string[]) => JSON.stringify(tuple);
 /** New/reset actual state is deliberately independent of demo fixtures. */
 export function materialize(_content?: Content): Envelope {

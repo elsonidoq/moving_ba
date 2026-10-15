@@ -60,7 +60,7 @@ export interface Content {
     pointsPerCompletion: number;
     challenges: { id: string; title: string; description: string; metric: Metric; period: 'week' | 'month'; target: number }[];
     badges: { id: string; title: string; description: string; metric: Metric; threshold: number }[];
-    benefits: { id: string; title: string; description: string; disclaimer: string; pointsThreshold: number; redeemable: false }[];
+    benefits: { id: string; title: string; description: string; photo: { path: string; alt: string }; disclaimer: string; pointsThreshold: number; redeemable: false }[];
   };
   scenarios: {
     referenceDate: string; defaultProfileId: 'first';
