@@ -238,3 +238,10 @@ test('all 29 mockup JPEG keys have intended exact local uses and factual provena
  expect(readFileSync('src/screens/Plan.tsx','utf8')).toContain('step-photo');
  expect(content.images.every(i=>i.subject.kind==='exercise')).toBe(true);
 });
+
+test('content validation duration estimates reject missing duplicate invalid and per-medium options',()=>{
+ for(const value of [undefined,[],[15,15],[30,15],[15,45],[15,30,60],[15.5,30],['15',30],{minutes:15}]){
+  const c=clone();(c.plans[0] as any).durationOptions=value;expect(()=>validateContent(c)).toThrow('durationOptions');
+ }
+ for(const plan of source.plans){const expected=plan.sportId==='swimming'?(plan.medium==='water'?[45,60]:[15]):[15,30];expect(plan.durationOptions).toEqual(expected);const c=clone();c.plans.find(p=>p.id===plan.id)!.durationOptions=[5];expect(()=>validateContent(c)).toThrow('durationOptions');}
+});

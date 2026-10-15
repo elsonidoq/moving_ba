@@ -36,7 +36,11 @@ before reread and guarded actual landing. No multi-tab transaction promise.
 Monday-week/calendar-month progress without mutable counters. Interest/intention/chat
 never credit. Only bars cap. Explicit `selectPreviewJourney` instead builds a
 scenario-only projection at its configured reference date; profile subviews use it
-only in preview. Canonical actual records/envelope remain untouched.
+only in preview. Canonical actual records/envelope remain untouched. Profile combines that projection's
+metrics with weekly progress and seven Monday–Sunday activity buckets. Buckets count
+unique source records by activityDate only through that projection's BA today, sum to
+weeklySessions, and have full Spanish weekday/date/count text equivalents. Empty weeks
+remain zero; only the progress fill caps, never the raw count.
 
 ### Navigation, practice and support
 
@@ -60,9 +64,21 @@ partial exit/reload or forged success grants no extra credit. Water start rechec
 both separate swimming ability and permitted supervised-pool/guardavidas affirmations;
 preference/history/hash cannot supply either. Leaving clears them.
 
+Unchosen entry is a memory-only photographic welcome, then `Contanos sobre vos`
+with three unselected situation radios and explicit confirmation. Selection/back/reload
+never writes or chooses a preference. Confirmed saved users skip both stages; successful
+or tab-only reset returns welcome, with recovery taking priority. Profile editing opens
+the preference form directly and preserves history.
+
+Estimated duration is presentation-only: validated plan durationOptions are 15/30 minutes
+for yoga/calisthenics, 45/60 for water swimming and a separate 15-minute dry preparation.
+Plan-local semantic selectors default to the shorter estimate; leaving/changing plan or
+reload resets selection. SportChoice summarizes both swimming paths distinctly. No
+exercise, command, attempt snapshot, Session duration, timer or credit rule changes.
+
 Profile-entered scenarios are one person's transient demonstrations. Journey scenarios
 show sustained progress/supportive return; notice scenarios open
-`#/notice/:scenarioId`, then `#/chat/:chatId` directly, with matching active context.
+`#/notice/:scenarioId` with an image-backed translucent activation card, then `#/chat/:chatId` directly, with matching active context.
 Forged notice/chat hashes never activate preview. Exactly five missed-class/four
 inactivity answers show configured supportive response and stable class/dry-plan/sport
 destination. Leaving chat clears answer, destination remains preview. No free text,
@@ -71,7 +87,10 @@ actual home/card without pending action; reload cannot restore preview.
 
 `AppShell` provides circular profile, contextual back, skip link, heading/exercise
 focus and bottom Inicio/Deportes/Clases (hidden on onboarding/recovery/notice/chat).
-Every preview surface uses the same shell badge and normal-flow bottom exit after
+The navigational header stays pinned during document scrolling. Positive breadcrumb
+spacing and scroll/focus offsets keep the back control and outline below its divider.
+There is no repeated disclaimer header/footer; actionable safety remains at practice
+decisions. Every preview surface uses the same shell badge and normal-flow bottom exit after
 content, with tab clearance and visible keyboard focus. Durable controls are disabled
 and independently guarded. Rounded yellow mobile-first pages use ordinary document
 scroll, Spanish labels/alts/status/errors, 44px targets and reduced-motion rules.
@@ -81,13 +100,16 @@ Representative 360/1280 keyboard/visual checks are not universal accessibility p
 
 All 29 approved mockup photos are bundled local JPEGs. The 15 unique exercise photos use
 runtime JSON assignments bounded by the developer-controlled path/subject allowlist in
-`content/images.ts`, not JSON self-approval. The 14 onboarding, notice, sport and class
+`content/images.ts`, not JSON self-approval. The 14 onboarding, Home, notice, sport and class
 photos use the small static `content/mockupPhotos.ts` map; shared components reuse those
 stable paths in actual and preview destinations. Plans show exercise thumbnails before
 Start and sessions retain snapshot images. The three legacy SVGs remain available only as
 general environment art and are not used on photo-required surfaces. The
 [provenance record](../public/assets/photos/provenance.json) retains owner-satisfied
 permission, original Pexels/license metadata, byte hashes and visual correspondence.
+Home uses the documented Buenos Aires park photo (Pexels 31414914) with a separate
+readable yellow copy panel, including saved-user and preview homes. Failed Home photos
+show a Spanish unavailable status without remote fallback.
 Unsafe exercise paths/subjects reject; missing/unverified assignment or failed session
 load preserves instructions with Spanish unavailable status, never a remote fallback.
 Runtime never fetches provenance source URLs.
@@ -112,7 +134,7 @@ above. The historical heading/anchors remain stable for immutable approved-plan 
 
 ## Verified repository baseline
 
-The existing [conceptual mockup](mockup_ba_en_movimiento_v2.html) is a single HTML
+At initialization, the conceptual v2 mockup (retained in Git history) was a single HTML
 file with inline CSS and JavaScript. It declares conceptual/non-official status and
 fictitious class data in its visible header and notices. Its JavaScript contains
 example sport/profile data, an in-memory `state` object, rendering functions, and

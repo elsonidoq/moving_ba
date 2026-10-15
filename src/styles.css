@@ -234,3 +234,8 @@ button.chat-option[aria-pressed="true"] { border-color: #a88d00; background: #ff
 .chat-result { margin-top: 20px; padding-top: 4px; border-top: 1px solid var(--line); }
 .scenario-support .journey-stats { margin-bottom: 0; }
 .scenario-support .journey-stats dd { font-size: 26px; }
+
+.duration-estimate label, .duration-label { display: block; color: #41575a; font-size: 13px; font-weight: 750; margin-bottom: 8px; }
+.duration-estimate select { background: #fff9dc; border-color: #a58e27; font-weight: 750; }
+.duration-estimate p { margin: 0; font-weight: 750; }
+[data-water-plan-id] > .duration-estimate { margin: 16px 0; padding: 14px; border-radius: 13px; background: white; border: 1px solid var(--line); }

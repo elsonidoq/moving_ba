@@ -17,11 +17,11 @@ HTML. IDs match `[a-z][a-z0-9-]*`, unique within collection, never labels/positi
 | branding | name (`Buenos Aires te mueve`), tagline, demoNotice |
 | ui | Every `uiKeys` entry in types.ts, including accessibility/error/unavailable/preview/exit/review labels |
 | legal | illustrativeTraining, professionalReview, fictionalClasses, noOfficialStatus, nonredeemable, noAgreement, locationNotice |
-| onboarding | title, instructions, continueLabel, validationLabel, editTitle, editInstructions; exactly three choices `{id,label}` |
+| onboarding | startLabel, title, instructions, continueLabel, validationLabel, editTitle, editInstructions; exactly three choices `{id,label}` |
 | profiles | Exactly first/returning/regular recommendation categories: id,title,subtitle,welcome,hero,cta,nextPrompt,defaultSportId,defaultPlanId,scenarioId,weeklyGoal (positive integer) |
 | sports | Exactly calisthenics/yoga/swimming: id,name,summary,heroAsset,heroAlt,environment,facilities,tips,modes (solo/classes),safetyCopy |
 | exercises | id,sportId,title,quantity,technique,medium (dry-land/water),imageAsset (empty),imageAlt,imageId (null or image ID),imageStatus (unavailable/verified) |
-| plans | id,sportId,profileId,level,name,description,duration,environment,prerequisites,safetyCopy,medium,ordered steps `{id,exerciseId}` |
+| plans | id,sportId,profileId,level,name,description,duration,durationOptions,environment,prerequisites,safetyCopy,medium,ordered steps `{id,exerciseId}` |
 | classes | id,sportId,title,schedule,venue,locality,level,requirements,description,receiver,contactCopy,price `{kind:free/paid,amount,currency:ARS}`,fictional:true |
 | rules | pointsPerCompletion nonnegative integer; challenges `{id,title,description,metric:sessions/activeWeeks,period:week/month,target}`; badges `{id,title,description,metric,threshold}`; benefits `{id,title,description,disclaimer,pointsThreshold,redeemable:false}`; targets/thresholds positive except pointsThreshold nonnegative |
 | scenarios | Retained legacy content fixtures: referenceDate, defaultProfileId:first, profiles `{id,profileId,history:[{id,sportId,planId,activityDate}]}`; not actual initialization/reset data |
@@ -37,6 +37,23 @@ only enter swimming-water plans; dry warmups may enter water plans. Both runtime
 swimming affirmations remain mandatory regardless of copy. Each sport needs free
 (amount 0) and paid (finite positive amount) ARS fictional examples. Receiver/contact
 must stay explicitly fictional or `A confirmar`, never booking/contact integration.
+
+Plan `durationOptions` is a display-only ordered numeric list: exactly `[15,30]` for
+yoga/calisthenics, `[45,60]` for swimming water and `[15]` for separate dry preparation.
+Missing, duplicate, reversed or unsupported options block configuration. `ui.duration`
+labels the selector (`Duración estimada`); `ui.durationOption` formats each estimate
+with `{minutes}` (currently `{minutes} min`). Keep numeric options and dry/water meaning;
+these estimates never change exercises, quantities, photos, start commands or credit.
+Selection is local to the Plan view and resets on leave/change/reload, not saved.
+
+Profile headings/empty/count copy use `ui.recentActivity`, `activityEmpty`,
+`weeklyCount` (`{count}` and `{goal}`) and `activityCount` (`{count}`). Bars derive from
+the selected actual/preview projection, never editable fictional counters. Keep placeholders.
+
+Welcome uses branding name/tagline and onboarding.startLabel; selection title is
+`Contanos sobre vos`. Selection instructions and direct profile-edit title/instructions
+explain recommendation personalization/history preservation, not a daily mood check.
+Legacy nonempty disclaimer fields stay validated but are not rendered as boilerplate.
 
 Exact onboarding labels (not freely replaceable):
 - `No estoy entrenando y quiero empezar.`
@@ -70,9 +87,10 @@ approval. Reusing an exercise JPEG is permitted only for explicitly listed equiv
 subjects. Do not infer correspondence from filenames/IDs: visible text matches actual
 posture/equipment and stable IDs remain unchanged.
 
-Onboarding, notice, sport-card/hero and class photos are deliberately not JSON fields.
+Onboarding, Home, notice, sport-card/hero and class photos are deliberately not JSON fields.
 `src/content/mockupPhotos.ts` statically maps those 14 visual assets to the existing
-components and stable sport/class IDs. Add or rename those product records only with a
+components and stable sport/class IDs. Home uses the documented Buenos Aires city_park
+photo (31414914), with readable yellow text and local unavailable feedback. Add or rename those product records only with a
 matching code-map change; an unknown class shows honest unavailable feedback rather than
 a different photo. The three SVGs remain general environment assets and cannot substitute
 on a photo-required surface.
@@ -100,8 +118,8 @@ editor's self-declared verified flag.
 1. Follow [run commands](../README.md). Dev reads public; built server reads **dist**.
    Rebuild after each repository edit for production-like preview. Build typechecks
    and bundles; it does not validate JSON. Reload/retry validates actual served bytes.
-2. Edit onboarding.instructions and onboarding.editTitle; reload to inspect unchosen
-   onboarding and Perfil → edit. Keep exact choice labels. Edit a profile hero and
+2. Edit branding.tagline, onboarding.startLabel/title/instructions and
+   onboarding.editTitle/editInstructions; reload through welcome → selection and Perfil → edit. Keep exact choice labels. Edit a profile hero and
    inspect its actual home recommendation after explicit selection.
 3. Edit inactive guidance/notice and inactive-chat introduction/answer response.
    For short-solo, keep its ID/label and select a valid returning dry plan destination
@@ -115,8 +133,9 @@ editor's self-declared verified flag.
 5. For a class edit, retain `yoga-free` ID and change title/schedule, then inspect
    `/#/sports/yoga/classes/yoga-free`. For step order edits retain each unique step
    ID/exercise pair. Active attempts keep snapshots until abandoned/new explicit start.
-6. Restore edits. **Restablecer demostración** in actual Perfil confirms then writes
-   empty unchosen state, never fixtures. Cancel changes nothing. Invalid storage uses
+6. Inspect Plan estimates and SportChoice summaries; estimate choice changes display only.
+   Restore edits. **Restablecer mis datos** in actual Perfil confirms then writes
+   empty unchosen state and returns welcome, never fixtures. Cancel changes nothing. Invalid storage uses
    confirmed recovery. Failed save/reset is tab-only, with honest old-data-may-return
    warning. Only this origin's demo key changes; unrelated keys survive.
 
@@ -128,7 +147,7 @@ npm run test:e2e -- --grep 'served profile content recovery'
 ```
 
 The browser test edits actual dist JSON, observes no-store request/response and
-rendered copy/reference/image changes; missing/malformed/reference-invalid content
+rendered welcome/selection/edit copy, duration formatter, reference/image changes; missing/malformed/reference-invalid content
 blocks, restoring bytes and retry recovers. It exercises unsafe paths, pending
 assignments and an actually missing local JPEG without remote fallback, restores
 exact original JSON/photo bytes in finally, and tears down its owned server.

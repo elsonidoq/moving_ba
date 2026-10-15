@@ -17,7 +17,7 @@ export const uiKeys = [
   'rest', 'pause', 'history', 'sessionAbandoned', 'notAvailable',
   'sports', 'profileAccessibleName', 'editSituation', 'previewBadge', 'exploreSituations', 'exitPreview',
   'intention', 'intentionNotice', 'intentionEmpty', 'imageUnavailable', 'scriptedDisclosure',
-  'futureAI', 'cancel', 'resetFailed', 'chooseRequired', 'previous', 'reviewNext', 'locationIllustration', 'recentActivity', 'activityEmpty', 'weeklyCount', 'activityCount',
+  'futureAI', 'cancel', 'resetFailed', 'chooseRequired', 'previous', 'reviewNext', 'locationIllustration', 'recentActivity', 'activityEmpty', 'weeklyCount', 'activityCount', 'durationOption',
 ] as const;
 export type UI = Record<typeof uiKeys[number], string>;
 export interface Profile {
@@ -35,7 +35,7 @@ export interface Exercise {
 }
 export interface Plan {
   id: string; sportId: SportId; profileId: ProfileId; level: string; name: string;
-  description: string; duration: string; environment: string; prerequisites: string[];
+  description: string; duration: string; durationOptions: number[]; environment: string; prerequisites: string[];
   safetyCopy: string; medium: Medium; steps: { id: string; exerciseId: string }[];
 }
 export interface ClassListing {

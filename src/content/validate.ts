@@ -97,6 +97,9 @@ export function validateContent(input: unknown): Content {
     choice(plan.profileId, profileIds, `${path}.profileId`);
     choice(plan.sportId, sportIds, `${path}.sportId`);
     choice(plan.medium, ['dry-land', 'water'], `${path}.medium`);
+    const expectedMinutes = plan.sportId === 'swimming' ? (plan.medium === 'water' ? [45,60] : [15]) : [15,30];
+    const durationOptions = list(plan.durationOptions, `${path}.durationOptions`);
+    if (durationOptions.length !== expectedMinutes.length || durationOptions.some((minutes,index)=>minutes !== expectedMinutes[index])) fail(`${path}.durationOptions`, 'se requieren las estimaciones permitidas, únicas y de menor a mayor.');
     texts(plan.prerequisites, `${path}.prerequisites`);
     if (plan.medium === 'water' && plan.sportId !== 'swimming') fail(path, 'un plan en agua debe pertenecer a natación.');
     for (const step of entities(plan.steps, `${path}.steps`)) {
