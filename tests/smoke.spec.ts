@@ -34,8 +34,8 @@ test('one-person onboarding profile exact unselected choices and no identity inf
 });
 for(const choice of content.onboarding.choices) test(`one-person onboarding profile ${choice.id} explicit recommendation survives reload`,async({page})=>{
  await page.goto('/');await choose(page,choice.id);const profile=content.profiles.find(p=>p.id===choice.id)!;
- await expect(page.locator('.hero')).toContainText(profile.hero);expect(JSON.parse((await raw(page))!).preference).toEqual({situationId:choice.id,confirmed:true});
- await page.reload();await expect(page.locator('.hero')).toContainText(profile.hero);await expect(page.getByRole('button',{name:content.onboarding.startLabel,exact:true})).toHaveCount(0);await expect(page.getByRole('radio')).toHaveCount(0);const saved=await raw(page);await page.goto('/#/regular/home');await expect(page.locator('.hero')).toContainText(profile.hero);expect(await raw(page)).toBe(saved);console.log('choice',choice.id,'route',page.url(),'bytes',await raw(page));
+ await expect(page.locator('.hero')).toContainText(profile.hero);await homePhoto(page);expect(JSON.parse((await raw(page))!).preference).toEqual({situationId:choice.id,confirmed:true});
+ await page.reload();await expect(page.locator('.hero')).toContainText(profile.hero);await homePhoto(page);await expect(page.getByRole('button',{name:content.onboarding.startLabel,exact:true})).toHaveCount(0);await expect(page.getByRole('radio')).toHaveCount(0);const saved=await raw(page);await page.goto('/#/regular/home');await expect(page.locator('.hero')).toContainText(profile.hero);expect(await raw(page)).toBe(saved);console.log('choice',choice.id,'route',page.url(),'bytes',await raw(page));
 });
 test('one-person onboarding profile legacy collision choose reload edit preserves canonical history and lifetime',async({page})=>{
  const source=legacy();await page.addInitScript(({key,source})=>{if(!sessionStorage.getItem('seeded')){localStorage.setItem(key,JSON.stringify(source));sessionStorage.setItem('seeded','yes');}},{key,source});
@@ -413,4 +413,37 @@ for(const width of [360,1280])test(`compact pinned shell geometry and contextual
   await page.getByRole('button',{name:content.ui.exitPreview,exact:true}).click();
  }
  await page.evaluate(k=>localStorage.setItem(k,'{invalid'),key);await page.reload();await shellCopy(page);await page.screenshot({path:`/tmp/ba-refresh-t001/${width}-recovery.png`});
+});
+
+async function homePhoto(page:Page) {
+ const image=page.locator('.home-hero > img');await expect(image).toHaveAttribute('src',mockupPhotos.city_park.src);await expect(image).toHaveAttribute('alt',mockupPhotos.city_park.alt);
+ expect(await image.evaluate(async(i:HTMLImageElement)=>{await i.decode();return i.naturalWidth;})).toBe(1400);
+}
+for(const width of [360,1280])test(`genuine profile buckets and Buenos Aires Home ${width}`,async({page,request})=>{
+ await page.setViewportSize({width,height:900});await page.clock.setFixedTime(new Date('2026-11-02T15:00:00Z'));
+ const folder='/tmp/ba-refresh-t003';mkdirSync(folder,{recursive:true});const remote:string[]=[];page.on('request',r=>{if(new URL(r.url()).origin!=='http://127.0.0.1:4173')remote.push(r.url());});
+ await page.goto('/');await choose(page);await homePhoto(page);await page.screenshot({path:`${folder}/${width}-actual-home.png`,fullPage:true});
+ await page.goto('/#/profile');await expect(page.locator('[data-stat="weeklyGoal"]')).toHaveText('0 de 1 sesiones');await expect(page.getByRole('progressbar',{name:content.ui.weeklyGoal})).toHaveAttribute('value','0');await expect(page.locator('[data-activity-count="0"]')).toHaveCount(7);await expect(page.locator('main')).toContainText(content.ui.activityEmpty);expect(await page.locator('.activity-column i').evaluateAll(b=>b.every(el=>el.getBoundingClientRect().height===0))).toBe(true);
+ await page.screenshot({path:`${folder}/${width}-zero-profile.png`,fullPage:true});
+ const source=legacy();for(const p of Object.values(source.profiles))p.baselineHistory[0].activityDate='2026-11-02';source.scenarioReferenceDate='2026-11-02';const actual=normalizeLegacy(source);actual.preference={situationId:'first',confirmed:true};actual.intention={classId:'yoga-free',sportId:'yoga',classSnapshot:content.classes.find(c=>c.id==='yoga-free')!,chosenAt:'2026-10-14T15:00:00.000Z',origin:'simulated-intention'};
+ const bytes=JSON.stringify(actual);await page.evaluate(({key,bytes})=>localStorage.setItem(key,bytes),{key,bytes});await page.reload();
+ async function buckets(dates:string[],counts:number[],total:number,goal:number){
+  expect(await page.locator('[data-activity-date]').evaluateAll(elements=>elements.map(el=>el.getAttribute('data-activity-date')))).toEqual(dates);
+  expect(await page.locator('[data-activity-count]').evaluateAll(elements=>elements.map(el=>Number(el.getAttribute('data-activity-count'))))).toEqual(counts);expect(counts.reduce((a,b)=>a+b,0)).toBe(total);
+  await expect(page.locator('[data-stat="weeklyGoal"]')).toHaveText(`${total} de ${goal} sesiones`);await expect(page.getByRole('progressbar',{name:content.ui.weeklyGoal})).toHaveAttribute('value',String(Math.min(total,goal)));await expect(page.getByRole('progressbar',{name:content.ui.weeklyGoal})).toHaveAttribute('aria-valuetext',`${total} de ${goal} sesiones`);
+  const fullDays=['lunes','martes','miércoles','jueves','viernes','sábado','domingo'];for(const [i,date] of dates.entries())await expect(page.locator(`[data-activity-date="${date}"]`)).toContainText(`${new Intl.DateTimeFormat('es-AR',{timeZone:'America/Argentina/Buenos_Aires',weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date(date+'T12:00:00Z'))}: ${counts[i]} sesiones`);
+  const heights=await page.locator('.activity-column i').evaluateAll(b=>b.map(el=>el.getBoundingClientRect().height));for(const [i,c]of counts.entries())expect(heights[i]).toBe(c===0?0:c/Math.max(...counts,1)*71);
+  console.log('T003/V1 independent dates/counts/raw total/goal/bar heights',width,dates,fullDays,counts,total,goal,heights);
+ }
+ await expect(page.locator('[data-stat="sessions"]')).toHaveText('6');await expect(page.locator('[data-stat="points"]')).toHaveText('60');await expect(page.locator('[data-stat="activeWeeks"]')).toHaveText('2');await buckets(['2026-11-02','2026-11-03','2026-11-04','2026-11-05','2026-11-06','2026-11-07','2026-11-08'],[3,0,0,0,0,0,0],3,1);
+ await page.screenshot({path:`${folder}/${width}-populated-profile.png`,fullPage:true});
+ await page.getByRole('button',{name:content.ui.editSituation}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();await page.getByRole('radio').nth(2).check();await page.getByRole('button',{name:content.ui.cancel,exact:true}).click();expect(await raw(page)).toBe(bytes);await page.reload();expect(await raw(page)).toBe(bytes);
+ const scenario=content.previewScenarios.find(s=>s.id==='sustained')!;await page.getByRole('button',{name:scenario.title,exact:true}).click();await homePhoto(page);await page.screenshot({path:`${folder}/${width}-sustained-home.png`,fullPage:true});await page.goto('/#/profile');
+ // Independent reference-date oracle, not the production selector.
+ const previewDates=['2026-10-12','2026-10-13','2026-10-14','2026-10-15','2026-10-16','2026-10-17','2026-10-18'];const counts=previewDates.map(date=>scenario.history.filter(r=>r.activityDate===date&&date<=scenario.referenceDate).length);
+ await buckets(previewDates,counts,counts.reduce((a,b)=>a+b,0),2);await expect(page.locator('[data-stat="sessions"]')).toHaveText(String(scenario.history.length));await page.screenshot({path:`${folder}/${width}-preview-profile.png`,fullPage:true});expect(await raw(page)).toBe(bytes);await page.getByRole('button',{name:content.ui.exitPreview,exact:true}).click();await expect(page.locator('[data-intended-class-id="yoga-free"]')).toBeVisible();expect(await raw(page)).toBe(bytes);
+ await page.goto('/#/profile');await page.getByRole('button',{name:'Volver después de una pausa',exact:true}).click();await homePhoto(page);await page.screenshot({path:`${folder}/${width}-paused-home.png`,fullPage:true});expect(await raw(page)).toBe(bytes);await page.getByRole('button',{name:content.ui.exitPreview,exact:true}).click();
+ await page.goto('/#/profile');await page.getByRole('button',{name:content.ui.editSituation}).click();await choose(page,'returning');const edited=JSON.parse((await raw(page))!);expect({...edited,preference:null}).toEqual({...actual,preference:null});await page.reload();expect(await raw(page)).toBe(JSON.stringify(edited));
+ const provenance=JSON.parse(readFileSync('public/assets/photos/provenance.json','utf8')).assets.find((a:any)=>a.manifestKey==='city_park');expect(provenance.photoId).toBe(31414914);const response=await request.get(provenance.runtimePath);expect(response.status()).toBe(200);const served=await response.body();expect(served.equals(readFileSync('public'+provenance.runtimePath))).toBe(true);expect(createHash('sha256').update(served).digest('hex')).toBe(provenance.sha256);console.log('T003/V2 served Home provenance',provenance.photoId,provenance.source,provenance.sha256,served.length,'actual→preview→exit exact bytes',bytes,'confirmed preference-only',JSON.stringify(edited));
+ await page.route('**/assets/photos/city_park.jpg',r=>r.abort());await page.reload();await expect(page.locator('.home-hero [role="status"]')).toHaveText(content.ui.imageUnavailable);await expect(page.locator('.home-hero')).toContainText(content.profiles[1].hero);expect(remote).toEqual([]);
 });

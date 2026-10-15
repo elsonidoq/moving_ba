@@ -12,11 +12,17 @@ export function selectJourney(content: Content, envelope: Envelope, profileId: P
   const history = eligibleHistory(envelope, profileId);
   const today = activityDate(now);
   const week = history.filter(r => weekKey(r.activityDate) === weekKey(today) && r.activityDate <= today);
+  const activityDays = Array.from({length:7}, (_, index) => {
+    const day = new Date(`${weekKey(today)}T12:00:00Z`);
+    day.setUTCDate(day.getUTCDate() + index);
+    const date = day.toISOString().slice(0,10);
+    return {date, count: week.filter(record => record.activityDate === date).length};
+  });
   const month = history.filter(r => monthKey(r.activityDate) === monthKey(today) && r.activityDate <= today);
   const profile = content.profiles.find(p => p.id === (envelope.preference?.situationId ?? profileId))!;
   const points = history.length * content.rules.pointsPerCompletion;
   return {
-    history, today, sessions: history.length, points,
+    history, today, activityDays, sessions: history.length, points,
     weekKeys: [...new Set(history.map(r => weekKey(r.activityDate)))].sort(),
     activeWeeks: metricValue(history, 'activeWeeks'), weeklySessions: week.length, weeklyGoal: profile.weeklyGoal,
     challenges: content.rules.challenges.map(rule => ({ ...rule, value: metricValue(rule.period === 'week' ? week : month, rule.metric) })),

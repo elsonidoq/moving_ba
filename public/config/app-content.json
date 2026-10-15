@@ -6,6 +6,10 @@
     "demoNotice": "Demostración conceptual · no es un servicio oficial"
   },
   "ui": {
+    "recentActivity": "Actividad reciente",
+    "activityEmpty": "Todavía no registraste prácticas esta semana.",
+    "weeklyCount": "{count} de {goal} sesiones",
+    "activityCount": "{count} sesiones",
     "home": "Inicio",
     "back": "Volver",
     "profile": "Tu momento con el movimiento",

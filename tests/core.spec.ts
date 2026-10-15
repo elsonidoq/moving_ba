@@ -173,7 +173,7 @@ test('one-person progress dates BA midnight, Monday week and month windows use i
     ['2026-11-02T03:00:00Z','2026-11-02',[3,6,1,2],[4],[3,4]],
     ['2026-12-01T15:00:00Z','2026-12-01',[0,0,0,0],[],[]],
   ] as const){
-    const actual=selectJourney(c,e,'first',new Date(instant));expect(actual.today).toBe(today);expect(actual.sessions).toBe(15);expect(actual.points).toBe(150);expect(actual.activeWeeks).toBe(3);expect(actual.weeklySessions).toBe(numerators[0]);expect(actual.challenges.map(r=>r.value)).toEqual(numerators);expect(actual.badges.map(b=>b.earned)).toEqual([true,true]);expect(actual.benefits.map(b=>b.eligible)).toEqual([true]);
+    const actual=selectJourney(c,e,'first',new Date(instant));expect(actual.today).toBe(today);expect(actual.sessions).toBe(15);expect(actual.points).toBe(150);expect(actual.activeWeeks).toBe(3);expect(actual.weeklySessions).toBe(numerators[0]);expect(actual.activityDays).toHaveLength(7);expect(actual.activityDays.reduce((sum,day)=>sum+day.count,0)).toBe(actual.weeklySessions);expect(actual.activityDays[0].date).toBe(weekKey(today));expect(actual.activityDays.filter(day=>day.date>today).every(day=>day.count===0)).toBe(true);for(const day of actual.activityDays)expect(day.count).toBe(day.date<=today?profiles.length*dates.filter(d=>d===day.date).length:0);expect(actual.challenges.map(r=>r.value)).toEqual(numerators);expect(actual.badges.map(b=>b.earned)).toEqual([true,true]);expect(actual.benefits.map(b=>b.eligible)).toEqual([true]);
     const expectedWeek=profiles.flatMap(p=>weeklyIds.map(i=>sourceKey('legacy',p,'baseline',`same-${i}`))).sort();
     const expectedMonth=profiles.flatMap(p=>monthlyIds.map(i=>sourceKey('legacy',p,'baseline',`same-${i}`))).sort();
     expect(actual.history.filter(r=>r.activityDate<=today&&weekKey(r.activityDate)===weekKey(today)).map(r=>r.sourceKey).sort()).toEqual(expectedWeek);
@@ -184,7 +184,7 @@ test('one-person progress dates BA midnight, Monday week and month windows use i
   const s=storage(JSON.stringify(e));const owner=createCommandOwner(c,s.port,'',()=>now);const before=selectJourney(c,e,'first',now);
   owner.dispatch({type:'chooseSituation',situationId:'regular'});owner.dispatch({type:'interest',classId:'yoga-free'});owner.dispatch({type:'intention',classId:'yoga-free'});owner.dispatch({type:'enterScenario',scenarioId:'inactive'});owner.dispatch({type:'answer',answerId:'skip'});owner.dispatch({type:'exitPreview'});
   const after=selectJourney(c,owner.getState().envelope,'first',now);expect(after.history).toEqual(before.history);expect(after.points).toBe(before.points);expect(after.badges).toEqual(before.badges);expect(after.weeklyGoal).toBe(c.profiles.find(p=>p.id==='regular')!.weeklyGoal);
-  const actualBytes=s.values.get(storageKey);for(const scenario of c.previewScenarios){const preview=selectPreviewJourney(c,scenario.id)!;expect(preview.today).toBe(scenario.referenceDate);expect(preview.sessions).toBe(scenario.history.length);expect(s.values.get(storageKey)).toBe(actualBytes);}
+  const actualBytes=s.values.get(storageKey);for(const scenario of c.previewScenarios){const preview=selectPreviewJourney(c,scenario.id)!;expect(preview.today).toBe(scenario.referenceDate);expect(preview.sessions).toBe(scenario.history.length);expect(preview.activityDays.reduce((sum,day)=>sum+day.count,0)).toBe(preview.weeklySessions);expect(preview.activityDays[0].date).toBe(weekKey(scenario.referenceDate));expect(s.values.get(storageKey)).toBe(actualBytes);}
   expect(selectPreviewJourney(c,'unknown')).toBeNull();expect(validateEnvelope(owner.getState().envelope)).toEqual(owner.getState().envelope);
 });
 test('actual command custody current-state start/accept cannot credit twice or use stale identity, intention retirement retains exact snapshot',()=>{
@@ -294,4 +294,13 @@ test('one-person compatibility canonical success rejects imported source keys wi
  for(const step of content.plans.find(p=>p.id==='cal-first')!.steps)owner.dispatch({type:'accept',attemptId:id,stepId:step.id});
  const actual=owner.getState().envelope;expect(Object.keys(actual.journey)).toHaveLength(Object.keys(envelope.journey).length+1);for(const [key,record] of Object.entries(envelope.journey))expect(actual.journey[key]).toEqual(record);
  const actualHash=`#/success/${encodeURIComponent(sourceKey('actual','completion',id))}`;expect(routeHash(owner.getState().route)).toBe(actualHash);owner.dispatch({type:'navigate',hash:actualHash});expect(owner.getState().route).toEqual({screen:'success',profileId:'first',sportId:'calisthenics',attemptId:id});
+});
+
+test('one-person progress dates empty and same-day over-goal use unique source records, not record IDs',()=>{
+ const empty=selectJourney(content,materialize(),'first',new Date('2026-11-02T03:00:00Z'));
+ expect(empty.activityDays.map(day=>day.count)).toEqual([0,0,0,0,0,0,0]);expect(empty.weeklySessions).toBe(0);
+ const e=normalizeLegacy(legacyFixture());for(const r of Object.values(e.journey))r.activityDate='2026-11-02';
+ const result=selectJourney(content,e,'first',new Date('2026-11-02T03:00:00Z'));
+ expect(result.activityDays.map(day=>day.count)).toEqual([12,0,0,0,0,0,0]);expect(result.weeklySessions).toBe(12);expect(result.weeklySessions).toBeGreaterThan(result.weeklyGoal);expect(result.sessions).toBe(12);expect(result.points).toBe(120);
+ console.log('T003/V1 empty',empty.activityDays,'same-day unique source tuples',result.history.map(r=>r.sourceKey),'over-goal',result.weeklySessions,result.weeklyGoal,result.activityDays);
 });

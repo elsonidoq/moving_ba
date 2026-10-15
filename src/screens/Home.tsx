@@ -1,9 +1,11 @@
-import { sportPhotos } from '../content/mockupPhotos';
+import { useState } from 'react';
+import { mockupPhotos, sportPhotos } from '../content/mockupPhotos';
 import { useApp } from '../state/context';
 import { selectPreviewJourney } from '../state/selectors';
 import { routeHash } from '../state/navigation';
 
 export default function Home() {
+  const [photoFailed, setPhotoFailed] = useState(false);
   const { content, route, envelope, mode } = useApp();
   const scenario = mode.kind === 'preview' ? content.previewScenarios.find(s=>s.id===mode.scenarioId) : undefined;
   const preview = scenario ? selectPreviewJourney(content,scenario.id)! : null;
@@ -14,11 +16,12 @@ export default function Home() {
     <p className="eyebrow">{profile.title}</p>
     <h1 tabIndex={-1}>{profile.welcome}</h1>
     <p className="lead">{profile.subtitle}</p>
-    <section className="hero" aria-labelledby="hero-title">
-      <p className="eyebrow">{profile.cta}</p>
+    <section className="hero home-hero" aria-labelledby="hero-title">
+      {!photoFailed ? <img src={mockupPhotos.city_park.src} alt={mockupPhotos.city_park.alt} onError={()=>setPhotoFailed(true)} /> : <p role="status">{content.ui.imageUnavailable}</p>}
+      <div className="home-hero-copy"><p className="eyebrow">{profile.cta}</p>
       <h2 id="hero-title">{profile.hero}</h2>
       <p>{profile.nextPrompt}</p>
-      <span className="hero-orbit" aria-hidden="true" />
+      </div>
     </section>
     {intention && <section className="support" data-intended-class-id={intention.classId}><h2>{intention.classSnapshot.title}</h2>
       <p>{content.ui.intentionNotice}</p><p>{intention.classSnapshot.schedule}</p><p>{intention.classSnapshot.venue} · {intention.classSnapshot.locality}</p>

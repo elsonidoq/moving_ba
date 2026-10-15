@@ -17,7 +17,7 @@ export const uiKeys = [
   'rest', 'pause', 'history', 'sessionAbandoned', 'notAvailable',
   'sports', 'profileAccessibleName', 'editSituation', 'previewBadge', 'exploreSituations', 'exitPreview',
   'intention', 'intentionNotice', 'intentionEmpty', 'imageUnavailable', 'scriptedDisclosure',
-  'futureAI', 'cancel', 'resetFailed', 'chooseRequired', 'previous', 'reviewNext', 'locationIllustration',
+  'futureAI', 'cancel', 'resetFailed', 'chooseRequired', 'previous', 'reviewNext', 'locationIllustration', 'recentActivity', 'activityEmpty', 'weeklyCount', 'activityCount',
 ] as const;
 export type UI = Record<typeof uiKeys[number], string>;
 export interface Profile {

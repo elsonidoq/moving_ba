@@ -2,20 +2,35 @@ import { useState, useEffect } from 'react';
 import { useApp } from '../state/context';
 import { routeHash } from '../state/navigation';
 import { selectJourney, selectPreviewJourney } from '../state/selectors';
+import { timeZone } from '../state/dates';
 import { SituationForm } from './Onboarding';
 export default function Profile() {
  const {content,envelope,route,command,mode}=useApp();const [editing,setEditing]=useState(false);
  useEffect(()=>{document.querySelector<HTMLElement>('main h1')?.focus();},[editing]);
  const journey=mode.kind==='preview'?selectPreviewJourney(content,mode.scenarioId)!:selectJourney(content,envelope,route.profileId);
- return <><h1 tabIndex={-1}>{editing?content.onboarding.editTitle:content.ui.profile}</h1>
+ const {ui}=content;
+ const weeklyCount=ui.weeklyCount.replace('{count}',String(journey.weeklySessions)).replace('{goal}',String(journey.weeklyGoal));
+ const maximum=Math.max(1,...journey.activityDays.map(day=>day.count));
+ const dayLabel=(date:string)=>new Intl.DateTimeFormat('es-AR',{timeZone,weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date(`${date}T12:00:00Z`));
+ return <><div className="profile-heading"><span className="profile-avatar" aria-hidden="true">◉</span><h1 tabIndex={-1}>{editing?content.onboarding.editTitle:ui.profile}</h1></div>
  {editing?<SituationForm editing onCancel={()=>setEditing(false)} />:<>
- <p>{content.onboarding.choices.find(c=>c.id===route.profileId)?.label}</p>
- <button disabled={mode.kind!=='actual'} onClick={()=>setEditing(true)}>{content.ui.editSituation}</button>
- <dl className="journey-stats"><div><dt>{content.ui.sessions}</dt><dd data-stat="sessions">{journey.sessions}</dd></div><div><dt>{content.ui.points}</dt><dd data-stat="points">{journey.points}</dd></div><div><dt>{content.ui.activeWeeks}</dt><dd data-stat="activeWeeks">{journey.activeWeeks}</dd></div></dl>
- <a className="button-link" href={routeHash({screen:'journey',profileId:route.profileId})}>{content.ui.journey}</a>
- <a className="button-link secondary" href={routeHash({screen:'challenges',profileId:route.profileId})}>{content.ui.challenges} · {content.ui.badges} · {content.ui.benefits}</a>
- <button className="secondary" disabled={mode.kind!=='actual'} onClick={()=>command({type:'reset',confirmed:window.confirm(content.ui.resetConfirm),entry:'profile'})}>{content.ui.reset}</button>
- <section aria-label={content.ui.exploreSituations}><h2>{content.ui.exploreSituations}</h2>{content.previewScenarios.map(s=><button className="secondary" key={s.id} disabled={mode.kind!=='actual'} onClick={()=>command({type:'enterScenario',scenarioId:s.id})}>{s.title}</button>)}</section>
+ <section className="profile-situation"><p>{content.onboarding.choices.find(c=>c.id===route.profileId)?.label}</p>
+ <button className="secondary" disabled={mode.kind!=='actual'} onClick={()=>setEditing(true)}>{ui.editSituation}</button></section>
+ <section className="profile-progress" aria-labelledby="profile-journey"><h2 id="profile-journey">{ui.journey}</h2>
+ <dl className="journey-stats"><div><dt>{ui.sessions}</dt><dd data-stat="sessions">{journey.sessions}</dd></div><div><dt>{ui.points}</dt><dd data-stat="points">{journey.points}</dd></div><div><dt>{ui.activeWeeks}</dt><dd data-stat="activeWeeks">{journey.activeWeeks}</dd></div></dl>
+ <h3 id="profile-weekly">{ui.weeklyGoal}</h3><p data-stat="weeklyGoal">{weeklyCount}</p>
+ <progress aria-labelledby="profile-weekly" aria-valuetext={weeklyCount} value={Math.min(journey.weeklySessions,journey.weeklyGoal)} max={journey.weeklyGoal} />
+ <h3 id="profile-activity">{ui.recentActivity}</h3>
+ <ul className="activity-chart" aria-labelledby="profile-activity">{journey.activityDays.map(day=><li key={day.date} data-activity-date={day.date} data-activity-count={day.count}>
+ <span className="activity-column" aria-hidden="true"><i style={{height:`${day.count/maximum*100}%`}} /></span>
+ <span aria-hidden="true">{dayLabel(day.date).slice(0,1).toUpperCase()}</span>
+ <span className="visually-hidden">{dayLabel(day.date)}: {ui.activityCount.replace('{count}',String(day.count))}</span>
+ </li>)}</ul>
+ {!journey.weeklySessions&&<p className="muted">{ui.activityEmpty}</p>}
+ <a className="profile-link" href={routeHash({screen:'journey',profileId:route.profileId})}><span aria-hidden="true">↗</span>{ui.journey}<span aria-hidden="true">›</span></a></section>
+ <a className="profile-link" href={routeHash({screen:'challenges',profileId:route.profileId})}><span aria-hidden="true">✦</span>{ui.challenges} · {ui.badges} · {ui.benefits}<span aria-hidden="true">›</span></a>
+ <section className="profile-scenarios" aria-label={ui.exploreSituations}><h2>{ui.exploreSituations}</h2>{content.previewScenarios.map((s,index)=><button className="secondary scenario-card" key={s.id} disabled={mode.kind!=='actual'} onClick={()=>command({type:'enterScenario',scenarioId:s.id})}><span className="route-icon" aria-hidden="true">{['↗','↻','◷','▦'][index]}</span><span>{s.title}</span><span aria-hidden="true">›</span></button>)}</section>
+ <button className="secondary profile-reset" disabled={mode.kind!=='actual'} onClick={()=>command({type:'reset',confirmed:window.confirm(ui.resetConfirm),entry:'profile'})}>{ui.reset}</button>
  </>}
  </>;
 }
