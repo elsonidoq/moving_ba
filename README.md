@@ -3,8 +3,8 @@
 Spanish-language conceptual demo for one person's movement journey, not an official
 service. Practices, classes, contacts, intentions and rewards are simulations. No
 booking, attendance verification, AI, push, backend, account or live integration.
-[Deployment](docs/deployment.md) owns the verified Railway production release at
-commit `80c0b1d`, including its public URL and bounded live checks.
+[Deployment](docs/deployment.md) owns the verified Railway production release,
+including its public URL and bounded live checks.
 
 ## Run locally
 
@@ -46,11 +46,14 @@ file listing. Hash navigation needs no server rewrite.
    stores one UUID completion. Leaving/reload abandons incomplete work. Swimming water
    start requires both autonomous ability and a permitted supervised pool with
    guardavidas/rules, rechecked at the command boundary. Dry/instructor options remain.
-4. Perfil groups genuine metrics, weekly progress and Monday–Sunday activity bars,
-   plus situation editing, history, challenges and achievements. The Challenges page
-   shows earned points and three photo-led benefits (coffee, Jardín Japonés and yoga)
-   with point goals; canjes are not enabled. Editing preference preserves earned
-   history and intention. Four named scenarios are deliberate **same-person previews**.
+4. Perfil groups saved sessions, weekly progress and Monday–Sunday activity bars,
+   plus situation editing, history, challenges and achievements. The illustrative
+   benefit points shown on Inicio, Perfil and Challenges equal the selected situation's
+   example base (currently 0/20/40) plus points from saved completions. Inicio shows
+   one reached benefit or the nearest upcoming goal and links to all three photo-led
+   examples (coffee, Jardín Japonés and yoga); canjes are not enabled. Editing the
+   situation changes the example base, not saved history or intention. Recorrido
+   shows saved-history points separately. Four named scenarios are deliberate **same-person previews**.
    Sustained/return examples use configured dates/history, never actual records.
    The two notice scenarios show a wallpaper/clock/card composition without a top
    banner; each card opens its matching structured chat with four/five answer choices.

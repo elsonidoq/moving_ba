@@ -13,8 +13,8 @@ booking, training-verification or partner service.
 | Project | moving_ba (`cc82d4e3-18c9-4bf6-93fc-f5cd9f58a05d`) |
 | Environment | production (`75f39978-e9e1-4019-8b04-b60308632dcd`) |
 | Service | moving_ba (`07c70e92-6e27-477f-a3e0-2264da1c8c9c`) |
-| Deployment | `f1c3c1e5-efd2-44b8-8c2a-d70160e6bfdb` — **SUCCESS**, observed terminal-success |
-| Source | Clean main revision `80c0b1d84b62e9098d025130f58de28b3b2bc128`, uploaded from cwd |
+| Deployment | `8daea6ea-0bb3-4d0c-af36-dfd6ec2580e8` — **SUCCESS**, observed terminal-success |
+| Source | Clean main revision `8c234582261fa7c8659d7ef752c278f8038642be`, uploaded from cwd; later test-only commit `a2675c1` changes no served bytes |
 | Region / replicas | us-east4-eqdc4a / 1 |
 | Domain target | 8080; domain ID `abf3962f-0602-4ae1-8dbf-a1d9055dfb94` |
 
@@ -35,10 +35,7 @@ at `d6ca077` included the one-person flow and all 29 bundled mockup photos. The
 previous verified visual-refresh release `c8664af7-a748-4e92-a5fa-05e27609e75c`
 at `cf08e056` added two-stage entry, profile charts and both notification-style
 scenarios. The prior `0c8f94dc-3db2-45f3-bb2b-f630765ea235` release at `078f3be`
-added the owner-permitted, locally bundled Obelisk welcome photo. The current
-release adds mockup-inspired wallpaper notice scenes, photo-led challenges/benefits
-and concrete app copy; in-app points are calculated, but no canje is enabled.
-Documentation-only commits after `80c0b1d` are not part of its uploaded source snapshot.
+added the owner-permitted, locally bundled Obelisk welcome photo. The prior `f1c3c1e5-efd2-44b8-8c2a-d70160e6bfdb` release at `80c0b1d` added mockup-inspired wallpaper notice scenes, photo-led challenges/benefits and concrete app copy. The current release adds clearly labeled situation-based illustrative benefit points and a one-benefit Home card, without enabling canjes. The test-only commit after `8c23458` is not part of its uploaded source snapshot.
 
 ## Verified local build/start boundary
 
@@ -160,6 +157,8 @@ is browser-origin-specific, not hosted state. If an old build cannot read a futu
 envelope, it offers scoped demo recovery rather than migration/global browser clearing.
 
 ## Live verification and limitations
+
+For deployment `8daea6ea-0bb3-4d0c-af36-dfd6ec2580e8`, the exact-ID Railway status was **SUCCESS**. HTTPS root returned 200; `/config/app-content.json` returned 200 with `no-store` and the new Spanish benefit labels; the bundled coffee JPEG returned 200. In a fresh 360px Chromium context, selecting `Ya estoy entrenando.` showed 40 illustrative points and the coffee card on Home; following `Ver todos los beneficios` showed the same 40 points and all three cards. This is a bounded live check, not a full-device or cross-browser claim. Before upload, focused core/browser tests, typecheck and build passed on the product revision; subsequent test-only corrections at `a2675c1` passed 10 affected browser tests and build/typecheck, and independent final review found no remaining acceptance issue. The source upload preceded the test-only corrections; no production code changed in them.
 
 The `80c0b1d` release's bounded checks after observed SUCCESS:
 
