@@ -47,7 +47,10 @@ sport filter), `#/profile`, `#/profile/journey`, `#/profile/challenges`,
 `#/session/:attemptUUID` requires an active attempt; `#/success/:encodedCompletionKey`
 requires an actual stored completion. Configuration, recovery, onboarding then
 mode/target guards take precedence. Old profile-prefixed URLs are navigation hints,
-never preference/identity writes. Wrong/retired IDs return safe lists, never array items.
+never preference/identity writes. Preview mode rejects canonical and legacy session/success
+routes, including genuine actual completion IDs. Canonical Success accepts only a renderable
+actual completion source key; imported legacy completion keys return meaningful actual home
+without changing their records. Wrong/retired IDs return safe lists, never array items.
 
 `session.ts` snapshots ordered exercise/image/plan content at explicit start with a
 fresh UUID. `acceptedCount` is a monotonic prefix, `viewIndex` a review cursor;
@@ -76,18 +79,23 @@ Representative 360/1280 keyboard/visual checks are not universal accessibility p
 
 ### Images, serving and verification
 
-Three local SVGs are environment art only. Exact-exercise images use approved bundled
-JPEGs and developer-controlled path/subject allowlist in `content/images.ts`, not JSON
-self-approval. The [provenance record](../public/assets/photos/provenance.json) retains
-owner-satisfied permission, original Pexels/license metadata, byte hashes and actual
-visual correspondence observations. Unsafe paths/subjects reject; missing/unverified
-assignment or failed local load preserves instructions with Spanish unavailable status,
-never a remote fallback. Runtime never fetches provenance source URLs.
+All 29 approved mockup photos are bundled local JPEGs. The 15 unique exercise photos use
+runtime JSON assignments bounded by the developer-controlled path/subject allowlist in
+`content/images.ts`, not JSON self-approval. The 14 onboarding, notice, sport and class
+photos use the small static `content/mockupPhotos.ts` map; shared components reuse those
+stable paths in actual and preview destinations. Plans show exercise thumbnails before
+Start and sessions retain snapshot images. The three legacy SVGs remain available only as
+general environment art and are not used on photo-required surfaces. The
+[provenance record](../public/assets/photos/provenance.json) retains owner-satisfied
+permission, original Pexels/license metadata, byte hashes and visual correspondence.
+Unsafe exercise paths/subjects reject; missing/unverified assignment or failed session
+load preserves instructions with Spanish unavailable status, never a remote fallback.
+Runtime never fetches provenance source URLs.
 
 `scripts/serve.mjs` serves only built dist via pinned serve-handler 6.1.6 on 0.0.0.0,
 validated PORT (default 3000), no port switching/catch-all/listing/symlinks. JSON fetch
-and response are no-store. Dependencies/serving/deployment configuration are unchanged;
-[deployment](deployment.md) owns the earlier release, not this feature's release status.
+and response are no-store. Dependencies and serving configuration are unchanged; [deployment](deployment.md) owns
+the verified production release of this feature and its bounded live checks.
 [Root README](../README.md) owns commands/reset/presenter limits. Core tests import real
 helpers; serial Chromium tests own built port 4173 and compare actual raw bytes/rendered
 outcomes. Served JSON/photo recovery restores exact bytes in finally. Required evidence

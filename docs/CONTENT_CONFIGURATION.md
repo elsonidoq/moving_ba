@@ -63,17 +63,25 @@ Retiring a target requires repairing references, never selecting the next array 
 
 ## Exact local photos
 
-General environment art remains only `/assets/calisthenics.svg`, `/assets/yoga.svg`,
-`/assets/swimming.svg`; it cannot substitute for an exact exercise photo.
-`src/content/images.ts` owns the exact approved JPEG path/subject/evidence allowlist.
-JSON cannot grant approval. Reusing a JPEG is permitted only for its explicitly
-listed equivalent exercise subjects. Do not infer correspondence from filenames/IDs:
-T005 corrected visible text to match actual posture/equipment, and IDs stay stable.
+All 29 approved mockup photos are bundled under `/assets/photos/`. Exercise assignments
+remain editor-controlled through the JSON `images` collection; `src/content/images.ts`
+owns their exact approved JPEG path/subject/evidence allowlist, and JSON cannot grant
+approval. Reusing an exercise JPEG is permitted only for explicitly listed equivalent
+subjects. Do not infer correspondence from filenames/IDs: visible text matches actual
+posture/equipment and stable IDs remain unchanged.
+
+Onboarding, notice, sport-card/hero and class photos are deliberately not JSON fields.
+`src/content/mockupPhotos.ts` statically maps those 14 visual assets to the existing
+components and stable sport/class IDs. Add or rename those product records only with a
+matching code-map change; an unknown class shows honest unavailable feedback rather than
+a different photo. The three SVGs remain general environment assets and cannot substitute
+on a photo-required surface.
+
 The [photo provenance](../public/assets/photos/provenance.json) records owner-satisfied
-permission for the supplied as-is set, original Pexels URLs, exact license label
+permission for the complete set, original Pexels URLs, exact license label
 `Pexels License (consultar términos)`, acquisition/bytes/hashes/decoding/serving and
-actual image correspondence observations. Consume that evidence; no reacquisition or
-renewed rights gate is required for these unchanged assets.
+visual correspondence observations. Consume that evidence; no reacquisition or renewed
+rights gate is required for unchanged assets.
 
 A verified assignment needs canonical allowlisted local path, exact subject,
 licenseStatus:verified, matching evidence and exercise imageStatus:verified. Spanish
@@ -137,5 +145,6 @@ Reload/exit/storage events discard attempt/affirmation/preview/chat transients.
 No multi-tab transaction guarantee or verified exercise activity is implied.
 
 Repository edits do not change deployed bytes. [Deployment](deployment.md) owns the
-historical release/authorization boundary; rebuild and separately authorize any release.
+current verified production release and authorization boundary; rebuild and separately
+authorize any future release.
 No CMS, account, remote editor, provider call or automatic Git-push deployment is added.

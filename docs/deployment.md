@@ -2,7 +2,7 @@
 
 ## Current status
 
-**Live demo verified on Railway, 2026-10-14.**
+**Live demo verified on Railway, 2026-10-15.**
 Public HTTPS: **https://movingba-production.up.railway.app** (desktop and phone browsers;
 no tunnel needed). This is still a conceptual, non-official simulation, not a live
 booking, training-verification or partner service.
@@ -13,8 +13,8 @@ booking, training-verification or partner service.
 | Project | moving_ba (`cc82d4e3-18c9-4bf6-93fc-f5cd9f58a05d`) |
 | Environment | production (`75f39978-e9e1-4019-8b04-b60308632dcd`) |
 | Service | moving_ba (`07c70e92-6e27-477f-a3e0-2264da1c8c9c`) |
-| Deployment | `bf3b2bdd-858f-4b7f-8481-f46f0a74de52` — **SUCCESS**, status updated at 20:28:28Z |
-| Source | Clean main revision `80361c0906235b2809dbf9c57c568f41f40b93bb`, uploaded from cwd |
+| Deployment | `753afdf2-7033-4c22-94b1-6045f6ffcfa2` — **SUCCESS**, created at 01:03:08Z and observed terminal-success |
+| Source | Clean main revision `d6ca077011868ce4a9079d8a84a69cc4080ca45b`, uploaded from cwd |
 | Region / replicas | us-east4-eqdc4a / 1 |
 | Domain target | 8080; domain ID `abf3962f-0602-4ae1-8dbf-a1d9055dfb94` |
 
@@ -29,9 +29,10 @@ The initial `railway up` created the project/service and submitted deployment
 `6ee520e0-2164-4d16-bc0e-f27fd77a7f39` (observed SUCCESS). Detection chose the correct
 Node listener but defaulted to `npm install`. One scoped environment configuration
 patch selected locked installation and explicit build/start commands, automatically
-creating the final deployment above from the same source snapshot. This was not a
-second source upload or a retry of a failed build. Later documentation commits are
-not part of that uploaded application snapshot.
+creating prior deployment `bf3b2bdd-858f-4b7f-8481-f46f0a74de52` from that source
+snapshot. The current deployment above is a later authorized cwd upload containing the
+one-person flow, route corrections and all 29 bundled mockup photos. Closeout-only
+documentation commits after `d6ca077` are not part of its application snapshot.
 
 ## Verified local build/start boundary
 
@@ -154,37 +155,32 @@ envelope, it offers scoped demo recovery rather than migration/global browser cl
 
 ## Live verification and limitations
 
-After final-deployment SUCCESS, HTTPS checks and Playwright 1.56.1 with existing
-Chromium 153.0.8010.12 passed against the public origin:
+After current deployment SUCCESS, bounded HTTPS checks using Playwright 1.56.1 with
+matching Chromium 141.0.7390.37 passed against the public origin:
 
-- Root application rendered at 1280px; JavaScript loaded with JavaScript MIME.
-- JSON returned 200, JSON MIME, `Cache-Control: no-store`, populated bytes identical
-  to repository JSON; all three sport SVGs returned exact repository bytes.
-- Missing `/config/absent.json` and `/assets/absent.svg` returned real 404s.
-- `/#/returning/yoga/solo/yoga-returning` survived refresh.
-- At 360×900, Calistenia opened both solo and class paths without horizontal overflow.
-- One explicit solo completion (including double final-step activation) persisted
-  once after reload; Mi camino showed 1 practice/10 points and rewards agreed.
-- Fictional Yoga class interest survived refresh without changing completions or
-  reward output. Swimming blocked no/each single affirmation; both enabled water.
-- No uncaught browser errors; desktop/mobile screenshots were viewed.
+- Runtime JSON returned 200 with JSON MIME and `Cache-Control: no-store`; its bytes
+  matched repository `public/config/app-content.json` SHA-256
+  `699d656834e8715e18b0e3a61c81196d99bac3d48c1ab383c34ecb44c93144bf`.
+- Fresh mobile onboarding reached actual Home. The three Home sport-card JPEGs and one
+  exact Calistenia class-detail JPEG decoded at their 1400px natural width using only
+  local production URLs; no external image request occurred.
+- The broader committed implementation evidence passed typecheck/build, 129 core tests
+  and 33 Chromium tests, including all-29 mapping/bytes/decode coverage, route isolation,
+  storage safety and representative responsive placement. The independent final review
+  passed with one non-blocking thumbnail-error note.
 
-Disposable script/log/screenshots: `/tmp/ba-railway-deploy/` in the deployment session;
-these are not required for a fresh checkout or redeploy. Live verification did not
-mutate served content, mock responses or freeze the clock. Browser history created
-by these checks belongs only to the disposable browser context, not other visitors.
+Disposable closeout headers/config bytes and browser contexts under `/tmp` are not
+required for a fresh checkout or redeploy. Live verification did not mutate served
+content or mock responses. Browser history belongs only to the disposable context.
 
-Physical cellphone hardware, Safari/Firefox and universal device/accessibility support
-were not tested. Previously verified 68 core/26 Chromium local tests were not rerun
-as a full suite; app source and dependencies are unchanged. The existing local server
-on port 4173 was preserved. New HTTPS-origin localStorage does not inherit localhost
-or tunnel history; different browsers/devices have independent demo histories.
-
-[OI-1](open_issues.md#oi-1--assess-reported-dependency-audit-warnings) remains open:
-Railway `npm ci` also reported three high-severity warnings. Advisories and runtime/
-development exposure are unassessed; no dependency remediation or production security
-hardening is claimed. No audit fix was applied. Future deployments/rollback require
-appropriate authorization; no platform rollback was exercised.
+Physical cellphone hardware, Safari/Firefox, every production photo placement and
+universal device/accessibility support were not manually tested. Verification was
+intentionally representative; different browsers/devices retain independent
+HTTPS-origin localStorage. [OI-1](open_issues.md#oi-1--assess-reported-dependency-audit-warnings)
+tracks unassessed dependency warnings, and
+[OI-2](open_issues.md#oi-2--add-explicit-load-failure-feedback-for-plan-thumbnails)
+tracks the non-blocking plan-thumbnail load-failure feedback gap. No dependency fix or
+platform rollback was applied; future deployments/rollback require authorization.
 
 ## Historical provenance
 

@@ -3,8 +3,8 @@
 Spanish-language conceptual demo for one person's movement journey, not an official
 service. Practices, classes, contacts, intentions and rewards are simulations. No
 booking, attendance verification, AI, push, backend, account or live integration.
-[Deployment](docs/deployment.md) owns the earlier release record; these local changes
-do not deploy or establish the current contents of that release.
+[Deployment](docs/deployment.md) owns the verified Railway production release at
+commit `d6ca077`, including its public URL and bounded live checks.
 
 ## Run locally
 
@@ -80,11 +80,13 @@ Edit UTF-8 `public/config/app-content.json` following the
 screens; runtime fetch and HTTP response are no-store. Missing/malformed/invalid JSON
 blocks with Spanish error/retry, never plausible fallback. Dev serves public directly;
 built serving requires rebuilding after source edits. There is no CMS/live editor.
-Exact exercise photos are approved bundled JPEGs, restricted by the developer allowlist;
-source/license/correspondence evidence is in
-[photo provenance](public/assets/photos/provenance.json). Source URLs are metadata,
-never remote fallbacks. Missing/unverified photos preserve instructions with honest
-unavailable feedback, not matching-image evidence. No photo reacquisition is needed.
+All 29 approved mockup photos are bundled JPEGs. Exercise assignments remain in runtime
+JSON and are restricted by the developer allowlist; onboarding, notice, sport and class
+photos use the static `src/content/mockupPhotos.ts` mapping. Plans show exercise thumbnails
+before Start and sessions retain snapshot images. Source/license/correspondence evidence is
+in [photo provenance](public/assets/photos/provenance.json). Source URLs are metadata,
+never remote fallbacks. Missing/unverified exercise photos preserve instructions with
+honest unavailable feedback. No photo reacquisition is needed.
 
 ## Checks
 
@@ -109,8 +111,10 @@ originals in finally; do not share that mutable fixture with another client. Cor
 imports actual validators/state/date/safety helpers. Browser checks compare exact raw
 storage with rendered outcomes, local JPEG bytes, recovery and keyboard/360/1280
 presentation measurements. Screenshots require actual viewing, not just generation.
-Fresh independent implementation review and owner acceptance remain separate.
+Fresh independent implementation review passed at `d6ca077`; owner acceptance and any
+future release remain separate decisions.
 
 [Architecture](docs/architecture.md) explains custody/routes; [docs index](docs/README.md)
-provides other owners. Existing audit investigation is separate in
-[open issues](docs/open_issues.md); no dependency or deployment change is included here.
+provides other owners. The dependency investigation and non-blocking plan-thumbnail load-failure gap are tracked
+in [open issues](docs/open_issues.md). Current deployment evidence is maintained separately
+in the [deployment runbook](docs/deployment.md).
