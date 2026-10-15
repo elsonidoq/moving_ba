@@ -2,77 +2,98 @@
 
 ## Current implemented demo
 
-The delivered app is React 19.2.0/TypeScript 5.9.3/Vite 7.2.2, plain CSS and hooks/simple
-context. `src/App.tsx` bootstraps a no-store runtime fetch of
-`/config/app-content.json` through `src/content/load.ts` and `validate.ts`; no product
-JSON is bundled into JavaScript. Complete validation precedes mounting consumers;
-a built-in Spanish blocking/retry shell works without editable content. Strings
-render as text, assets are restricted to three local extracted v2 environment SVGs.
-The [content guide](CONTENT_CONFIGURATION.md) owns required fields and editing steps.
+React 19.2.0/TypeScript 5.9.3/Vite 7.2.2, plain hooks/context and CSS. No new
+state/router/schema library, backend, database, account or live integration.
+`src/App.tsx` fetches `/config/app-content.json` through `content/load.ts` with
+no-store and complete validation before mounting consumers. Built-in Spanish
+loading/error/retry works without product JSON. Text renders as text, never HTML.
+The [content guide](CONTENT_CONFIGURATION.md) owns the editor contract.
 
-`src/state/navigation.ts` guards stable-ID hash routes (no server rewrite), rejecting
-wrong-sport, stale class/plan and forged session/success targets. `context.tsx` owns
-synchronous transitions; `session.ts` permits explicit START, current-step acceptance,
-then one upsert keyed by attempt UUID before success. Navigation, partial attempts,
-interest and presentation inspection never credit completion. Water START always
-requires both separate ability and supervised permitted-pool/guardavidas affirmations;
-profile history is not eligibility. There are no timer waits or real activity checks.
+### Actual custody and projections
 
-`storage.ts` validates/materializes a schema 1 envelope at only
-`ba-en-movimiento:demo:v1`: selected profile, fixed reference date, isolated seed
-snapshots, completed attempts and interests. No counters are stored. First creation
-or deliberate reset materializes fixtures; reload does not reseed. Retired plan/class
-snapshots remain valid with known profile/sport identity. Invalid data offers scoped
-recovery; denied reads/writes permit warning-labeled in-tab use without persistence
-promises. Storage events reload the envelope and abandon active work, not a multi-tab
-transaction system. Reset replaces only the one key and selects first-time.
+`state/storage.ts` writes only `ba-en-movimiento:demo:v1`, schemaVersion 1,
+layout `one-person`: `preference`, source-keyed `journey`, `interests`, `intention`,
+optional `legacySource`. New/reset envelopes are empty and unchosen. Frozen
+`legacy.ts` validation is independent of current catalog/fixtures. Normalization
+preserves every original source-profile baseline/completion/interest and snapshot,
+with deterministic collision-safe tuple keys and original archive. The archive is
+not counted again; legacy selection is not confirmed preference. Reads never write.
+Retired snapshots remain history; no content edit/reload reseeds it.
 
-`dates.ts` and `selectors.ts` derive one history's lifetime points/weeks/badges and
-current Monday-start week/calendar-month progress using Buenos Aires local dates.
-Interests are not input. Only progress bars cap numerators. Fixtures reference
-2026-10-14, not a frozen app clock; current/new dates use actual time. Rest never
-deletes lifetime achievements. Seed origins and user-simulated completions are labeled.
-Root [README](../README.md) owns run/test/reset/presenter commands and date examples.
+`state/context.tsx` is the single synchronous command owner reading current state.
+Durable actions require actual mode, valid/nonblocked storage and explicit choice;
+reset is the confirmed recovery exception. Cancel is a complete no-op. Edit changes
+preference only; interest is idempotent; intention is one exact class snapshot,
+separate from attendance/history. Invalid data remains byte-identical pending reset.
+Denied reads prevent ordinary overwrite of unknown history; failed writes/reset
+produce warning-labeled tab-only state, explicitly allowing old data to return after
+reload. Only this key is replaced, never global storage clear.
 
-`src/screens/` provides Home, sport choice, plan/catalog, session/exact class detail,
-success, journey and challenges. `AppShell` provides profile/back/home/journey/logs,
-scoped recovery/reset and keyboard skip/focus; no separate unsafe stage shortcuts.
-One centered mobile-first app uses actual unchanged v2 scene art, approved palette,
-rounded hierarchy and regular page scrolling. All visible/a11y/error copy is Spanish.
-Classes/contacts/prices and interests are fictional, never booking/attendance;
-rewards are illustrative/nonredeemable/sin convenio vigente, no partner transactions.
+Attempts, swim affirmations, preview scenario/answer and contextual parent are
+memory-only. Storage events for the demo key or clear invalidate all transients
+before reread and guarded actual landing. No multi-tab transaction promise.
+`selectors.ts` derives actual lifetime sessions/points/weeks/badges and BA current
+Monday-week/calendar-month progress without mutable counters. Interest/intention/chat
+never credit. Only bars cap. Explicit `selectPreviewJourney` instead builds a
+scenario-only projection at its configured reference date; profile subviews use it
+only in preview. Canonical actual records/envelope remain untouched.
 
-### Runtime, serving and checks
+### Navigation, practice and support
 
-Direct exact pins in package/lock: react/react-dom 19.2.0, TypeScript 5.9.3, Vite 7.2.2,
-@vitejs/plugin-react 5.1.1, @types/react/@types/react-dom 19.2.2, @playwright/test 1.56.1,
-serve-handler 6.1.6. Actual local Node 22.23.3/npm 10.9.9; engines 22.x >=22.12.
-No new dependency was added in final integration; three high audit warnings remain
-unassessed, not remediated by an unapproved upgrade.
+`navigation.ts` guards stable-ID hashes: `#/home`, `#/sports`, `#/classes` (optional
+sport filter), `#/profile`, `#/profile/journey`, `#/profile/challenges`,
+`#/sports/:sportId`, `#/sports/:sportId/solo/:planId`,
+`#/sports/:sportId/classes` and `#/sports/:sportId/classes/:classId`.
+`#/session/:attemptUUID` requires an active attempt; `#/success/:encodedCompletionKey`
+requires an actual stored completion. Configuration, recovery, onboarding then
+mode/target guards take precedence. Old profile-prefixed URLs are navigation hints,
+never preference/identity writes. Wrong/retired IDs return safe lists, never array items.
 
-Vite copies public files unchanged to `dist`. `scripts/serve.mjs` is a minimal ESM
-Node HTTP listener delegating static MIME/path/streaming/errors to serve-handler;
-not a backend/API or Vite preview production server. Only absolute dist is served,
-0.0.0.0 plus validated PORT (unset: 3000, supplied decimal 1–65535), nonzero startup
-failure without fallback. Default root index, no SPA catch-all/directory listing/
-symlinks; configuration response and fetch are no-store. See [deployment](deployment.md)
-for the serving boundary and separately verified Railway deployment.
+`session.ts` snapshots ordered exercise/image/plan content at explicit start with a
+fresh UUID. `acceptedCount` is a monotonic prefix, `viewIndex` a review cursor;
+Previous/Next cannot accept/skip. Matching UUID/current unaccepted step is mandatory;
+final acceptance alone atomically upserts one completion. Replay/double activation,
+partial exit/reload or forged success grants no extra credit. Water start rechecks
+both separate swimming ability and permitted supervised-pool/guardavidas affirmations;
+preference/history/hash cannot supply either. Leaving clears them.
 
-Playwright core imports actual validator/transition/storage/date/rule helpers;
-Chromium uses a built app through the same production start command. Composed tests
-compare stored UUIDs and independently calculated rendered totals; real served-file
-mutation/failure tests restore original bytes in finally blocks. Tests are serial
-within their single browser file; don't run another client against its mutable dist
-fixture. Representative 360/1280px screenshots were actually viewed, with keyboard/
-focus/44px targets/reduced-motion/Spanish error checks and agent-led timed rehearsal.
-These are focused local checks, not universal accessibility/security/browser claims.
-Task-local commands and observations are retained in [tasks](../specs/001-ba-movement-demo/tasks.md).
+Profile-entered scenarios are one person's transient demonstrations. Journey scenarios
+show sustained progress/supportive return; notice scenarios open
+`#/notice/:scenarioId`, then `#/chat/:chatId` directly, with matching active context.
+Forged notice/chat hashes never activate preview. Exactly five missed-class/four
+inactivity answers show configured supportive response and stable class/dry-plan/sport
+destination. Leaving chat clears answer, destination remains preview. No free text,
+provider call, push, absence record, penalty or persisted answer. Explicit exit restores
+actual home/card without pending action; reload cannot restore preview.
 
-No backend/database/schema owner, authentication, real booking, payment, maps,
-notification or external integration is implemented. The first authorized Railway
-release uses this unchanged Node listener; [deployment](deployment.md) owns verified
-resource IDs, runtime, public URL and live checks. The conceptual HTML remains visual
-authority and historical artifact, not operational behavior truth.
+`AppShell` provides circular profile, contextual back, skip link, heading/exercise
+focus and bottom Inicio/Deportes/Clases (hidden on onboarding/recovery/notice/chat).
+Every preview surface uses the same shell badge and normal-flow bottom exit after
+content, with tab clearance and visible keyboard focus. Durable controls are disabled
+and independently guarded. Rounded yellow mobile-first pages use ordinary document
+scroll, Spanish labels/alts/status/errors, 44px targets and reduced-motion rules.
+Representative 360/1280 keyboard/visual checks are not universal accessibility proof.
+
+### Images, serving and verification
+
+Three local SVGs are environment art only. Exact-exercise images use approved bundled
+JPEGs and developer-controlled path/subject allowlist in `content/images.ts`, not JSON
+self-approval. The [provenance record](../public/assets/photos/provenance.json) retains
+owner-satisfied permission, original Pexels/license metadata, byte hashes and actual
+visual correspondence observations. Unsafe paths/subjects reject; missing/unverified
+assignment or failed local load preserves instructions with Spanish unavailable status,
+never a remote fallback. Runtime never fetches provenance source URLs.
+
+`scripts/serve.mjs` serves only built dist via pinned serve-handler 6.1.6 on 0.0.0.0,
+validated PORT (default 3000), no port switching/catch-all/listing/symlinks. JSON fetch
+and response are no-store. Dependencies/serving/deployment configuration are unchanged;
+[deployment](deployment.md) owns the earlier release, not this feature's release status.
+[Root README](../README.md) owns commands/reset/presenter limits. Core tests import real
+helpers; serial Chromium tests own built port 4173 and compare actual raw bytes/rendered
+outcomes. Served JSON/photo recovery restores exact bytes in finally. Required evidence
+and implementation checkpoints are returned for independent review, not self-awarded
+acceptance or live-service claims. All training/classes/contact/rewards remain fictional,
+nonofficial, professional-review/no-booking/nonredeemable demonstrations.
 
 ## Historical initialization and planning provenance
 

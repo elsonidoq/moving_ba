@@ -1,112 +1,141 @@
 # Content configuration
 
-Edit UTF-8 `public/config/app-content.json`; React controls presentation, JSON controls
-content. It is public: never add secrets, personal data, real contacts, executable HTML
-or remote assets. The app fetches `/config/app-content.json` with no-store on reload,
-validates the whole document and blocks with Spanish hints and **Intentar de nuevo**
-on missing files, malformed JSON or invalid references. There is no silent fallback.
+Edit public UTF-8 `public/config/app-content.json`; React owns presentation, JSON
+owns Spanish content. Never add secrets/personal data/real contacts/HTML. Runtime
+`/config/app-content.json` fetch and HTTP response are no-store. Whole-document
+validation precedes dependent screens; missing/malformed/reference-invalid content
+shows built-in Spanish error and **Intentar de nuevo**, never plausible fallback.
 
-## Required fields and identities
+## Schema and stable identities
 
-Keep `schemaVersion: 1`. All fields below are required; copy a complete existing record.
-Human text must be nonempty Spanish, without HTML. IDs match `[a-z][a-z0-9-]*`, unique
-within each collection; keep IDs stable when editing copy, never use array positions.
+Keep `schemaVersion: 1`. Copy complete records. Text is nonempty Spanish without
+HTML. IDs match `[a-z][a-z0-9-]*`, unique within collection, never labels/positions.
+`src/content/types.ts` and `validate.ts` are the executable field/reference contract.
 
-| Section | Fields / constraints |
+| Collection | Required fields / constraints |
 | --- | --- |
-| branding | name, tagline, demoNotice |
-| ui | All named labels in `src/content/types.ts` (`uiKeys`); retain every key, including accessible, error, empty and success labels |
+| branding | name (`Buenos Aires te mueve`), tagline, demoNotice |
+| ui | Every `uiKeys` entry in types.ts, including accessibility/error/unavailable/preview/exit/review labels |
 | legal | illustrativeTraining, professionalReview, fictionalClasses, noOfficialStatus, nonredeemable, noAgreement, locationNotice |
-| profiles | Exactly first/returning/regular: id, title, subtitle, welcome, hero, cta, nextPrompt, defaultSportId, defaultPlanId, scenarioId, weeklyGoal (positive integer) |
-| sports | Exactly calisthenics/yoga/swimming: id, name, summary, heroAsset, heroAlt, environment, facilities, tips (nonempty strings), modes (solo/classes), safetyCopy |
-| exercises | id, sportId, title, quantity, technique, imageAsset, imageAlt, medium (dry-land/water) |
-| plans | id, sportId, profileId, level, name, description, duration, environment, prerequisites (nonempty strings), safetyCopy, medium, steps (nonempty ordered objects: id, exerciseId) |
-| classes | id, sportId, title, schedule, venue, locality, level, requirements (nonempty strings), description, receiver, contactCopy, price (kind free/paid, amount, currency ARS), fictional true |
-| rules | pointsPerCompletion (nonnegative integer); challenges (id,title,description,metric sessions/activeWeeks,period week/month,target positive integer); badges (id,title,description,metric,threshold positive integer); benefits (id,title,description,disclaimer,pointsThreshold nonnegative integer,redeemable false) |
-| scenarios | referenceDate (valid YYYY-MM-DD), defaultProfileId first, profiles (id,profileId,history entries with id,sportId,planId,activityDate) |
+| onboarding | title, instructions, continueLabel, validationLabel, editTitle, editInstructions; exactly three choices `{id,label}` |
+| profiles | Exactly first/returning/regular recommendation categories: id,title,subtitle,welcome,hero,cta,nextPrompt,defaultSportId,defaultPlanId,scenarioId,weeklyGoal (positive integer) |
+| sports | Exactly calisthenics/yoga/swimming: id,name,summary,heroAsset,heroAlt,environment,facilities,tips,modes (solo/classes),safetyCopy |
+| exercises | id,sportId,title,quantity,technique,medium (dry-land/water),imageAsset (empty),imageAlt,imageId (null or image ID),imageStatus (unavailable/verified) |
+| plans | id,sportId,profileId,level,name,description,duration,environment,prerequisites,safetyCopy,medium,ordered steps `{id,exerciseId}` |
+| classes | id,sportId,title,schedule,venue,locality,level,requirements,description,receiver,contactCopy,price `{kind:free/paid,amount,currency:ARS}`,fictional:true |
+| rules | pointsPerCompletion nonnegative integer; challenges `{id,title,description,metric:sessions/activeWeeks,period:week/month,target}`; badges `{id,title,description,metric,threshold}`; benefits `{id,title,description,disclaimer,pointsThreshold,redeemable:false}`; targets/thresholds positive except pointsThreshold nonnegative |
+| scenarios | Retained legacy content fixtures: referenceDate, defaultProfileId:first, profiles `{id,profileId,history:[{id,sportId,planId,activityDate}]}`; not actual initialization/reset data |
+| previewScenarios | Exactly sustained/return/inactive/missed-class: id,title,disclosure,guidance,referenceDate,recommendationSituationId,kind (journey/notice),history; notice additionally chatId,notice,activationLabel |
+| chats | Exactly missed-class-chat/inactive-chat: id,scenarioId,introduction,disclosure,answers `{id,label,response,destinationId}` |
+| destinations | id,label,kind (class/plan/sport),sportId; class requires classId only, plan requires planId only, sport neither |
+| images | id,path (null or approved canonical local path),alt,subject `{kind:exercise/sport,id}`,sourceUrl (null or metadata URL),attribution,provenance,licenseStatus (unverified/verified),evidence (null or registry evidence) |
 
-References must exist and match sport/profile. Default plans must be safe dry-land plans
-for their profile/default sport; scenarioId must refer to that profile's scenario.
-Every profile/sport needs a dry-land plan; swimming also needs a water variant per
-profile. Water exercises only belong in swimming water plans. Both runtime swimming
-and supervised-permitted-pool/guardavidas affirmations always gate water start; editing
-copy cannot grant eligibility. Assets are only `/assets/calisthenics.svg`,
-`/assets/yoga.svg`, `/assets/swimming.svg`, with Spanish alternative text.
+Profile IDs are recommendation categories, never people or swim eligibility. Keep
+all nine category/sport dry plans and three swimming-water variants. Default and
+chat plans must be safe dry plans in the correct category/sport. Water exercises
+only enter swimming-water plans; dry warmups may enter water plans. Both runtime
+swimming affirmations remain mandatory regardless of copy. Each sport needs free
+(amount 0) and paid (finite positive amount) ARS fictional examples. Receiver/contact
+must stay explicitly fictional or `A confirmar`, never booking/contact integration.
 
-## Concrete local edit and preview
+Exact onboarding labels (not freely replaceable):
+- `No estoy entrenando y quiero empezar.`
+- `Entrenaba antes y quiero volver.`
+- `Ya estoy entrenando.`
 
-1. Run `npm ci`, then `npm run dev`; open the printed local URL. For production-like
-   preview instead run `npm run build` and `PORT=4173 npm start`, open
-   `http://localhost:4173`. Stop the previous server before reusing its port.
-2. Find class `yoga-free`: set title to `Yoga: encuentro editorial de ejemplo` and
-   schedule to `Viernes 16:45 · horario ficticio`. Keep the ID. Reload
-   `/#/first/yoga/classes/yoga-free`; both exact values must appear.
-3. Find plan `cal-first`, reverse its `steps` array without changing the step IDs or
-   exerciseId pairs. Edit the referenced exercise's technique to
-   `Ejemplo editorial: usá un apoyo estable y un recorrido cómodo.` Reload
-   `/#/first/calisthenics/solo/cal-first`; the new sequence and technique must appear.
-4. Set `rules.benefits[0].description` to
-   `Una pausa editorial de demostración, sin oferta real.` Reload
-   `/#/first/challenges`; the copy must appear, still nonredeemable/sin convenio vigente.
-5. For a built preview, repeat `npm run build` **after each repository edit** before
-   reloading: the server reads `dist`, not `public`. Dev serves public directly.
-   No React edits are needed. `npm run test:core -- --grep 'content validation'`
-   checks repository content (six classes is a minimum, not a cap).
-   `npm run build` alone only typechecks/bundles; it does not validate JSON. A browser reload validates the file actually being served.
-6. Restore your example edits. Use **Restablecer demostración**, accept its confirmation,
-   and inspect each profile under **Mi camino**. This replaces only
-   `ba-en-movimiento:demo:v1` on the current browser origin; other origins and unrelated
-   storage keys are untouched. It restores all fixtures, clears added completions and
-   interests, selects first-time and abandons transient practice/affirmations.
+Exact scenario titles: `Entrenamiento sostenido`, `Volver después de una pausa`,
+`Dejó de entrenar y de usar la app`, `Pensaba asistir a una clase, pero no fue`.
+Dates are valid YYYY-MM-DD and history cannot exceed referenceDate; sustained spans
+multiple weeks, return precedes its reference. Guidance/notice/disclosure are editable.
 
-Automated reproduction against the actual built file (serial tests, finally restoration):
-`npm run test:e2e -- --grep 'content edits'` and separately
-`npm run test:e2e -- --grep 'content failures'`. Build first and install matching Chromium
-as described in the root README. These tests temporarily edit/remove **dist** JSON,
-verify actual HTTP responses and rendered reload/retry, then restore exact original bytes.
-Do not run other browsers against that same fixture concurrently.
+Missed-class answer IDs/labels: interruption / `Me surgió algo`; schedule /
+`El horario o el lugar no me sirven`; dislike / `No me gustó la actividad`;
+discomfort / `No me sentí cómodo/a con el docente o la clase`; skip /
+`Prefiero no responder`. Inactive: class / `Volver con una clase`; short-solo /
+`Entrenar algo corto por mi cuenta`; other-sport / `Probar otra actividad`; skip /
+`Prefiero no responder`. Keep these exact labels/IDs and no Other/free-text case.
+Introduction, supportive response and destination label/reference are editable.
+Each answer needs its own destination. Interruption/schedule offer exact classes,
+dislike another sport, discomfort class or solo, skip a low-pressure plan/sport;
+inactive choices map to class/short solo/other sport/low-pressure respectively.
+Full validation rejects contradictory/wrong-sport/wrong-category/water/retired references.
+Retiring a target requires repairing references, never selecting the next array item.
 
-## Add classes, exercises or plans
+## Exact local photos
 
-Duplicate a complete class, give it a new stable ID and existing sportId, and keep all
-fictional notices/receiver (`A confirmar` or explicitly fictional)/contact copy honest.
-Each sport still needs at least one free (amount 0) and paid (finite amount >0) ARS
-example. Adding interest never means booking, attendance, sent request or incentive credit.
+General environment art remains only `/assets/calisthenics.svg`, `/assets/yoga.svg`,
+`/assets/swimming.svg`; it cannot substitute for an exact exercise photo.
+`src/content/images.ts` owns the exact approved JPEG path/subject/evidence allowlist.
+JSON cannot grant approval. Reusing a JPEG is permitted only for its explicitly
+listed equivalent exercise subjects. Do not infer correspondence from filenames/IDs:
+T005 corrected visible text to match actual posture/equipment, and IDs stay stable.
+The [photo provenance](../public/assets/photos/provenance.json) records owner-satisfied
+permission for the supplied as-is set, original Pexels URLs, exact license label
+`Pexels License (consultar términos)`, acquisition/bytes/hashes/decoding/serving and
+actual image correspondence observations. Consume that evidence; no reacquisition or
+renewed rights gate is required for these unchanged assets.
 
-Duplicate an exercise with a new ID, same sport and safe medium; supply quantity,
-technique and local artwork/alt. Reference it in a plan step with a unique step ID.
-The same exercise may recur, but each occurrence needs its own step ID. Duplicate a
-plan with a new ID and appropriate profileId/sportId; preserve all metadata and valid
-ordered references. To select it as that profile's default, update defaultPlanId and
-matching defaultSportId. Keep every required safe combination and swimming variant.
-Retiring a referenced plan also requires repairing defaults and scenario references.
-Removed selected IDs return to valid choice/catalog, never the item now at that position.
+A verified assignment needs canonical allowlisted local path, exact subject,
+licenseStatus:verified, matching evidence and exercise imageStatus:verified. Spanish
+`alt` describes the actual image. Source URLs/attribution are provenance metadata,
+never runtime loaders. HTTP/HTTPS/protocol-relative/data/script runtime paths,
+backslashes/traversal/encoding/query/fragment tricks and unapproved paths reject.
+For pending images use path:null, licenseStatus:unverified, evidence:null and exercise
+imageStatus:unavailable (imageId may reference that pending exact subject or be null).
+Missing local bytes also render Spanish unavailable feedback while retaining
+instructions, without fallback. Safe unavailable feedback is not matching-photo proof.
+Adding new subjects/assets requires separate developer authorization/review, not an
+editor's self-declared verified flag.
 
-## Fixtures, snapshots and derived rules
+## Local editing and recovery
 
-`scenarios.referenceDate` is **2026-10-14**, not the running clock. First-time history
-is empty; returning has two seeded practices on August 17/24 and a pause; regular has
-four seeded weeks through October 12. Fixture IDs must be unique across scenarios,
-dates valid and on/before referenceDate, sport/plan/profile consistent. Returning
-must precede referenceDate; regular spans multiple weeks. Fixture edits apply only
-on initial storage creation or explicit reset, not every reload.
+1. Follow [run commands](../README.md). Dev reads public; built server reads **dist**.
+   Rebuild after each repository edit for production-like preview. Build typechecks
+   and bundles; it does not validate JSON. Reload/retry validates actual served bytes.
+2. Edit onboarding.instructions and onboarding.editTitle; reload to inspect unchosen
+   onboarding and Perfil → edit. Keep exact choice labels. Edit a profile hero and
+   inspect its actual home recommendation after explicit selection.
+3. Edit inactive guidance/notice and inactive-chat introduction/answer response.
+   For short-solo, keep its ID/label and select a valid returning dry plan destination
+   with matching sportId, e.g. yoga-returning/yoga; edit its destination label.
+   Enter inactive from Perfil, activate notice, choose the predefined answer, then
+   follow the exact configured destination. It stays preview and cannot start.
+4. For `cal-first-shoulders`, copy its verified image record with a new unique ID,
+   same path/subject/evidence and updated truthful Spanish alt; reference that ID.
+   Actual practice renders that local JPEG. To test unavailable state instead set
+   imageId:null/imageStatus:unavailable; instructions remain visible.
+5. For a class edit, retain `yoga-free` ID and change title/schedule, then inspect
+   `/#/sports/yoga/classes/yoga-free`. For step order edits retain each unique step
+   ID/exercise pair. Active attempts keep snapshots until abandoned/new explicit start.
+6. Restore edits. **Restablecer demostración** in actual Perfil confirms then writes
+   empty unchosen state, never fixtures. Cancel changes nothing. Invalid storage uses
+   confirmed recovery. Failed save/reset is tab-only, with honest old-data-may-return
+   warning. Only this origin's demo key changes; unrelated keys survive.
 
-New completions and current windows use the actual Buenos Aires clock
-(`America/Argentina/Buenos_Aires`), Monday-start weeks and calendar months. Seeded
-history is labeled **Datos de demostración**, app completions **Práctica simulada por vos**.
-Older seeds may be outside current windows. Lifetime points = unique eligible record
-count × pointsPerCompletion; goals/challenges/badges derive from the same history.
-Only visual bars cap progress. Rest never deletes lifetime achievements. Rule edits
-recompute on reload, but stored history/interest titles remain historical snapshots;
-renaming or retiring current plans/classes does not reinterpret them. Unfinished
-sessions are transient and abandoned on reload, without credit. Storage denial permits
-in-tab use with a visible persistence warning; invalid envelopes offer scoped recovery.
+Serial reproduction (build first, no other clients sharing mutable dist):
 
-## Published builds
+```sh
+npm run test:core -- --grep 'content validation'
+npm run test:e2e -- --grep 'served profile content recovery'
+```
 
-Editing repository public JSON does not mutate a deployed build. Rebuild and, only
-with separate authorization, redeploy that static artifact. Reload fetches the newly
-served bytes; there is no CMS, account, hot deployed editor or remote-edit promise.
-The demo is published on Railway; see [deployment](deployment.md) for the public URL,
-verified source-upload redeployment procedure and exact resource scope. Git pushes alone
-do not update this service. HTTPS-origin localStorage is separate from local previews.
+The browser test edits actual dist JSON, observes no-store request/response and
+rendered copy/reference/image changes; missing/malformed/reference-invalid content
+blocks, restoring bytes and retry recovers. It exercises unsafe paths, pending
+assignments and an actually missing local JPEG without remote fallback, restores
+exact original JSON/photo bytes in finally, and tears down its owned server.
+
+## History, dates and published boundary
+
+Actual initialization/reset is empty; retained scenarios fixtures never manufacture
+history. Explicit preview projections use their own reference dates/history, not
+actual state or clock. Actual completions/current goals use Buenos Aires local time,
+Monday weeks and calendar months; preference/intention/interest/chat never credit.
+Legacy archive records and retired snapshots survive content/preference changes.
+Rule edits recompute derived values; only bars cap; rest retains lifetime badges.
+Reload/exit/storage events discard attempt/affirmation/preview/chat transients.
+No multi-tab transaction guarantee or verified exercise activity is implied.
+
+Repository edits do not change deployed bytes. [Deployment](deployment.md) owns the
+historical release/authorization boundary; rebuild and separately authorize any release.
+No CMS, account, remote editor, provider call or automatic Git-push deployment is added.

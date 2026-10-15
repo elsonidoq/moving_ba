@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { test, expect, type Page } from '@playwright/test';
-import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import { readFileSync, mkdirSync, writeFileSync, renameSync } from 'node:fs';
 import type { Content } from '../src/content/types';
 import { normalizeLegacy, type LegacyEnvelope } from '../src/state/storage';
 const content=JSON.parse(readFileSync('public/config/app-content.json','utf8')) as Content;
@@ -177,11 +177,14 @@ async function previewExitEvidence(page:Page,id:string,width:number) {
  const exit=page.getByRole('button',{name:content.ui.exitPreview,exact:true});
  await expect(page.locator('[data-preview-badge]')).toBeVisible();
  expect(await page.locator('main').evaluate(m=>m.lastElementChild?.hasAttribute('data-preview-exit'))).toBe(true);
- await page.keyboard.press('Tab');await exit.scrollIntoViewIfNeeded();await exit.focus();await expect(exit).toBeFocused();
+ const preceding=page.locator('[data-preview-content] a[href], [data-preview-content] button:not(:disabled), [data-preview-content] input:not(:disabled)');
+ if(await preceding.count())await preceding.last().focus();else await page.locator('main h1').focus();
+ await page.keyboard.press('Tab');await expect(exit).toBeFocused();await exit.evaluate(el=>el.scrollIntoView({block:'center'}));
  const measurement=await exit.evaluate(el=>{const r=el.getBoundingClientRect();const tabs=document.querySelector('.bottom-tabs')?.getBoundingClientRect();return {top:r.top,bottom:r.bottom,height:r.height,viewport:innerHeight,tabTop:tabs?.top??innerHeight,outline:getComputedStyle(el).outlineStyle,position:getComputedStyle(el).position,overflow:document.documentElement.scrollWidth>innerWidth};});
  expect(measurement.height).toBeGreaterThanOrEqual(44);expect(measurement.bottom+4).toBeLessThanOrEqual(measurement.tabTop);expect(measurement.top).toBeGreaterThanOrEqual(0);expect(measurement.outline).not.toBe('none');expect(measurement.position).toBe('static');expect(measurement.overflow).toBe(false);
  console.log('preview bottom focus',id,width,measurement);
  await page.screenshot({path:`/tmp/ba-batch3/t006-${width}-${id}.png`,fullPage:true});
+ await page.screenshot({path:`/tmp/ba-batch3/focus-${width}-${id}.png`});
 }
 for(const width of [360,1280])test(`ephemeral same-person scenarios ${width}`,async({page})=>{
  await page.setViewportSize({width,height:900});
@@ -224,4 +227,55 @@ for(const width of [360,1280])test(`scripted support alternatives ${width}`,asyn
   await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await page.getByRole('button',{name:scenario.title,exact:true}).click();await page.getByRole('button',{name:scenario.activationLabel!,exact:true}).click();await page.getByRole('button',{name:chat.answers[0].label,exact:true}).click();await page.getByRole('link',{name:content.ui.back,exact:true}).click();await page.getByRole('button',{name:scenario.activationLabel!,exact:true}).click();await expect(page.getByRole('status')).toHaveCount(0);await page.reload();await expect(page.locator('[data-preview-badge]')).toHaveCount(0);await expect(page.getByRole('status')).toHaveCount(0);expect(await raw(page)).toBe(bytes);
  }
  expect(requests.filter(url=>new URL(url).origin!=='http://127.0.0.1:4173')).toEqual([]);console.log('T007 only local requests; no provider/push',requests);
+});
+
+test('served profile content recovery serial actual dist edits, retry and local photo boundary',async({page})=>{
+ test.setTimeout(90000);
+ const file='dist/config/app-content.json',original=readFileSync(file);const photo='dist/assets/photos/cali_warmup.jpg',photoBytes=readFileSync(photo);let moved=false;
+ await (await page.context().newCDPSession(page)).send('Network.setCacheDisabled',{cacheDisabled:true});
+ await page.addInitScript(()=>{const originalFetch=window.fetch; (window as any).__configFetches=[];window.fetch=(input,init)=>{if(String(input)==='/config/app-content.json')(window as any).__configFetches.push({url:String(input),cache:init?.cache});return originalFetch(input,init);};});
+ const requests:{url:string;cache:string|undefined}[]=[];page.on('request',r=>requests.push({url:r.url(),cache:r.headers()['cache-control']}));
+ const modified=structuredClone(content);modified.onboarding.instructions='Elegí tu situación para esta prueba editorial.';modified.onboarding.editTitle='Editar mi situación de ejemplo';modified.profiles[0].hero='Un paso editorial a tu ritmo';
+ const scenario=modified.previewScenarios.find(s=>s.id==='inactive')!;scenario.notice='Aviso editorial simulado para volver sin presión.';scenario.guidance='Podés retomar con una alternativa editorial segura.';
+ const chat=modified.chats.find(c=>c.id==='inactive-chat')!;chat.introduction='Elegí una alternativa editorial predefinida.';const answer=chat.answers.find(a=>a.id==='short-solo')!;answer.response='Una pausa breve también cuenta como cuidado editorial.';
+ const destination=modified.destinations.find(d=>d.id===answer.destinationId)!;Object.assign(destination,{sportId:'yoga',planId:'yoga-returning',label:'Explorar este plan editorial'});
+ const exercise=modified.exercises.find(e=>e.id==='cal-first-shoulders')!;const assignment=structuredClone(modified.images.find(i=>i.id===exercise.imageId)!);assignment.id='editorial-exact-photo';assignment.alt='Mujer de pie estirando un hombro con el brazo cruzado frente al pecho, al aire libre.';modified.images.push(assignment);exercise.imageId=assignment.id;
+ async function reloadResponse(){const response=page.waitForResponse(r=>r.url().endsWith('/config/app-content.json'));await page.reload();return response;}
+ async function practice(){await page.goto('/');await expect(page.locator('.hero')).toContainText(modified.profiles[0].hero);await page.goto('/#/sports/calisthenics/solo/cal-first');await expect(page.locator('[data-plan-id]')).toHaveAttribute('data-plan-id','cal-first');await page.getByRole('button',{name:content.ui.start,exact:true}).click();await expect(page.getByRole('heading',{level:1})).toHaveText(exercise.title);await expect(page.locator('main')).toContainText(exercise.technique);}
+ try{
+  writeFileSync(file,JSON.stringify(modified));const responsePromise=page.waitForResponse(r=>r.url().endsWith('/config/app-content.json'));await page.goto('/');const response=await responsePromise;expect(response.status()).toBe(200);expect(response.headers()['cache-control']).toBe('no-store');await expect(page.locator('main')).toContainText(modified.onboarding.instructions);await choose(page);await expect(page.locator('.hero')).toContainText(modified.profiles[0].hero);
+  await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await page.getByRole('button',{name:content.ui.editSituation}).click();await expect(page.getByRole('heading',{level:1})).toHaveText(modified.onboarding.editTitle);await page.getByRole('button',{name:content.ui.cancel,exact:true}).click();
+  await page.getByRole('button',{name:scenario.title,exact:true}).click();await expect(page.locator('main')).toContainText(scenario.notice!);await expect(page.locator('main')).toContainText(scenario.guidance);await page.getByRole('button',{name:scenario.activationLabel!,exact:true}).click();await expect(page.locator('main')).toContainText(chat.introduction);await page.getByRole('button',{name:answer.label,exact:true}).click();await expect(page.getByRole('status')).toContainText(answer.response);await page.getByRole('link',{name:destination.label,exact:true}).click();await expect(page.locator('[data-plan-id]')).toHaveAttribute('data-plan-id','yoga-returning');await page.getByRole('button',{name:content.ui.exitPreview,exact:true}).click();
+  await practice();const img=page.locator('.exercise-photo img');await expect(img).toHaveAttribute('src',assignment.path!);await expect(img).toHaveAttribute('alt',assignment.alt);await img.evaluate((i:HTMLImageElement)=>i.decode());const served=await page.evaluate(async path=>{const r=await fetch(path);return {status:r.status,mime:r.headers.get('content-type'),bytes:Array.from(new Uint8Array(await r.arrayBuffer()))};},assignment.path!);expect(served.status).toBe(200);expect(served.mime).toContain('image/jpeg');expect(Buffer.from(served.bytes).equals(photoBytes)).toBe(true);
+  console.log('T008 served edited IDs/render',scenario.id,chat.id,answer.id,JSON.stringify(destination),exercise.id,assignment.id,assignment.path,'HTTP',response.status(),response.headers(),'JPEG hash',createHash('sha256').update(photoBytes).digest('hex'));
+  for(const variant of ['missing','malformed','reference-invalid','unsafe-path']){
+   if(variant==='missing'){renameSync(file,file+'.held');moved=true;}else if(variant==='malformed')writeFileSync(file,'{invalid-json');else {const invalid=structuredClone(modified);if(variant==='reference-invalid')invalid.chats[0].answers[0].destinationId='retired-destination';else invalid.images.find(i=>i.id===assignment.id)!.path='https://example.com/not-allowed.jpg';writeFileSync(file,JSON.stringify(invalid));}
+   const failed=await reloadResponse();await expect(page.getByRole('heading',{level:1})).toHaveText('No pudimos cargar el contenido.');await expect(page.getByRole('alert')).toContainText('Revisá la configuración');await expect(page.locator('[data-plan-id],[data-chat-id],.bottom-tabs')).toHaveCount(0);
+   if(variant==='missing'){expect(failed.status()).toBe(404);renameSync(file+'.held',file);moved=false;}else expect(failed.status()).toBe(200);
+   await page.screenshot({path:`/tmp/ba-batch3/t008-error-${variant}.png`});
+   console.log('T008 blocking',variant,'HTTP',failed.status(),'Spanish error',await page.getByRole('alert').innerText());writeFileSync(file,JSON.stringify(modified));const retryResponse=page.waitForResponse(r=>r.url().endsWith('/config/app-content.json'));await page.getByRole('button',{name:'Intentar de nuevo',exact:true}).click();expect((await retryResponse).status()).toBe(200);await expect(page.locator('.hero')).toContainText(modified.profiles[0].hero);
+  }
+  const unavailable=structuredClone(modified);unavailable.images.push({id:'pending-exact',path:null,alt:'Imagen del ejercicio no disponible',subject:{kind:'exercise',id:exercise.id},sourceUrl:null,attribution:'Sin atribución verificada',provenance:'Imagen pendiente de revisión',licenseStatus:'unverified',evidence:null});Object.assign(unavailable.exercises.find(e=>e.id===exercise.id)!,{imageId:'pending-exact',imageStatus:'unavailable'});writeFileSync(file,JSON.stringify(unavailable));await page.reload();await practice();await expect(page.getByRole('status')).toHaveText(content.ui.imageUnavailable);await expect(page.locator('.exercise-photo img')).toHaveCount(0);
+  // Pass through actual HTTP while disabling the browser image cache for the missing-byte check.
+  await page.route('**/assets/photos/**',route=>route.continue());
+  writeFileSync(file,JSON.stringify(modified));renameSync(photo,photo+'.held');await page.reload();const missingPhoto=page.waitForResponse(r=>r.url().endsWith(assignment.path!));await practice();expect((await missingPhoto).status()).toBe(404);await expect(page.getByRole('status')).toHaveText(content.ui.imageUnavailable);await expect(page.locator('.exercise-photo img')).toHaveCount(0);renameSync(photo+'.held',photo);
+  expect(requests.filter(r=>new URL(r.url).origin!=='http://127.0.0.1:4173')).toEqual([]);const configRequests=requests.filter(r=>r.url.endsWith('/config/app-content.json'));expect(configRequests.length).toBeGreaterThan(5);const fetches=await page.evaluate(()=>(window as any).__configFetches);expect(fetches.length).toBeGreaterThan(0);expect(fetches.every((r:{cache:string})=>r.cache==='no-store')).toBe(true);console.log('T008 no-store fetch options',fetches,'browser requests',configRequests,'pending/missing image unavailable preserves exact instructions; no remote fallback; prior T005 correspondence consumed');
+ }finally{
+  if(moved)renameSync(file+'.held',file);writeFileSync(file,original);try{renameSync(photo+'.held',photo);}catch{/* Already restored. */}expect(readFileSync(file).equals(original)).toBe(true);expect(readFileSync(photo).equals(photoBytes)).toBe(true);console.log('T008 finally exact served bytes restored',createHash('sha256').update(original).digest('hex'));
+ }
+});
+
+for(const width of [360,1280])test(`profile presentation convergence keyboard reduced motion ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:900});await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');await choose(page);
+ const scenario=content.previewScenarios.find(s=>s.id==='inactive')!;await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await page.getByRole('button',{name:scenario.title,exact:true}).click();
+ for(const surface of ['notice','chat']){
+  await expect(page.getByRole('heading',{level:1})).toBeFocused();await page.getByRole('button',{name:content.ui.skipToContent}).focus();await page.keyboard.press('Enter');await expect(page.locator('main')).toBeFocused();
+  await previewExitEvidence(page,`convergence-${surface}`,width);
+  for(const b of await page.locator('button:not(.skip-link),a').all()){if(await b.isVisible()){const box=await b.boundingBox();expect(box!.height).toBeGreaterThanOrEqual(44);}}
+  expect(await page.locator('.app').evaluate(el=>getComputedStyle(el).transitionDuration)).toBe('0s');await expect(page.locator('footer')).toContainText(content.legal.professionalReview);await expect(page.locator('footer')).toContainText(content.legal.noOfficialStatus);
+  if(surface==='notice'){await page.getByRole('button',{name:scenario.activationLabel!,exact:true}).focus();await page.keyboard.press('Enter');}
+ }
+ await page.getByRole('button',{name:content.ui.exitPreview,exact:true}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();await page.goto('/#/sports/calisthenics/solo/cal-first');await page.getByRole('button',{name:content.ui.start,exact:true}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();
+ const exercise=content.exercises.find(e=>e.id==='cal-first-shoulders')!,image=content.images.find(i=>i.id===exercise.imageId)!;await expect(page.locator('.exercise-photo img')).toHaveAttribute('alt',image.alt);await expect(page.locator('main')).toContainText(content.legal.illustrativeTraining);await expect(page.locator('footer')).toContainText(content.legal.professionalReview);
+ await page.getByRole('button',{name:content.ui.completeStep,exact:true}).focus();const measurement=await page.getByRole('button',{name:content.ui.completeStep,exact:true}).evaluate(el=>{const r=el.getBoundingClientRect();return {height:r.height,bottom:r.bottom,tabTop:document.querySelector('.bottom-tabs')!.getBoundingClientRect().top,outline:getComputedStyle(el).outlineStyle,width:document.documentElement.scrollWidth,viewport:innerWidth};});expect(measurement.height).toBeGreaterThanOrEqual(44);expect(measurement.bottom+4).toBeLessThan(measurement.tabTop);expect(measurement.outline).not.toBe('none');expect(measurement.width).toBeLessThanOrEqual(measurement.viewport);await page.screenshot({path:`/tmp/ba-batch3/t008-${width}-practice.png`,fullPage:true});await page.screenshot({path:`/tmp/ba-batch3/t008-${width}-practice-focus.png`});await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();console.log('T008 keyboard exercise focus, skip, disclosures, reduced motion',width,measurement);
 });

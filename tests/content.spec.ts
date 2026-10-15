@@ -196,3 +196,10 @@ test('content validation shared JPEG admits only enumerated equivalent exercise 
  }
  console.log('shared JPEG permitted explicit subjects',image.path,verifiedImages[image.path!].subjectIds);
 });
+
+test('content validation editor handoff documents one-person empty reset and transient scenario custody',()=>{
+ const architecture=readFileSync('docs/architecture.md','utf8');const guide=readFileSync('docs/CONTENT_CONFIGURATION.md','utf8');const readme=readFileSync('README.md','utf8');
+ for(const field of ['one-person','legacySource','intention','preference'])expect(architecture).toContain(field);
+ for(const field of ['previewScenarios','destinations','imageStatus','imageId','licenseStatus'])expect(guide).toContain(field);
+ expect(readme).toContain('empty');expect(guide).toContain('empty');expect(readme).not.toContain('restore all three\nfixtures');
+});
