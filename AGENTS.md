@@ -8,6 +8,9 @@ and documentation. User-facing app content is in Spanish; code identifiers,
 comments, developer-facing messages, tests, documentation, and planning artifacts
 are in English (user-facing Spanish strings remain Spanish in code and tests).
 The constitution is local product policy, not implementation authorization.
+User-facing app copy should read as a natural real-product experience; do not add
+demo, illustrative, fictional, or simulated disclaimers solely to explain
+implementation shortcuts. Keep those details in engineering documentation.
 
 ## SpecKit capability discovery
 

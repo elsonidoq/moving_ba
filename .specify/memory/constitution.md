@@ -48,16 +48,14 @@ experience to many unfinished features. Check the intended presentation conditio
 and relevant screen sizes for affected UI; do not infer universal browser/device
 support from a single demonstration.
 
-### VI. Honest shortcuts
+### VI. Natural app experience
 
-Mock data, simulated services, hard-coded examples, and simplified implementations
-are acceptable when they speed useful feedback. Identify simulations and material
-limitations so the demo does not imply real bookings, offers, integrations, or
-operational guarantees. Keep shortcuts easy to replace where practical. Speed does
-not justify exposing secrets or personal data, destructive actions without approval,
-or claims unsupported by evidence. Address a shortcut before using it outside its
-safe demo boundary; do not add production machinery merely because it may be needed
-later.
+Present the application as the real product experience. In-app progress, benefits,
+bookings, and other journeys may use simulated data and outcomes without labeling
+them as a demo in the interface. Choose simple, reversible implementation shortcuts
+that make the experience convincing. Keep engineering documentation accurate about
+simulated behavior, and do not perform real external transactions or expose secrets
+or personal data.
 
 ### VII. Spanish app, English engineering
 
@@ -95,4 +93,8 @@ changes or a SpecKit installation. The proposal and answer are retained in the P
 session; the initial policy content is retained by the Git commit introducing this
 file. Pre-change baseline: `52ffd83b619362a7c8e13692d4ea91180a231e4d`.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-14 | **Last amended**: 2026-10-14
+On 2026-10-15 the owner explicitly approved replacing principle VI with “Natural
+app experience” and the matching `AGENTS.md` rule in the Pi session. This is a
+policy amendment, not authorization for particular app, push, or deployment changes.
+
+**Version**: 2.0.0 | **Ratified**: 2026-10-14 | **Last amended**: 2026-10-15
