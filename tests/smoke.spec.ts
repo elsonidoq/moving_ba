@@ -375,7 +375,7 @@ for(const width of [360,1280])test(`compact pinned shell geometry and contextual
   await shellCopy(page);
   const benefits=page.locator('[data-benefit-id]');
   for(const benefit of await benefits.all()){await expect(benefit.locator('img')).toHaveCount(1);await expect(benefit.locator('[data-benefit-limitation]')).toHaveCount(0);}
-  if(await benefits.count()) { await expect(page.locator('[data-benefit-limitation]')).toHaveText(content.ui.benefitsDisclaimer); if(await page.locator('.rewards-page').count()) for(const benefit of await benefits.all()) await expect(benefit.locator('progress')).toHaveCount(1); }
+  if(await benefits.count()) { await expect(page.locator('[data-benefit-limitation]')).toHaveCount(0); if(await page.locator('.rewards-page').count()) for(const benefit of await benefits.all()) { await expect(benefit.locator('progress')).toHaveCount(1); await expect(benefit.locator('.benefit-points')).toHaveText(/^(Te faltan \d+ puntos\.|Ya podés canjear este beneficio\.)$/); } }
   const maximum=await page.evaluate(()=>document.documentElement.scrollHeight-innerHeight);
   const measurements=[];
   for(const fraction of [0,.5,1]){
@@ -481,8 +481,7 @@ for(const width of [360,1280])test(`photo-led challenges and honest earned point
  await expect(page.locator('.rewards-hero')).toContainText(content.ui.illustrativeProgress.replace('{situation}',content.onboarding.choices[0].label));await expect(page.locator('.rewards-hero')).toContainText(content.ui.savedJourneyPoints.replace('{earned}','0'));
  await expect(page.locator('[data-badge-id]')).toHaveCount(2);await expect(page.locator('[data-badge-id] .badge-icon svg')).toHaveCount(2);
  await expect(page.locator('[data-benefit-id]')).toHaveCount(3);
- await expect(page.locator('[data-benefit-limitation]')).toHaveCount(1);
- await expect(page.locator('[data-benefit-limitation]')).toHaveText(content.ui.benefitsDisclaimer);
+ await expect(page.locator('[data-benefit-limitation]')).toHaveCount(0);
  for(const rule of content.rules.benefits){const card=page.locator(`[data-benefit-id="${rule.id}"]`);const image=card.locator('img');await expect(card).toContainText(rule.title);await expect(image).toHaveAttribute('src',rule.photo.path);await expect(image).toHaveAttribute('alt',rule.photo.alt);await image.evaluate((img:HTMLImageElement)=>img.decode());await expect(card.locator('progress')).toHaveAttribute('value','0');}
  await expect(page.locator('main')).toContainText(content.ui.illustrativeProgress.replace('{situation}',content.onboarding.choices[0].label));
  await page.screenshot({path:`/tmp/ba-rewards-${width}-empty.png`,fullPage:true});
