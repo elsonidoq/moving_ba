@@ -2,6 +2,8 @@ export interface VerifiedImage { subjectKind: 'exercise' | 'sport'; subjectIds: 
 export type ImageRegistry = Readonly<Record<string, VerifiedImage>>;
 /** Exact subjects reviewed against owner-approved bundled JPEG bytes; no category or wildcard authority. */
 export const verifiedImages: ImageRegistry = Object.freeze({
+  "/assets/photos/cali_stretch.jpg": { subjectKind: "exercise", subjectIds: ["cal-returning-shoulders"], evidence: "/assets/photos/provenance.json#cali_stretch" },
+  "/assets/photos/swim_board.jpg": { subjectKind: "exercise", subjectIds: ["swim-water-returning-technique"], evidence: "/assets/photos/provenance.json#swim_board" },
   "/assets/photos/cali_incline.jpg": {
     "subjectKind": "exercise",
     "subjectIds": [
@@ -30,7 +32,6 @@ export const verifiedImages: ImageRegistry = Object.freeze({
     "subjectKind": "exercise",
     "subjectIds": [
       "cal-first-shoulders",
-      "cal-returning-shoulders",
       "cal-regular-shoulders"
     ],
     "evidence": "/assets/photos/provenance.json#cali_warmup"
@@ -39,7 +40,6 @@ export const verifiedImages: ImageRegistry = Object.freeze({
     "subjectKind": "exercise",
     "subjectIds": [
       "swim-water-first-technique",
-      "swim-water-returning-technique",
       "swim-water-regular-technique"
     ],
     "evidence": "/assets/photos/provenance.json#swim_backstroke"

@@ -348,11 +348,11 @@
     {
       "id": "cal-returning-shoulders",
       "sportId": "calisthenics",
-      "title": "Estiramiento suave de hombro cruzado",
-      "quantity": "3 respiraciones cómodas por lado",
-      "technique": "De pie, acercá un brazo al pecho y sostenelo con el otro sin tirar del codo. Apoyos estables, hombros bajos y sin dolor; soltá y descansá antes de cambiar de lado.",
+      "title": "Estiramiento sentado de piernas",
+      "quantity": "3 respiraciones cómodas",
+      "technique": "Sentate sobre una superficie seca y estable y acercá suavemente el tronco hacia las piernas. No hace falta alcanzar los pies: flexioná rodillas o usá una silla firme. No rebotes ni fuerces la espalda; descansá y pará ante dolor.",
       "imageAsset": "",
-      "imageAlt": "Mujer de pie estirando un hombro con el brazo cruzado frente al pecho.",
+      "imageAlt": "Mujer sentada en el parque inclinando el tronco hacia las piernas y acercando las manos a los pies.",
       "medium": "dry-land",
       "imageId": "cal-returning-shoulders-photo",
       "imageStatus": "verified"
@@ -468,11 +468,11 @@
     {
       "id": "swim-water-returning-technique",
       "sportId": "swimming",
-      "title": "Espalda suave en estilo conocido",
-      "quantity": "1 tramo de hasta 10 m",
-      "technique": "Sólo si ya nadás espalda con autonomía y está permitido en esa pileta con guardavidas. No busques velocidad ni aprendas un estilo nuevo acá; respetá las reglas, evitá dolor y descansá entre tramos. Ante dudas, elegí clase o preparación en seco.",
+      "title": "Preparación de tabla con supervisión",
+      "quantity": "Una preparación tranquila, sin entrar a nadar",
+      "technique": "En una zona permitida por el personal, prepará la tabla con tu instructor, sentado con apoyo estable. No practiques patadas ni te desplaces sin indicación y supervisión. Seguí las reglas de la pileta habilitada; descansá y pará ante dolor.",
       "imageAsset": "",
-      "imageAlt": "Vista desde arriba de un nadador de espalda con un brazo extendido sobre la cabeza.",
+      "imageAlt": "Nadadores sentados en el borde de la pileta sosteniendo tablas de natación.",
       "medium": "water",
       "imageId": "swim-water-returning-technique-photo",
       "imageStatus": "verified"
@@ -1435,17 +1435,17 @@
     },
     {
       "id": "cal-returning-shoulders-photo",
-      "path": "/assets/photos/cali_warmup.jpg",
-      "alt": "Mujer de pie estirando un hombro con el brazo cruzado frente al pecho.",
+      "path": "/assets/photos/cali_stretch.jpg",
+      "alt": "Mujer sentada en el parque inclinando el tronco hacia las piernas y acercando las manos a los pies.",
       "subject": {
         "kind": "exercise",
         "id": "cal-returning-shoulders"
       },
-      "sourceUrl": "https://www.pexels.com/photo/asian-sportswoman-stretching-arms-before-training-in-park-4426319/",
+      "sourceUrl": "https://www.pexels.com/photo/woman-stretching-in-park-during-daytime-exercise-34382760/",
       "attribution": "Pexels · Pexels License (consultar términos)",
       "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
       "licenseStatus": "verified",
-      "evidence": "/assets/photos/provenance.json#cali_warmup"
+      "evidence": "/assets/photos/provenance.json#cali_stretch"
     },
     {
       "id": "cal-returning-row-photo",
@@ -1575,17 +1575,17 @@
     },
     {
       "id": "swim-water-returning-technique-photo",
-      "path": "/assets/photos/swim_backstroke.jpg",
-      "alt": "Vista desde arriba de un nadador de espalda con un brazo extendido sobre la cabeza.",
+      "path": "/assets/photos/swim_board.jpg",
+      "alt": "Nadadores sentados en el borde de la pileta sosteniendo tablas de natación.",
       "subject": {
         "kind": "exercise",
         "id": "swim-water-returning-technique"
       },
-      "sourceUrl": "https://www.pexels.com/photo/a-person-swimming-in-the-pool-8688618/",
+      "sourceUrl": "https://www.pexels.com/photo/man-at-swimming-pool-in-black-and-white-18372085/",
       "attribution": "Pexels · Pexels License (consultar términos)",
       "provenance": "Conjunto del manifiesto Pexels autorizado por el propietario para esta demo; correspondencia visual revisada.",
       "licenseStatus": "verified",
-      "evidence": "/assets/photos/provenance.json#swim_backstroke"
+      "evidence": "/assets/photos/provenance.json#swim_board"
     },
     {
       "id": "swim-water-returning-rest-photo",

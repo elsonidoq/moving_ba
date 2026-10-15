@@ -186,7 +186,7 @@ test.describe('content validation extended contract', () => {
 
 import { verifiedImages, validateImageRegistry, type ImageRegistry } from '../src/content/images';
 test('content validation shared JPEG admits only enumerated equivalent exercise subjects',()=>{
- const c=validateContent(clone());const first=c.exercises.find(e=>e.id==='cal-first-shoulders')!;const returning=c.exercises.find(e=>e.id==='cal-returning-shoulders')!;
+ const c=validateContent(clone());const first=c.exercises.find(e=>e.id==='cal-first-shoulders')!;const returning=c.exercises.find(e=>e.id==='cal-regular-shoulders')!;
  const image=c.images.find(i=>i.id===first.imageId)!;const other=c.images.find(i=>i.id===returning.imageId)!;expect(image.path).toBe(other.path);expect(verifiedImages[image.path!].subjectIds).toContain(first.id);expect(verifiedImages[image.path!].subjectIds).toContain(returning.id);
  const mismatch=clone();mismatch.images.find(i=>i.id===first.imageId)!.path='/assets/photos/swim_warmup.jpg';expect(()=>validateContent(mismatch)).toThrow('sujeto exacto');
  const missing=clone();missing.images.find(i=>i.id===first.imageId)!.subject.id='cal-first-row';expect(()=>validateContent(missing)).toThrow('sujeto exacto');
@@ -202,4 +202,38 @@ test('content validation editor handoff documents one-person empty reset and tra
  for(const field of ['one-person','legacySource','intention','preference'])expect(architecture).toContain(field);
  for(const field of ['previewScenarios','destinations','imageStatus','imageId','licenseStatus'])expect(guide).toContain(field);
  expect(readme).toContain('empty');expect(guide).toContain('empty');expect(readme).not.toContain('restore all three\nfixtures');
+});
+
+import { mockupPhotos, sportPhotos, classPhotos } from '../src/content/mockupPhotos';
+import { createHash } from 'node:crypto';
+test('all 29 mockup JPEG keys have intended exact local uses and factual provenance', () => {
+ const manifest=JSON.parse(readFileSync('docs/mockup_ba_te_mueve/assets/image_manifest.json','utf8'));
+ const provenance=JSON.parse(readFileSync('public/assets/photos/provenance.json','utf8'));
+ const content=validateContent(clone());
+ const paths=new Set([...Object.values(mockupPhotos).map(p=>p.src),...content.images.map(i=>i.path)]);
+ expect(paths.size).toBe(29);
+ for(const [key,photo] of Object.entries(manifest) as [string,any][]){
+  expect(paths.has('/'+photo.local),key).toBe(true);
+  const bytes=readFileSync('public/'+photo.local);expect(bytes.subarray(0,3).toString('hex')).toBe('ffd8ff');
+  const record=provenance.assets.find((p:any)=>p.manifestKey===key);
+  for(const field of ['photoId','source','cdn','license','local'])expect(record[field]).toEqual(photo[field]);
+  expect(record.byteLength).toBe(bytes.length);expect(record.sha256).toBe(createHash('sha256').update(bytes).digest('hex'));
+ }
+ for(const [sport,prefix] of [['calisthenics','cali'],['yoga','yoga'],['swimming','swim']] as const){
+  expect(sportPhotos[sport].card.src).toBe(`/assets/photos/${prefix}_card.jpg`);
+  expect(sportPhotos[sport].hero.src).toBe(`/assets/photos/${prefix}_hero.jpg`);
+  for(const exercise of content.exercises.filter(e=>e.sportId===sport)){
+   const image=content.images.find(i=>i.id===exercise.imageId)!;expect(image.subject).toEqual({kind:'exercise',id:exercise.id});
+   expect(image.path).toMatch(new RegExp(`/assets/photos/${prefix}_.*\\.jpg$`));
+   expect(content.plans.some(p=>p.sportId===sport&&p.steps.some(s=>s.exerciseId===exercise.id))).toBe(true);
+  }
+ }
+ expect(classPhotos['cal-free'].src).toContain('cali_class_a');expect(classPhotos['cal-paid'].src).toContain('cali_class_b');
+ expect(classPhotos['yoga-free'].src).toContain('yoga_class_a');expect(classPhotos['yoga-paid'].src).toContain('yoga_class_b');
+ expect(classPhotos['swim-paid'].src).toContain('swim_class_a');expect(classPhotos['swim-free'].src).toContain('swim_class_b');
+ for(const screen of ['Home','Sports','SportChoice','ClassCatalog','ClassDetail','Plan','Onboarding','Notice']){
+  const code=readFileSync(`src/screens/${screen}.tsx`,'utf8');expect(code).not.toContain('heroAsset');expect(code).toContain('mockupPhotos');
+ }
+ expect(readFileSync('src/screens/Plan.tsx','utf8')).toContain('step-photo');
+ expect(content.images.every(i=>i.subject.kind==='exercise')).toBe(true);
 });

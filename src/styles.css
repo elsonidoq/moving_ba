@@ -153,3 +153,28 @@ legend { line-height: 1.5; margin-bottom: 12px; }
 .preview-badge { background: var(--yellow); border-radius: 12px; padding: 12px; font-weight: 750; }
 [data-preview-exit] { margin-top: 28px; padding-top: 18px; border-top: 2px solid var(--yellow); scroll-margin-bottom: 100px; }
 [data-preview-exit] button { scroll-margin-block: 100px; }
+
+/* Local mockup photos retain distinct card, hero and instructional roles. */
+.city-hero { display: block; width: 100%; height: 330px; object-fit: cover; border-radius: 18px; margin: 20px 0; }
+.sport-card { overflow: hidden; padding: 0; min-height: 88px; gap: 12px; }
+.sport-card img { width: 109px; height: 88px; border-radius: 0; }
+.sport-card > span { padding: 10px 0; min-width: 0; }
+.sport-card .chevron { padding-right: 12px; }
+.sport-hero img, .sport-hero.compact img { height: 220px; object-fit: cover; }
+.class-photo { float: left; width: 95px; height: 90px; object-fit: cover; border-radius: 10px; margin: 0 12px 12px 0; }
+.class-card .class-meta { clear: both; }
+.exercise-list li { display: grid; grid-template-columns: 73px minmax(0, 1fr); align-items: start; position: relative; }
+.step-photo { width: 73px; height: 56px; object-fit: cover; border-radius: 9px; }
+.exercise-list .step-number { position: absolute; left: 8px; top: 8px; width: 22px; height: 22px; font-size: 12px; background: #fffdf0ee; }
+.exercise-list li > div { min-width: 0; }
+.notice-photo { position: relative; border-radius: 22px; overflow: hidden; margin: 20px 0; }
+.notice-photo img { display: block; width: 100%; height: 330px; object-fit: cover; }
+.notice-photo p { position: absolute; bottom: 0; left: 0; right: 0; margin: 0; padding: 40px 20px 20px; background: linear-gradient(transparent, #01101be8); color: white; font-size: 21px; font-weight: 750; }
+@media (max-width: 480px) {
+  .sport-card img { width: 100px; height: 88px; }
+  .sport-hero img, .sport-hero.compact img { height: 184px; }
+}
+/* Focal crops keep faces and the low child-pose subject inside shallow photos. */
+.sport-hero img[src$="cali_hero.jpg"] { object-position: center 40%; }
+.sport-hero img[src$="yoga_hero.jpg"] { object-position: center 35%; }
+.step-photo[src$="yoga_child.jpg"] { object-position: center bottom; }

@@ -4,300 +4,181 @@
     "status": "satisfied",
     "authority": "Owner explicitly authorized the exact mockup JPEG set as-is for this demo, including bounded text corrections after direct visual inspection."
   },
+  "manifest": "docs/mockup_ba_te_mueve/assets/image_manifest.json",
   "licenseLabel": "Pexels License (consultar términos)",
   "assets": [
     {
-      "manifestKey": "cali_incline",
-      "title": "Mujer haciendo flexiones inclinadas sobre un banco",
-      "photoId": 8401820,
-      "source": "https://www.pexels.com/photo/woman-doing-push-ups-exercises-push-8401820/",
+      "manifestKey": "city_hero",
+      "title": "Ciudad y parques de Buenos Aires",
+      "photoId": 20779916,
+      "source": "https://www.pexels.com/photo/aerial-photography-of-a-cityscape-20779916/",
       "license": "Pexels License (consultar términos)",
-      "local": "assets/photos/cali_incline.jpg",
-      "cdn": "https://images.pexels.com/photos/8401820/pexels-photo-8401820.jpeg?fm=jpg&cs=tinysrgb&w=1400",
-      "runtimePath": "/assets/photos/cali_incline.jpg",
-      "acquisition": {
-        "manifestKey": "cali_incline",
-        "command": [
-          "curl",
-          "--fail",
-          "--location",
-          "--max-time",
-          "30",
-          "--retry",
-          "1",
-          "--output",
-          "public/assets/photos/cali_incline.jpg",
-          "--write-out",
-          "%{http_code} %{content_type} %{size_download}",
-          "https://images.pexels.com/photos/8401820/pexels-photo-8401820.jpeg?fm=jpg&cs=tinysrgb&w=1400"
-        ],
-        "exit": 0,
-        "status": "200 image/jpeg 145296"
-      },
-      "byteLength": 145296,
-      "sha256": "616fc52787c4c74ce9ebbfa2d223bb0774bf3cde624e3dd4b61ba1fe0e3574a2",
+      "local": "assets/photos/city_hero.jpg",
+      "cdn": "https://images.pexels.com/photos/20779916/pexels-photo-20779916.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/city_hero.jpg",
+      "byteLength": 309503,
+      "sha256": "c4275b56197d5d12550419d1a9e20fa187886234a3d864917b464f9c20174ffa",
       "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/city_hero.jpg https://images.pexels.com/photos/20779916/pexels-photo-20779916.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
       "magicStatus": "pass",
       "decodeStatus": "pass",
-      "servedStatus": "pass",
-      "visualReview": {
-        "status": "pass",
-        "method": "Actual downloaded image read, not filename inference",
-        "observation": "Woman with feet on paving and palms on a wooden bench, elbows flexed, trunk extended: inclined push-up, not an Australian row.",
-        "renderedStatus": "pass",
-        "renderedObservation": "Rendered screenshot directly read: displayed local photo, Spanish exercise title, quantity and technique agree with this recorded posture/equipment/medium; contain sizing preserves the source image. Fixed tabs are viewport overlays in full-page screenshots; normal page scrolling exposes all content."
-      },
-      "exercises": [
-        {
-          "id": "cal-first-row",
-          "before": {
-            "title": "Remo australiano con apoyo",
-            "quantity": "1 serie de 4 repeticiones",
-            "technique": "Usá una barra baja firme, pies cerca del cuerpo y apoyo cómodo. No necesitás hacer dominadas.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Flexión inclinada con apoyo",
-            "quantity": "1 serie de 4 repeticiones",
-            "technique": "Apoyá las manos en un banco firme y estable, pies cerca para reducir el esfuerzo. Flexioná poco los codos y volvé sin dolor. Podés usar una pared y descansar; no necesitás hacer dominadas.",
-            "imageId": "cal-first-row-photo",
-            "imageAlt": "Mujer haciendo una flexión inclinada con ambas manos sobre un banco de madera.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "cal-returning-row",
-          "before": {
-            "title": "Remo australiano muy asistido",
-            "quantity": "1 serie de 3 repeticiones",
-            "technique": "Acercá los pies para descargar esfuerzo y usá un recorrido corto. No requiere dominadas.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Flexión inclinada con apoyo",
-            "quantity": "1 serie de 3 repeticiones",
-            "technique": "Apoyá las manos en un banco firme y estable, pies cerca para reducir el esfuerzo. Flexioná poco los codos y volvé sin dolor. Podés usar una pared y descansar; no necesitás hacer dominadas.",
-            "imageId": "cal-returning-row-photo",
-            "imageAlt": "Mujer haciendo una flexión inclinada con ambas manos sobre un banco de madera.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "cal-regular-row",
-          "before": {
-            "title": "Remo australiano controlado",
-            "quantity": "2 series de 5 repeticiones",
-            "technique": "Elegí una inclinación que permita bajar lento y mantener el tronco estable. Descansá entre series.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Flexión inclinada con apoyo",
-            "quantity": "1 serie de 4 repeticiones",
-            "technique": "Apoyá las manos en un banco firme y estable, pies cerca para reducir el esfuerzo. Flexioná poco los codos y volvé sin dolor. Podés usar una pared y descansar; no necesitás hacer dominadas.",
-            "imageId": "cal-regular-row-photo",
-            "imageAlt": "Mujer haciendo una flexión inclinada con ambas manos sobre un banco de madera.",
-            "imageStatus": "verified"
-          }
-        }
-      ],
       "servedEvidence": {
-        "path": "/assets/photos/cali_incline.jpg",
+        "manifestKey": "city_hero",
+        "path": "/assets/photos/city_hero.jpg",
         "status": 200,
         "mime": "image/jpeg",
-        "byteLength": 145296,
-        "sha256": "616fc52787c4c74ce9ebbfa2d223bb0774bf3cde624e3dd4b61ba1fe0e3574a2",
-        "magicHex": "ffd8ffe10080457869660000",
-        "decodeStatus": "pass",
+        "byteLength": 309503,
+        "sha256": "c4275b56197d5d12550419d1a9e20fa187886234a3d864917b464f9c20174ffa",
         "dimensions": {
           "width": 1400,
-          "height": 933
-        },
-        "exerciseIds": [
-          "cal-first-row",
-          "cal-returning-row",
-          "cal-regular-row"
-        ],
-        "renderedScreenshot": "/tmp/ba-batch2/t005-mapping-cali_incline.png"
+          "height": 788
+        }
       }
     },
     {
-      "manifestKey": "cali_plank",
-      "title": "Hombre realizando plancha al aire libre",
-      "photoId": 4920466,
-      "source": "https://www.pexels.com/photo/man-doing-core-exercises-4920466/",
+      "manifestKey": "city_park",
+      "title": "Parque de Buenos Aires con edificios",
+      "photoId": 31414914,
+      "source": "https://www.pexels.com/photo/green-park-view-in-buenos-aires-cityscape-31414914/",
       "license": "Pexels License (consultar términos)",
-      "local": "assets/photos/cali_plank.jpg",
-      "cdn": "https://images.pexels.com/photos/4920466/pexels-photo-4920466.jpeg?fm=jpg&cs=tinysrgb&w=1400",
-      "runtimePath": "/assets/photos/cali_plank.jpg",
-      "acquisition": {
-        "manifestKey": "cali_plank",
-        "command": [
-          "curl",
-          "--fail",
-          "--location",
-          "--max-time",
-          "30",
-          "--retry",
-          "1",
-          "--output",
-          "public/assets/photos/cali_plank.jpg",
-          "--write-out",
-          "%{http_code} %{content_type} %{size_download}",
-          "https://images.pexels.com/photos/4920466/pexels-photo-4920466.jpeg?fm=jpg&cs=tinysrgb&w=1400"
-        ],
-        "exit": 0,
-        "status": "200 image/jpeg 81797"
-      },
-      "byteLength": 81797,
-      "sha256": "90149e897699f6f8bb427b424eb6c6a00e076fa12703b50eb843ab0c62d4b981",
-      "magicHex": "ffd8ffe100b4457869660000",
+      "local": "assets/photos/city_park.jpg",
+      "cdn": "https://images.pexels.com/photos/31414914/pexels-photo-31414914.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/city_park.jpg",
+      "byteLength": 348959,
+      "sha256": "3d14d84f1b00641e3f05ec05b2727971bb791324106f257a6d8e50ecad89c6e0",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/city_park.jpg https://images.pexels.com/photos/31414914/pexels-photo-31414914.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
       "magicStatus": "pass",
       "decodeStatus": "pass",
-      "servedStatus": "pass",
-      "visualReview": {
-        "status": "pass",
-        "method": "Actual downloaded image read, not filename inference",
-        "observation": "Man in high plank on paved ground, one palm supporting and the other touching the opposite upper arm/shoulder. Not a side plank; text now names supported plank with shoulder touch.",
-        "renderedStatus": "pass",
-        "renderedObservation": "Rendered screenshot directly read: displayed local photo, Spanish exercise title, quantity and technique agree with this recorded posture/equipment/medium; contain sizing preserves the source image. Fixed tabs are viewport overlays in full-page screenshots; normal page scrolling exposes all content."
-      },
-      "exercises": [
-        {
-          "id": "cal-regular-side",
-          "before": {
-            "title": "Plancha lateral adaptada",
-            "quantity": "2 apoyos de 10 segundos por lado",
-            "technique": "Apoyá rodillas si hace falta; priorizá alineación y cerrá con recuperación.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Plancha con apoyo y toque de hombro",
-            "quantity": "1 toque suave por lado, con descanso",
-            "technique": "En apoyo estable de manos y pies, acercá una mano al hombro contrario sólo si conservás comodidad. Apoyá rodillas o usá una pared si hace falta; sin dolor, sin competir y con recuperación entre lados.",
-            "imageId": "cal-regular-side-photo",
-            "imageAlt": "Hombre en plancha con una mano apoyada y la otra junto al hombro contrario.",
-            "imageStatus": "verified"
-          }
-        }
-      ],
       "servedEvidence": {
-        "path": "/assets/photos/cali_plank.jpg",
+        "manifestKey": "city_park",
+        "path": "/assets/photos/city_park.jpg",
         "status": 200,
         "mime": "image/jpeg",
-        "byteLength": 81797,
-        "sha256": "90149e897699f6f8bb427b424eb6c6a00e076fa12703b50eb843ab0c62d4b981",
-        "magicHex": "ffd8ffe100b4457869660000",
-        "decodeStatus": "pass",
+        "byteLength": 348959,
+        "sha256": "3d14d84f1b00641e3f05ec05b2727971bb791324106f257a6d8e50ecad89c6e0",
         "dimensions": {
           "width": 1400,
-          "height": 933
-        },
-        "exerciseIds": [
-          "cal-regular-side"
-        ],
-        "renderedScreenshot": "/tmp/ba-batch2/t005-mapping-cali_plank.png"
+          "height": 1050
+        }
       }
     },
     {
-      "manifestKey": "cali_squat",
-      "title": "Hombre realizando sentadilla en parque",
-      "photoId": 4803865,
-      "source": "https://www.pexels.com/photo/man-exercising-in-park-4803865/",
+      "manifestKey": "cali_card",
+      "title": "Persona entrenando en barras de parque",
+      "photoId": 39757461,
+      "source": "https://www.pexels.com/photo/man-exercising-on-outdoor-gym-equipment-in-park-39757461/",
       "license": "Pexels License (consultar términos)",
-      "local": "assets/photos/cali_squat.jpg",
-      "cdn": "https://images.pexels.com/photos/4803865/pexels-photo-4803865.jpeg?fm=jpg&cs=tinysrgb&w=1400",
-      "runtimePath": "/assets/photos/cali_squat.jpg",
-      "acquisition": {
-        "manifestKey": "cali_squat",
-        "command": [
-          "curl",
-          "--fail",
-          "--location",
-          "--max-time",
-          "30",
-          "--retry",
-          "1",
-          "--output",
-          "public/assets/photos/cali_squat.jpg",
-          "--write-out",
-          "%{http_code} %{content_type} %{size_download}",
-          "https://images.pexels.com/photos/4803865/pexels-photo-4803865.jpeg?fm=jpg&cs=tinysrgb&w=1400"
-        ],
-        "exit": 0,
-        "status": "200 image/jpeg 407418"
-      },
-      "byteLength": 407418,
-      "sha256": "938a4153833bda3b59c4e73c8b81e62af43e8f70d58df12e865f6857633c48a2",
+      "local": "assets/photos/cali_card.jpg",
+      "cdn": "https://images.pexels.com/photos/39757461/pexels-photo-39757461.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/cali_card.jpg",
+      "byteLength": 451282,
+      "sha256": "8a3a2d8b7ea1785644b9ad7db2a7f09e2a9904b9f89b5884861c3d1b48adba32",
       "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/cali_card.jpg https://images.pexels.com/photos/39757461/pexels-photo-39757461.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
       "magicStatus": "pass",
       "decodeStatus": "pass",
-      "servedStatus": "pass",
-      "visualReview": {
-        "status": "pass",
-        "method": "Actual downloaded image read, not filename inference",
-        "observation": "Man in a deep crouch outdoors with both palms planted on the ground and knees bent. Not an upright unsupported squat; text now names leg flexion with hand support and permits a higher stable support.",
-        "renderedStatus": "pass",
-        "renderedObservation": "Rendered screenshot directly read: displayed local photo, Spanish exercise title, quantity and technique agree with this recorded posture/equipment/medium; contain sizing preserves the source image. Fixed tabs are viewport overlays in full-page screenshots; normal page scrolling exposes all content."
-      },
-      "exercises": [
-        {
-          "id": "cal-first-squat",
-          "before": {
-            "title": "Sentadilla asistida",
-            "quantity": "1 serie de 4 repeticiones",
-            "technique": "Sujetate de un apoyo estable y bajá sólo lo que puedas controlar.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Flexión de piernas con apoyo de manos",
-            "quantity": "1 serie de 4 movimientos cortos",
-            "technique": "Con apoyo firme para las manos, flexioná las piernas sólo hasta donde resulte cómodo. No hace falta bajar tanto como en la foto: usá un apoyo elevado y revisión profesional. Sin dolor, con pausa entre movimientos.",
-            "imageId": "cal-first-squat-photo",
-            "imageAlt": "Hombre con piernas flexionadas y manos apoyadas en el suelo del parque.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "cal-returning-squat",
-          "before": {
-            "title": "Sentadilla asistida corta",
-            "quantity": "1 serie de 3 repeticiones",
-            "technique": "Usá apoyo firme, menos profundidad y descansá entre movimientos.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Flexión de piernas con apoyo de manos",
-            "quantity": "1 serie de 3 movimientos cortos",
-            "technique": "Con apoyo firme para las manos, flexioná las piernas sólo hasta donde resulte cómodo. No hace falta bajar tanto como en la foto: usá un apoyo elevado y revisión profesional. Sin dolor, con pausa entre movimientos.",
-            "imageId": "cal-returning-squat-photo",
-            "imageAlt": "Hombre con piernas flexionadas y manos apoyadas en el suelo del parque.",
-            "imageStatus": "verified"
-          }
-        }
-      ],
       "servedEvidence": {
-        "path": "/assets/photos/cali_squat.jpg",
+        "manifestKey": "cali_card",
+        "path": "/assets/photos/cali_card.jpg",
         "status": 200,
         "mime": "image/jpeg",
-        "byteLength": 407418,
-        "sha256": "938a4153833bda3b59c4e73c8b81e62af43e8f70d58df12e865f6857633c48a2",
-        "magicHex": "ffd8ffe10080457869660000",
-        "decodeStatus": "pass",
+        "byteLength": 451282,
+        "sha256": "8a3a2d8b7ea1785644b9ad7db2a7f09e2a9904b9f89b5884861c3d1b48adba32",
         "dimensions": {
           "width": 1400,
           "height": 2100
-        },
-        "exerciseIds": [
-          "cal-first-squat",
-          "cal-returning-squat"
-        ],
-        "renderedScreenshot": "/tmp/ba-batch2/t005-mapping-cali_squat.png"
+        }
+      }
+    },
+    {
+      "manifestKey": "cali_hero",
+      "title": "Atleta haciendo dominadas en barra exterior",
+      "photoId": 16495746,
+      "source": "https://www.pexels.com/photo/young-shirtless-man-exercising-outdoors-16495746/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/cali_hero.jpg",
+      "cdn": "https://images.pexels.com/photos/16495746/pexels-photo-16495746.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/cali_hero.jpg",
+      "byteLength": 226610,
+      "sha256": "6f0dfee67380b54ca1167dfe20746ad7aa82f11539ced7b3e4bec73317c8b854",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/cali_hero.jpg https://images.pexels.com/photos/16495746/pexels-photo-16495746.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "cali_hero",
+        "path": "/assets/photos/cali_hero.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 226610,
+        "sha256": "6f0dfee67380b54ca1167dfe20746ad7aa82f11539ced7b3e4bec73317c8b854",
+        "dimensions": {
+          "width": 1400,
+          "height": 2100
+        }
+      }
+    },
+    {
+      "manifestKey": "cali_class_a",
+      "title": "Grupo de personas haciendo ejercicio funcional al aire libre",
+      "photoId": 31293814,
+      "source": "https://www.pexels.com/photo/group-outdoor-fitness-training-session-31293814/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/cali_class_a.jpg",
+      "cdn": "https://images.pexels.com/photos/31293814/pexels-photo-31293814.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/cali_class_a.jpg",
+      "byteLength": 186810,
+      "sha256": "73b0ea4d1fb87c7c23f0875699cccebe7e75cf3905796ba061d7527157474482",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/cali_class_a.jpg https://images.pexels.com/photos/31293814/pexels-photo-31293814.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "cali_class_a",
+        "path": "/assets/photos/cali_class_a.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 186810,
+        "sha256": "73b0ea4d1fb87c7c23f0875699cccebe7e75cf3905796ba061d7527157474482",
+        "dimensions": {
+          "width": 1400,
+          "height": 1400
+        }
+      }
+    },
+    {
+      "manifestKey": "cali_class_b",
+      "title": "Grupo de entrenamiento al aire libre con equipamiento",
+      "photoId": 8401819,
+      "source": "https://www.pexels.com/photo/women-doing-outdoor-exercises-8401819/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/cali_class_b.jpg",
+      "cdn": "https://images.pexels.com/photos/8401819/pexels-photo-8401819.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/cali_class_b.jpg",
+      "byteLength": 359490,
+      "sha256": "5bc3d8a595d360f5c09eff2c99e5efa843a3e355b389134a07d927274688558f",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/cali_class_b.jpg https://images.pexels.com/photos/8401819/pexels-photo-8401819.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "cali_class_b",
+        "path": "/assets/photos/cali_class_b.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 359490,
+        "sha256": "5bc3d8a595d360f5c09eff2c99e5efa843a3e355b389134a07d927274688558f",
+        "dimensions": {
+          "width": 1400,
+          "height": 2100
+        }
       }
     },
     {
@@ -309,694 +190,275 @@
       "local": "assets/photos/cali_warmup.jpg",
       "cdn": "https://images.pexels.com/photos/4426319/pexels-photo-4426319.jpeg?fm=jpg&cs=tinysrgb&w=1400",
       "runtimePath": "/assets/photos/cali_warmup.jpg",
-      "acquisition": {
-        "manifestKey": "cali_warmup",
-        "command": [
-          "curl",
-          "--fail",
-          "--location",
-          "--max-time",
-          "30",
-          "--retry",
-          "1",
-          "--output",
-          "public/assets/photos/cali_warmup.jpg",
-          "--write-out",
-          "%{http_code} %{content_type} %{size_download}",
-          "https://images.pexels.com/photos/4426319/pexels-photo-4426319.jpeg?fm=jpg&cs=tinysrgb&w=1400"
-        ],
-        "exit": 0,
-        "status": "200 image/jpeg 555049"
-      },
       "byteLength": 555049,
       "sha256": "96e6564051a5fc6452b71a9f55b2e9774e0e31bc369a078024a72bc88af69128",
       "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "Reused owner-approved bundled manifest bytes",
+      "exerciseIds": [
+        "cal-first-shoulders",
+        "cal-regular-shoulders"
+      ],
+      "priorVisualObservation": "Standing woman outdoors draws one arm across her chest, opposite elbow bent to support it; both feet on grass. This is a cross-body shoulder stretch, not arm circles.",
       "magicStatus": "pass",
       "decodeStatus": "pass",
-      "servedStatus": "pass",
-      "visualReview": {
-        "status": "pass",
-        "method": "Actual downloaded image read, not filename inference",
-        "observation": "Standing woman outdoors draws one arm across her chest, opposite elbow bent to support it; both feet on grass. This is a cross-body shoulder stretch, not arm circles.",
-        "renderedStatus": "pass",
-        "renderedObservation": "Rendered screenshot directly read: displayed local photo, Spanish exercise title, quantity and technique agree with this recorded posture/equipment/medium; contain sizing preserves the source image. Fixed tabs are viewport overlays in full-page screenshots; normal page scrolling exposes all content."
-      },
-      "exercises": [
-        {
-          "id": "cal-first-shoulders",
-          "before": {
-            "title": "Movilidad de hombros",
-            "quantity": "4 círculos suaves por lado",
-            "technique": "Dejá los hombros bajos y mové dentro de un rango cómodo, sin dolor.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Estiramiento suave de hombro cruzado",
-            "quantity": "4 respiraciones cómodas por lado",
-            "technique": "De pie, acercá un brazo al pecho y sostenelo con el otro sin tirar del codo. Apoyos estables, hombros bajos y sin dolor; soltá y descansá antes de cambiar de lado.",
-            "imageId": "cal-first-shoulders-photo",
-            "imageAlt": "Mujer de pie estirando un hombro con el brazo cruzado frente al pecho.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "cal-returning-shoulders",
-          "before": {
-            "title": "Movilidad de hombros suave",
-            "quantity": "3 círculos suaves por lado",
-            "technique": "Buscá comodidad y hacé pausas cuando lo necesites.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Estiramiento suave de hombro cruzado",
-            "quantity": "3 respiraciones cómodas por lado",
-            "technique": "De pie, acercá un brazo al pecho y sostenelo con el otro sin tirar del codo. Apoyos estables, hombros bajos y sin dolor; soltá y descansá antes de cambiar de lado.",
-            "imageId": "cal-returning-shoulders-photo",
-            "imageAlt": "Mujer de pie estirando un hombro con el brazo cruzado frente al pecho.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "cal-regular-shoulders",
-          "before": {
-            "title": "Control escapular con apoyo",
-            "quantity": "1 serie de 6 repeticiones",
-            "technique": "Mové las escápulas sin encoger el cuello, con los pies apoyados.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Estiramiento suave de hombro cruzado",
-            "quantity": "4 respiraciones cómodas por lado",
-            "technique": "De pie, acercá un brazo al pecho y sostenelo con el otro sin tirar del codo. Apoyos estables, hombros bajos y sin dolor; soltá y descansá antes de cambiar de lado.",
-            "imageId": "cal-regular-shoulders-photo",
-            "imageAlt": "Mujer de pie estirando un hombro con el brazo cruzado frente al pecho.",
-            "imageStatus": "verified"
-          }
-        }
-      ],
       "servedEvidence": {
+        "manifestKey": "cali_warmup",
         "path": "/assets/photos/cali_warmup.jpg",
         "status": 200,
         "mime": "image/jpeg",
         "byteLength": 555049,
         "sha256": "96e6564051a5fc6452b71a9f55b2e9774e0e31bc369a078024a72bc88af69128",
-        "magicHex": "ffd8ffe10080457869660000",
-        "decodeStatus": "pass",
         "dimensions": {
           "width": 1400,
           "height": 2100
-        },
-        "exerciseIds": [
-          "cal-first-shoulders",
-          "cal-returning-shoulders",
-          "cal-regular-shoulders"
-        ],
-        "renderedScreenshot": "/tmp/ba-batch2/t005-mapping-cali_warmup.png"
+        }
       }
     },
     {
-      "manifestKey": "swim_backstroke",
-      "title": "Atleta ejecutando estilo espalda en piscina",
-      "photoId": 8688618,
-      "source": "https://www.pexels.com/photo/a-person-swimming-in-the-pool-8688618/",
+      "manifestKey": "cali_squat",
+      "title": "Hombre realizando sentadilla en parque",
+      "photoId": 4803865,
+      "source": "https://www.pexels.com/photo/man-exercising-in-park-4803865/",
       "license": "Pexels License (consultar términos)",
-      "local": "assets/photos/swim_backstroke.jpg",
-      "cdn": "https://images.pexels.com/photos/8688618/pexels-photo-8688618.jpeg?fm=jpg&cs=tinysrgb&w=1400",
-      "runtimePath": "/assets/photos/swim_backstroke.jpg",
-      "acquisition": {
-        "manifestKey": "swim_backstroke",
-        "command": [
-          "curl",
-          "--fail",
-          "--location",
-          "--max-time",
-          "30",
-          "--retry",
-          "1",
-          "--output",
-          "public/assets/photos/swim_backstroke.jpg",
-          "--write-out",
-          "%{http_code} %{content_type} %{size_download}",
-          "https://images.pexels.com/photos/8688618/pexels-photo-8688618.jpeg?fm=jpg&cs=tinysrgb&w=1400"
-        ],
-        "exit": 0,
-        "status": "200 image/jpeg 331661"
-      },
-      "byteLength": 331661,
-      "sha256": "b74e442baaf5614d52d8bde758856dabc4dc2a6dffcc26dd58c3cd0c27e0be64",
+      "local": "assets/photos/cali_squat.jpg",
+      "cdn": "https://images.pexels.com/photos/4803865/pexels-photo-4803865.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/cali_squat.jpg",
+      "byteLength": 407418,
+      "sha256": "938a4153833bda3b59c4e73c8b81e62af43e8f70d58df12e865f6857633c48a2",
       "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "Reused owner-approved bundled manifest bytes",
+      "exerciseIds": [
+        "cal-first-squat",
+        "cal-returning-squat"
+      ],
+      "priorVisualObservation": "Man in a deep crouch outdoors with both palms planted on the ground and knees bent. Not an upright unsupported squat; text now names leg flexion with hand support and permits a higher stable support.",
       "magicStatus": "pass",
       "decodeStatus": "pass",
-      "servedStatus": "pass",
-      "visualReview": {
-        "status": "pass",
-        "method": "Actual downloaded image read, not filename inference",
-        "observation": "Overhead swimmer face upward, one arm reaching overhead in pool, body on back: backstroke, not front crawl.",
-        "renderedStatus": "pass",
-        "renderedObservation": "Rendered screenshot directly read: displayed local photo, Spanish exercise title, quantity and technique agree with this recorded posture/equipment/medium; contain sizing preserves the source image. Fixed tabs are viewport overlays in full-page screenshots; normal page scrolling exposes all content."
-      },
-      "exercises": [
-        {
-          "id": "swim-water-first-technique",
-          "before": {
-            "title": "Nado cómodo con atención a la técnica",
-            "quantity": "1 tramo de hasta 15 m",
-            "technique": "No busques velocidad. Elegí un estilo conocido y descansá entre tramos; respetá las reglas de la pileta.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Espalda suave en estilo conocido",
-            "quantity": "1 tramo de hasta 15 m",
-            "technique": "Sólo si ya nadás espalda con autonomía y está permitido en esa pileta con guardavidas. No busques velocidad ni aprendas un estilo nuevo acá; respetá las reglas, evitá dolor y descansá entre tramos. Ante dudas, elegí clase o preparación en seco.",
-            "imageId": "swim-water-first-technique-photo",
-            "imageAlt": "Vista desde arriba de un nadador de espalda con un brazo extendido sobre la cabeza.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-water-returning-technique",
-          "before": {
-            "title": "Nado cómodo con atención a la técnica",
-            "quantity": "1 tramo de hasta 10 m",
-            "technique": "No busques velocidad. Elegí un estilo conocido y descansá entre tramos; respetá las reglas de la pileta.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Espalda suave en estilo conocido",
-            "quantity": "1 tramo de hasta 10 m",
-            "technique": "Sólo si ya nadás espalda con autonomía y está permitido en esa pileta con guardavidas. No busques velocidad ni aprendas un estilo nuevo acá; respetá las reglas, evitá dolor y descansá entre tramos. Ante dudas, elegí clase o preparación en seco.",
-            "imageId": "swim-water-returning-technique-photo",
-            "imageAlt": "Vista desde arriba de un nadador de espalda con un brazo extendido sobre la cabeza.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-water-regular-technique",
-          "before": {
-            "title": "Nado cómodo con atención a la técnica",
-            "quantity": "2 tramos de hasta 15 m",
-            "technique": "No busques velocidad. Elegí un estilo conocido y descansá entre tramos; respetá las reglas de la pileta.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Espalda suave en estilo conocido",
-            "quantity": "2 tramos de hasta 15 m",
-            "technique": "Sólo si ya nadás espalda con autonomía y está permitido en esa pileta con guardavidas. No busques velocidad ni aprendas un estilo nuevo acá; respetá las reglas, evitá dolor y descansá entre tramos. Ante dudas, elegí clase o preparación en seco.",
-            "imageId": "swim-water-regular-technique-photo",
-            "imageAlt": "Vista desde arriba de un nadador de espalda con un brazo extendido sobre la cabeza.",
-            "imageStatus": "verified"
-          }
-        }
-      ],
       "servedEvidence": {
-        "path": "/assets/photos/swim_backstroke.jpg",
+        "manifestKey": "cali_squat",
+        "path": "/assets/photos/cali_squat.jpg",
         "status": 200,
         "mime": "image/jpeg",
-        "byteLength": 331661,
-        "sha256": "b74e442baaf5614d52d8bde758856dabc4dc2a6dffcc26dd58c3cd0c27e0be64",
-        "magicHex": "ffd8ffe10080457869660000",
-        "decodeStatus": "pass",
+        "byteLength": 407418,
+        "sha256": "938a4153833bda3b59c4e73c8b81e62af43e8f70d58df12e865f6857633c48a2",
+        "dimensions": {
+          "width": 1400,
+          "height": 2100
+        }
+      }
+    },
+    {
+      "manifestKey": "cali_incline",
+      "title": "Mujer haciendo flexiones inclinadas sobre un banco",
+      "photoId": 8401820,
+      "source": "https://www.pexels.com/photo/woman-doing-push-ups-exercises-push-8401820/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/cali_incline.jpg",
+      "cdn": "https://images.pexels.com/photos/8401820/pexels-photo-8401820.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/cali_incline.jpg",
+      "byteLength": 145296,
+      "sha256": "616fc52787c4c74ce9ebbfa2d223bb0774bf3cde624e3dd4b61ba1fe0e3574a2",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "Reused owner-approved bundled manifest bytes",
+      "exerciseIds": [
+        "cal-first-row",
+        "cal-returning-row",
+        "cal-regular-row"
+      ],
+      "priorVisualObservation": "Woman with feet on paving and palms on a wooden bench, elbows flexed, trunk extended: inclined push-up, not an Australian row.",
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "cali_incline",
+        "path": "/assets/photos/cali_incline.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 145296,
+        "sha256": "616fc52787c4c74ce9ebbfa2d223bb0774bf3cde624e3dd4b61ba1fe0e3574a2",
+        "dimensions": {
+          "width": 1400,
+          "height": 933
+        }
+      }
+    },
+    {
+      "manifestKey": "cali_plank",
+      "title": "Hombre realizando plancha al aire libre",
+      "photoId": 4920466,
+      "source": "https://www.pexels.com/photo/man-doing-core-exercises-4920466/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/cali_plank.jpg",
+      "cdn": "https://images.pexels.com/photos/4920466/pexels-photo-4920466.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/cali_plank.jpg",
+      "byteLength": 81797,
+      "sha256": "90149e897699f6f8bb427b424eb6c6a00e076fa12703b50eb843ab0c62d4b981",
+      "magicHex": "ffd8ffe100b4457869660000",
+      "acquisition": "Reused owner-approved bundled manifest bytes",
+      "exerciseIds": [
+        "cal-regular-side"
+      ],
+      "priorVisualObservation": "Man in high plank on paved ground, one palm supporting and the other touching the opposite upper arm/shoulder. Not a side plank; text now names supported plank with shoulder touch.",
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "cali_plank",
+        "path": "/assets/photos/cali_plank.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 81797,
+        "sha256": "90149e897699f6f8bb427b424eb6c6a00e076fa12703b50eb843ab0c62d4b981",
+        "dimensions": {
+          "width": 1400,
+          "height": 933
+        }
+      }
+    },
+    {
+      "manifestKey": "cali_stretch",
+      "title": "Mujer haciendo estiramiento en parque",
+      "photoId": 34382760,
+      "source": "https://www.pexels.com/photo/woman-stretching-in-park-during-daytime-exercise-34382760/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/cali_stretch.jpg",
+      "cdn": "https://images.pexels.com/photos/34382760/pexels-photo-34382760.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/cali_stretch.jpg",
+      "byteLength": 226368,
+      "sha256": "24fc516e2edb7b4fbfce8ba0f449b20555924f1a8b97eadf8722b1aedbdf5109",
+      "magicHex": "ffd8ffe1009e457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/cali_stretch.jpg https://images.pexels.com/photos/34382760/pexels-photo-34382760.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [
+        "cal-returning-shoulders"
+      ],
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "cali_stretch",
+        "path": "/assets/photos/cali_stretch.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 226368,
+        "sha256": "24fc516e2edb7b4fbfce8ba0f449b20555924f1a8b97eadf8722b1aedbdf5109",
+        "dimensions": {
+          "width": 1400,
+          "height": 933
+        }
+      },
+      "visualObservation": "Direct image read: woman seated on grass leaning toward extended legs with hands near feet. Bounded seated stretch text allows bent knees or a chair, no forced reach."
+    },
+    {
+      "manifestKey": "yoga_card",
+      "title": "Mujer practicando yoga en parque",
+      "photoId": 34382753,
+      "source": "https://www.pexels.com/photo/woman-practicing-yoga-outdoors-in-park-34382753/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/yoga_card.jpg",
+      "cdn": "https://images.pexels.com/photos/34382753/pexels-photo-34382753.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/yoga_card.jpg",
+      "byteLength": 219974,
+      "sha256": "db76ee6e6ca723a89f8ed2470c77ec21333afffffc458c5c365f8a010bda57a1",
+      "magicHex": "ffd8ffe1009e457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/yoga_card.jpg https://images.pexels.com/photos/34382753/pexels-photo-34382753.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "yoga_card",
+        "path": "/assets/photos/yoga_card.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 219974,
+        "sha256": "db76ee6e6ca723a89f8ed2470c77ec21333afffffc458c5c365f8a010bda57a1",
+        "dimensions": {
+          "width": 1400,
+          "height": 933
+        }
+      }
+    },
+    {
+      "manifestKey": "yoga_hero",
+      "title": "Mujer haciendo yoga y meditación en parque",
+      "photoId": 34395954,
+      "source": "https://www.pexels.com/photo/outdoor-yoga-meditation-class-in-a-park-34395954/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/yoga_hero.jpg",
+      "cdn": "https://images.pexels.com/photos/34395954/pexels-photo-34395954.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/yoga_hero.jpg",
+      "byteLength": 205997,
+      "sha256": "8db570124ccfaf1c4dfa480c79d18a0b84607b0d0d6e39b681cf90952c522769",
+      "magicHex": "ffd8ffe1009e457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/yoga_hero.jpg https://images.pexels.com/photos/34395954/pexels-photo-34395954.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "yoga_hero",
+        "path": "/assets/photos/yoga_hero.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 205997,
+        "sha256": "8db570124ccfaf1c4dfa480c79d18a0b84607b0d0d6e39b681cf90952c522769",
+        "dimensions": {
+          "width": 1400,
+          "height": 933
+        }
+      }
+    },
+    {
+      "manifestKey": "yoga_class_a",
+      "title": "Grupo de yoga al aire libre en parque",
+      "photoId": 36715598,
+      "source": "https://www.pexels.com/photo/outdoor-group-yoga-session-in-a-sunny-park-36715598/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/yoga_class_a.jpg",
+      "cdn": "https://images.pexels.com/photos/36715598/pexels-photo-36715598.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/yoga_class_a.jpg",
+      "byteLength": 251404,
+      "sha256": "95812f256a97e80bda85cc8ff271d05fee9acf8bd27eb768e4957e465021ab76",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/yoga_class_a.jpg https://images.pexels.com/photos/36715598/pexels-photo-36715598.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "yoga_class_a",
+        "path": "/assets/photos/yoga_class_a.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 251404,
+        "sha256": "95812f256a97e80bda85cc8ff271d05fee9acf8bd27eb768e4957e465021ab76",
         "dimensions": {
           "width": 1400,
           "height": 788
-        },
-        "exerciseIds": [
-          "swim-water-first-technique",
-          "swim-water-returning-technique",
-          "swim-water-regular-technique"
-        ],
-        "renderedScreenshot": "/tmp/ba-batch2/t005-mapping-swim_backstroke.png"
+        }
       }
     },
     {
-      "manifestKey": "swim_cooldown",
-      "title": "Nadador practicando nado suave",
-      "photoId": 5903226,
-      "source": "https://www.pexels.com/photo/a-swimmer-training-on-a-pool-5903226/",
+      "manifestKey": "yoga_class_b",
+      "title": "Otra clase grupal de yoga en parque con árboles",
+      "photoId": 8172947,
+      "source": "https://www.pexels.com/photo/people-on-the-park-doing-yoga-8172947/",
       "license": "Pexels License (consultar términos)",
-      "local": "assets/photos/swim_cooldown.jpg",
-      "cdn": "https://images.pexels.com/photos/5903226/pexels-photo-5903226.jpeg?fm=jpg&cs=tinysrgb&w=1400",
-      "runtimePath": "/assets/photos/swim_cooldown.jpg",
-      "acquisition": {
-        "manifestKey": "swim_cooldown",
-        "command": [
-          "curl",
-          "--fail",
-          "--location",
-          "--max-time",
-          "30",
-          "--retry",
-          "1",
-          "--output",
-          "public/assets/photos/swim_cooldown.jpg",
-          "--write-out",
-          "%{http_code} %{content_type} %{size_download}",
-          "https://images.pexels.com/photos/5903226/pexels-photo-5903226.jpeg?fm=jpg&cs=tinysrgb&w=1400"
-        ],
-        "exit": 0,
-        "status": "200 image/jpeg 116384"
-      },
-      "byteLength": 116384,
-      "sha256": "ddc2a91e91c2b40b8c25835f278a334ac508a773f5148930f3060ebd147f9552",
+      "local": "assets/photos/yoga_class_b.jpg",
+      "cdn": "https://images.pexels.com/photos/8172947/pexels-photo-8172947.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/yoga_class_b.jpg",
+      "byteLength": 285958,
+      "sha256": "b851403341ddd23104aa1e38f1a9177b4eb928e3af72c8641bd17dc40769c3d7",
       "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/yoga_class_b.jpg https://images.pexels.com/photos/8172947/pexels-photo-8172947.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
       "magicStatus": "pass",
       "decodeStatus": "pass",
-      "servedStatus": "pass",
-      "visualReview": {
-        "status": "pass",
-        "method": "Actual downloaded image read, not filename inference",
-        "observation": "Swimmer upright waist-deep in pool, hands together forward; not swimming a length or gripping a wall. Text now names upright recovery only in a permitted stable-support area, otherwise exit.",
-        "renderedStatus": "pass",
-        "renderedObservation": "Rendered screenshot directly read: displayed local photo, Spanish exercise title, quantity and technique agree with this recorded posture/equipment/medium; contain sizing preserves the source image. Fixed tabs are viewport overlays in full-page screenshots; normal page scrolling exposes all content."
-      },
-      "exercises": [
-        {
-          "id": "swim-water-first-rest",
-          "before": {
-            "title": "Pausa de recuperación segura",
-            "quantity": "1 pausa completa en zona permitida",
-            "technique": "Salí o apoyate sólo donde esté permitido. Terminá antes si perdés comodidad; nunca sigas con dolor.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Recuperación erguida en zona permitida",
-            "quantity": "1 pausa completa en zona permitida",
-            "technique": "Recuperá la respiración erguido sólo en una zona donde el lugar permita apoyo estable y seguro. No supongas que podés tocar fondo: si no hay apoyo permitido, salí por el acceso habilitado. Sin retener aire ni seguir con dolor; respetá al guardavidas.",
-            "imageId": "swim-water-first-rest-photo",
-            "imageAlt": "Nadador erguido dentro de la pileta, con las manos juntas delante del cuerpo.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-water-returning-rest",
-          "before": {
-            "title": "Pausa de recuperación segura",
-            "quantity": "1 pausa completa en zona permitida",
-            "technique": "Salí o apoyate sólo donde esté permitido. Terminá antes si perdés comodidad; nunca sigas con dolor.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Recuperación erguida en zona permitida",
-            "quantity": "1 pausa completa en zona permitida",
-            "technique": "Recuperá la respiración erguido sólo en una zona donde el lugar permita apoyo estable y seguro. No supongas que podés tocar fondo: si no hay apoyo permitido, salí por el acceso habilitado. Sin retener aire ni seguir con dolor; respetá al guardavidas.",
-            "imageId": "swim-water-returning-rest-photo",
-            "imageAlt": "Nadador erguido dentro de la pileta, con las manos juntas delante del cuerpo.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-water-regular-rest",
-          "before": {
-            "title": "Pausa de recuperación segura",
-            "quantity": "1 pausa completa en zona permitida",
-            "technique": "Salí o apoyate sólo donde esté permitido. Terminá antes si perdés comodidad; nunca sigas con dolor.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Recuperación erguida en zona permitida",
-            "quantity": "1 pausa completa en zona permitida",
-            "technique": "Recuperá la respiración erguido sólo en una zona donde el lugar permita apoyo estable y seguro. No supongas que podés tocar fondo: si no hay apoyo permitido, salí por el acceso habilitado. Sin retener aire ni seguir con dolor; respetá al guardavidas.",
-            "imageId": "swim-water-regular-rest-photo",
-            "imageAlt": "Nadador erguido dentro de la pileta, con las manos juntas delante del cuerpo.",
-            "imageStatus": "verified"
-          }
-        }
-      ],
       "servedEvidence": {
-        "path": "/assets/photos/swim_cooldown.jpg",
+        "manifestKey": "yoga_class_b",
+        "path": "/assets/photos/yoga_class_b.jpg",
         "status": 200,
         "mime": "image/jpeg",
-        "byteLength": 116384,
-        "sha256": "ddc2a91e91c2b40b8c25835f278a334ac508a773f5148930f3060ebd147f9552",
-        "magicHex": "ffd8ffe10080457869660000",
-        "decodeStatus": "pass",
+        "byteLength": 285958,
+        "sha256": "b851403341ddd23104aa1e38f1a9177b4eb928e3af72c8641bd17dc40769c3d7",
         "dimensions": {
           "width": 1400,
-          "height": 788
-        },
-        "exerciseIds": [
-          "swim-water-first-rest",
-          "swim-water-returning-rest",
-          "swim-water-regular-rest"
-        ],
-        "renderedScreenshot": "/tmp/ba-batch2/t005-mapping-swim_cooldown.png"
-      }
-    },
-    {
-      "manifestKey": "swim_freestyle",
-      "title": "Nadadora haciendo crol en piscina",
-      "photoId": 6539731,
-      "source": "https://www.pexels.com/photo/woman-swimming-in-a-lap-pool-6539731/",
-      "license": "Pexels License (consultar términos)",
-      "local": "assets/photos/swim_freestyle.jpg",
-      "cdn": "https://images.pexels.com/photos/6539731/pexels-photo-6539731.jpeg?fm=jpg&cs=tinysrgb&w=1400",
-      "runtimePath": "/assets/photos/swim_freestyle.jpg",
-      "acquisition": {
-        "manifestKey": "swim_freestyle",
-        "command": [
-          "curl",
-          "--fail",
-          "--location",
-          "--max-time",
-          "30",
-          "--retry",
-          "1",
-          "--output",
-          "public/assets/photos/swim_freestyle.jpg",
-          "--write-out",
-          "%{http_code} %{content_type} %{size_download}",
-          "https://images.pexels.com/photos/6539731/pexels-photo-6539731.jpeg?fm=jpg&cs=tinysrgb&w=1400"
-        ],
-        "exit": 0,
-        "status": "200 image/jpeg 146407"
-      },
-      "byteLength": 146407,
-      "sha256": "f7c272cd36d5502859f1d626583985c525280f1724a68c1a28b75bb7f3687568",
-      "magicHex": "ffd8ffe100a0457869660000",
-      "magicStatus": "pass",
-      "decodeStatus": "pass",
-      "servedStatus": "pass",
-      "visualReview": {
-        "status": "pass",
-        "method": "Actual downloaded image read, not filename inference",
-        "observation": "Woman horizontal in a lane pool, goggles/cap, one arm extended forward and the other recovering while face turns sideways: front crawl. No unobserved technique quality or actual attendance claimed.",
-        "renderedStatus": "pass",
-        "renderedObservation": "Rendered screenshot directly read: displayed local photo, Spanish exercise title, quantity and technique agree with this recorded posture/equipment/medium; contain sizing preserves the source image. Fixed tabs are viewport overlays in full-page screenshots; normal page scrolling exposes all content."
-      },
-      "exercises": [
-        {
-          "id": "swim-water-first-warmup",
-          "before": {
-            "title": "Desplazamiento cómodo en el agua",
-            "quantity": "1 tramo corto de hasta 10 m",
-            "technique": "Sólo si ya nadás con autonomía, con permiso del lugar y guardavidas. Descansá al llegar.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Crol cómodo de entrada",
-            "quantity": "1 tramo corto de hasta 10 m",
-            "technique": "Sólo si ya nadás crol con autonomía, con permiso del lugar y guardavidas. Hacé un tramo corto sin buscar velocidad; respetá las reglas y descansá al llegar. Si no es cómodo, elegí preparación en seco o una clase.",
-            "imageId": "swim-water-first-warmup-photo",
-            "imageAlt": "Nadadora haciendo crol en un carril de pileta, con un brazo extendido y la cara hacia un lado.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-water-returning-warmup",
-          "before": {
-            "title": "Desplazamiento cómodo en el agua",
-            "quantity": "1 tramo corto de hasta 10 m",
-            "technique": "Sólo si ya nadás con autonomía, con permiso del lugar y guardavidas. Descansá al llegar.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Crol cómodo de entrada",
-            "quantity": "1 tramo corto de hasta 10 m",
-            "technique": "Sólo si ya nadás crol con autonomía, con permiso del lugar y guardavidas. Hacé un tramo corto sin buscar velocidad; respetá las reglas y descansá al llegar. Si no es cómodo, elegí preparación en seco o una clase.",
-            "imageId": "swim-water-returning-warmup-photo",
-            "imageAlt": "Nadadora haciendo crol en un carril de pileta, con un brazo extendido y la cara hacia un lado.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-water-regular-warmup",
-          "before": {
-            "title": "Desplazamiento cómodo en el agua",
-            "quantity": "1 tramo corto de hasta 10 m",
-            "technique": "Sólo si ya nadás con autonomía, con permiso del lugar y guardavidas. Descansá al llegar.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Crol cómodo de entrada",
-            "quantity": "1 tramo corto de hasta 10 m",
-            "technique": "Sólo si ya nadás crol con autonomía, con permiso del lugar y guardavidas. Hacé un tramo corto sin buscar velocidad; respetá las reglas y descansá al llegar. Si no es cómodo, elegí preparación en seco o una clase.",
-            "imageId": "swim-water-regular-warmup-photo",
-            "imageAlt": "Nadadora haciendo crol en un carril de pileta, con un brazo extendido y la cara hacia un lado.",
-            "imageStatus": "verified"
-          }
+          "height": 933
         }
-      ],
-      "servedEvidence": {
-        "path": "/assets/photos/swim_freestyle.jpg",
-        "status": 200,
-        "mime": "image/jpeg",
-        "byteLength": 146407,
-        "sha256": "f7c272cd36d5502859f1d626583985c525280f1724a68c1a28b75bb7f3687568",
-        "magicHex": "ffd8ffe100a0457869660000",
-        "decodeStatus": "pass",
-        "dimensions": {
-          "width": 1400,
-          "height": 935
-        },
-        "exerciseIds": [
-          "swim-water-first-warmup",
-          "swim-water-returning-warmup",
-          "swim-water-regular-warmup"
-        ],
-        "renderedScreenshot": "/tmp/ba-batch2/t005-mapping-swim_freestyle.png"
-      }
-    },
-    {
-      "manifestKey": "swim_warmup",
-      "title": "Nadador estirando antes de entrar al agua",
-      "photoId": 6539744,
-      "source": "https://www.pexels.com/photo/a-swimmer-doing-stretching-6539744/",
-      "license": "Pexels License (consultar términos)",
-      "local": "assets/photos/swim_warmup.jpg",
-      "cdn": "https://images.pexels.com/photos/6539744/pexels-photo-6539744.jpeg?fm=jpg&cs=tinysrgb&w=1400",
-      "runtimePath": "/assets/photos/swim_warmup.jpg",
-      "acquisition": {
-        "manifestKey": "swim_warmup",
-        "command": [
-          "curl",
-          "--fail",
-          "--location",
-          "--max-time",
-          "30",
-          "--retry",
-          "1",
-          "--output",
-          "public/assets/photos/swim_warmup.jpg",
-          "--write-out",
-          "%{http_code} %{content_type} %{size_download}",
-          "https://images.pexels.com/photos/6539744/pexels-photo-6539744.jpeg?fm=jpg&cs=tinysrgb&w=1400"
-        ],
-        "exit": 0,
-        "status": "200 image/jpeg 121757"
-      },
-      "byteLength": 121757,
-      "sha256": "6d277de927f4c66db39d52840b10a800c0f08b61583784cee43e861c2fbb8cc0",
-      "magicHex": "ffd8ffe100a0457869660000",
-      "magicStatus": "pass",
-      "decodeStatus": "pass",
-      "servedStatus": "pass",
-      "visualReview": {
-        "status": "pass",
-        "method": "Actual downloaded image read, not filename inference",
-        "observation": "Swimmer upright outside the pool, seen from behind, extending one arm across chest with other arm supporting. Dry cross-body shoulder stretch; not in-water eligibility or strokes.",
-        "renderedStatus": "pass",
-        "renderedObservation": "Rendered screenshot directly read: displayed local photo, Spanish exercise title, quantity and technique agree with this recorded posture/equipment/medium; contain sizing preserves the source image. Fixed tabs are viewport overlays in full-page screenshots; normal page scrolling exposes all content."
-      },
-      "exercises": [
-        {
-          "id": "swim-dry-first-shoulders",
-          "before": {
-            "title": "Movilidad de hombros en seco",
-            "quantity": "5 círculos por lado",
-            "technique": "Lejos del borde, mové brazos y hombros sin dolor.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Estiramiento de hombro cruzado en seco",
-            "quantity": "5 respiraciones cómodas por lado",
-            "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
-            "imageId": "swim-dry-first-shoulders-photo",
-            "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-dry-first-breath",
-          "before": {
-            "title": "Respiración en seco",
-            "quantity": "5 respiraciones cómodas",
-            "technique": "De pie con apoyo, soltá el aire sin retenciones. No sumerjas la cara.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Estiramiento de hombro cruzado en seco",
-            "quantity": "5 respiraciones cómodas por lado",
-            "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
-            "imageId": "swim-dry-first-breath-photo",
-            "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-dry-first-coordination",
-          "before": {
-            "title": "Coordinación de brazos en seco",
-            "quantity": "3 alternancias lentas",
-            "technique": "Con pies quietos y apoyo estable, coordiná los brazos sin entrar al agua. Descansá al cerrar.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Estiramiento de hombro cruzado en seco",
-            "quantity": "4 cambios suaves de lado, con pausa",
-            "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
-            "imageId": "swim-dry-first-coordination-photo",
-            "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-dry-returning-shoulders",
-          "before": {
-            "title": "Movilidad de hombros en seco",
-            "quantity": "3 círculos por lado",
-            "technique": "Lejos del borde, mové brazos y hombros sin dolor.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Estiramiento de hombro cruzado en seco",
-            "quantity": "3 respiraciones cómodas por lado",
-            "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
-            "imageId": "swim-dry-returning-shoulders-photo",
-            "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-dry-returning-breath",
-          "before": {
-            "title": "Respiración en seco",
-            "quantity": "3 respiraciones cómodas",
-            "technique": "De pie con apoyo, soltá el aire sin retenciones. No sumerjas la cara.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Estiramiento de hombro cruzado en seco",
-            "quantity": "3 respiraciones cómodas por lado",
-            "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
-            "imageId": "swim-dry-returning-breath-photo",
-            "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-dry-returning-coordination",
-          "before": {
-            "title": "Coordinación de brazos en seco",
-            "quantity": "3 alternancias lentas",
-            "technique": "Con pies quietos y apoyo estable, coordiná los brazos sin entrar al agua. Descansá al cerrar.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Estiramiento de hombro cruzado en seco",
-            "quantity": "3 cambios suaves de lado, con pausa",
-            "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
-            "imageId": "swim-dry-returning-coordination-photo",
-            "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-dry-regular-shoulders",
-          "before": {
-            "title": "Movilidad de hombros en seco",
-            "quantity": "5 círculos por lado",
-            "technique": "Lejos del borde, mové brazos y hombros sin dolor.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Estiramiento de hombro cruzado en seco",
-            "quantity": "5 respiraciones cómodas por lado",
-            "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
-            "imageId": "swim-dry-regular-shoulders-photo",
-            "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-dry-regular-breath",
-          "before": {
-            "title": "Respiración en seco",
-            "quantity": "5 respiraciones cómodas",
-            "technique": "De pie con apoyo, soltá el aire sin retenciones. No sumerjas la cara.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Estiramiento de hombro cruzado en seco",
-            "quantity": "5 respiraciones cómodas por lado",
-            "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
-            "imageId": "swim-dry-regular-breath-photo",
-            "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "swim-dry-regular-coordination",
-          "before": {
-            "title": "Coordinación de brazos en seco",
-            "quantity": "6 alternancias lentas",
-            "technique": "Con pies quietos y apoyo estable, coordiná los brazos sin entrar al agua. Descansá al cerrar.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Estiramiento de hombro cruzado en seco",
-            "quantity": "4 cambios suaves de lado, con pausa",
-            "technique": "Fuera del agua y lejos del borde, acercá un brazo al pecho y sostenelo suavemente con el otro. Alterná lados sin forzar, con pies estables y respiración libre. No sumerjas la cara ni entres al agua; descansá y pará ante dolor.",
-            "imageId": "swim-dry-regular-coordination-photo",
-            "imageAlt": "Nadador fuera de la pileta estirando un brazo cruzado delante del pecho.",
-            "imageStatus": "verified"
-          }
-        }
-      ],
-      "servedEvidence": {
-        "path": "/assets/photos/swim_warmup.jpg",
-        "status": 200,
-        "mime": "image/jpeg",
-        "byteLength": 121757,
-        "sha256": "6d277de927f4c66db39d52840b10a800c0f08b61583784cee43e861c2fbb8cc0",
-        "magicHex": "ffd8ffe100a0457869660000",
-        "decodeStatus": "pass",
-        "dimensions": {
-          "width": 1400,
-          "height": 935
-        },
-        "exerciseIds": [
-          "swim-dry-first-shoulders",
-          "swim-dry-first-breath",
-          "swim-dry-first-coordination",
-          "swim-dry-returning-shoulders",
-          "swim-dry-returning-breath",
-          "swim-dry-returning-coordination",
-          "swim-dry-regular-shoulders",
-          "swim-dry-regular-breath",
-          "swim-dry-regular-coordination"
-        ],
-        "renderedScreenshot": "/tmp/ba-batch2/t005-mapping-swim_warmup.png"
       }
     },
     {
@@ -1008,349 +470,28 @@
       "local": "assets/photos/yoga_breathe.jpg",
       "cdn": "https://images.pexels.com/photos/35253327/pexels-photo-35253327.jpeg?fm=jpg&cs=tinysrgb&w=1400",
       "runtimePath": "/assets/photos/yoga_breathe.jpg",
-      "acquisition": {
-        "manifestKey": "yoga_breathe",
-        "command": [
-          "curl",
-          "--fail",
-          "--location",
-          "--max-time",
-          "30",
-          "--retry",
-          "1",
-          "--output",
-          "public/assets/photos/yoga_breathe.jpg",
-          "--write-out",
-          "%{http_code} %{content_type} %{size_download}",
-          "https://images.pexels.com/photos/35253327/pexels-photo-35253327.jpeg?fm=jpg&cs=tinysrgb&w=1400"
-        ],
-        "exit": 0,
-        "status": "200 image/jpeg 224287"
-      },
       "byteLength": 224287,
       "sha256": "d591baa1aee65cf479c494b8e4311fbb3692ddd948fc9390f6801b85084fb993",
       "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "Reused owner-approved bundled manifest bytes",
+      "exerciseIds": [
+        "yoga-first-breath",
+        "yoga-returning-breath"
+      ],
+      "priorVisualObservation": "Woman seated cross-legged on an orange mat outdoors, upright torso and hands on knees. Text names comfortable seated breathing without requiring feet on the floor.",
       "magicStatus": "pass",
       "decodeStatus": "pass",
-      "servedStatus": "pass",
-      "visualReview": {
-        "status": "pass",
-        "method": "Actual downloaded image read, not filename inference",
-        "observation": "Woman seated cross-legged on an orange mat outdoors, upright torso and hands on knees. Text names comfortable seated breathing without requiring feet on the floor.",
-        "renderedStatus": "pass",
-        "renderedObservation": "Rendered screenshot directly read: displayed local photo, Spanish exercise title, quantity and technique agree with this recorded posture/equipment/medium; contain sizing preserves the source image. Fixed tabs are viewport overlays in full-page screenshots; normal page scrolling exposes all content."
-      },
-      "exercises": [
-        {
-          "id": "yoga-first-breath",
-          "before": {
-            "title": "Respiración consciente sentada",
-            "quantity": "5 respiraciones cómodas",
-            "technique": "Apoyá los pies y respirá a tu ritmo, sin retenciones.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Respiración consciente sentada",
-            "quantity": "5 respiraciones cómodas",
-            "technique": "Sentate con el tronco cómodo y las manos descansando sobre las piernas. No fuerces el cruce de piernas: podés usar almohadón o silla firme. Respirá a tu ritmo, sin retenciones ni dolor.",
-            "imageId": "yoga-first-breath-photo",
-            "imageAlt": "Mujer sentada con piernas cruzadas y manos sobre las rodillas en una colchoneta.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "yoga-returning-breath",
-          "before": {
-            "title": "Respiración consciente sentada",
-            "quantity": "3 respiraciones cómodas",
-            "technique": "Apoyá los pies y respirá a tu ritmo, sin retenciones.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Respiración consciente sentada",
-            "quantity": "3 respiraciones cómodas",
-            "technique": "Sentate con el tronco cómodo y las manos descansando sobre las piernas. No fuerces el cruce de piernas: podés usar almohadón o silla firme. Respirá a tu ritmo, sin retenciones ni dolor.",
-            "imageId": "yoga-returning-breath-photo",
-            "imageAlt": "Mujer sentada con piernas cruzadas y manos sobre las rodillas en una colchoneta.",
-            "imageStatus": "verified"
-          }
-        }
-      ],
       "servedEvidence": {
+        "manifestKey": "yoga_breathe",
         "path": "/assets/photos/yoga_breathe.jpg",
         "status": 200,
         "mime": "image/jpeg",
         "byteLength": 224287,
         "sha256": "d591baa1aee65cf479c494b8e4311fbb3692ddd948fc9390f6801b85084fb993",
-        "magicHex": "ffd8ffe10080457869660000",
-        "decodeStatus": "pass",
         "dimensions": {
           "width": 1400,
           "height": 1865
-        },
-        "exerciseIds": [
-          "yoga-first-breath",
-          "yoga-returning-breath"
-        ],
-        "renderedScreenshot": "/tmp/ba-batch2/t005-mapping-yoga_breathe.png"
-      }
-    },
-    {
-      "manifestKey": "yoga_child",
-      "title": "Mujer en postura del niño",
-      "photoId": 4534638,
-      "source": "https://www.pexels.com/photo/woman-kneeling-on-a-yoga-mat-4534638/",
-      "license": "Pexels License (consultar términos)",
-      "local": "assets/photos/yoga_child.jpg",
-      "cdn": "https://images.pexels.com/photos/4534638/pexels-photo-4534638.jpeg?fm=jpg&cs=tinysrgb&w=1400",
-      "runtimePath": "/assets/photos/yoga_child.jpg",
-      "acquisition": {
-        "manifestKey": "yoga_child",
-        "command": [
-          "curl",
-          "--fail",
-          "--location",
-          "--max-time",
-          "30",
-          "--retry",
-          "1",
-          "--output",
-          "public/assets/photos/yoga_child.jpg",
-          "--write-out",
-          "%{http_code} %{content_type} %{size_download}",
-          "https://images.pexels.com/photos/4534638/pexels-photo-4534638.jpeg?fm=jpg&cs=tinysrgb&w=1400"
-        ],
-        "exit": 0,
-        "status": "200 image/jpeg 104648"
-      },
-      "byteLength": 104648,
-      "sha256": "51128308853f52b7cc035e8d67bb4f040e70c8a1bab9c14df3766f603a60c466",
-      "magicHex": "ffd8ffe10080457869660000",
-      "magicStatus": "pass",
-      "decodeStatus": "pass",
-      "servedStatus": "pass",
-      "visualReview": {
-        "status": "pass",
-        "method": "Actual downloaded image read, not filename inference",
-        "observation": "Woman kneeling on mat, hips toward heels, torso folded forward and arms extended on floor: child pose. Text offers cushion/chair alternatives without forcing knee/hip flexion.",
-        "renderedStatus": "pass",
-        "renderedObservation": "Rendered screenshot directly read: displayed local photo, Spanish exercise title, quantity and technique agree with this recorded posture/equipment/medium; contain sizing preserves the source image. Fixed tabs are viewport overlays in full-page screenshots; normal page scrolling exposes all content."
-      },
-      "exercises": [
-        {
-          "id": "yoga-first-rest",
-          "before": {
-            "title": "Descanso con apoyo",
-            "quantity": "4 respiraciones cómodas",
-            "technique": "Elegí una posición sin dolor, con almohadón o respaldo. No fuerces la flexión.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Descanso en postura del niño adaptada",
-            "quantity": "4 respiraciones cómodas",
-            "technique": "Desde rodillas apoyadas, acercá el tronco hacia un apoyo cómodo y descansá los brazos adelante. No fuerces rodillas ni cadera: usá almohadón o descansá sentado en una silla firme. Pará si hay dolor.",
-            "imageId": "yoga-first-rest-photo",
-            "imageAlt": "Mujer arrodillada en postura del niño, tronco inclinado y brazos extendidos sobre la colchoneta.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "yoga-returning-rest",
-          "before": {
-            "title": "Descanso con apoyo",
-            "quantity": "2 respiraciones cómodas",
-            "technique": "Elegí una posición sin dolor, con almohadón o respaldo. No fuerces la flexión.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Descanso en postura del niño adaptada",
-            "quantity": "2 respiraciones cómodas",
-            "technique": "Desde rodillas apoyadas, acercá el tronco hacia un apoyo cómodo y descansá los brazos adelante. No fuerces rodillas ni cadera: usá almohadón o descansá sentado en una silla firme. Pará si hay dolor.",
-            "imageId": "yoga-returning-rest-photo",
-            "imageAlt": "Mujer arrodillada en postura del niño, tronco inclinado y brazos extendidos sobre la colchoneta.",
-            "imageStatus": "verified"
-          }
         }
-      ],
-      "servedEvidence": {
-        "path": "/assets/photos/yoga_child.jpg",
-        "status": 200,
-        "mime": "image/jpeg",
-        "byteLength": 104648,
-        "sha256": "51128308853f52b7cc035e8d67bb4f040e70c8a1bab9c14df3766f603a60c466",
-        "magicHex": "ffd8ffe10080457869660000",
-        "decodeStatus": "pass",
-        "dimensions": {
-          "width": 1400,
-          "height": 2100
-        },
-        "exerciseIds": [
-          "yoga-first-rest",
-          "yoga-returning-rest"
-        ],
-        "renderedScreenshot": "/tmp/ba-batch2/t005-mapping-yoga_child.png"
-      }
-    },
-    {
-      "manifestKey": "yoga_downward",
-      "title": "Mujer realizando postura perro boca abajo",
-      "photoId": 7592992,
-      "source": "https://www.pexels.com/photo/faceless-woman-practicing-downward-facing-dog-asana-7592992/",
-      "license": "Pexels License (consultar términos)",
-      "local": "assets/photos/yoga_downward.jpg",
-      "cdn": "https://images.pexels.com/photos/7592992/pexels-photo-7592992.jpeg?fm=jpg&cs=tinysrgb&w=1400",
-      "runtimePath": "/assets/photos/yoga_downward.jpg",
-      "acquisition": {
-        "manifestKey": "yoga_downward",
-        "command": [
-          "curl",
-          "--fail",
-          "--location",
-          "--max-time",
-          "30",
-          "--retry",
-          "1",
-          "--output",
-          "public/assets/photos/yoga_downward.jpg",
-          "--write-out",
-          "%{http_code} %{content_type} %{size_download}",
-          "https://images.pexels.com/photos/7592992/pexels-photo-7592992.jpeg?fm=jpg&cs=tinysrgb&w=1400"
-        ],
-        "exit": 0,
-        "status": "200 image/jpeg 203480"
-      },
-      "byteLength": 203480,
-      "sha256": "4c03a8d268dc88674a4fe44251c0812e0127fdb8ca98b23ffb0fa2ca5ced3e1a",
-      "magicHex": "ffd8ffe10080457869660000",
-      "magicStatus": "pass",
-      "decodeStatus": "pass",
-      "servedStatus": "pass",
-      "visualReview": {
-        "status": "pass",
-        "method": "Actual downloaded image read, not filename inference",
-        "observation": "Woman on a mat with palms and feet grounded, hips elevated, torso inclined downward: downward-facing dog. Adaptation may bend knees/use wall rather than force heels or depth.",
-        "renderedStatus": "pass",
-        "renderedObservation": "Rendered screenshot directly read: displayed local photo, Spanish exercise title, quantity and technique agree with this recorded posture/equipment/medium; contain sizing preserves the source image. Fixed tabs are viewport overlays in full-page screenshots; normal page scrolling exposes all content."
-      },
-      "exercises": [
-        {
-          "id": "yoga-regular-standing",
-          "before": {
-            "title": "Secuencia de pie controlada",
-            "quantity": "3 transiciones lentas",
-            "technique": "Acortá el paso si lo necesitás y coordiná el movimiento con la respiración.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Perro boca abajo adaptado",
-            "quantity": "Hasta 3 respiraciones cómodas",
-            "technique": "Con manos y pies sobre apoyos estables, elevá suavemente la cadera sin forzar los talones. Podés flexionar rodillas o llevar las manos a una pared. No busques profundidad; sin dolor y con revisión profesional, descansá al terminar.",
-            "imageId": "yoga-regular-standing-photo",
-            "imageAlt": "Mujer en perro boca abajo sobre una colchoneta, con cadera elevada y manos y pies apoyados.",
-            "imageStatus": "verified"
-          }
-        }
-      ],
-      "servedEvidence": {
-        "path": "/assets/photos/yoga_downward.jpg",
-        "status": 200,
-        "mime": "image/jpeg",
-        "byteLength": 203480,
-        "sha256": "4c03a8d268dc88674a4fe44251c0812e0127fdb8ca98b23ffb0fa2ca5ced3e1a",
-        "magicHex": "ffd8ffe10080457869660000",
-        "decodeStatus": "pass",
-        "dimensions": {
-          "width": 1400,
-          "height": 2100
-        },
-        "exerciseIds": [
-          "yoga-regular-standing"
-        ],
-        "renderedScreenshot": "/tmp/ba-batch2/t005-mapping-yoga_downward.png"
-      }
-    },
-    {
-      "manifestKey": "yoga_relax",
-      "title": "Persona en savasana o relajación tumbada",
-      "photoId": 4325489,
-      "source": "https://www.pexels.com/photo/man-in-gray-tank-top-lying-on-black-carpet-4325489/",
-      "license": "Pexels License (consultar términos)",
-      "local": "assets/photos/yoga_relax.jpg",
-      "cdn": "https://images.pexels.com/photos/4325489/pexels-photo-4325489.jpeg?fm=jpg&cs=tinysrgb&w=1400",
-      "runtimePath": "/assets/photos/yoga_relax.jpg",
-      "acquisition": {
-        "manifestKey": "yoga_relax",
-        "command": [
-          "curl",
-          "--fail",
-          "--location",
-          "--max-time",
-          "30",
-          "--retry",
-          "1",
-          "--output",
-          "public/assets/photos/yoga_relax.jpg",
-          "--write-out",
-          "%{http_code} %{content_type} %{size_download}",
-          "https://images.pexels.com/photos/4325489/pexels-photo-4325489.jpeg?fm=jpg&cs=tinysrgb&w=1400"
-        ],
-        "exit": 0,
-        "status": "200 image/jpeg 164425"
-      },
-      "byteLength": 164425,
-      "sha256": "b88c73a927047b3b0d23f9b2a8b09b9050e22e2d84f929a62d94eead5af530b5",
-      "magicHex": "ffd8ffe100b4457869660000",
-      "magicStatus": "pass",
-      "decodeStatus": "pass",
-      "servedStatus": "pass",
-      "visualReview": {
-        "status": "pass",
-        "method": "Actual downloaded image read, not filename inference",
-        "observation": "Man lying on his back on a dark mat, eyes closed, hands resting on abdomen. Text names supine recovery and does not invent unseen leg position.",
-        "renderedStatus": "pass",
-        "renderedObservation": "Rendered screenshot directly read: displayed local photo, Spanish exercise title, quantity and technique agree with this recorded posture/equipment/medium; contain sizing preserves the source image. Fixed tabs are viewport overlays in full-page screenshots; normal page scrolling exposes all content."
-      },
-      "exercises": [
-        {
-          "id": "yoga-regular-close",
-          "before": {
-            "title": "Respiración y recuperación",
-            "quantity": "4 respiraciones cómodas",
-            "technique": "Volvé a una postura estable y soltá el esfuerzo sin retener el aire.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Recuperación boca arriba",
-            "quantity": "4 respiraciones cómodas",
-            "technique": "Recostate boca arriba sobre una superficie cómoda y dejá las manos sobre el abdomen. Usá apoyos o una posición alternativa si hace falta. Soltá el esfuerzo sin retener el aire y terminá si aparece dolor.",
-            "imageId": "yoga-regular-close-photo",
-            "imageAlt": "Hombre recostado boca arriba con ojos cerrados y manos sobre el abdomen.",
-            "imageStatus": "verified"
-          }
-        }
-      ],
-      "servedEvidence": {
-        "path": "/assets/photos/yoga_relax.jpg",
-        "status": 200,
-        "mime": "image/jpeg",
-        "byteLength": 164425,
-        "sha256": "b88c73a927047b3b0d23f9b2a8b09b9050e22e2d84f929a62d94eead5af530b5",
-        "magicHex": "ffd8ffe100b4457869660000",
-        "decodeStatus": "pass",
-        "dimensions": {
-          "width": 1400,
-          "height": 933
-        },
-        "exerciseIds": [
-          "yoga-regular-close"
-        ],
-        "renderedScreenshot": "/tmp/ba-batch2/t005-mapping-yoga_relax.png"
       }
     },
     {
@@ -1362,112 +503,415 @@
       "local": "assets/photos/yoga_sidebend.jpg",
       "cdn": "https://images.pexels.com/photos/4971621/pexels-photo-4971621.jpeg?fm=jpg&cs=tinysrgb&w=1400",
       "runtimePath": "/assets/photos/yoga_sidebend.jpg",
-      "acquisition": {
-        "manifestKey": "yoga_sidebend",
-        "command": [
-          "curl",
-          "--fail",
-          "--location",
-          "--max-time",
-          "30",
-          "--retry",
-          "1",
-          "--output",
-          "public/assets/photos/yoga_sidebend.jpg",
-          "--write-out",
-          "%{http_code} %{content_type} %{size_download}",
-          "https://images.pexels.com/photos/4971621/pexels-photo-4971621.jpeg?fm=jpg&cs=tinysrgb&w=1400"
-        ],
-        "exit": 0,
-        "status": "200 image/jpeg 128712"
-      },
       "byteLength": 128712,
       "sha256": "7b390679a4136eff4c010ea5aeb67ba4075bcd8822689b0181574ed768ff071d",
       "magicHex": "ffd8ffe10096457869660000",
+      "acquisition": "Reused owner-approved bundled manifest bytes",
+      "exerciseIds": [
+        "yoga-first-mobility",
+        "yoga-returning-mobility",
+        "yoga-regular-balance"
+      ],
+      "priorVisualObservation": "Woman seated cross-legged on a mat, one palm on ground, other arm overhead, trunk inclining sideways. Text names seated side bend, not cat/cow or standing balance.",
       "magicStatus": "pass",
       "decodeStatus": "pass",
-      "servedStatus": "pass",
-      "visualReview": {
-        "status": "pass",
-        "method": "Actual downloaded image read, not filename inference",
-        "observation": "Woman seated cross-legged on a mat, one palm on ground, other arm overhead, trunk inclining sideways. Text names seated side bend, not cat/cow or standing balance.",
-        "renderedStatus": "pass",
-        "renderedObservation": "Rendered screenshot directly read: displayed local photo, Spanish exercise title, quantity and technique agree with this recorded posture/equipment/medium; contain sizing preserves the source image. Fixed tabs are viewport overlays in full-page screenshots; normal page scrolling exposes all content."
-      },
-      "exercises": [
-        {
-          "id": "yoga-first-mobility",
-          "before": {
-            "title": "Gato y vaca adaptado",
-            "quantity": "5 movimientos suaves",
-            "technique": "Usá una silla firme si hace falta y mové sólo dentro de un rango cómodo.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Inclinación lateral sentada",
-            "quantity": "4 respiraciones suaves, alternando lados",
-            "technique": "Sentate con comodidad, apoyá una mano y elevá la otra mientras inclinás suavemente el tronco. Usá silla firme o almohadón si hace falta; no fuerces el hombro ni la flexión. Descansá entre lados.",
-            "imageId": "yoga-first-mobility-photo",
-            "imageAlt": "Mujer sentada inclinando el tronco a un lado, con un brazo elevado y la otra mano apoyada.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "yoga-returning-mobility",
-          "before": {
-            "title": "Movilidad de columna sentada",
-            "quantity": "3 movimientos suaves",
-            "technique": "Usá una silla firme si hace falta y mové sólo dentro de un rango cómodo.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Inclinación lateral sentada",
-            "quantity": "3 respiraciones suaves, alternando lados",
-            "technique": "Sentate con comodidad, apoyá una mano y elevá la otra mientras inclinás suavemente el tronco. Usá silla firme o almohadón si hace falta; no fuerces el hombro ni la flexión. Descansá entre lados.",
-            "imageId": "yoga-returning-mobility-photo",
-            "imageAlt": "Mujer sentada inclinando el tronco a un lado, con un brazo elevado y la otra mano apoyada.",
-            "imageStatus": "verified"
-          }
-        },
-        {
-          "id": "yoga-regular-balance",
-          "before": {
-            "title": "Equilibrio con apoyo",
-            "quantity": "2 apoyos de 10 segundos por lado",
-            "technique": "Tené una pared cerca, sostené la mirada y evitá bloquear las rodillas.",
-            "imageId": null,
-            "imageStatus": "unavailable"
-          },
-          "after": {
-            "title": "Inclinación lateral sentada",
-            "quantity": "4 respiraciones suaves, alternando lados",
-            "technique": "Sentate con comodidad, apoyá una mano y elevá la otra mientras inclinás suavemente el tronco. Usá silla firme o almohadón si hace falta; no fuerces el hombro ni la flexión. Descansá entre lados.",
-            "imageId": "yoga-regular-balance-photo",
-            "imageAlt": "Mujer sentada inclinando el tronco a un lado, con un brazo elevado y la otra mano apoyada.",
-            "imageStatus": "verified"
-          }
-        }
-      ],
       "servedEvidence": {
+        "manifestKey": "yoga_sidebend",
         "path": "/assets/photos/yoga_sidebend.jpg",
         "status": 200,
         "mime": "image/jpeg",
         "byteLength": 128712,
         "sha256": "7b390679a4136eff4c010ea5aeb67ba4075bcd8822689b0181574ed768ff071d",
-        "magicHex": "ffd8ffe10096457869660000",
-        "decodeStatus": "pass",
         "dimensions": {
           "width": 1400,
           "height": 933
-        },
-        "exerciseIds": [
-          "yoga-first-mobility",
-          "yoga-returning-mobility",
-          "yoga-regular-balance"
-        ],
-        "renderedScreenshot": "/tmp/ba-batch2/t005-mapping-yoga_sidebend.png"
+        }
+      }
+    },
+    {
+      "manifestKey": "yoga_downward",
+      "title": "Mujer realizando postura perro boca abajo",
+      "photoId": 7592992,
+      "source": "https://www.pexels.com/photo/faceless-woman-practicing-downward-facing-dog-asana-7592992/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/yoga_downward.jpg",
+      "cdn": "https://images.pexels.com/photos/7592992/pexels-photo-7592992.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/yoga_downward.jpg",
+      "byteLength": 203480,
+      "sha256": "4c03a8d268dc88674a4fe44251c0812e0127fdb8ca98b23ffb0fa2ca5ced3e1a",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "Reused owner-approved bundled manifest bytes",
+      "exerciseIds": [
+        "yoga-regular-standing"
+      ],
+      "priorVisualObservation": "Woman on a mat with palms and feet grounded, hips elevated, torso inclined downward: downward-facing dog. Adaptation may bend knees/use wall rather than force heels or depth.",
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "yoga_downward",
+        "path": "/assets/photos/yoga_downward.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 203480,
+        "sha256": "4c03a8d268dc88674a4fe44251c0812e0127fdb8ca98b23ffb0fa2ca5ced3e1a",
+        "dimensions": {
+          "width": 1400,
+          "height": 2100
+        }
+      }
+    },
+    {
+      "manifestKey": "yoga_child",
+      "title": "Mujer en postura del niño",
+      "photoId": 4534638,
+      "source": "https://www.pexels.com/photo/woman-kneeling-on-a-yoga-mat-4534638/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/yoga_child.jpg",
+      "cdn": "https://images.pexels.com/photos/4534638/pexels-photo-4534638.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/yoga_child.jpg",
+      "byteLength": 104648,
+      "sha256": "51128308853f52b7cc035e8d67bb4f040e70c8a1bab9c14df3766f603a60c466",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "Reused owner-approved bundled manifest bytes",
+      "exerciseIds": [
+        "yoga-first-rest",
+        "yoga-returning-rest"
+      ],
+      "priorVisualObservation": "Woman kneeling on mat, hips toward heels, torso folded forward and arms extended on floor: child pose. Text offers cushion/chair alternatives without forcing knee/hip flexion.",
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "yoga_child",
+        "path": "/assets/photos/yoga_child.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 104648,
+        "sha256": "51128308853f52b7cc035e8d67bb4f040e70c8a1bab9c14df3766f603a60c466",
+        "dimensions": {
+          "width": 1400,
+          "height": 2100
+        }
+      }
+    },
+    {
+      "manifestKey": "yoga_relax",
+      "title": "Persona en savasana o relajación tumbada",
+      "photoId": 4325489,
+      "source": "https://www.pexels.com/photo/man-in-gray-tank-top-lying-on-black-carpet-4325489/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/yoga_relax.jpg",
+      "cdn": "https://images.pexels.com/photos/4325489/pexels-photo-4325489.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/yoga_relax.jpg",
+      "byteLength": 164425,
+      "sha256": "b88c73a927047b3b0d23f9b2a8b09b9050e22e2d84f929a62d94eead5af530b5",
+      "magicHex": "ffd8ffe100b4457869660000",
+      "acquisition": "Reused owner-approved bundled manifest bytes",
+      "exerciseIds": [
+        "yoga-regular-close"
+      ],
+      "priorVisualObservation": "Man lying on his back on a dark mat, eyes closed, hands resting on abdomen. Text names supine recovery and does not invent unseen leg position.",
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "yoga_relax",
+        "path": "/assets/photos/yoga_relax.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 164425,
+        "sha256": "b88c73a927047b3b0d23f9b2a8b09b9050e22e2d84f929a62d94eead5af530b5",
+        "dimensions": {
+          "width": 1400,
+          "height": 933
+        }
+      }
+    },
+    {
+      "manifestKey": "swim_card",
+      "title": "Nadadora haciendo crol en piscina cubierta",
+      "photoId": 6539731,
+      "source": "https://www.pexels.com/photo/woman-swimming-in-a-lap-pool-6539731/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/swim_card.jpg",
+      "cdn": "https://images.pexels.com/photos/6539731/pexels-photo-6539731.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/swim_card.jpg",
+      "byteLength": 146407,
+      "sha256": "f7c272cd36d5502859f1d626583985c525280f1724a68c1a28b75bb7f3687568",
+      "magicHex": "ffd8ffe100a0457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/swim_card.jpg https://images.pexels.com/photos/6539731/pexels-photo-6539731.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "swim_card",
+        "path": "/assets/photos/swim_card.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 146407,
+        "sha256": "f7c272cd36d5502859f1d626583985c525280f1724a68c1a28b75bb7f3687568",
+        "dimensions": {
+          "width": 1400,
+          "height": 935
+        }
+      }
+    },
+    {
+      "manifestKey": "swim_hero",
+      "title": "Nadador realizando estilo libre en pileta",
+      "photoId": 9030293,
+      "source": "https://www.pexels.com/photo/a-swimmer-swimming-in-the-swimming-pool-9030293/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/swim_hero.jpg",
+      "cdn": "https://images.pexels.com/photos/9030293/pexels-photo-9030293.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/swim_hero.jpg",
+      "byteLength": 319618,
+      "sha256": "086778da10b320c89b2627234ca865eeac002ba7cc7ee3e1b5d5570e476af63b",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/swim_hero.jpg https://images.pexels.com/photos/9030293/pexels-photo-9030293.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "swim_hero",
+        "path": "/assets/photos/swim_hero.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 319618,
+        "sha256": "086778da10b320c89b2627234ca865eeac002ba7cc7ee3e1b5d5570e476af63b",
+        "dimensions": {
+          "width": 1400,
+          "height": 1050
+        }
+      }
+    },
+    {
+      "manifestKey": "swim_class_a",
+      "title": "Personas nadando largos en pileta",
+      "photoId": 18167934,
+      "source": "https://www.pexels.com/photo/people-swimming-in-a-pool-18167934/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/swim_class_a.jpg",
+      "cdn": "https://images.pexels.com/photos/18167934/pexels-photo-18167934.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/swim_class_a.jpg",
+      "byteLength": 520309,
+      "sha256": "5fdef32eb14e421e296f2ac5b065737c2c44952e610c7fd2d384f995fc064de4",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/swim_class_a.jpg https://images.pexels.com/photos/18167934/pexels-photo-18167934.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "swim_class_a",
+        "path": "/assets/photos/swim_class_a.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 520309,
+        "sha256": "5fdef32eb14e421e296f2ac5b065737c2c44952e610c7fd2d384f995fc064de4",
+        "dimensions": {
+          "width": 1400,
+          "height": 2100
+        }
+      }
+    },
+    {
+      "manifestKey": "swim_class_b",
+      "title": "Grupo de nadadores entrenando en pileta",
+      "photoId": 8028682,
+      "source": "https://www.pexels.com/photo/people-swimming-in-the-pool-8028682/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/swim_class_b.jpg",
+      "cdn": "https://images.pexels.com/photos/8028682/pexels-photo-8028682.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/swim_class_b.jpg",
+      "byteLength": 278334,
+      "sha256": "9cbabc060ed31ecb3ecd3c834226998755bcbbdbcf9e27cc5aa562df1f1a98bd",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/swim_class_b.jpg https://images.pexels.com/photos/8028682/pexels-photo-8028682.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [],
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "swim_class_b",
+        "path": "/assets/photos/swim_class_b.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 278334,
+        "sha256": "9cbabc060ed31ecb3ecd3c834226998755bcbbdbcf9e27cc5aa562df1f1a98bd",
+        "dimensions": {
+          "width": 1400,
+          "height": 933
+        }
+      }
+    },
+    {
+      "manifestKey": "swim_warmup",
+      "title": "Nadador estirando antes de entrar al agua",
+      "photoId": 6539744,
+      "source": "https://www.pexels.com/photo/a-swimmer-doing-stretching-6539744/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/swim_warmup.jpg",
+      "cdn": "https://images.pexels.com/photos/6539744/pexels-photo-6539744.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/swim_warmup.jpg",
+      "byteLength": 121757,
+      "sha256": "6d277de927f4c66db39d52840b10a800c0f08b61583784cee43e861c2fbb8cc0",
+      "magicHex": "ffd8ffe100a0457869660000",
+      "acquisition": "Reused owner-approved bundled manifest bytes",
+      "exerciseIds": [
+        "swim-dry-first-shoulders",
+        "swim-dry-first-breath",
+        "swim-dry-first-coordination",
+        "swim-dry-returning-shoulders",
+        "swim-dry-returning-breath",
+        "swim-dry-returning-coordination",
+        "swim-dry-regular-shoulders",
+        "swim-dry-regular-breath",
+        "swim-dry-regular-coordination"
+      ],
+      "priorVisualObservation": "Swimmer upright outside the pool, seen from behind, extending one arm across chest with other arm supporting. Dry cross-body shoulder stretch; not in-water eligibility or strokes.",
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "swim_warmup",
+        "path": "/assets/photos/swim_warmup.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 121757,
+        "sha256": "6d277de927f4c66db39d52840b10a800c0f08b61583784cee43e861c2fbb8cc0",
+        "dimensions": {
+          "width": 1400,
+          "height": 935
+        }
+      }
+    },
+    {
+      "manifestKey": "swim_board",
+      "title": "Nadadores preparando las tablas de natación",
+      "photoId": 18372085,
+      "source": "https://www.pexels.com/photo/man-at-swimming-pool-in-black-and-white-18372085/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/swim_board.jpg",
+      "cdn": "https://images.pexels.com/photos/18372085/pexels-photo-18372085.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/swim_board.jpg",
+      "byteLength": 269929,
+      "sha256": "70fc2779c9c3999170c5d581ccef71f5186a4a76e554c4a43448bf74bccaa29e",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "curl --fail --location --max-time 60 --retry 2 --output public/assets/photos/swim_board.jpg https://images.pexels.com/photos/18372085/pexels-photo-18372085.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "exerciseIds": [
+        "swim-water-returning-technique"
+      ],
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "swim_board",
+        "path": "/assets/photos/swim_board.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 269929,
+        "sha256": "70fc2779c9c3999170c5d581ccef71f5186a4a76e554c4a43448bf74bccaa29e",
+        "dimensions": {
+          "width": 1400,
+          "height": 2100
+        }
+      },
+      "visualObservation": "Direct image read: swimmers seated at the pool edge holding boards, legs in water; not a kicking drill. Assigned only to guarded water preparation with instructor."
+    },
+    {
+      "manifestKey": "swim_freestyle",
+      "title": "Nadadora haciendo crol en piscina",
+      "photoId": 6539731,
+      "source": "https://www.pexels.com/photo/woman-swimming-in-a-lap-pool-6539731/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/swim_freestyle.jpg",
+      "cdn": "https://images.pexels.com/photos/6539731/pexels-photo-6539731.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/swim_freestyle.jpg",
+      "byteLength": 146407,
+      "sha256": "f7c272cd36d5502859f1d626583985c525280f1724a68c1a28b75bb7f3687568",
+      "magicHex": "ffd8ffe100a0457869660000",
+      "acquisition": "Reused owner-approved bundled manifest bytes",
+      "exerciseIds": [
+        "swim-water-first-warmup",
+        "swim-water-returning-warmup",
+        "swim-water-regular-warmup"
+      ],
+      "priorVisualObservation": "Woman horizontal in a lane pool, goggles/cap, one arm extended forward and the other recovering while face turns sideways: front crawl. No unobserved technique quality or actual attendance claimed.",
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "swim_freestyle",
+        "path": "/assets/photos/swim_freestyle.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 146407,
+        "sha256": "f7c272cd36d5502859f1d626583985c525280f1724a68c1a28b75bb7f3687568",
+        "dimensions": {
+          "width": 1400,
+          "height": 935
+        }
+      }
+    },
+    {
+      "manifestKey": "swim_backstroke",
+      "title": "Atleta ejecutando estilo espalda en piscina",
+      "photoId": 8688618,
+      "source": "https://www.pexels.com/photo/a-person-swimming-in-the-pool-8688618/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/swim_backstroke.jpg",
+      "cdn": "https://images.pexels.com/photos/8688618/pexels-photo-8688618.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/swim_backstroke.jpg",
+      "byteLength": 331661,
+      "sha256": "b74e442baaf5614d52d8bde758856dabc4dc2a6dffcc26dd58c3cd0c27e0be64",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "Reused owner-approved bundled manifest bytes",
+      "exerciseIds": [
+        "swim-water-first-technique",
+        "swim-water-regular-technique"
+      ],
+      "priorVisualObservation": "Overhead swimmer face upward, one arm reaching overhead in pool, body on back: backstroke, not front crawl.",
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "swim_backstroke",
+        "path": "/assets/photos/swim_backstroke.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 331661,
+        "sha256": "b74e442baaf5614d52d8bde758856dabc4dc2a6dffcc26dd58c3cd0c27e0be64",
+        "dimensions": {
+          "width": 1400,
+          "height": 788
+        }
+      }
+    },
+    {
+      "manifestKey": "swim_cooldown",
+      "title": "Nadador practicando nado suave",
+      "photoId": 5903226,
+      "source": "https://www.pexels.com/photo/a-swimmer-training-on-a-pool-5903226/",
+      "license": "Pexels License (consultar términos)",
+      "local": "assets/photos/swim_cooldown.jpg",
+      "cdn": "https://images.pexels.com/photos/5903226/pexels-photo-5903226.jpeg?fm=jpg&cs=tinysrgb&w=1400",
+      "runtimePath": "/assets/photos/swim_cooldown.jpg",
+      "byteLength": 116384,
+      "sha256": "ddc2a91e91c2b40b8c25835f278a334ac508a773f5148930f3060ebd147f9552",
+      "magicHex": "ffd8ffe10080457869660000",
+      "acquisition": "Reused owner-approved bundled manifest bytes",
+      "exerciseIds": [
+        "swim-water-first-rest",
+        "swim-water-returning-rest",
+        "swim-water-regular-rest"
+      ],
+      "priorVisualObservation": "Swimmer upright waist-deep in pool, hands together forward; not swimming a length or gripping a wall. Text now names upright recovery only in a permitted stable-support area, otherwise exit.",
+      "magicStatus": "pass",
+      "decodeStatus": "pass",
+      "servedEvidence": {
+        "manifestKey": "swim_cooldown",
+        "path": "/assets/photos/swim_cooldown.jpg",
+        "status": 200,
+        "mime": "image/jpeg",
+        "byteLength": 116384,
+        "sha256": "ddc2a91e91c2b40b8c25835f278a334ac508a773f5148930f3060ebd147f9552",
+        "dimensions": {
+          "width": 1400,
+          "height": 788
+        }
       }
     }
   ]

@@ -1,3 +1,4 @@
+import { classPhotos } from '../content/mockupPhotos';
 import { useApp } from '../state/context';
 import { routeHash, safePlan } from '../state/navigation';
 export default function ClassDetail() {
@@ -5,13 +6,12 @@ export default function ClassDetail() {
   if (route.screen !== 'detail') return null;
   const item = content.classes.find(c => c.id === route.classId && c.sportId === route.sportId)!;
   const { ui } = content;
-  const sport = content.sports.find(s => s.id === item.sportId)!;
   const interested = Object.values(envelope.interests).some(i=>i.classId===item.id);
   const plan = safePlan(content, route.profileId, route.sportId);
   return <article data-detail-class-id={item.id}>
     <p className="eyebrow">{ui.classes}</p><h1 tabIndex={-1}>{item.title}</h1>
     <p className="safety">{content.legal.fictionalClasses}</p>
-    <div className="sport-hero compact"><img src={sport.heroAsset} alt={sport.heroAlt} /></div>
+    {classPhotos[item.id] ? <div className="sport-hero compact"><img src={classPhotos[item.id].src} alt={classPhotos[item.id].alt} /></div> : <p className="muted">{ui.imageUnavailable}</p>}
     <p className="lead">{item.description}</p>
     <dl className="class-meta">
       <div><dt>{ui.schedule}</dt><dd>{item.schedule}</dd></div>

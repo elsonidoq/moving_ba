@@ -1,3 +1,4 @@
+import { sportPhotos } from '../content/mockupPhotos';
 import { useApp } from '../state/context';
 import { selectPreviewJourney } from '../state/selectors';
 import { routeHash } from '../state/navigation';
@@ -26,7 +27,7 @@ export default function Home() {
     <h2 className="section-title">{content.ui.chooseSport}</h2>
     <div className="sport-list">
       {content.sports.map(sport => <a key={sport.id} className="sport-card" aria-label={sport.name} data-sport-card={sport.id} href={routeHash({ screen: 'choice', profileId: profile.id, sportId: sport.id })}>
-        <img src={sport.heroAsset} alt={sport.heroAlt} />
+        <img src={sportPhotos[sport.id].card.src} alt={sportPhotos[sport.id].card.alt} />
         <span><strong>{sport.name}</strong><span className="muted">{sport.summary}</span></span>
         <span className="chevron" aria-hidden="true">›</span>
       </a>)}

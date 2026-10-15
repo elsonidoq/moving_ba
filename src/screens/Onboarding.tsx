@@ -1,3 +1,4 @@
+import { mockupPhotos } from '../content/mockupPhotos';
 import { useState } from 'react';
 import type { ProfileId } from '../content/types';
 import { useApp } from '../state/context';
@@ -16,6 +17,6 @@ export function SituationForm({editing=false,onCancel}:{editing?:boolean;onCance
 }
 export default function Onboarding() {
  const {content,route,command}=useApp();const recovery=route.screen==='recovery';
- return <><h1 tabIndex={-1}>{recovery?content.ui.storageRecovery:content.onboarding.title}</h1>
+ return <>{!recovery && <img className="city-hero" src={mockupPhotos.city_hero.src} alt={mockupPhotos.city_hero.alt} />}<h1 tabIndex={-1}>{recovery?content.ui.storageRecovery:content.onboarding.title}</h1>
  {recovery?<button onClick={()=>command({type:'reset',confirmed:window.confirm(content.ui.resetConfirm),entry:'recovery'})}>{content.ui.storageReset}</button>:<SituationForm />}</>;
 }
