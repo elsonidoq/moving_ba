@@ -13,8 +13,8 @@ booking, training-verification or partner service.
 | Project | moving_ba (`cc82d4e3-18c9-4bf6-93fc-f5cd9f58a05d`) |
 | Environment | production (`75f39978-e9e1-4019-8b04-b60308632dcd`) |
 | Service | moving_ba (`07c70e92-6e27-477f-a3e0-2264da1c8c9c`) |
-| Deployment | `a5472911-183b-499b-9d86-32aedace33e0` — **SUCCESS**, observed terminal-success |
-| Source | Clean main revision `c0d3500c3d08123d7d1d9ed2fb086ed35f9d3d37`, uploaded from cwd |
+| Deployment | `5685a350-b75e-490e-b113-2df3ff5aeb0d` — **SUCCESS**, observed terminal-success |
+| Source | Clean main revision `252111a92f6ce1a9c5c341983b780318654b14e9`, uploaded from cwd |
 | Region / replicas | us-east4-eqdc4a / 1 |
 | Domain target | 8080; domain ID `abf3962f-0602-4ae1-8dbf-a1d9055dfb94` |
 
@@ -157,6 +157,8 @@ is browser-origin-specific, not hosted state. If an old build cannot read a futu
 envelope, it offers scoped demo recovery rather than migration/global browser clearing.
 
 ## Live verification and limitations
+
+For deployment `5685a350-b75e-490e-b113-2df3ff5aeb0d`, the exact-ID Railway status was **SUCCESS** after uploading committed `252111a`. A fresh 360px Chromium session loaded the public HTTPS root (200), selected the returning situation, clicked the home card and observed a smooth scroll request reaching the activities heading with no page errors. Before upload, local build/typecheck and three focused 360/1280/reduced-motion browser checks passed; reduced-motion users receive an instant scroll. No server configuration or data contract changed.
 
 For deployment `a5472911-183b-499b-9d86-32aedace33e0`, the exact-ID Railway status was **SUCCESS** after uploading committed `c0d3500`. A fresh 360px Chromium session loaded the public HTTPS root (200), selected the returning situation, observed a 122px home motivation card, clicked it and confirmed the activities heading received focus and scrolled into view without changing the home route or raising page errors. Before upload, local build/typecheck, two focused 360/1280 browser interaction checks, and three existing profile-persistence browser checks passed. The Git push did not trigger deployment: this service is deployed by a targeted source upload.
 
