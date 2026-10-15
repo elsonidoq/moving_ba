@@ -47,14 +47,17 @@ file listing. Hash navigation needs no server rewrite.
    start requires both autonomous ability and a permitted supervised pool with
    guardavidas/rules, rechecked at the command boundary. Dry/instructor options remain.
 4. Perfil groups genuine metrics, weekly progress and Monday–Sunday activity bars,
-   plus situation editing, history, challenges, achievements and illustrative
-   nonredeemable benefits. Editing preference preserves earned history and intention.
-   Four named scenarios are deliberate **same-person previews**. Sustained/return
-   examples use configured dates/history, never actual records. The two notice scenarios
-   open photo-backed translucent notice cards, then matching scripted chats with exactly five/four answers.
+   plus situation editing, history, challenges and achievements. The Challenges page
+   shows earned points and three photo-led benefits (coffee, Jardín Japonés and yoga)
+   with point goals; canjes are not enabled. Editing preference preserves earned
+   history and intention. Four named scenarios are deliberate **same-person previews**.
+   Sustained/return examples use configured dates/history, never actual records.
+   The two notice scenarios show a wallpaper/clock/card composition without a top
+   banner; each card opens its matching structured chat with four/five answer choices.
    Each supportive response links to a configured class, dry plan or sport preview.
-5. Every preview destination shows a simulation badge and **Volver a hoy** after the
-   page content in normal document flow. Scroll down or use the keyboard. Edit/reset,
+5. Preview screens have **Volver a hoy** after their content; the notice screen
+   keeps it below the wallpaper, with no header or top context badge. Other preview
+   screens show a compact situation cue. Scroll down or use the keyboard. Edit/reset,
    interest/intention/start are unavailable until explicit exit; exit performs no pending
    action. Actual intention is hidden in preview. Leaving chat loses its answer;
    exit/reload/storage events discard preview. No free text or provider request occurs.
@@ -87,17 +90,19 @@ Edit UTF-8 `public/config/app-content.json` following the
 screens; runtime fetch and HTTP response are no-store. Missing/malformed/invalid JSON
 blocks with Spanish error/retry, never plausible fallback. Dev serves public directly;
 built serving requires rebuilding after source edits. There is no CMS/live editor.
-All 29 approved mockup photos remain bundled JPEGs, alongside one separately approved
-Obelisk welcome photo. Exercise assignments remain in runtime JSON and are restricted by
-the developer allowlist; welcome, Home, notice, sport and class photos use the static
+All 29 approved mockup photos remain bundled JPEGs, alongside the separately approved
+Obelisk welcome photo and two benefit photos (coffee and Jardín Japonés).
+Exercise assignments remain in runtime JSON and are restricted by the developer
+allowlist; welcome, Home, notice, sport and class photos use the static
 `src/content/mockupPhotos.ts` mapping. Plans show exercise thumbnails
 before Start and sessions retain snapshot images. Source/license/correspondence evidence is
 in [photo provenance](public/assets/photos/provenance.json). Source URLs are metadata,
 never remote fallbacks. Home shows the documented Buenos Aires park photo (31414914)
 on actual and preview entry; welcome uses the owner-permitted Obelisk photograph.
-The app header stays pinned with clear back/focus spacing;
-there is no repeated disclaimer footer, while local safety and simulation context remain. Missing/unverified exercise photos preserve instructions with
-honest unavailable feedback. No photo reacquisition is needed.
+The app header stays pinned on ordinary pages with clear back/focus spacing;
+the immersive notice hides it. There is no repeated disclaimer footer; safety and
+unavailable-booking/canje states remain where relevant. Missing/unverified exercise
+photos preserve instructions with unavailable feedback. No photo reacquisition is needed.
 
 ## Checks
 
