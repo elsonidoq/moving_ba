@@ -214,3 +214,23 @@ button.profile-reset { font-size: 13px; color: var(--muted); margin-top: 24px; }
 .home-hero-copy { position: relative; padding: 18px; background: linear-gradient(120deg,#ffd500,#fff0a3); }
 .home-hero-copy h2 { margin: 10px 0; font-size: 27px; }
 .home-hero > [role="status"] { padding: 16px; }
+
+/* In-app, person-selected notices: no device chrome or delivery claims. */
+.notice-photo { background: #dcebe4; isolation: isolate; padding-bottom: 16px; }
+.notice-photo img { height: 350px; }
+.notice-photo::after { content: ''; position: absolute; inset: 0; z-index: -1; background: #dcebe4; }
+button.notice-card { position: relative; display: grid; justify-content: stretch; text-align: left; gap: 12px; width: calc(100% - 32px); margin: -165px 16px 0; padding: 18px; border: 1px solid #ffffff; border-radius: 17px; background: #fffffff0; color: #203349; box-shadow: 0 6px 24px #102c3633; backdrop-filter: blur(8px); }
+.notice-card:focus-visible { outline-offset: 4px; }
+.notice-brand { display: flex; align-items: center; gap: 9px; font-size: 13px; }
+.notice-brand > span { display: grid; place-items: center; background: var(--yellow); color: #171b1e; border-radius: 8px; width: 30px; height: 30px; }
+.notice-message { font-size: 18px; line-height: 1.45; font-weight: 650; }
+.notice-action { color: #275d6c; font-size: 14px; }
+.chat-bubble { padding: 14px; border-radius: 15px; line-height: 1.5; font-size: 15px; max-width: 92%; margin: 14px 0; }
+.chat-bubble.bot { background: #edf4f7; border-top-left-radius: 4px; }
+.chat-bubble.me { background: #fff4b5; border-top-right-radius: 4px; margin-left: auto; }
+.chat-prompt { font-size: 13px; color: var(--muted); margin: 18px 0 10px; }
+button.chat-option { display: flex; justify-content: space-between; gap: 12px; text-align: left; margin-top: 9px; font-size: 14px; }
+button.chat-option[aria-pressed="true"] { border-color: #a88d00; background: #fff8d4; }
+.chat-result { margin-top: 20px; padding-top: 4px; border-top: 1px solid var(--line); }
+.scenario-support .journey-stats { margin-bottom: 0; }
+.scenario-support .journey-stats dd { font-size: 26px; }
