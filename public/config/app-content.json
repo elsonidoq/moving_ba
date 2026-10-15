@@ -46,7 +46,7 @@
     "success": "Un paso posible, a tu manera. ¡Bien ahí!",
     "next": "Tu próximo paso",
     "interest": "Me interesa esta clase",
-    "interestSuccess": "Guardamos tu interés. No se envió ninguna solicitud ni se hizo una reserva.",
+    "interestSuccess": "Guardamos esta clase entre tus intereses.",
     "journey": "Mi camino",
     "challenges": "Desafíos y logros",
     "historyEmpty": "Tu camino empieza con una primera práctica posible. Todavía no hay sesiones completadas.",
@@ -66,7 +66,7 @@
     "safePool": "Confirmo que estoy en una pileta habilitada, supervisada por guardavidas y que respeto las reglas del lugar.",
     "loading": "Estamos preparando tu próximo paso…",
     "retry": "Intentar de nuevo",
-    "configurationError": "No pudimos cargar el contenido. Revisá la configuración e intentá de nuevo.",
+    "configurationError": "No pudimos cargar el contenido. Intentá de nuevo en unos momentos.",
     "skipToContent": "Ir al contenido",
     "rest": "Descansar también es cuidarte. Tus logros siguen con vos.",
     "pause": "Una pausa no borra lo que ya hiciste. Retomá sin apuro.",
@@ -88,7 +88,7 @@
     "exploreSituations": "Explorar situaciones",
     "exitPreview": "Volver a hoy",
     "intention": "Voy a ir",
-    "intentionNotice": "Guardaste tu intención de ir. No se hizo una reserva.",
+    "intentionNotice": "Agregaste esta clase a tus próximos planes.",
     "intentionEmpty": "Todavía no elegiste una próxima clase.",
     "imageUnavailable": "Imagen del ejercicio no disponible. Seguí las instrucciones escritas.",
     "scriptedDisclosure": "Elegí cómo querés seguir.",
@@ -99,26 +99,26 @@
     "previous": "Anterior",
     "reviewNext": "Revisar siguiente",
     "locationIllustration": "No usamos tu ubicación para mostrar este lugar.",
-    "illustrativeProgress": "Progreso ilustrativo · {situation}",
-    "illustrativePoints": "Puntos ilustrativos",
-    "exampleBase": "Base de ejemplo: {baseline} puntos",
-    "savedJourneyPoints": "Puntos de tu recorrido guardado: {earned}",
-    "illustrativeExplanation": "La base cambia según la situación elegida; tus prácticas guardadas se conservan y suman puntos.",
-    "previewPoints": "Puntos del escenario",
+    "illustrativeProgress": "Tu progreso · {situation}",
+    "illustrativePoints": "Puntos",
+    "exampleBase": "Puntos iniciales: {baseline}",
+    "savedJourneyPoints": "Puntos por tus prácticas: {earned}",
+    "illustrativeExplanation": "Tus prácticas registradas se conservan.",
+    "previewPoints": "Puntos",
     "benefitsDisclaimer": "Beneficios ilustrativos, sin canje ni ofertas confirmadas.",
-    "benefitsEmpty": "No hay beneficios ilustrativos para mostrar.",
-    "benefitRemaining": "Te faltan {count} puntos para esta meta",
-    "benefitReached": "Meta ilustrativa alcanzada",
+    "benefitsEmpty": "Todavía no hay beneficios disponibles.",
+    "benefitRemaining": "Te faltan {count} puntos.",
+    "benefitReached": "Ya podés canjear este beneficio.",
     "viewAllBenefits": "Ver todos los beneficios",
-    "savedJourney": "Tu recorrido guardado",
-    "savedJourneyPointsLabel": "Puntos de tu recorrido guardado",
-    "scenarioSimulated": "Escenario simulado",
-    "previewExplanation": "Ejemplo de un escenario simulado."
+    "savedJourney": "Tu progreso",
+    "savedJourneyPointsLabel": "Puntos por tus prácticas",
+    "scenarioSimulated": "Situación elegida",
+    "previewExplanation": "Consultá opciones para seguir a tu ritmo."
   },
   "legal": {
     "illustrativeTraining": "No hagas ejercicios con dolor. Adaptá el movimiento a tus posibilidades y descansá cuando lo necesites. Consultá a una persona profesional para recibir orientación personal.",
     "professionalReview": "Antes de entrenar de verdad, estas propuestas requieren revisión de una persona profesional calificada y adaptación a tus necesidades.",
-    "fictionalClasses": "Las inscripciones no están habilitadas en la app.",
+    "fictionalClasses": "Elegí una clase y guardala para más adelante.",
     "noOfficialStatus": "Sin afiliación oficial con GCBA.",
     "nonredeemable": "Los canjes todavía no están habilitados.",
     "noAgreement": "Los canjes todavía no están habilitados.",
@@ -664,7 +664,10 @@
       "name": "Calistenia: un primer paso",
       "description": "Tres movimientos accesibles para conocer los apoyos, sin buscar fatiga.",
       "duration": "15 min",
-      "durationOptions": [15, 30],
+      "durationOptions": [
+        15,
+        30
+      ],
       "environment": "Parque con barra baja y apoyo firme",
       "prerequisites": [
         "Revisá la estabilidad del banco, la pared y los apoyos.",
@@ -695,7 +698,10 @@
       "name": "Yoga: respirar y moverte",
       "description": "Respiración y movilidad suave; las posturas se adaptan a vos.",
       "duration": "15 min",
-      "durationOptions": [15, 30],
+      "durationOptions": [
+        15,
+        30
+      ],
       "environment": "Casa o parque, superficie seca y estable",
       "prerequisites": [
         "Mat o silla firme y apoyos cómodos.",
@@ -726,7 +732,9 @@
       "name": "Natación: prepararte fuera del agua",
       "description": "Preparación fuera del agua; no enseña a nadar ni reemplaza una clase. Una práctica accesible sin pileta.",
       "duration": "15 min",
-      "durationOptions": [15],
+      "durationOptions": [
+        15
+      ],
       "environment": "Zona seca, estable y alejada del borde",
       "prerequisites": [
         "No hace falta saber nadar para esta preparación en seco.",
@@ -757,7 +765,10 @@
       "name": "Natación: una práctica breve si ya nadás",
       "description": "Variante exclusivamente para quien ya sabe nadar; requiere ambas confirmaciones y supervisión. No es una clase para aprender.",
       "duration": "45 min",
-      "durationOptions": [45, 60],
+      "durationOptions": [
+        45,
+        60
+      ],
       "environment": "Pileta habilitada y supervisada con guardavidas",
       "prerequisites": [
         "Saber nadar con autonomía.",
@@ -788,7 +799,10 @@
       "name": "Calistenia: volver sin apuro",
       "description": "Menos repeticiones y recorrido más corto que la primera propuesta. No hace falta recuperar lo anterior hoy.",
       "duration": "15 min",
-      "durationOptions": [15, 30],
+      "durationOptions": [
+        15,
+        30
+      ],
       "environment": "Parque con barra baja y apoyo firme",
       "prerequisites": [
         "Revisá la estabilidad del banco, la pared y los apoyos.",
@@ -819,7 +833,10 @@
       "name": "Yoga: volver con suavidad",
       "description": "Menos movimientos, sentado y con pausas libres para retomar.",
       "duration": "15 min",
-      "durationOptions": [15, 30],
+      "durationOptions": [
+        15,
+        30
+      ],
       "environment": "Casa o parque, superficie seca y estable",
       "prerequisites": [
         "Mat o silla firme y apoyos cómodos.",
@@ -850,7 +867,9 @@
       "name": "Natación: retomar en seco",
       "description": "Preparación fuera del agua; no enseña a nadar ni reemplaza una clase. Menos movimientos para volver sin apuro.",
       "duration": "15 min",
-      "durationOptions": [15],
+      "durationOptions": [
+        15
+      ],
       "environment": "Zona seca, estable y alejada del borde",
       "prerequisites": [
         "No hace falta saber nadar para esta preparación en seco.",
@@ -881,7 +900,10 @@
       "name": "Natación: volver al agua con pausa",
       "description": "Variante exclusivamente para quien ya sabe nadar; requiere ambas confirmaciones y supervisión. No es una clase para aprender.",
       "duration": "45 min",
-      "durationOptions": [45, 60],
+      "durationOptions": [
+        45,
+        60
+      ],
       "environment": "Pileta habilitada y supervisada con guardavidas",
       "prerequisites": [
         "Saber nadar con autonomía.",
@@ -912,7 +934,10 @@
       "name": "Calistenia: control y recuperación",
       "description": "Una progresión moderada de técnica, sin competir ni buscar el límite.",
       "duration": "15 min",
-      "durationOptions": [15, 30],
+      "durationOptions": [
+        15,
+        30
+      ],
       "environment": "Parque con barra baja y apoyo firme",
       "prerequisites": [
         "Revisá la estabilidad del banco, la pared y los apoyos.",
@@ -943,7 +968,10 @@
       "name": "Yoga: apoyos y recuperación",
       "description": "Explorá control y coordinación con apoyos, y reservá espacio para recuperar.",
       "duration": "15 min",
-      "durationOptions": [15, 30],
+      "durationOptions": [
+        15,
+        30
+      ],
       "environment": "Casa o parque, superficie seca y estable",
       "prerequisites": [
         "Mat o silla firme y apoyos cómodos.",
@@ -974,7 +1002,9 @@
       "name": "Natación: coordinación y recuperación en seco",
       "description": "Preparación fuera del agua; no enseña a nadar ni reemplaza una clase. Una práctica accesible sin pileta.",
       "duration": "15 min",
-      "durationOptions": [15],
+      "durationOptions": [
+        15
+      ],
       "environment": "Zona seca, estable y alejada del borde",
       "prerequisites": [
         "No hace falta saber nadar para esta preparación en seco.",
@@ -1005,7 +1035,10 @@
       "name": "Natación: técnica con descanso",
       "description": "Variante exclusivamente para quien ya sabe nadar; requiere ambas confirmaciones y supervisión. No es una clase para aprender.",
       "duration": "45 min",
-      "durationOptions": [45, 60],
+      "durationOptions": [
+        45,
+        60
+      ],
       "environment": "Pileta habilitada y supervisada con guardavidas",
       "prerequisites": [
         "Saber nadar con autonomía.",
@@ -1210,7 +1243,10 @@
         "id": "coffee",
         "title": "Un café para vos",
         "description": "Una pausa rica después de moverte.",
-        "photo": { "path": "/assets/photos/benefit_coffee.jpg", "alt": "Taza de café con arte latte" },
+        "photo": {
+          "path": "/assets/photos/benefit_coffee.jpg",
+          "alt": "Taza de café con arte latte"
+        },
         "disclaimer": "Los canjes todavía no están habilitados.",
         "pointsThreshold": 30,
         "redeemable": false
@@ -1219,7 +1255,10 @@
         "id": "japanese-garden",
         "title": "Entrada al Jardín Japonés",
         "description": "Una tarde entre puentes, árboles y senderos.",
-        "photo": { "path": "/assets/photos/benefit_jardin_japones.jpg", "alt": "Puente rojo y lago del Jardín Japonés de Buenos Aires" },
+        "photo": {
+          "path": "/assets/photos/benefit_jardin_japones.jpg",
+          "alt": "Puente rojo y lago del Jardín Japonés de Buenos Aires"
+        },
         "disclaimer": "Los canjes todavía no están habilitados.",
         "pointsThreshold": 60,
         "redeemable": false
@@ -1228,7 +1267,10 @@
         "id": "outdoor-yoga",
         "title": "Clase de yoga al aire libre",
         "description": "Un encuentro para respirar y moverte en compañía.",
-        "photo": { "path": "/assets/photos/yoga_class_a.jpg", "alt": "Grupo practicando yoga al aire libre" },
+        "photo": {
+          "path": "/assets/photos/yoga_class_a.jpg",
+          "alt": "Grupo practicando yoga al aire libre"
+        },
         "disclaimer": "Los canjes todavía no están habilitados.",
         "pointsThreshold": 90,
         "redeemable": false
@@ -1301,7 +1343,7 @@
     "continueLabel": "Continuar",
     "validationLabel": "Elegí una situación para continuar.",
     "editTitle": "Personalizá tu práctica",
-    "editInstructions": "Elegí tu situación para cambiar la base ilustrativa de beneficios; tu recorrido guardado no cambia.",
+    "editInstructions": "Elegí la situación que mejor te representa. Tus prácticas registradas se conservan.",
     "choices": [
       {
         "id": "first",
@@ -1884,7 +1926,7 @@
     },
     {
       "id": "inactive",
-      "title": "Dejó de entrenar y de usar la app",
+      "title": "Quiero volver a moverme",
       "disclosure": "Explorá esta situación sin cambiar tu recorrido.",
       "guidance": "Podés avanzar a tu ritmo, descansar o elegir una alternativa segura.",
       "referenceDate": "2026-10-14",
@@ -1910,7 +1952,7 @@
     },
     {
       "id": "missed-class",
-      "title": "Pensaba asistir a una clase, pero no fue",
+      "title": "No pude ir a una clase",
       "disclosure": "Explorá esta situación sin cambiar tu recorrido.",
       "guidance": "Podés avanzar a tu ritmo, descansar o elegir una alternativa segura.",
       "referenceDate": "2026-10-14",

@@ -18,7 +18,7 @@ import ClassDetail from './screens/ClassDetail';
 import Journey from './screens/Journey';
 import Challenges from './screens/Challenges';
 
-type Bootstrap = { status: 'loading' } | { status: 'ready'; content: Content } | { status: 'error'; hint: string };
+type Bootstrap = { status: 'loading' } | { status: 'ready'; content: Content } | { status: 'error' };
 
 function Screens() {
   const { route } = useApp();
@@ -34,7 +34,8 @@ export default function App() {
     loadContent(controller.signal).then(content => {
       if (!controller.signal.aborted) setState({ status: 'ready', content });
     }).catch(error => {
-      if (!controller.signal.aborted) setState({ status: 'error', hint: error.message });
+      if (!controller.signal.aborted) console.error('Content bootstrap failed.', error);
+      if (!controller.signal.aborted) setState({ status: 'error' });
     });
     return () => controller.abort();
   }, [retry]);
@@ -42,8 +43,7 @@ export default function App() {
   // The bootstrap shell must work when the public file itself cannot be read.
   return <main className="app bootstrap" aria-busy={state.status === 'loading'}>
     {state.status === 'loading' ? <p role="status">Estamos cargando el contenido…</p> : <section role="alert">
-      <h1>No pudimos cargar el contenido.</h1>
-      <p>Revisá la configuración e intentá de nuevo.</p><p>{state.hint}</p>
+      <h1>No pudimos cargar el contenido. Intentá de nuevo en unos momentos.</h1>
       <button onClick={() => setRetry(value => value + 1)}>Intentar de nuevo</button>
     </section>}
   </main>;

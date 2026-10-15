@@ -120,7 +120,7 @@ test.describe('content validation extended contract', () => {
   test('exact choices, four moments and nine supportive answer destinations', () => {
     const c = validateContent(clone());
     expect(c.onboarding.choices.map(x => x.label)).toEqual(['No estoy entrenando y quiero empezar.', 'Entrenaba antes y quiero volver.', 'Ya estoy entrenando.']);
-    expect(c.previewScenarios.map(x => x.title)).toEqual(['Entrenamiento sostenido', 'Volver después de una pausa', 'Dejó de entrenar y de usar la app', 'Pensaba asistir a una clase, pero no fue']);
+    expect(c.previewScenarios.map(x => x.title)).toEqual(['Entrenamiento sostenido', 'Volver después de una pausa', 'Quiero volver a moverme', 'No pude ir a una clase']);
     expect(c.chats.find(x => x.id === 'missed-class-chat')!.answers.map(x => x.label)).toEqual(['Me surgió algo', 'El horario o el lugar no me sirven', 'No me gustó la actividad', 'No me sentí cómodo/a con el docente o la clase', 'Prefiero no responder']);
     expect(c.chats.find(x => x.id === 'inactive-chat')!.answers.map(x => x.label)).toEqual(['Volver con una clase', 'Entrenar algo corto por mi cuenta', 'Probar otra actividad', 'Prefiero no responder']);
     for (const chat of c.chats) for (const a of chat.answers) {
@@ -265,7 +265,7 @@ test('content validation duration estimates reject missing duplicate invalid and
  for(const plan of source.plans){const expected=plan.sportId==='swimming'?(plan.medium==='water'?[45,60]:[15]):[15,30];expect(plan.durationOptions).toEqual(expected);const c=clone();c.plans.find(p=>p.id===plan.id)!.durationOptions=[5];expect(()=>validateContent(c)).toThrow('durationOptions');}
 });
 
-test('content validation permits empty illustrative benefits and retains benefit safeguards', () => {
+test('content validation permits empty benefits and retains benefit safeguards', () => {
  const empty=clone();empty.rules.benefits=[];expect(validateContent(empty).rules.benefits).toEqual([]);
  for(const mutate of [
   (c:Content)=>{c.rules.benefits[0].pointsThreshold=-1;},

@@ -200,7 +200,7 @@ export function validateContent(input: unknown): Content {
 }
 
 const onboardingLabels = ['No estoy entrenando y quiero empezar.', 'Entrenaba antes y quiero volver.', 'Ya estoy entrenando.'];
-const scenarioTitles = ['Entrenamiento sostenido', 'Volver después de una pausa', 'Dejó de entrenar y de usar la app', 'Pensaba asistir a una clase, pero no fue'];
+const scenarioTitles = ['Entrenamiento sostenido', 'Volver después de una pausa', 'Quiero volver a moverme', 'No pude ir a una clase'];
 const cases = {
   'missed-class': [
     ['interruption', 'Me surgió algo', ['class']],
