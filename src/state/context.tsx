@@ -58,7 +58,7 @@ export function createCommandOwner(content: Content, port: Parameters<typeof loa
         if (!canAct() || !scenario) return false;
         state = {...state,...cleared,mode:{kind:'preview',scenarioId:scenario.id},route:scenario.kind === 'notice' ? {screen:'notice',profileId:scenario.recommendationSituationId,scenarioId:scenario.id} : {screen:'home',profileId:scenario.recommendationSituationId}};
       } else if (command.type === 'answer') {
-        if (state.mode.kind !== 'preview') return false;
+        if (state.mode.kind !== 'preview' || state.route.screen !== 'chat') return false;
         const scenario = content.previewScenarios.find(s => s.id === (state.mode.kind === 'preview' ? state.mode.scenarioId : ''))!;
         const answer = content.chats.find(c => c.id === scenario.chatId)?.answers.find(a => a.id === command.answerId);
         if (!answer) return false;
@@ -67,7 +67,8 @@ export function createCommandOwner(content: Content, port: Parameters<typeof loa
         const route = state.status === 'invalid' ? landing(state.envelope,true) : guardHash(command.hash,content,state);
         const parent = route.screen === 'detail' ? (state.route.screen === 'classes' || state.route.screen === 'catalog' ? state.route : state.route.screen === 'detail' ? state.parent : null) : state.parent;
         const sameSession = route.screen === 'session' && state.attempt?.status === 'active' && state.attempt.attemptId === route.attemptId;
-        state = {...state,route,parent,attempt:sameSession?state.attempt:null,canSwim:sameSession&&state.canSwim,safePool:sameSession&&state.safePool};
+        const mode = state.mode.kind === 'preview' && route.screen !== 'chat' ? {kind:'preview' as const,scenarioId:state.mode.scenarioId} : state.mode;
+        state = {...state,mode,route,parent,attempt:sameSession?state.attempt:null,canSwim:sameSession&&state.canSwim,safePool:sameSession&&state.safePool};
       } else if (command.type === 'chooseSituation' || command.type === 'editSituation') {
         if (state.mode.kind !== 'actual' || state.status === 'invalid' || !content.profiles.some(p => p.id === command.situationId) || (command.type === 'editSituation' && !state.envelope.preference)) return false;
         if (state.envelope.preference?.situationId === command.situationId) return false;

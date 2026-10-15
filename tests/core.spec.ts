@@ -112,10 +112,11 @@ test('actual command custody URLs and legacy selection never consent; edits only
 });
 test('actual command custody preview rejects direct mutations, serializes no transients, exit has no pending replay',()=>{
   const s=storage();const owner=createCommandOwner(content,s.port,'',()=>now,()=> 'actual-uuid');owner.dispatch({type:'chooseSituation',situationId:'returning'});owner.dispatch({type:'intention',classId:'yoga-free'});
-  const bytes=s.values.get(storageKey);owner.dispatch({type:'enterScenario',scenarioId:'missed-class'});owner.dispatch({type:'answer',answerId:'interruption'});
+  const bytes=s.values.get(storageKey);owner.dispatch({type:'enterScenario',scenarioId:'missed-class'});owner.dispatch({type:'navigate',hash:'#/chat/missed-class-chat'});owner.dispatch({type:'answer',answerId:'interruption'});
+  expect(owner.getState().mode).toEqual({kind:'preview',scenarioId:'missed-class',answerId:'interruption'});
   const blocked:Command[]=[{type:'editSituation',situationId:'regular'},{type:'chooseSituation',situationId:'first'},{type:'reset',confirmed:true,entry:'profile'},{type:'reset',confirmed:true,entry:'recovery'},{type:'interest',classId:'cal-free'},{type:'intention',classId:'cal-paid'},{type:'start',planId:'cal-returning'},{type:'accept',attemptId:'forged',stepId:'forged'},{type:'affirm',key:'canSwim',value:true}];
   for(const action of blocked){expect(owner.dispatch(action),JSON.stringify(action)).toBe(false);expect(s.values.get(storageKey)).toBe(bytes);console.log('preview rejected',JSON.stringify(action));}
-  owner.dispatch({type:'navigate',hash:'#/first/yoga/classes/yoga-free'});expect(owner.getState().mode).toMatchObject({kind:'preview',answerId:'interruption'});expect(s.values.get(storageKey)).toBe(bytes);
+  owner.dispatch({type:'navigate',hash:'#/first/yoga/classes/yoga-free'});expect(owner.getState().mode).toEqual({kind:'preview',scenarioId:'missed-class'});expect(s.values.get(storageKey)).toBe(bytes);expect(createCommandOwner(content,s.port,'#/chat/missed-class-chat').getState()).toMatchObject({mode:{kind:'actual'},route:{screen:'profile'},attempt:null});
   owner.dispatch({type:'exitPreview'});expect(owner.getState()).toMatchObject({mode:{kind:'actual'},attempt:null,canSwim:false,safePool:false});expect(s.values.get(storageKey)).toBe(bytes);
   owner.dispatch({type:'affirm',key:'canSwim',value:true});owner.dispatch({type:'affirm',key:'safePool',value:true});owner.dispatch({type:'start',planId:'swim-water-returning'});expect(owner.getState().attempt).not.toBeNull();expect(s.values.get(storageKey)).toBe(bytes);
   for(const key of ['mode','answerId','answers','canSwim','safePool','attempt','cursor','preview'])expect(Object.keys(JSON.parse(bytes!))).not.toContain(key);
