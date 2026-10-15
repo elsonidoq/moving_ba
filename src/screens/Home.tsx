@@ -17,7 +17,7 @@ export default function Home() {
     <p className="eyebrow">{profile.title}</p>
     <h1 tabIndex={-1}>{profile.welcome}</h1>
     <p className="lead">{profile.subtitle}</p>
-    <a className="hero home-hero" href="#activities" aria-label={`${profile.hero} — ${content.ui.chooseSport}`} onClick={event => { event.preventDefault(); const target = document.getElementById('activities'); target?.focus({preventScroll:true}); target?.scrollIntoView({block:'start'}); }}>
+    <a className="hero home-hero" href="#activities" aria-label={`${profile.hero} — ${content.ui.chooseSport}`} onClick={event => { event.preventDefault(); const target = document.getElementById('activities'); target?.focus({preventScroll:true}); target?.scrollIntoView({block:'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}); }}>
       {!photoFailed ? <img src={mockupPhotos.city_park.src} alt={mockupPhotos.city_park.alt} onError={() => setPhotoFailed(true)} /> : <span role="status">{content.ui.imageUnavailable}</span>}
       <div className="home-hero-copy"><p className="eyebrow">{profile.cta}</p><h2>{profile.hero}</h2><span className="home-hero-action">{content.ui.chooseSport} ↓</span></div>
     </a>

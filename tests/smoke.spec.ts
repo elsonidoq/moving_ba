@@ -37,14 +37,17 @@ for(const choice of content.onboarding.choices) test(`one-person onboarding prof
  await expect(page.locator('.hero')).toContainText(profile.hero);await homePhoto(page);expect(JSON.parse((await raw(page))!).preference).toEqual({situationId:choice.id,confirmed:true});
  await page.reload();await expect(page.locator('.hero')).toContainText(profile.hero);await homePhoto(page);await expect(page.getByRole('button',{name:content.onboarding.startLabel,exact:true})).toHaveCount(0);await expect(page.getByRole('radio')).toHaveCount(0);const saved=await raw(page);await page.goto('/#/regular/home');await expect(page.locator('.hero')).toContainText(profile.hero);expect(await raw(page)).toBe(saved);console.log('choice',choice.id,'route',page.url(),'bytes',await raw(page));
 });
-for(const width of [360,1280]) test(`compact home card scrolls to activities at ${width}px`,async({page})=>{
- await page.setViewportSize({width,height:700});await page.goto('/');await choose(page);
+for(const {width,reducedMotion} of [{width:360,reducedMotion:false},{width:1280,reducedMotion:false},{width:360,reducedMotion:true}]) test(`compact home card scrolls to activities at ${width}px${reducedMotion?' with reduced motion':''}`,async({page})=>{
+ await page.setViewportSize({width,height:700});await page.emulateMedia({reducedMotion:reducedMotion?'reduce':'no-preference'});await page.goto('/');await choose(page);
  const card=page.locator('.home-hero');const target=page.locator('#activities');const before=await raw(page);
  await expect(card).toContainText(content.profiles[0].hero);await expect(card).not.toContainText(content.profiles[0].nextPrompt);
  expect((await card.boundingBox())!.height).toBeLessThan(180);
+ await page.evaluate(()=>{const original=Element.prototype.scrollIntoView;Element.prototype.scrollIntoView=function(options){if(this.id==='activities')(window as any).__activityScroll=options;return original.call(this,options);};});
  await card.focus();await expect(card).toBeFocused();await page.keyboard.press('Enter');
- await expect(target).toBeFocused();expect(await target.evaluate(el=>el.getBoundingClientRect().top)).toBeGreaterThanOrEqual(0);
- expect(await target.evaluate(el=>el.getBoundingClientRect().top)).toBeLessThan(200);
+ await expect(target).toBeFocused();
+ expect(await page.evaluate(()=>(window as any).__activityScroll)).toEqual({block:'start',behavior:reducedMotion?'instant':'smooth'});
+ await expect.poll(()=>target.evaluate(el=>el.getBoundingClientRect().top)).toBeLessThan(200);
+ expect(await target.evaluate(el=>el.getBoundingClientRect().top)).toBeGreaterThanOrEqual(0);
  expect(await raw(page)).toBe(before);await expect(page).toHaveURL(/#\/home$/);
  await card.click();await expect(target).toBeFocused();
 });
