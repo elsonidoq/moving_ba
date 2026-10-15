@@ -477,17 +477,18 @@ for(const width of [360,1280])test(`duration local defaults focus and visual ${w
 for(const width of [360,1280])test(`photo-led challenges and honest earned points ${width}`,async({page})=>{
  await page.setViewportSize({width,height:900});await page.goto('/');await choose(page);
  await page.goto('/#/profile/challenges');await expect(page.locator('[data-stat="points"]')).toHaveText('0');
+ await expect(page.locator('.rewards-hero')).toContainText(content.ui.illustrativeProgress.replace('{situation}',content.onboarding.choices[0].label));await expect(page.locator('.rewards-hero')).toContainText(content.ui.savedJourneyPoints.replace('{earned}','0'));
  await expect(page.locator('[data-badge-id]')).toHaveCount(2);await expect(page.locator('[data-badge-id] .badge-icon svg')).toHaveCount(2);
  await expect(page.locator('[data-benefit-id]')).toHaveCount(3);
  await expect(page.locator('[data-benefit-limitation]')).toHaveCount(1);
- await expect(page.locator('[data-benefit-limitation]')).toHaveText(content.legal.nonredeemable);
+ await expect(page.locator('[data-benefit-limitation]')).toHaveText(content.ui.benefitsDisclaimer);
  for(const rule of content.rules.benefits){const card=page.locator(`[data-benefit-id="${rule.id}"]`);const image=card.locator('img');await expect(card).toContainText(rule.title);await expect(image).toHaveAttribute('src',rule.photo.path);await expect(image).toHaveAttribute('alt',rule.photo.alt);await image.evaluate((img:HTMLImageElement)=>img.decode());await expect(card.locator('progress')).toHaveAttribute('value','0');}
- await expect(page.locator('main')).not.toContainText(/demo|ilustrativ|ejemplo|fictici|simulad/i);
+ await expect(page.locator('main')).toContainText(content.ui.illustrativeProgress.replace('{situation}',content.onboarding.choices[0].label));
  await page.screenshot({path:`/tmp/ba-rewards-${width}-empty.png`,fullPage:true});
  const bytes=await raw(page);await page.goto('/#/profile');await page.getByRole('button',{name:'Entrenamiento sostenido',exact:true}).click();await page.goto('/#/profile/challenges');
  const scenario=content.previewScenarios.find(s=>s.id==='sustained')!;const points=scenario.history.length*content.rules.pointsPerCompletion;
- await expect(page.locator('[data-stat="points"]')).toHaveText(String(points));await expect(page.locator('[data-benefit-id="coffee"] .benefit-points')).toHaveText('Meta alcanzada');
- await expect(page.locator('main')).not.toContainText(/demo|ilustrativ|ejemplo|fictici|simulad/i);
+ await expect(page.locator('[data-stat="points"]')).toHaveText(String(points));await expect(page.locator('[data-benefit-id="coffee"] .benefit-points')).toHaveText(content.ui.benefitReached);
+ await expect(page.locator('main')).toContainText(content.ui.scenarioSimulated);await expect(page.locator('main')).toContainText(content.ui.previewExplanation);
  await page.screenshot({path:`/tmp/ba-rewards-${width}-progress.png`,fullPage:true});expect(await raw(page)).toBe(bytes);
 });
 
@@ -526,17 +527,14 @@ for(const width of [360,1280])for(const scenario of content.previewScenarios.fil
 });
 
 test('illustrative edit complete persist', async ({page}) => {
- await page.goto('/'); await choose(page,'returning');
- await expect(page.locator('.benefit-summary')).toContainText('Puntos ilustrativos: 20');
- const before=JSON.parse((await raw(page))!);
- await page.getByRole('link',{name:content.ui.profileAccessibleName}).click(); await page.getByRole('button',{name:content.ui.editSituation}).click();
- await page.getByRole('radio',{name:content.onboarding.choices.find(c=>c.id==='regular')!.label}).check(); await page.getByRole('button',{name:content.onboarding.continueLabel}).click();
- const edited=JSON.parse((await raw(page))!); expect({...edited,preference:null}).toEqual({...before,preference:null}); expect(edited.preference).toEqual({situationId:'regular',confirmed:true});
- await page.reload(); await expect(page.locator('.benefit-summary')).toContainText('Puntos ilustrativos: 40');
- await page.goto('/#/sports/calisthenics/solo/cal-regular'); await page.getByRole('button',{name:content.ui.start}).click();
- for(const step of content.plans.find(plan=>plan.id==='cal-regular')!.steps) await page.getByRole('button',{name:content.ui.completeStep}).click();
- await page.goto('/#/profile'); await expect(page.locator('[data-stat="points"]')).toHaveText('50');
- await page.goto('/#/home'); await expect(page.locator('.benefit-summary')).toContainText('Puntos de tu recorrido guardado: 10');
+ await page.goto('/'); await choose(page,'returning'); await expect(page.locator('.benefit-summary')).toContainText('Puntos ilustrativos: 20');
+ const before=await raw(page); await page.getByRole('link',{name:content.ui.profileAccessibleName}).click(); await page.getByRole('button',{name:content.ui.editSituation}).click(); await page.getByRole('radio',{name:content.onboarding.choices[0].label}).check(); await page.getByRole('button',{name:content.ui.cancel}).click(); expect(await raw(page)).toBe(before);
+ await page.getByRole('button',{name:content.ui.editSituation}).click(); await page.getByRole('radio',{name:content.onboarding.choices.find(c=>c.id==='regular')!.label}).check(); await page.getByRole('button',{name:content.onboarding.continueLabel}).click();
+ const edited=JSON.parse((await raw(page))!); expect({...edited,preference:null}).toEqual({...JSON.parse(before!),preference:null}); expect(edited.preference).toEqual({situationId:'regular',confirmed:true}); await page.reload();
+ await page.goto('/#/sports/calisthenics'); await page.locator('.route-card.solo').click(); await page.getByRole('button',{name:content.ui.start}).click(); for(const step of content.plans.find(plan=>plan.id==='cal-regular')!.steps) await page.getByRole('button',{name:content.ui.completeStep}).click(); const completed=JSON.parse((await raw(page))!);
+ for(const hash of ['#/home','#/profile','#/profile/challenges']) { await page.goto('/'+hash); await expect(hash==='#/home'?page.locator('.benefit-summary'):page.locator('[data-stat="points"]')).toContainText('50'); }
+ await page.goto('/#/profile'); await page.getByRole('button',{name:content.ui.editSituation}).click(); await page.getByRole('radio',{name:content.onboarding.choices.find(c=>c.id==='returning')!.label}).check(); await page.getByRole('button',{name:content.onboarding.continueLabel}).click();
+ for(const hash of ['#/home','#/profile','#/profile/challenges']) { await page.goto('/'+hash); await expect(hash==='#/home'?page.locator('.benefit-summary'):page.locator('[data-stat="points"]')).toContainText('30'); } await page.goto('/#/profile'); await expect(page.locator('main')).toContainText(content.ui.savedJourneyPoints.replace('{earned}','10')); await page.getByRole('link',{name:content.ui.journey,exact:true}).click(); await expect(page.locator('[data-history-id]')).toHaveCount(1); expect(JSON.parse((await raw(page))!).journey).toEqual(completed.journey);
 });
 
 test('illustrative benefits show one home card and full truthful list', async ({page}) => {
@@ -547,15 +545,21 @@ test('illustrative benefits show one home card and full truthful list', async ({
 });
 
 test('illustrative preview isolation', async ({page}) => {
- await page.goto('/'); await choose(page,'regular'); const bytes=await raw(page);
- await page.getByRole('link',{name:content.ui.profileAccessibleName}).click(); const scenario=content.previewScenarios.find(item=>item.id==='sustained')!; await page.getByRole('button',{name:scenario.title}).click();
- await expect(page.locator('.benefit-summary')).toContainText('Puntos del escenario: 40'); await expect(page.locator('.benefit-summary')).not.toContainText('Puntos de tu recorrido guardado');
- await page.getByRole('link',{name:content.ui.profileAccessibleName}).click(); await expect(page.locator('[data-stat="points"]')).toHaveText('40'); await expect(page.locator('main')).not.toContainText('Puntos de tu recorrido guardado');
- await page.getByRole('button',{name:content.ui.exitPreview}).click(); expect(await raw(page)).toBe(bytes); await expect(page.locator('.benefit-summary')).toContainText('Puntos ilustrativos: 40');
+ await page.goto('/'); await choose(page,'regular'); await page.goto('/#/sports/calisthenics'); await page.locator('.route-card.solo').click(); await page.getByRole('button',{name:content.ui.start}).click(); for(const step of content.plans.find(plan=>plan.id==='cal-regular')!.steps) await page.getByRole('button',{name:content.ui.completeStep}).click(); const bytes=await raw(page);
+ await page.goto('/#/profile'); const scenario=content.previewScenarios.find(item=>item.id==='sustained')!; await page.getByRole('button',{name:scenario.title}).click();
+ for(const hash of ['#/home','#/profile','#/profile/challenges']) { await page.goto('/'+hash); await expect(hash==='#/home'?page.locator('.benefit-summary'):page.locator('[data-stat="points"]')).toContainText('40'); await expect(page.locator('main')).not.toContainText(content.ui.savedJourneyPointsLabel); } expect(await raw(page)).toBe(bytes);
+ await page.getByRole('button',{name:content.ui.exitPreview}).click(); expect(await raw(page)).toBe(bytes); await expect(page.locator('.benefit-summary')).toContainText('Puntos ilustrativos: 50'); await page.reload(); await expect(page.locator('.benefit-summary')).toContainText('Puntos ilustrativos: 50');
 });
 
 test('illustrative visual accessibility captures', async ({page}) => {
- for(const width of [360,1280]) { await page.setViewportSize({width,height:900}); await page.goto('/'); await page.evaluate(()=>localStorage.clear()); await page.reload(); await choose(page,'returning'); await page.screenshot({path:`/tmp/ba-situation-benefits/${width}-home.png`,fullPage:true}); await page.getByRole('link',{name:content.ui.profileAccessibleName}).click(); await page.screenshot({path:`/tmp/ba-situation-benefits/${width}-profile.png`,fullPage:true}); await page.getByRole('button',{name:content.ui.editSituation}).click(); await page.screenshot({path:`/tmp/ba-situation-benefits/${width}-edit.png`,fullPage:true}); await page.getByRole('button',{name:content.ui.cancel}).click(); await page.getByRole('link',{name:/Desafíos/}).click(); await page.screenshot({path:`/tmp/ba-situation-benefits/${width}-benefits.png`,fullPage:true}); expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true); }
+ for(const width of [360,1280]) { await page.setViewportSize({width,height:900}); await page.goto('/'); await page.evaluate(()=>localStorage.clear()); await page.reload(); await choose(page,'returning'); await page.screenshot({path:`/tmp/ba-situation-benefits/${width}-home.png`,fullPage:true}); await page.getByRole('link',{name:content.ui.profileAccessibleName}).click(); await page.screenshot({path:`/tmp/ba-situation-benefits/${width}-profile.png`,fullPage:true}); const edit=page.getByRole('button',{name:content.ui.editSituation}); await edit.focus(); await page.keyboard.press('Enter'); await expect(page.getByRole('heading',{level:1})).toBeFocused(); await page.screenshot({path:`/tmp/ba-situation-benefits/${width}-edit.png`,fullPage:true}); await page.getByRole('button',{name:content.ui.cancel}).click(); await page.getByRole('link',{name:/Desafíos/}).click(); await page.screenshot({path:`/tmp/ba-situation-benefits/${width}-benefits.png`,fullPage:true}); await page.goto('/#/profile'); await page.getByRole('button',{name:'Entrenamiento sostenido'}).click(); await page.screenshot({path:`/tmp/ba-situation-benefits/${width}-preview.png`,fullPage:true}); const geometry=await page.locator('button:not(.skip-link), .profile-link').evaluateAll(items=>({min:Math.min(...items.map(item=>item.getBoundingClientRect().height)),overflow:document.documentElement.scrollWidth>innerWidth})); expect(geometry.min).toBeGreaterThanOrEqual(44); expect(geometry.overflow).toBe(false); }
+
+});
+
+test('illustrative served label reload is runtime-configured', async ({page}) => {
+ const file='dist/config/app-content.json'; const original=readFileSync(file); const changed=JSON.parse(original.toString()); changed.ui.previewExplanation='Etiqueta servida de ejemplo.';
+ try { writeFileSync(file,JSON.stringify(changed)); await page.goto('/'); await choose(page,'regular'); await page.getByRole('link',{name:content.ui.profileAccessibleName}).click(); await page.getByRole('button',{name:'Entrenamiento sostenido'}).click(); await page.goto('/#/profile/challenges'); await expect(page.locator('main')).toContainText('Etiqueta servida de ejemplo.'); }
+ finally { writeFileSync(file,original); } expect(readFileSync(file).equals(original)).toBe(true);
 });
 
 test('illustrative benefits empty served configuration restores exact bytes', async ({page}) => {

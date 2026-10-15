@@ -110,7 +110,10 @@
     "benefitRemaining": "Te faltan {count} puntos para esta meta",
     "benefitReached": "Meta ilustrativa alcanzada",
     "viewAllBenefits": "Ver todos los beneficios",
-    "savedJourney": "Tu recorrido guardado"
+    "savedJourney": "Tu recorrido guardado",
+    "savedJourneyPointsLabel": "Puntos de tu recorrido guardado",
+    "scenarioSimulated": "Escenario simulado",
+    "previewExplanation": "Ejemplo de un escenario simulado."
   },
   "legal": {
     "illustrativeTraining": "No hagas ejercicios con dolor. Adaptá el movimiento a tus posibilidades y descansá cuando lo necesites. Consultá a una persona profesional para recibir orientación personal.",

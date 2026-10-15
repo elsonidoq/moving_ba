@@ -18,7 +18,7 @@ export default function Challenges() {
     <h1 tabIndex={-1}>{ui.challenges}</h1>
     <section className="rewards-hero" aria-label={presentation.mode === 'preview' ? ui.previewPoints : ui.illustrativePoints}>
       <span className="rewards-hero-icon" aria-hidden="true">✦</span>
-      <div><span>{presentation.mode === 'preview' ? `Escenario simulado · ${ui.previewPoints}` : ui.illustrativeProgress.replace('{situation}',situation)}</span><strong data-stat="points">{presentation.displayPoints}</strong><p>{presentation.mode === 'preview' ? 'Ejemplo de un escenario simulado.' : ui.exampleBase.replace('{baseline}',String(presentation.baseline))}</p>{presentation.mode === 'actual' && <p>{ui.savedJourneyPoints.replace('{earned}',String(presentation.earnedPoints))}</p>}</div>
+      <div><span>{presentation.mode === 'preview' ? `${ui.scenarioSimulated} · ${ui.previewPoints}` : ui.illustrativeProgress.replace('{situation}',situation)}</span><strong data-stat="points">{presentation.displayPoints}</strong><p>{presentation.mode === 'preview' ? ui.previewExplanation : ui.exampleBase.replace('{baseline}',String(presentation.baseline))}</p>{presentation.mode === 'actual' && <p>{ui.savedJourneyPoints.replace('{earned}',String(presentation.earnedPoints))}</p>}</div>
     </section>
     <h2 className="section-title">Desafíos para seguir</h2>
     <div className="challenge-list">{journey.challenges.map((rule, index) => <section className="challenge-tile" key={rule.id} data-challenge-id={rule.id}>

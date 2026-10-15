@@ -18,7 +18,7 @@ export const uiKeys = [
   'sports', 'profileAccessibleName', 'editSituation', 'previewBadge', 'exploreSituations', 'exitPreview',
   'intention', 'intentionNotice', 'intentionEmpty', 'imageUnavailable', 'scriptedDisclosure',
   'futureAI', 'cancel', 'resetFailed', 'chooseRequired', 'previous', 'reviewNext', 'locationIllustration', 'recentActivity', 'activityEmpty', 'weeklyCount', 'activityCount', 'durationOption',
-  'illustrativeProgress', 'illustrativePoints', 'exampleBase', 'savedJourneyPoints', 'illustrativeExplanation', 'previewPoints', 'benefitsDisclaimer', 'benefitsEmpty', 'benefitRemaining', 'benefitReached', 'viewAllBenefits', 'savedJourney',
+  'illustrativeProgress', 'illustrativePoints', 'exampleBase', 'savedJourneyPoints', 'illustrativeExplanation', 'previewPoints', 'benefitsDisclaimer', 'benefitsEmpty', 'benefitRemaining', 'benefitReached', 'viewAllBenefits', 'savedJourney', 'savedJourneyPointsLabel', 'scenarioSimulated', 'previewExplanation',
 ] as const;
 export type UI = Record<typeof uiKeys[number], string>;
 export interface Profile {
