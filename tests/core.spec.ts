@@ -5,7 +5,7 @@ import { validateContent } from '../src/content/validate';
 import { startSession, completeStep, reviewStep, abandonSession } from '../src/state/session';
 import { materialize, loadEnvelope, saveEnvelope, validateEnvelope, validateLegacyEnvelope, normalizeLegacy, sourceKey, resetEnvelope, storageKey, type Envelope, type LegacyEnvelope, type StoragePort } from '../src/state/storage';
 import { createCommandOwner, type Command } from '../src/state/context';
-import { guardHash } from '../src/state/navigation';
+import { guardHash, routeHash } from '../src/state/navigation';
 import { activityDate, weekKey, monthKey } from '../src/state/dates';
 import { eligibleHistory, selectJourney, selectPreviewJourney } from '../src/state/selectors';
 const content = validateContent(JSON.parse(readFileSync('public/config/app-content.json', 'utf8'))) as Content;
@@ -279,4 +279,19 @@ test('actual command custody preview route isolation rejects genuine actual comp
   expect(state.route).toEqual({screen:'home',profileId:'regular'});expect(state.mode).toEqual({kind:'preview',scenarioId:'sustained'});expect(state.envelope).toBe(envelope);expect(s.values.get(storageKey)).toBe(bytes);expect(owner.dispatch({type:'start',planId:'cal-regular'})).toBe(false);
  }
  owner.dispatch({type:'exitPreview'});owner.dispatch({type:'navigate',hash:canonical});expect(owner.getState().route).toMatchObject({screen:'success',attemptId:id});expect(s.values.get(storageKey)).toBe(bytes);
+});
+
+test('one-person compatibility canonical success rejects imported source keys with colliding bare IDs without losing history',()=>{
+ const s=storage(JSON.stringify(legacyFixture()));const owner=createCommandOwner(content,s.port,'',()=>now,()=> 'd57a1e2c-922e-4c4a-b033-63bd54650ee1');owner.dispatch({type:'chooseSituation',situationId:'first'});
+ const envelope=owner.getState().envelope,bytes=s.values.get(storageKey),writes=s.writes().length;
+ for(const profile of profiles){
+  const key=sourceKey('legacy',profile,'completion','same-attempt');expect(envelope.journey[key]).toMatchObject({id:'same-attempt',profileId:profile,origin:'user-simulated'});
+  owner.dispatch({type:'navigate',hash:`#/success/${encodeURIComponent(key)}`});console.log('imported success key',key,'record exists',!!envelope.journey[key],'route',JSON.stringify(owner.getState().route));
+  expect(owner.getState().route).toEqual({screen:'home',profileId:'first'});expect(owner.getState().envelope).toBe(envelope);expect(s.values.get(storageKey)).toBe(bytes);expect(s.writes()).toHaveLength(writes);
+ }
+ expect(createCommandOwner(content,s.port,`#/success/${encodeURIComponent(sourceKey('legacy','first','completion','same-attempt'))}`).getState().route.screen).toBe('home');
+ owner.dispatch({type:'start',planId:'cal-first'});const id=owner.getState().attempt!.attemptId;
+ for(const step of content.plans.find(p=>p.id==='cal-first')!.steps)owner.dispatch({type:'accept',attemptId:id,stepId:step.id});
+ const actual=owner.getState().envelope;expect(Object.keys(actual.journey)).toHaveLength(Object.keys(envelope.journey).length+1);for(const [key,record] of Object.entries(envelope.journey))expect(actual.journey[key]).toEqual(record);
+ const actualHash=`#/success/${encodeURIComponent(sourceKey('actual','completion',id))}`;expect(routeHash(owner.getState().route)).toBe(actualHash);owner.dispatch({type:'navigate',hash:actualHash});expect(owner.getState().route).toEqual({screen:'success',profileId:'first',sportId:'calisthenics',attemptId:id});
 });

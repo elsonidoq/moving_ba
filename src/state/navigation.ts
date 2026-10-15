@@ -49,7 +49,8 @@ export function guardHash(hash: string, content: Content, runtime?: { attempt: A
     }
     if (parts[0] === 'success') {
       const r = actual?.journey[parts[1]];
-      return parts.length === 2 && r?.origin === 'user-simulated' ? {screen:'success',profileId,sportId:r.sportId,attemptId:r.id} : {screen:'home',profileId};
+      // Success and routeHash resolve only actual completion keys, not imported source identities.
+      return parts.length === 2 && r?.origin === 'user-simulated' && parts[1] === sourceKey('actual','completion',r.id) ? {screen:'success',profileId,sportId:r.sportId,attemptId:r.id} : {screen:'home',profileId};
     }
     if (parts[0] === 'sports' && parts.length > 1) parts = [profileId,...parts.slice(1)];
     else return {screen:'home',profileId};
