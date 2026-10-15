@@ -4,7 +4,7 @@
 
 - [Content configuration](CONTENT_CONFIGURATION.md): implemented JSON fields, local edits, validation, snapshots and reset.
 
-- [Conceptual interactive mockup](mockup_ba_en_movimiento_v2.html): Spanish-language demonstration of activity selection, individual practice or classes, continuity, and illustrative rewards. Not an official service; class data and transactions are simulated.
+- [Conceptual interactive mockup](mockup_ba_te_mueve/index.html): Spanish-language demonstration of activity selection, individual practice or classes, continuity, and rewards. Not an operational service contract.
 - [Architecture](architecture.md): current implemented client/state/content/serving/test boundaries, exact dependencies, and preserved historical research.
 - [Deployment](deployment.md): verified local and Railway build/start/PORT contract, public HTTPS URL, exact successful deployment and content redeployment runbook.
 - [Documentation routing](documentation-routing.md): material change categories and authoritative owners.
@@ -52,3 +52,7 @@ the documentation content is retained by the Git checkpoint introducing this rec
 Pi session conversation retains the executive brief and affirmative answer.
 Recheck current contents against these bounds before reusing approval; material drift
 requires renewed approval. This is initialization authority, not product approval.
+
+## Mockup-owner link repair
+
+Owner approved the bounded repair through `ask_user` on 2026-10-15: update the stale mockup links here and in `documentation-routing.md` to the existing `mockup_ba_te_mueve/index.html`, then resume `finish-session`. Before repair, clean HEAD `2aa7a3850b64568573d3e48f980eb72d592e98d6`; SHA-256 of this index `9f64c20c6845d99591efbea14edd63006ad9e40ffd5d08a12c61c8087cd665f7`, routing guide `63197a51708918d9da39d93d116ba8a2156947945b28ec63821ded903c0f9cb2`, and existing mockup `dc398b7b6e64d150576a430038f6c284ac520df19f12d31c7729789bdce5bb00`. This approval does not authorize app or mockup changes.
