@@ -252,3 +252,15 @@ test('swimming start guard actual owner clears both affirmations on every leave 
  for(const action of ['navigate','reload','reset','storageEvent'] as const){const s=storage();const owner=createCommandOwner(content,s.port,'',()=>now);owner.dispatch({type:'chooseSituation',situationId:'regular'});owner.dispatch({type:'affirm',key:'canSwim',value:true});owner.dispatch({type:'affirm',key:'safePool',value:true});expect(owner.dispatch({type:'start',planId:'swim-water-regular'})).toBe(true);
  if(action==='navigate')owner.dispatch({type:'navigate',hash:'#/home'});if(action==='reset')owner.dispatch({type:'reset',confirmed:true,entry:'profile'});if(action==='storageEvent')owner.dispatch({type:'storageEvent',key:storageKey});const result=action==='reload'?createCommandOwner(content,s.port).getState():owner.getState();expect(result).toMatchObject({canSwim:false,safePool:false,attempt:null});expect(result.envelope.journey).toEqual({});console.log('water affirmation clearing',action,JSON.stringify(result.envelope));}
 });
+test('actual command custody all four explicit scenarios use projection dates and guarded notice identity without writes',()=>{
+ const s=storage();const owner=createCommandOwner(content,s.port,'',()=>now);owner.dispatch({type:'chooseSituation',situationId:'first'});owner.dispatch({type:'intention',classId:'yoga-free'});const bytes=s.values.get(storageKey);const actual=owner.getState().envelope;
+ for(const scenario of content.previewScenarios){
+  expect(owner.dispatch({type:'enterScenario',scenarioId:scenario.id})).toBe(true);
+  expect(owner.getState().route.screen).toBe(scenario.kind==='notice'?'notice':'home');
+  const projection=selectPreviewJourney(content,scenario.id)!;expect(projection.today).toBe(scenario.referenceDate);expect(projection.sessions).toBe(scenario.history.length);expect(projection.points).toBe(scenario.history.length*content.rules.pointsPerCompletion);
+  for(const hash of ['#/profile/journey','#/profile/challenges','#/session/forged','#/success/forged']){owner.dispatch({type:'navigate',hash});expect(owner.getState().route.profileId).toBe(scenario.recommendationSituationId);expect(owner.dispatch({type:'start',planId:'cal-first'})).toBe(false);}
+  expect(owner.getState().envelope).toBe(actual);expect(s.values.get(storageKey)).toBe(bytes);owner.dispatch({type:'exitPreview'});expect(owner.getState().envelope).toBe(actual);expect(owner.getState().route.screen).toBe('home');
+  console.log(scenario.id,projection.today,projection.sessions,projection.points,projection.activeWeeks,'actual identical',bytes);
+ }
+ expect(guardHash('#/notice/missed-class',content,owner.getState()).screen).toBe('profile');
+});

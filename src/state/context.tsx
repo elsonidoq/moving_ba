@@ -56,7 +56,7 @@ export function createCommandOwner(content: Content, port: Parameters<typeof loa
       } else if (command.type === 'enterScenario') {
         const scenario = content.previewScenarios.find(s => s.id === command.scenarioId);
         if (!canAct() || !scenario) return false;
-        state = {...state,...cleared,mode:{kind:'preview',scenarioId:scenario.id},route:{screen:'home',profileId:scenario.recommendationSituationId}};
+        state = {...state,...cleared,mode:{kind:'preview',scenarioId:scenario.id},route:scenario.kind === 'notice' ? {screen:'notice',profileId:scenario.recommendationSituationId,scenarioId:scenario.id} : {screen:'home',profileId:scenario.recommendationSituationId}};
       } else if (command.type === 'answer') {
         if (state.mode.kind !== 'preview') return false;
         const scenario = content.previewScenarios.find(s => s.id === (state.mode.kind === 'preview' ? state.mode.scenarioId : ''))!;

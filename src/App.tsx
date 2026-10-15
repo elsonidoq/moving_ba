@@ -3,6 +3,7 @@ import type { Content } from './content/types';
 import { loadContent } from './content/load';
 import { AppProvider, useApp } from './state/context';
 import AppShell from './components/AppShell';
+import Notice from './screens/Notice';
 import Home from './screens/Home';
 import Onboarding from './screens/Onboarding';
 import Profile from './screens/Profile';
@@ -20,7 +21,7 @@ type Bootstrap = { status: 'loading' } | { status: 'ready'; content: Content } |
 
 function Screens() {
   const { route } = useApp();
-  return <AppShell>{route.screen === 'onboarding' || route.screen === 'recovery' ? <Onboarding /> : route.screen === 'profile' ? <Profile /> : route.screen === 'sports' ? <Sports /> : route.screen === 'classes' ? <ClassCatalog /> : route.screen === 'home' ? <Home /> : route.screen === 'choice' ? <SportChoice /> : route.screen === 'plan' ? <Plan /> : route.screen === 'session' ? <Session /> : route.screen === 'success' ? <Success /> : route.screen === 'detail' ? <ClassDetail /> : route.screen === 'journey' ? <Journey /> : route.screen === 'challenges' ? <Challenges /> : <ClassCatalog />}</AppShell>;
+  return <AppShell>{route.screen === 'notice' ? <Notice /> : route.screen === 'onboarding' || route.screen === 'recovery' ? <Onboarding /> : route.screen === 'profile' ? <Profile /> : route.screen === 'sports' ? <Sports /> : route.screen === 'classes' ? <ClassCatalog /> : route.screen === 'home' ? <Home /> : route.screen === 'choice' ? <SportChoice /> : route.screen === 'plan' ? <Plan /> : route.screen === 'session' ? <Session /> : route.screen === 'success' ? <Success /> : route.screen === 'detail' ? <ClassDetail /> : route.screen === 'journey' ? <Journey /> : route.screen === 'challenges' ? <Challenges /> : <ClassCatalog />}</AppShell>;
 }
 
 export default function App() {

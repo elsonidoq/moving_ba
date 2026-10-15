@@ -1,11 +1,15 @@
 import { useApp } from '../state/context';
+import { selectPreviewJourney } from '../state/selectors';
 import { routeHash } from '../state/navigation';
 
 export default function Home() {
-  const { content, route, envelope } = useApp();
-  const profile = content.profiles.find(p => p.id === envelope.preference?.situationId)!;
-  const intention = envelope.intention;
+  const { content, route, envelope, mode } = useApp();
+  const scenario = mode.kind === 'preview' ? content.previewScenarios.find(s=>s.id===mode.scenarioId) : undefined;
+  const preview = scenario ? selectPreviewJourney(content,scenario.id)! : null;
+  const profile = content.profiles.find(p => p.id === route.profileId)!;
+  const intention = mode.kind === 'actual' ? envelope.intention : null;
   return <>
+    {scenario && <section data-preview-scenario={scenario.id} className="support"><h2>{scenario.title}</h2><p>{scenario.guidance}</p><p>{scenario.disclosure}</p><dl className="journey-stats"><div><dt>{content.ui.sessions}</dt><dd data-stat="sessions">{preview!.sessions}</dd></div><div><dt>{content.ui.activeWeeks}</dt><dd>{preview!.activeWeeks}</dd></div><div><dt>{content.ui.points}</dt><dd>{preview!.points}</dd></div></dl></section>}
     <p className="eyebrow">{profile.title}</p>
     <h1 tabIndex={-1}>{profile.welcome}</h1>
     <p className="lead">{profile.subtitle}</p>

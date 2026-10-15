@@ -150,3 +150,6 @@ legend { line-height: 1.5; margin-bottom: 12px; }
 .exercise-photo img { display: block; width: 100%; height: auto; max-height: 420px; object-fit: contain; background: #edf6f1; border-radius: 18px; }
 .exercise-photo figcaption { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 8px; }
 .review-controls { display: flex; gap: 12px; margin-bottom: 16px; }
+.preview-badge { background: var(--yellow); border-radius: 12px; padding: 12px; font-weight: 750; }
+[data-preview-exit] { margin-top: 28px; padding-top: 18px; border-top: 2px solid var(--yellow); scroll-margin-bottom: 100px; }
+[data-preview-exit] button { scroll-margin-block: 100px; }

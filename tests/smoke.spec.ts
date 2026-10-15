@@ -172,3 +172,37 @@ test('ordered practice review matching JPEG delivery for all configured snapshot
 test('ordered practice review failed local photo remains honestly unavailable with instructions and no fallback',async({page})=>{
  await page.route('**/assets/photos/cali_warmup.jpg',r=>r.abort());await page.goto('/');await choose(page);await page.goto('/#/sports/calisthenics/solo/cal-first');await page.getByRole('button',{name:content.ui.start,exact:true}).click();await expect(page.getByRole('status')).toHaveText(content.ui.imageUnavailable);await expect(page.locator('main')).toContainText(content.exercises.find(e=>e.id==='cal-first-shoulders')!.technique);await expect(page.locator('.exercise-photo img')).toHaveCount(0);
 });
+
+async function previewExitEvidence(page:Page,id:string,width:number) {
+ const exit=page.getByRole('button',{name:content.ui.exitPreview,exact:true});
+ await expect(page.locator('[data-preview-badge]')).toBeVisible();
+ expect(await page.locator('main').evaluate(m=>m.lastElementChild?.hasAttribute('data-preview-exit'))).toBe(true);
+ await page.keyboard.press('Tab');await exit.scrollIntoViewIfNeeded();await exit.focus();await expect(exit).toBeFocused();
+ const measurement=await exit.evaluate(el=>{const r=el.getBoundingClientRect();const tabs=document.querySelector('.bottom-tabs')?.getBoundingClientRect();return {top:r.top,bottom:r.bottom,height:r.height,viewport:innerHeight,tabTop:tabs?.top??innerHeight,outline:getComputedStyle(el).outlineStyle,position:getComputedStyle(el).position,overflow:document.documentElement.scrollWidth>innerWidth};});
+ expect(measurement.height).toBeGreaterThanOrEqual(44);expect(measurement.bottom+4).toBeLessThanOrEqual(measurement.tabTop);expect(measurement.top).toBeGreaterThanOrEqual(0);expect(measurement.outline).not.toBe('none');expect(measurement.position).toBe('static');expect(measurement.overflow).toBe(false);
+ console.log('preview bottom focus',id,width,measurement);
+ await page.screenshot({path:`/tmp/ba-batch3/t006-${width}-${id}.png`,fullPage:true});
+}
+for(const width of [360,1280])test(`ephemeral same-person scenarios ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:900});
+ const actual=normalizeLegacy(legacy());actual.preference={situationId:'first',confirmed:true};actual.intention={classId:'yoga-free',sportId:'yoga',classSnapshot:content.classes.find(c=>c.id==='yoga-free')!,chosenAt:'2026-10-14T15:00:00.000Z',origin:'simulated-intention'};
+ const bytes=JSON.stringify(actual);await page.addInitScript(({key,bytes})=>{if(!sessionStorage.getItem('seeded')){localStorage.setItem(key,bytes);sessionStorage.setItem('seeded','yes');}},{key,bytes});await page.goto('/');
+ for(const scenario of content.previewScenarios){
+  await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await page.getByRole('button',{name:scenario.title,exact:true}).click();
+  await expect(page.locator('[data-preview-scenario]')).toHaveAttribute('data-preview-scenario',scenario.id);await expect(page.locator('[data-intended-class-id]')).toHaveCount(0);
+  if(scenario.kind==='notice'){await expect(page.locator('[data-notice-id]')).toHaveAttribute('data-notice-id',scenario.id);await expect(page.locator('main')).toContainText(scenario.notice!);await expect(page.getByRole('navigation',{name:'Principal'})).toHaveCount(0);}
+  else {await expect(page.locator('main')).toContainText(scenario.guidance);await expect(page.locator('[data-stat="sessions"]')).toHaveText(String(scenario.history.length));}
+  await previewExitEvidence(page,scenario.id,width);await page.keyboard.press('Enter');await expect(page.locator('[data-intended-class-id]')).toHaveAttribute('data-intended-class-id','yoga-free');expect(await raw(page)).toBe(bytes);
+ }
+ const scenario=content.previewScenarios.find(s=>s.kind==='journey')!;
+ for(const hash of ['#/home','#/sports','#/sports/yoga','#/classes','#/classes/yoga','#/sports/yoga/classes','#/sports/yoga/classes/yoga-free',`#/sports/yoga/solo/${content.plans.find(p=>p.profileId===scenario.recommendationSituationId&&p.sportId==='yoga'&&p.medium==='dry-land')!.id}`,'#/profile','#/profile/journey','#/profile/challenges','#/session/forged','#/success/forged']){
+  await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await page.getByRole('button',{name:scenario.title,exact:true}).click();await page.evaluate(h=>location.hash=h,hash);await page.waitForTimeout(60);
+  for(const label of [content.ui.editSituation,content.ui.reset,content.ui.interest,content.ui.intention,content.ui.start])for(const button of await page.getByRole('button',{name:label,exact:true}).all())await expect(button).toBeDisabled();
+  if(hash==='#/profile/journey')await expect(page.locator('[data-stat="sessions"]')).toHaveText(String(scenario.history.length));
+  if(hash==='#/profile/challenges')await expect(page.locator('[data-stat="points"]')).toHaveText(String(scenario.history.length*content.rules.pointsPerCompletion));
+  await previewExitEvidence(page,hash.replace(/[^a-z]/g,''),width);await page.keyboard.press('Enter');expect(await raw(page)).toBe(bytes);await expect(page.locator('[data-intended-class-id]')).toBeVisible();
+ }
+ await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await page.getByRole('button',{name:scenario.title,exact:true}).click();await page.goBack();await page.goForward();await expect(page.locator('[data-preview-badge]')).toBeVisible();expect(await raw(page)).toBe(bytes);await page.reload();await expect(page.locator('[data-preview-badge]')).toHaveCount(0);
+ await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await page.getByRole('button',{name:scenario.title,exact:true}).click();await page.evaluate(key=>dispatchEvent(new StorageEvent('storage',{key})),key);await expect(page.locator('[data-preview-badge]')).toHaveCount(0);await expect(page.locator('[data-intended-class-id]')).toBeVisible();
+ await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await expect(page.locator('[data-stat="sessions"]')).toHaveText('6');await expect(page.locator('[data-stat="points"]')).toHaveText('60');console.log('T006 exact actual bytes restored',bytes,'6 sessions / 60 points; intention yoga-free; scenario IDs',content.previewScenarios.map(s=>s.id));
+});

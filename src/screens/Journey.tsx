@@ -1,11 +1,11 @@
 import { useApp } from '../state/context';
 import { routeHash, safePlan } from '../state/navigation';
-import { selectJourney } from '../state/selectors';
+import { selectJourney, selectPreviewJourney } from '../state/selectors';
 import { displayDate } from '../state/dates';
 export default function Journey() {
-  const { content, route, envelope } = useApp();
+  const { content, route, envelope, mode } = useApp();
   const profile = content.profiles.find(p => p.id === route.profileId)!;
-  const journey = selectJourney(content, envelope, profile.id);
+  const journey = mode.kind === 'preview' ? selectPreviewJourney(content, mode.scenarioId)! : selectJourney(content, envelope, profile.id);
   const plan = safePlan(content, profile.id, profile.defaultSportId);
   const { ui } = content;
   return <>

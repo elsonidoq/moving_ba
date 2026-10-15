@@ -1,9 +1,9 @@
 import { useApp } from '../state/context';
-import { selectJourney } from '../state/selectors';
+import { selectJourney, selectPreviewJourney } from '../state/selectors';
 import { routeHash } from '../state/navigation';
 export default function Challenges() {
-  const { content, route, envelope } = useApp();
-  const journey = selectJourney(content, envelope, route.profileId);
+  const { content, route, envelope, mode } = useApp();
+  const journey = mode.kind === 'preview' ? selectPreviewJourney(content, mode.scenarioId)! : selectJourney(content, envelope, route.profileId);
   const { ui } = content;
   return <>
     <h1 tabIndex={-1}>{ui.challenges}</h1>

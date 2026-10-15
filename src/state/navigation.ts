@@ -5,6 +5,7 @@ import { sourceKey, type Envelope, type LegacyEnvelope } from './storage';
 export type Route =
   | { screen: 'onboarding'; profileId: ProfileId }
   | { screen: 'recovery'; profileId: ProfileId }
+  | { screen: 'notice'; profileId: ProfileId; scenarioId: string }
   | { screen: 'profile' | 'sports'; profileId: ProfileId }
   | { screen: 'classes'; profileId: ProfileId; sportId?: SportId }
   | { screen: 'home'; profileId: ProfileId }
@@ -24,12 +25,15 @@ export function safePlan(content: Content, profileId: ProfileId, sportId: SportI
 }
 
 /** URL identity is navigation only, never session or swimming eligibility. */
-export function guardHash(hash: string, content: Content, runtime?: { attempt: Attempt | null; envelope: Envelope | LegacyEnvelope }): Route {
+export function guardHash(hash: string, content: Content, runtime?: { attempt: Attempt | null; envelope: Envelope | LegacyEnvelope; mode?: {kind:string;scenarioId?:string} }): Route {
   let parts: string[];
   try { parts = hash.replace(/^#\/?/, '').split('/').map(decodeURIComponent); } catch { parts = []; }
   const actual = runtime?.envelope && 'layout' in runtime.envelope ? runtime.envelope : null;
-  const profileId = actual?.preference?.situationId ?? content.profiles.find(p => p.id === parts[0])?.id ?? 'first';
+  const scenario = runtime?.mode?.kind === 'preview' ? content.previewScenarios.find(s => s.id === runtime.mode?.scenarioId) : undefined;
+  const profileId = scenario?.recommendationSituationId ?? actual?.preference?.situationId ?? content.profiles.find(p => p.id === parts[0])?.id ?? 'first';
   if (actual && !actual.preference) return {screen:'onboarding',profileId:'first'};
+  if (parts[0] === 'notice') return scenario?.kind === 'notice' && parts[1] === scenario.id ? {screen:'notice',profileId,scenarioId:scenario.id} : {screen:'profile',profileId};
+  if (scenario && (parts[0] === 'session' || parts[0] === 'success')) return {screen:'home',profileId};
   if (['home','onboarding','recovery','sports','classes','profile','session','success'].includes(parts[0])) {
     if (parts[0] === 'profile') return {screen:parts[1] === 'journey' || parts[1] === 'challenges' ? parts[1] : 'profile',profileId};
     if (parts[0] === 'sports' && parts.length === 1) return {screen:'sports',profileId};
@@ -76,6 +80,7 @@ export function guardHash(hash: string, content: Content, runtime?: { attempt: A
 }
 
 export function routeHash(route: Route): string {
+  if (route.screen === 'notice') return `#/notice/${route.scenarioId}`;
   if (route.screen === 'classes') return `#/classes${route.sportId ? '/' + route.sportId : ''}`;
   if (['home','onboarding','recovery','profile','sports'].includes(route.screen)) return `#/${route.screen}`;
   if (route.screen === 'journey' || route.screen === 'challenges') return `#/profile/${route.screen}`;
