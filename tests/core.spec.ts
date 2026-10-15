@@ -7,7 +7,7 @@ import { materialize, loadEnvelope, saveEnvelope, validateEnvelope, validateLega
 import { createCommandOwner, type Command } from '../src/state/context';
 import { guardHash, routeHash } from '../src/state/navigation';
 import { activityDate, weekKey, monthKey } from '../src/state/dates';
-import { eligibleHistory, selectJourney, selectPreviewJourney } from '../src/state/selectors';
+import { eligibleHistory, selectJourney, selectPreviewJourney, selectBenefitPresentation } from '../src/state/selectors';
 const content = validateContent(JSON.parse(readFileSync('public/config/app-content.json', 'utf8'))) as Content;
 const now = new Date('2026-10-14T15:00:00.000Z');
 const input = {profileId:'first',sportId:'calisthenics',planId:'cal-first',canSwim:false,safePool:false} as const;
@@ -303,4 +303,34 @@ test('one-person progress dates empty and same-day over-goal use unique source r
  const result=selectJourney(content,e,'first',new Date('2026-11-02T03:00:00Z'));
  expect(result.activityDays.map(day=>day.count)).toEqual([12,0,0,0,0,0,0]);expect(result.weeklySessions).toBe(12);expect(result.weeklySessions).toBeGreaterThan(result.weeklyGoal);expect(result.sessions).toBe(12);expect(result.points).toBe(120);
  console.log('T003/V1 empty',empty.activityDays,'same-day unique source tuples',result.history.map(r=>r.sourceKey),'over-goal',result.weeklySessions,result.weeklyGoal,result.activityDays);
+});
+
+test('illustrative benefit presentation derives actual baselines and deterministic benefits', () => {
+  for (const [id, baseline] of [['first', 0], ['returning', 20], ['regular', 40]] as const) {
+    const result = selectBenefitPresentation(content, materialize(), id)!;
+    expect(result).toMatchObject({baseline, earnedPoints: 0, displayPoints: baseline});
+  }
+  const envelope = materialize(); envelope.preference = {situationId:'returning',confirmed:true};
+  envelope.journey[sourceKey('actual','completion','illustrative')] = {id:'illustrative',attemptId:'illustrative',profileId:'returning',sportId:'calisthenics',planId:'cal-returning',planTitle:'Práctica',sportTitle:'Calistenia',medium:'dry-land',activityDate:'2026-10-14',origin:'user-simulated',timestamp:now.toISOString(),completedStepIds:['one']};
+  const result = selectBenefitPresentation(content, envelope, 'first')!;
+  expect(result).toMatchObject({baseline:20,earnedPoints:10,displayPoints:30}); expect(result.selectedBenefit?.id).toBe('coffee'); expect(result.selectedBenefit?.remaining).toBe(0);
+  const changed = structuredClone(content); changed.rules.pointsPerCompletion = 15;
+  expect(selectBenefitPresentation(changed, envelope, 'first')).toMatchObject({baseline:30,earnedPoints:15,displayPoints:45});
+  const unsorted = structuredClone(content); unsorted.rules.benefits.reverse();
+  const returning = {...materialize(),preference:{situationId:'returning' as const,confirmed:true as const}};
+  const regular = {...materialize(),preference:{situationId:'regular' as const,confirmed:true as const}};
+  const sixty = {...regular, journey:{...envelope.journey,[sourceKey('actual','completion','second')]:{...envelope.journey[sourceKey('actual','completion','illustrative')],id:'second',attemptId:'second'}}};
+  for (const [e, id, remaining] of [[returning,'coffee',10],[envelope,'coffee',0],[regular,'coffee',0],[sixty,'japanese-garden',0]] as const) {
+    expect(selectBenefitPresentation(unsorted,e,'first')!.selectedBenefit).toMatchObject({id,remaining});
+  }
+  const tied=structuredClone(content); tied.rules.benefits=[{...tied.rules.benefits[1],id:'zeta',pointsThreshold:30},{...tied.rules.benefits[0],id:'alpha'}];
+  expect(selectBenefitPresentation(tied,envelope,'first')!.selectedBenefit?.id).toBe('alpha');
+  const empty=structuredClone(content);empty.rules.benefits=[];expect(selectBenefitPresentation(empty,envelope,'first')!.selectedBenefit).toBeNull();
+});
+
+test('illustrative preview isolation uses projections only', () => {
+  const envelope=materialize();envelope.preference={situationId:'regular',confirmed:true};envelope.journey[sourceKey('actual','completion','one')]={id:'one',attemptId:'one',profileId:'regular',sportId:'calisthenics',planId:'cal-regular',planTitle:'Práctica',sportTitle:'Calistenia',medium:'dry-land',activityDate:'2026-10-14',origin:'user-simulated',timestamp:now.toISOString(),completedStepIds:['one']};
+  const bytes=JSON.stringify(envelope);
+  for(const scenario of content.previewScenarios){const result=selectBenefitPresentation(content,envelope,'regular',scenario.id)!;expect(result).toMatchObject({mode:'preview',baseline:0,earnedPoints:0,displayPoints:scenario.history.length*content.rules.pointsPerCompletion});}
+  expect(JSON.stringify(envelope)).toBe(bytes);
 });

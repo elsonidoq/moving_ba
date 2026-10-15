@@ -140,7 +140,18 @@ export function validateContent(input: unknown): Content {
   const rules = object(root.rules, 'rules');
   integer(rules.pointsPerCompletion, 0, 'rules.pointsPerCompletion');
   for (const [collection, numeric] of [['challenges', 'target'], ['badges', 'threshold'], ['benefits', 'pointsThreshold']] as const) {
-    for (const item of entities(rules[collection], `rules.${collection}`)) {
+    const entries = collection === 'benefits' ? (() => {
+      const seen = new Set<string>();
+      return list(rules[collection], `rules.${collection}`, false).map((entry, index) => {
+        const item = object(entry, `rules.${collection}[${index}]`);
+        const id = text(item.id, `rules.${collection}[${index}].id`);
+        if (!/^[a-z][a-z0-9-]*$/.test(id) || id.trim() !== id) fail(`rules.${collection}`, `el ID «${id}» no es válido.`);
+        if (seen.has(id)) fail(`rules.${collection}`, `el ID «${id}» está duplicado.`);
+        seen.add(id);
+        return item;
+      });
+    })() : entities(rules[collection], `rules.${collection}`);
+    for (const item of entries) {
       const path = `rules.${collection}.${item.id}`;
       fields(item, ['title', 'description'], path);
       integer(item[numeric], collection === 'benefits' ? 0 : 1, `${path}.${numeric}`);

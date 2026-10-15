@@ -98,7 +98,19 @@
     "chooseRequired": "Elegí una situación para continuar.",
     "previous": "Anterior",
     "reviewNext": "Revisar siguiente",
-    "locationIllustration": "No usamos tu ubicación para mostrar este lugar."
+    "locationIllustration": "No usamos tu ubicación para mostrar este lugar.",
+    "illustrativeProgress": "Progreso ilustrativo · {situation}",
+    "illustrativePoints": "Puntos ilustrativos",
+    "exampleBase": "Base de ejemplo: {baseline} puntos",
+    "savedJourneyPoints": "Puntos de tu recorrido guardado: {earned}",
+    "illustrativeExplanation": "La base cambia según la situación elegida; tus prácticas guardadas se conservan y suman puntos.",
+    "previewPoints": "Puntos del escenario",
+    "benefitsDisclaimer": "Beneficios ilustrativos, sin canje ni ofertas confirmadas.",
+    "benefitsEmpty": "No hay beneficios ilustrativos para mostrar.",
+    "benefitRemaining": "Te faltan {count} puntos para esta meta",
+    "benefitReached": "Meta ilustrativa alcanzada",
+    "viewAllBenefits": "Ver todos los beneficios",
+    "savedJourney": "Tu recorrido guardado"
   },
   "legal": {
     "illustrativeTraining": "No hagas ejercicios con dolor. Adaptá el movimiento a tus posibilidades y descansá cuando lo necesites. Consultá a una persona profesional para recibir orientación personal.",
@@ -1286,7 +1298,7 @@
     "continueLabel": "Continuar",
     "validationLabel": "Elegí una situación para continuar.",
     "editTitle": "Personalizá tu práctica",
-    "editInstructions": "Elegí tu preferencia para recibir recomendaciones para empezar, retomar o mantener tu práctica deportiva. Tu recorrido y tus logros se conservan.",
+    "editInstructions": "Elegí tu situación para cambiar la base ilustrativa de beneficios; tu recorrido guardado no cambia.",
     "choices": [
       {
         "id": "first",

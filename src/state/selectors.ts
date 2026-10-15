@@ -32,6 +32,32 @@ export function selectJourney(content: Content, envelope: Envelope, profileId: P
 }
 
 /** A projection is explicitly supplied; actual history/intention never enters this view. */
+export type BenefitPresentation = {
+  mode: 'actual' | 'preview';
+  journey: ReturnType<typeof selectJourney>;
+  baseline: number;
+  earnedPoints: number;
+  displayPoints: number;
+  benefits: (Content['rules']['benefits'][number] & { eligible: boolean; remaining: number })[];
+  selectedBenefit: (Content['rules']['benefits'][number] & { eligible: boolean; remaining: number }) | null;
+};
+
+/** Read-only point presentation: actual situations add an example baseline; previews never do. */
+export function selectBenefitPresentation(content: Content, envelope: Envelope, profileId: ProfileId, previewScenarioId?: string): BenefitPresentation | null {
+  const preview = previewScenarioId ? selectPreviewJourney(content, previewScenarioId) : null;
+  if (previewScenarioId && !preview) return null;
+  const actualProfileId = envelope.preference?.situationId ?? profileId;
+  const profile = content.profiles.find(item => item.id === actualProfileId)!;
+  const scenario = content.scenarios.profiles.find(item => item.id === profile.scenarioId)!;
+  const journey = preview ?? selectJourney(content, envelope, actualProfileId);
+  const baseline = preview ? 0 : scenario.history.length * content.rules.pointsPerCompletion;
+  const earnedPoints = preview ? 0 : journey.points;
+  const displayPoints = preview ? journey.points : baseline + earnedPoints;
+  const benefits = content.rules.benefits.map(benefit => ({...benefit, eligible: displayPoints >= benefit.pointsThreshold, remaining: Math.max(0, benefit.pointsThreshold - displayPoints)}));
+  const selectedBenefit = [...benefits].sort((a, b) => a.eligible !== b.eligible ? (a.eligible ? -1 : 1) : a.eligible ? b.pointsThreshold - a.pointsThreshold || a.id.localeCompare(b.id) : a.pointsThreshold - b.pointsThreshold || a.id.localeCompare(b.id))[0] ?? null;
+  return {mode: preview ? 'preview' : 'actual', journey, baseline, earnedPoints, displayPoints, benefits, selectedBenefit};
+}
+
 export function selectPreviewJourney(content: Content, scenarioId: string) {
   const scenario = content.previewScenarios.find(s => s.id === scenarioId);
   if (!scenario) return null;

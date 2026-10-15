@@ -264,3 +264,13 @@ test('content validation duration estimates reject missing duplicate invalid and
  }
  for(const plan of source.plans){const expected=plan.sportId==='swimming'?(plan.medium==='water'?[45,60]:[15]):[15,30];expect(plan.durationOptions).toEqual(expected);const c=clone();c.plans.find(p=>p.id===plan.id)!.durationOptions=[5];expect(()=>validateContent(c)).toThrow('durationOptions');}
 });
+
+test('content validation permits empty illustrative benefits and retains benefit safeguards', () => {
+ const empty=clone();empty.rules.benefits=[];expect(validateContent(empty).rules.benefits).toEqual([]);
+ for(const mutate of [
+  (c:Content)=>{c.rules.benefits[0].pointsThreshold=-1;},
+  (c:Content)=>{c.rules.benefits[0].redeemable=true as never;},
+  (c:Content)=>{c.rules.benefits[0].photo.path='https://example.com/a.jpg';},
+  (c:Content)=>{c.ui.illustrativePoints='';},
+ ]) expect(()=>{const c=clone();mutate(c);validateContent(c);}).toThrow();
+});
