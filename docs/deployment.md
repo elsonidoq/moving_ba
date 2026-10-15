@@ -13,8 +13,8 @@ booking, training-verification or partner service.
 | Project | moving_ba (`cc82d4e3-18c9-4bf6-93fc-f5cd9f58a05d`) |
 | Environment | production (`75f39978-e9e1-4019-8b04-b60308632dcd`) |
 | Service | moving_ba (`07c70e92-6e27-477f-a3e0-2264da1c8c9c`) |
-| Deployment | `6333c4d1-3417-474c-afe8-1774e23bf6f3` — **SUCCESS**, observed terminal-success |
-| Source | Clean main revision `91f0da5789f08c1ec393826960b63d5863e517d8`, uploaded from cwd |
+| Deployment | `a5472911-183b-499b-9d86-32aedace33e0` — **SUCCESS**, observed terminal-success |
+| Source | Clean main revision `c0d3500c3d08123d7d1d9ed2fb086ed35f9d3d37`, uploaded from cwd |
 | Region / replicas | us-east4-eqdc4a / 1 |
 | Domain target | 8080; domain ID `abf3962f-0602-4ae1-8dbf-a1d9055dfb94` |
 
@@ -157,6 +157,8 @@ is browser-origin-specific, not hosted state. If an old build cannot read a futu
 envelope, it offers scoped demo recovery rather than migration/global browser clearing.
 
 ## Live verification and limitations
+
+For deployment `a5472911-183b-499b-9d86-32aedace33e0`, the exact-ID Railway status was **SUCCESS** after uploading committed `c0d3500`. A fresh 360px Chromium session loaded the public HTTPS root (200), selected the returning situation, observed a 122px home motivation card, clicked it and confirmed the activities heading received focus and scrolled into view without changing the home route or raising page errors. Before upload, local build/typecheck, two focused 360/1280 browser interaction checks, and three existing profile-persistence browser checks passed. The Git push did not trigger deployment: this service is deployed by a targeted source upload.
 
 For deployment `6333c4d1-3417-474c-afe8-1774e23bf6f3`, the exact-ID Railway status was **SUCCESS**. HTTPS root, runtime JSON (`no-store`) and local coffee photo returned 200. A fresh 360px Chromium context selected `Entrenaba antes y quiero volver.` and `Ya estoy entrenando.` separately: Home showed exactly one coffee card and respectively `Te faltan 10 puntos.` and `Ya podés canjear este beneficio.` without the old panel or visible `ilustrativo` copy; each `Ver todos los beneficios` link opened three cards. Local source/config scans found no Spanish `ilustrativo/a(s)` text. Before upload, 137 core and 57 Chromium tests, typecheck and build passed; the final unused-content string change was followed by 111 focused content checks, typecheck and build, and fresh independent review found no issues. These are bounded checks, not real canje or universal browser/device proof.
 
