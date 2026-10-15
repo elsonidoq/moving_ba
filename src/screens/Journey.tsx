@@ -14,7 +14,7 @@ export default function Journey() {
     <dl className="journey-stats">
       <div><dt>{ui.sessions}</dt><dd data-stat="sessions">{journey.sessions}</dd></div>
       <div><dt>{ui.activeWeeks}</dt><dd data-stat="activeWeeks">{journey.activeWeeks}</dd></div>
-      <div><dt>{ui.points}</dt><dd data-stat="points">{journey.points}</dd></div>
+      <div><dt>{mode.kind === 'preview' ? ui.previewPoints : ui.savedJourneyPoints}</dt><dd data-stat="points">{journey.points}</dd></div>
     </dl>
     <section className="support"><h2>{ui.weeklyGoal}</h2><p data-stat="weeklyGoal">{journey.weeklySessions} / {journey.weeklyGoal}</p>
       <progress value={Math.min(journey.weeklySessions, journey.weeklyGoal)} max={journey.weeklyGoal} aria-label={ui.weeklyGoal} /><p>{ui.rest}</p>

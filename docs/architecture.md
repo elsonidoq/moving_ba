@@ -34,9 +34,13 @@ memory-only. Storage events for the demo key or clear invalidate all transients
 before reread and guarded actual landing. No multi-tab transaction promise.
 `selectors.ts` derives actual lifetime sessions/points/weeks/badges and BA current
 Monday-week/calendar-month progress without mutable counters. Interest/intention/chat
-never credit. Only bars cap. Explicit `selectPreviewJourney` instead builds a
-scenario-only projection at its configured reference date; profile subviews use it
-only in preview. Canonical actual records/envelope remain untouched. Profile combines that projection's
+never credit. Only bars cap. `selectBenefitPresentation` adds a read-only illustrative
+baseline from the confirmed situation's configured scenario history to those earned
+points in actual mode; it selects the highest eligible benefit (or nearest upcoming,
+then lexical ID) without persisting or fabricating records. Preview mode uses only
+`selectPreviewJourney` at its configured reference date, with no actual or baseline
+addition. Home, Profile and Benefits identify illustrative versus saved points; Journey
+continues to show earned saved-journey points. Canonical actual records/envelope remain untouched. Profile combines that projection's
 metrics with weekly progress and seven Monday–Sunday activity buckets. Buckets count
 unique source records by activityDate only through that projection's BA today, sum to
 weeklySessions, and have full Spanish weekday/date/count text equivalents. Empty weeks
@@ -114,7 +118,8 @@ visual correspondence; its separate `welcomePhoto` entry records the owner-appro
 GetYourGuide image source and hash without implying a Pexels license. Two separate
 `benefitPhotos` records cover the owner-permitted Turismo BA Jardín Japonés photo and
 a Pexels coffee JPEG; a third card reuses the original yoga-class photo. Benefits
-show actual local point progress and photos, not a redemption flow.
+show situation-led illustrative progress plus separately labeled saved points and local
+photos, not a redemption flow.
 Home uses the documented Buenos Aires park photo (Pexels 31414914) with a separate
 readable yellow copy panel, including saved-user and preview homes. Failed Home photos
 show a Spanish unavailable status without remote fallback.

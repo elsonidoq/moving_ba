@@ -23,7 +23,7 @@ HTML. IDs match `[a-z][a-z0-9-]*`, unique within collection, never labels/positi
 | exercises | id,sportId,title,quantity,technique,medium (dry-land/water),imageAsset (empty),imageAlt,imageId (null or image ID),imageStatus (unavailable/verified) |
 | plans | id,sportId,profileId,level,name,description,duration,durationOptions,environment,prerequisites,safetyCopy,medium,ordered steps `{id,exerciseId}` |
 | classes | id,sportId,title,schedule,venue,locality,level,requirements,description,receiver,contactCopy,price `{kind:free/paid,amount,currency:ARS}`,fictional:true |
-| rules | pointsPerCompletion nonnegative integer; challenges `{id,title,description,metric:sessions/activeWeeks,period:week/month,target}`; badges `{id,title,description,metric,threshold}`; benefits `{id,title,description,photo:{path,alt},disclaimer,pointsThreshold,redeemable:false}`; targets/thresholds positive except pointsThreshold nonnegative |
+| rules | pointsPerCompletion nonnegative integer; challenges `{id,title,description,metric:sessions/activeWeeks,period:week/month,target}`; badges `{id,title,description,metric,threshold}`; benefits (may be empty) `{id,title,description,photo:{path,alt},disclaimer,pointsThreshold,redeemable:false}`; targets/thresholds positive except pointsThreshold nonnegative |
 | scenarios | Retained legacy content fixtures: referenceDate, defaultProfileId:first, profiles `{id,profileId,history:[{id,sportId,planId,activityDate}]}`; not actual initialization/reset data |
 | previewScenarios | Exactly sustained/return/inactive/missed-class: id,title,disclosure,guidance,referenceDate,recommendationSituationId,kind (journey/notice),history; notice additionally chatId,notice,activationLabel |
 | chats | Exactly missed-class-chat/inactive-chat: id,scenarioId,introduction,disclosure,answers `{id,label,response,destinationId}` |
@@ -104,8 +104,11 @@ GetYourGuide source, owner-confirmed public-use permission and exact bytes; the 
 license label applies only to the original mockup set. Separate `benefitPhotos`
 records the owner-permitted Turismo BA Jardín Japonés photo and the Pexels coffee
 photo, including sources, bytes and hashes. The yoga benefit reuses the approved
-class photo. Benefit cards show actual in-app point progress, not issued tickets;
-canjes remain unavailable. Consume this evidence; no reacquisition or renewed
+class photo. Benefit cards show illustrative situation-led points: actual mode derives
+an example baseline from the selected profile scenario history plus saved earned points,
+while previews use only their scenario projection. Runtime `ui` labels identify the
+illustration, base, saved earned split, empty state and nonredeemable limitation; no
+configured threshold creates a ticket, offer or entitlement, and canjes remain unavailable. Consume this evidence; no reacquisition or renewed
 rights gate is required for unchanged assets.
 
 A verified assignment needs canonical allowlisted local path, exact subject,

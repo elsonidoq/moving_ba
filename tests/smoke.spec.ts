@@ -524,3 +524,43 @@ for(const width of [360,1280])for(const scenario of content.previewScenarios.fil
  await page.keyboard.press('Enter');await expect(page.locator('[data-notice-id],[data-preview-badge]')).toHaveCount(0);expect(await raw(page)).toBe(bytes);
  console.log('notice wallpaper geometry / matching chat / preset answers / bottom exit',width,scenario.id,chat.id,geometry,'screenshot',`${path}.png`);
 });
+
+test('illustrative edit complete persist', async ({page}) => {
+ await page.goto('/'); await choose(page,'returning');
+ await expect(page.locator('.benefit-summary')).toContainText('Puntos ilustrativos: 20');
+ const before=JSON.parse((await raw(page))!);
+ await page.getByRole('link',{name:content.ui.profileAccessibleName}).click(); await page.getByRole('button',{name:content.ui.editSituation}).click();
+ await page.getByRole('radio',{name:content.onboarding.choices.find(c=>c.id==='regular')!.label}).check(); await page.getByRole('button',{name:content.onboarding.continueLabel}).click();
+ const edited=JSON.parse((await raw(page))!); expect({...edited,preference:null}).toEqual({...before,preference:null}); expect(edited.preference).toEqual({situationId:'regular',confirmed:true});
+ await page.reload(); await expect(page.locator('.benefit-summary')).toContainText('Puntos ilustrativos: 40');
+ await page.goto('/#/sports/calisthenics/solo/cal-regular'); await page.getByRole('button',{name:content.ui.start}).click();
+ for(const step of content.plans.find(plan=>plan.id==='cal-regular')!.steps) await page.getByRole('button',{name:content.ui.completeStep}).click();
+ await page.goto('/#/profile'); await expect(page.locator('[data-stat="points"]')).toHaveText('50');
+ await page.goto('/#/home'); await expect(page.locator('.benefit-summary')).toContainText('Puntos de tu recorrido guardado: 10');
+});
+
+test('illustrative benefits show one home card and full truthful list', async ({page}) => {
+ await page.goto('/'); await choose(page,'returning');
+ await expect(page.locator('.home-benefit')).toHaveCount(1); await expect(page.locator('.home-benefit')).toContainText('Te faltan 10 puntos para esta meta');
+ await expect(page.locator('.home-benefit img')).toHaveAttribute('src','/assets/photos/benefit_coffee.jpg'); await expect(page.locator('[data-benefit-limitation]')).toContainText('sin canje');
+ await page.getByRole('link',{name:content.ui.viewAllBenefits}).click(); await expect(page.locator('[data-benefit-id]')).toHaveCount(content.rules.benefits.length); await expect(page.locator('[data-benefit-id="coffee"]')).toContainText('Te faltan 10 puntos para esta meta');
+});
+
+test('illustrative preview isolation', async ({page}) => {
+ await page.goto('/'); await choose(page,'regular'); const bytes=await raw(page);
+ await page.getByRole('link',{name:content.ui.profileAccessibleName}).click(); const scenario=content.previewScenarios.find(item=>item.id==='sustained')!; await page.getByRole('button',{name:scenario.title}).click();
+ await expect(page.locator('.benefit-summary')).toContainText('Puntos del escenario: 40'); await expect(page.locator('.benefit-summary')).not.toContainText('Puntos de tu recorrido guardado');
+ await page.getByRole('link',{name:content.ui.profileAccessibleName}).click(); await expect(page.locator('[data-stat="points"]')).toHaveText('40'); await expect(page.locator('main')).not.toContainText('Puntos de tu recorrido guardado');
+ await page.getByRole('button',{name:content.ui.exitPreview}).click(); expect(await raw(page)).toBe(bytes); await expect(page.locator('.benefit-summary')).toContainText('Puntos ilustrativos: 40');
+});
+
+test('illustrative visual accessibility captures', async ({page}) => {
+ for(const width of [360,1280]) { await page.setViewportSize({width,height:900}); await page.goto('/'); await page.evaluate(()=>localStorage.clear()); await page.reload(); await choose(page,'returning'); await page.screenshot({path:`/tmp/ba-situation-benefits/${width}-home.png`,fullPage:true}); await page.getByRole('link',{name:content.ui.profileAccessibleName}).click(); await page.screenshot({path:`/tmp/ba-situation-benefits/${width}-profile.png`,fullPage:true}); await page.getByRole('button',{name:content.ui.editSituation}).click(); await page.screenshot({path:`/tmp/ba-situation-benefits/${width}-edit.png`,fullPage:true}); await page.getByRole('button',{name:content.ui.cancel}).click(); await page.getByRole('link',{name:/Desafíos/}).click(); await page.screenshot({path:`/tmp/ba-situation-benefits/${width}-benefits.png`,fullPage:true}); expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true); }
+});
+
+test('illustrative benefits empty served configuration restores exact bytes', async ({page}) => {
+ const file='dist/config/app-content.json'; const original=readFileSync(file); const empty=structuredClone(content); empty.rules.benefits=[];
+ try { writeFileSync(file,JSON.stringify(empty)); await page.goto('/'); await choose(page,'first'); await expect(page.locator('.benefit-summary')).toContainText(content.ui.benefitsEmpty); await page.getByRole('link',{name:content.ui.viewAllBenefits}).click(); await expect(page.getByRole('status')).toHaveText(content.ui.benefitsEmpty); await expect(page.locator('[data-benefit-id]')).toHaveCount(0); }
+ finally { writeFileSync(file,original); }
+ expect(readFileSync(file).equals(original)).toBe(true);
+});

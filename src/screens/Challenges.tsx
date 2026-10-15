@@ -1,5 +1,5 @@
 import { useApp } from '../state/context';
-import { selectJourney, selectPreviewJourney } from '../state/selectors';
+import { selectBenefitPresentation } from '../state/selectors';
 import { routeHash } from '../state/navigation';
 
 function BadgeIcon({ trophy }: { trophy: boolean }) {
@@ -10,13 +10,15 @@ function BadgeIcon({ trophy }: { trophy: boolean }) {
 
 export default function Challenges() {
   const { content, route, envelope, mode } = useApp();
-  const journey = mode.kind === 'preview' ? selectPreviewJourney(content, mode.scenarioId)! : selectJourney(content, envelope, route.profileId);
+  const presentation = selectBenefitPresentation(content, envelope, route.profileId, mode.kind === 'preview' ? mode.scenarioId : undefined)!;
+  const journey = presentation.journey;
   const { ui } = content;
+  const situation = content.onboarding.choices.find(choice => choice.id === route.profileId)!.label;
   return <article className="rewards-page">
     <h1 tabIndex={-1}>{ui.challenges}</h1>
-    <section className="rewards-hero" aria-label={ui.points}>
+    <section className="rewards-hero" aria-label={presentation.mode === 'preview' ? ui.previewPoints : ui.illustrativePoints}>
       <span className="rewards-hero-icon" aria-hidden="true">✦</span>
-      <div><span>{ui.points}</span><strong data-stat="points">{journey.points}</strong><p>Cada práctica suma a tu camino.</p></div>
+      <div><span>{presentation.mode === 'preview' ? `Escenario simulado · ${ui.previewPoints}` : ui.illustrativeProgress.replace('{situation}',situation)}</span><strong data-stat="points">{presentation.displayPoints}</strong><p>{presentation.mode === 'preview' ? 'Ejemplo de un escenario simulado.' : ui.exampleBase.replace('{baseline}',String(presentation.baseline))}</p>{presentation.mode === 'actual' && <p>{ui.savedJourneyPoints.replace('{earned}',String(presentation.earnedPoints))}</p>}</div>
     </section>
     <h2 className="section-title">Desafíos para seguir</h2>
     <div className="challenge-list">{journey.challenges.map((rule, index) => <section className="challenge-tile" key={rule.id} data-challenge-id={rule.id}>
@@ -31,15 +33,16 @@ export default function Challenges() {
       <span className="badge-icon"><BadgeIcon trophy={index !== 0} /></span>
       <div><h3>{rule.title}</h3><p>{rule.description}</p><p className="badge-progress">{rule.earned ? ui.earned : ui.nextAchievement} · {rule.value} / {rule.threshold}</p></div>
     </section>)}</div>
-    <h2 className="section-title">{ui.benefits}</h2>
-    <div className="benefit-list">{journey.benefits.map(rule => <section className="benefit-card" key={rule.id} data-benefit-id={rule.id}>
+    <h2 className="section-title" id="benefits">{ui.benefits}</h2>
+    <div className="benefit-list">{presentation.benefits.map(rule => <section className="benefit-card" key={rule.id} data-benefit-id={rule.id}>
       <img src={rule.photo.path} alt={rule.photo.alt} loading="lazy" onError={event => { event.currentTarget.hidden = true; }} />
       <div className="benefit-copy"><h3>{rule.title}</h3><p>{rule.description}</p>
-        <span className="benefit-points">{rule.eligible ? 'Meta alcanzada' : `${Math.max(0, rule.pointsThreshold - journey.points)} puntos para la meta`}</span>
-        <progress value={Math.min(journey.points, rule.pointsThreshold)} max={Math.max(1, rule.pointsThreshold)} aria-label={`${rule.title}: ${journey.points} de ${rule.pointsThreshold} puntos`} />
+        <span className="benefit-points">{rule.eligible ? ui.benefitReached : ui.benefitRemaining.replace('{count}',String(rule.remaining))}</span>
+        <progress value={Math.min(presentation.displayPoints, rule.pointsThreshold)} max={Math.max(1, rule.pointsThreshold)} aria-label={`${rule.title}: ${presentation.displayPoints} de ${rule.pointsThreshold} puntos`} />
       </div>
     </section>)}</div>
-    <p className="benefit-availability" data-benefit-limitation>{content.legal.nonredeemable}</p>
+    {!presentation.benefits.length && <p role="status">{ui.benefitsEmpty}</p>}
+    <p className="benefit-availability" data-benefit-limitation>{ui.benefitsDisclaimer}</p>
     <a className="button-link" href={routeHash({screen:'journey',profileId:route.profileId})}>{ui.journey}</a>
   </article>;
 }
