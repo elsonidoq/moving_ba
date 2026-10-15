@@ -20,3 +20,21 @@ Canonical register for verified unresolved work, maintained through installed
   inspect affected advisories and production/development reachability, then obtain
   approval for any dependency changes and rerun affected build/browser checks.
   Do not apply `npm audit fix --force` blindly.
+
+### OI-2 — Add explicit load-failure feedback for plan thumbnails
+
+- **Status**: open
+- **Classification**: bug
+- **Problem**: Exercise thumbnails in the plan overview show the Spanish unavailable-image
+  state only when no configured path exists. If a configured local JPEG fails to load,
+  the browser displays a broken image instead of the explicit unavailable state used by
+  the active-session screen. Exercise instructions remain visible and no remote fallback
+  occurs.
+- **Primary evidence**: `src/screens/Plan.tsx` renders step images without an `onError`
+  state, while `src/screens/Session.tsx` handles image errors and renders
+  `ui.imageUnavailable`. Final independent review at implementation commit
+  `d6ca077011868ce4a9079d8a84a69cc4080ca45b` classified this as a non-blocking P2 finding.
+- **Resumption condition**: Add bounded per-thumbnail load-failure state or a shared local
+  image component, preserve the step instructions, and add a browser assertion that a
+  failed local thumbnail request produces the Spanish unavailable message without a
+  remote request or fallback.
