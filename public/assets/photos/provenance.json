@@ -6,6 +6,15 @@
   },
   "manifest": "docs/mockup_ba_te_mueve/assets/image_manifest.json",
   "licenseLabel": "Pexels License (consultar términos)",
+  "welcomePhoto": {
+    "path": "/assets/photos/welcome_obelisk.jpg",
+    "alt": "Obelisco y avenida 9 de Julio en Buenos Aires",
+    "source": "https://cdn.getyourguide.com/image/format=avif%2Cfit=cover%2Cgravity=auto%2Cquality=60%2Cwidth=1280%2Cheight=1280/dam/BCC-2024-EXPLORER-BUENOS%20AIRES-LANDMARKS-HEADER-%20MOBILE.jpg",
+    "permission": "Owner confirmed permission to publicly serve this exact image in the current Pi session; no third-party license terms inferred",
+    "byteLength": 201566,
+    "sha256": "f3c35a1561f07ed550991419b4feadaedb7fd1694d8dc498c08d830f423fccd2",
+    "dimensions": { "width": 1280, "height": 1280 }
+  },
   "assets": [
     {
       "manifestKey": "city_hero",

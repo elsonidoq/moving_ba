@@ -87,13 +87,15 @@ Edit UTF-8 `public/config/app-content.json` following the
 screens; runtime fetch and HTTP response are no-store. Missing/malformed/invalid JSON
 blocks with Spanish error/retry, never plausible fallback. Dev serves public directly;
 built serving requires rebuilding after source edits. There is no CMS/live editor.
-All 29 approved mockup photos are bundled JPEGs. Exercise assignments remain in runtime
-JSON and are restricted by the developer allowlist; onboarding, Home, notice, sport and class
-photos use the static `src/content/mockupPhotos.ts` mapping. Plans show exercise thumbnails
+All 29 approved mockup photos remain bundled JPEGs, alongside one separately approved
+Obelisk welcome photo. Exercise assignments remain in runtime JSON and are restricted by
+the developer allowlist; welcome, Home, notice, sport and class photos use the static
+`src/content/mockupPhotos.ts` mapping. Plans show exercise thumbnails
 before Start and sessions retain snapshot images. Source/license/correspondence evidence is
 in [photo provenance](public/assets/photos/provenance.json). Source URLs are metadata,
 never remote fallbacks. Home shows the documented Buenos Aires park photo (31414914)
-on actual and preview entry. The app header stays pinned with clear back/focus spacing;
+on actual and preview entry; welcome uses the owner-permitted Obelisk photograph.
+The app header stays pinned with clear back/focus spacing;
 there is no repeated disclaimer footer, while local safety and simulation context remain. Missing/unverified exercise photos preserve instructions with
 honest unavailable feedback. No photo reacquisition is needed.
 

@@ -16,7 +16,7 @@ test('one-person onboarding profile exact unselected choices and no identity inf
  await page.goto('/#/regular/yoga/solo/yoga-regular');
  await expect(page.getByRole('heading',{level:1})).toHaveText(content.branding.name);
  await expect(page.getByRole('radio')).toHaveCount(0);await expect(page.getByRole('navigation',{name:'Principal'})).toHaveCount(0);
- await expect(page.locator('.city-hero')).toHaveAttribute('alt','Ciudad y parques de Buenos Aires');
+ await expect(page.locator('.city-hero')).toHaveAttribute('alt','Obelisco y avenida 9 de Julio en Buenos Aires');
  const before=await raw(page);expect(before).toBeNull();await page.evaluate(()=>localStorage.setItem('unrelated','sentinel'));
  for(const action of ['back','reload','reentry']){
   await page.getByRole('button',{name:content.onboarding.startLabel,exact:true}).click();
@@ -324,13 +324,13 @@ test('one-person onboarding profile imported completion success keys retain coll
  const after=JSON.parse((await raw(page))!);for(const [key,record] of Object.entries(JSON.parse(bytes!).journey))expect(after.journey[key]).toEqual(record);expect(Object.keys(after.journey)).toHaveLength(7);console.log('F2 preserved 6 imported records, actual completion render/reload',id,'original bytes',bytes);
 });
 
-import { mockupPhotos, sportPhotos, classPhotos } from '../src/content/mockupPhotos';
+import { mockupPhotos, sportPhotos, classPhotos, welcomePhoto } from '../src/content/mockupPhotos';
 for(const width of [360,1280])test(`all mockup photo roles exact local delivery layout and preview ${width}`,async({page,request})=>{
  test.setTimeout(120000);const folder='/tmp/ba-all-photos';mkdirSync(folder,{recursive:true});await page.setViewportSize({width,height:900});
  const remote:string[]=[];page.on('request',r=>{if(r.resourceType()==='image'&&!r.url().startsWith('http://127.0.0.1:4173/'))remote.push(r.url());});
  async function photo(selector:string,src:string,alt:string){const img=page.locator(selector);await expect(img).toHaveAttribute('src',src);await expect(img).toHaveAttribute('alt',alt);const d=await img.evaluate(async(i:HTMLImageElement)=>{await i.decode();const b=i.getBoundingClientRect();return{width:i.naturalWidth,height:i.naturalHeight,w:b.width,h:b.height,fit:getComputedStyle(i).objectFit};});expect(d.width).toBeGreaterThan(0);expect(d.height).toBeGreaterThan(0);expect(d.w).toBeGreaterThan(40);expect(d.h).toBeGreaterThan(40);return d;}
  async function shot(name:string){expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(await page.locator('.app').evaluate(e=>getComputedStyle(e).overflowY)).not.toBe('hidden');await page.screenshot({path:`${folder}/${width}-${name}.png`,fullPage:true});}
- await page.goto('/');await photo('.city-hero',mockupPhotos.city_hero.src,mockupPhotos.city_hero.alt);await shot('onboarding');await choose(page);
+ await page.goto('/');await photo('.city-hero',welcomePhoto.src,welcomePhoto.alt);await shot('onboarding');await choose(page);
  for(const sport of content.sports)await photo(`[data-sport-card="${sport.id}"] img`,sportPhotos[sport.id].card.src,sportPhotos[sport.id].card.alt);await shot('home');
  await page.goto('/#/sports');for(const [n,sport] of content.sports.entries())await photo(`.sport-card:nth-child(${n+1}) img`,sportPhotos[sport.id].card.src,sportPhotos[sport.id].card.alt);await shot('sports');
  for(const sport of content.sports){

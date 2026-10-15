@@ -205,7 +205,7 @@ test('content validation editor handoff documents one-person empty reset and tra
  expect(readme).toContain('empty');expect(guide).toContain('empty');expect(readme).not.toContain('restore all three\nfixtures');
 });
 
-import { mockupPhotos, sportPhotos, classPhotos } from '../src/content/mockupPhotos';
+import { mockupPhotos, sportPhotos, classPhotos, welcomePhoto } from '../src/content/mockupPhotos';
 import { createHash } from 'node:crypto';
 test('all 29 mockup JPEG keys have intended exact local uses and factual provenance', () => {
  const manifest=JSON.parse(readFileSync('docs/mockup_ba_te_mueve/assets/image_manifest.json','utf8'));
@@ -232,9 +232,15 @@ test('all 29 mockup JPEG keys have intended exact local uses and factual provena
  expect(classPhotos['cal-free'].src).toContain('cali_class_a');expect(classPhotos['cal-paid'].src).toContain('cali_class_b');
  expect(classPhotos['yoga-free'].src).toContain('yoga_class_a');expect(classPhotos['yoga-paid'].src).toContain('yoga_class_b');
  expect(classPhotos['swim-paid'].src).toContain('swim_class_a');expect(classPhotos['swim-free'].src).toContain('swim_class_b');
- for(const screen of ['Home','Sports','SportChoice','ClassCatalog','ClassDetail','Plan','Onboarding','Notice']){
+ for(const screen of ['Home','Sports','SportChoice','ClassCatalog','ClassDetail','Plan','Notice']){
   const code=readFileSync(`src/screens/${screen}.tsx`,'utf8');expect(code).not.toContain('heroAsset');expect(code).toContain('mockupPhotos');
  }
+ expect(readFileSync('src/screens/Onboarding.tsx','utf8')).toContain('welcomePhoto');
+ const welcome=JSON.parse(readFileSync('public/assets/photos/provenance.json','utf8')).welcomePhoto;
+ const welcomeBytes=readFileSync('public'+welcomePhoto.src);
+ expect(welcomePhoto.alt).toBe(welcome.alt);expect(welcome.path).toBe(welcomePhoto.src);
+ expect(welcomeBytes.length).toBe(welcome.byteLength);
+ expect(createHash('sha256').update(welcomeBytes).digest('hex')).toBe(welcome.sha256);
  expect(readFileSync('src/screens/Plan.tsx','utf8')).toContain('step-photo');
  expect(content.images.every(i=>i.subject.kind==='exercise')).toBe(true);
 });

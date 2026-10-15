@@ -19,6 +19,12 @@ export const mockupPhotos = {
   swim_class_b: { src: "/assets/photos/swim_class_b.jpg", alt: "Grupo de nadadores entrenando en pileta" },
 } as const satisfies Record<string, MockupPhoto>;
 
+/** Separately approved welcome photo; the original mockup photo set is unchanged. */
+export const welcomePhoto: MockupPhoto = {
+  src: "/assets/photos/welcome_obelisk.jpg",
+  alt: "Obelisco y avenida 9 de Julio en Buenos Aires",
+};
+
 export const sportPhotos: Record<SportId, { card: MockupPhoto; hero: MockupPhoto }> = {
   calisthenics: { card: mockupPhotos.cali_card, hero: mockupPhotos.cali_hero },
   yoga: { card: mockupPhotos.yoga_card, hero: mockupPhotos.yoga_hero },

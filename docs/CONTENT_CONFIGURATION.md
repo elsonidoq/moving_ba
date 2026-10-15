@@ -87,19 +87,21 @@ approval. Reusing an exercise JPEG is permitted only for explicitly listed equiv
 subjects. Do not infer correspondence from filenames/IDs: visible text matches actual
 posture/equipment and stable IDs remain unchanged.
 
-Onboarding, Home, notice, sport-card/hero and class photos are deliberately not JSON fields.
-`src/content/mockupPhotos.ts` statically maps those 14 visual assets to the existing
-components and stable sport/class IDs. Home uses the documented Buenos Aires city_park
-photo (31414914), with readable yellow text and local unavailable feedback. Add or rename those product records only with a
-matching code-map change; an unknown class shows honest unavailable feedback rather than
-a different photo. The three SVGs remain general environment assets and cannot substitute
+Welcome, Home, notice, sport-card/hero and class photos are deliberately not JSON fields.
+`src/content/mockupPhotos.ts` retains the original 14 mockup-role assets and separately maps
+an owner-permitted Obelisk welcome JPEG. Home still uses the documented Buenos Aires
+city_park photo (31414914), with readable yellow text and local unavailable feedback.
+Add or rename those product records only with a matching code-map change; an unknown
+class shows honest unavailable feedback rather than a different photo. The three SVGs remain general environment assets and cannot substitute
 on a photo-required surface.
 
 The [photo provenance](../public/assets/photos/provenance.json) records owner-satisfied
 permission for the complete set, original Pexels URLs, exact license label
 `Pexels License (consultar términos)`, acquisition/bytes/hashes/decoding/serving and
-visual correspondence observations. Consume that evidence; no reacquisition or renewed
-rights gate is required for unchanged assets.
+visual correspondence observations. Its separate `welcomePhoto` entry records the
+GetYourGuide source, owner-confirmed public-use permission and exact bytes; the Pexels
+license label applies only to the original mockup set. Consume that evidence; no
+reacquisition or renewed rights gate is required for unchanged assets.
 
 A verified assignment needs canonical allowlisted local path, exact subject,
 licenseStatus:verified, matching evidence and exercise imageStatus:verified. Spanish

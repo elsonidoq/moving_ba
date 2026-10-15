@@ -100,13 +100,16 @@ Representative 360/1280 keyboard/visual checks are not universal accessibility p
 
 All 29 approved mockup photos are bundled local JPEGs. The 15 unique exercise photos use
 runtime JSON assignments bounded by the developer-controlled path/subject allowlist in
-`content/images.ts`, not JSON self-approval. The 14 onboarding, Home, notice, sport and class
-photos use the small static `content/mockupPhotos.ts` map; shared components reuse those
-stable paths in actual and preview destinations. Plans show exercise thumbnails before
+`content/images.ts`, not JSON self-approval. The 14 original mockup-role photos use the
+small static `content/mockupPhotos.ts` map; a separately approved local Obelisk JPEG
+is used only on the welcome screen. Shared components reuse stable paths in actual
+and preview destinations. Plans show exercise thumbnails before
 Start and sessions retain snapshot images. The three legacy SVGs remain available only as
 general environment art and are not used on photo-required surfaces. The
 [provenance record](../public/assets/photos/provenance.json) retains owner-satisfied
-permission, original Pexels/license metadata, byte hashes and visual correspondence.
+permission, original Pexels/license metadata for the mockup set, byte hashes and
+visual correspondence; its separate `welcomePhoto` entry records the owner-approved
+GetYourGuide image source and hash without implying a Pexels license.
 Home uses the documented Buenos Aires park photo (Pexels 31414914) with a separate
 readable yellow copy panel, including saved-user and preview homes. Failed Home photos
 show a Spanish unavailable status without remote fallback.
