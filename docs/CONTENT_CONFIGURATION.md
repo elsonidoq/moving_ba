@@ -35,7 +35,7 @@ all nine category/sport dry plans and three swimming-water variants. Default and
 chat plans must be safe dry plans in the correct category/sport. Water exercises
 only enter swimming-water plans; dry warmups may enter water plans. Both runtime
 swimming affirmations remain mandatory regardless of copy. Each sport needs free
-(amount 0) and paid (finite positive amount) ARS fictional examples. Receiver stays `A confirmar`; saved interest does not send a contact or make a booking.
+(amount 0) and paid (finite positive amount) ARS class entries. Receiver metadata remains stored but is not rendered; saved interest does not send a contact or make a booking.
 
 Plan `durationOptions` is a display-only ordered numeric list: exactly `[15,30]` for
 yoga/calisthenics, `[45,60]` for swimming water and `[15]` for separate dry preparation.
@@ -47,7 +47,7 @@ Selection is local to the Plan view and resets on leave/change/reload, not saved
 
 Profile headings/empty/count copy use `ui.recentActivity`, `activityEmpty`,
 `weeklyCount` (`{count}` and `{goal}`) and `activityCount` (`{count}`). Bars derive from
-the selected actual/preview projection, never editable fictional counters. Keep placeholders.
+the selected actual/preview projection, never editable counters. Keep placeholders.
 
 Welcome uses branding name/tagline and onboarding.startLabel; selection title is
 `Contanos sobre vos`. Selection instructions and direct profile-edit title/instructions
@@ -60,7 +60,7 @@ Exact onboarding labels (not freely replaceable):
 - `Ya estoy entrenando.`
 
 Exact scenario titles: `Entrenamiento sostenido`, `Volver después de una pausa`,
-`Dejó de entrenar y de usar la app`, `Pensaba asistir a una clase, pero no fue`.
+`Quiero volver a moverme`, `No pude ir a una clase`.
 Dates are valid YYYY-MM-DD and history cannot exceed referenceDate; sustained spans
 multiple weeks, return precedes its reference. Guidance/notice/disclosure are editable.
 
@@ -104,11 +104,7 @@ GetYourGuide source, owner-confirmed public-use permission and exact bytes; the 
 license label applies only to the original mockup set. Separate `benefitPhotos`
 records the owner-permitted Turismo BA Jardín Japonés photo and the Pexels coffee
 photo, including sources, bytes and hashes. The yoga benefit reuses the approved
-class photo. Benefit cards show illustrative situation-led points: actual mode derives
-an example baseline from the selected profile scenario history plus saved earned points,
-while previews use only their scenario projection. Runtime `ui` labels identify the
-illustration, base, saved earned split, empty state and nonredeemable limitation; no
-configured threshold creates a ticket, offer or entitlement, and canjes remain unavailable. Consume this evidence; no reacquisition or renewed
+class photo. Benefit cards show situation-led points: actual mode derives a baseline from the selected profile scenario history plus saved earned points, while previews use only their scenario projection. Runtime labels present natural point totals and eligibility; no configured threshold creates a ticket, offer, entitlement, or redemption operation. Consume this evidence; no reacquisition or renewed
 rights gate is required for unchanged assets.
 
 A verified assignment needs canonical allowlisted local path, exact subject,

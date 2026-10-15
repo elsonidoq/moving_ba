@@ -16,9 +16,9 @@ export default function Challenges() {
   const situation = content.onboarding.choices.find(choice => choice.id === route.profileId)!.label;
   return <article className="rewards-page">
     <h1 tabIndex={-1}>{ui.challenges}</h1>
-    <section className="rewards-hero" aria-label={presentation.mode === 'preview' ? ui.previewPoints : ui.illustrativePoints}>
+    <section className="rewards-hero" aria-label={ui.points}>
       <span className="rewards-hero-icon" aria-hidden="true">✦</span>
-      <div><span>{presentation.mode === 'preview' ? `${ui.scenarioSimulated} · ${ui.previewPoints}` : ui.illustrativeProgress.replace('{situation}',situation)}</span><strong data-stat="points">{presentation.displayPoints}</strong><p>{presentation.mode === 'preview' ? ui.previewExplanation : ui.exampleBase.replace('{baseline}',String(presentation.baseline))}</p>{presentation.mode === 'actual' && <p>{ui.savedJourneyPoints.replace('{earned}',String(presentation.earnedPoints))}</p>}</div>
+      <div><span>{presentation.mode === 'preview' ? ui.scenarioSimulated : ui.illustrativeProgress.replace('{situation}',situation)}</span><strong data-stat="points">{presentation.displayPoints}</strong><p>{presentation.mode === 'preview' ? ui.previewExplanation : ui.exampleBase.replace('{baseline}',String(presentation.baseline))}</p>{presentation.mode === 'actual' && <p>{ui.savedJourneyPoints.replace('{earned}',String(presentation.earnedPoints))}</p>}</div>
     </section>
     <h2 className="section-title">Desafíos para seguir</h2>
     <div className="challenge-list">{journey.challenges.map((rule, index) => <section className="challenge-tile" key={rule.id} data-challenge-id={rule.id}>
@@ -42,7 +42,6 @@ export default function Challenges() {
       </div>
     </section>)}</div>
     {!presentation.benefits.length && <p role="status">{ui.benefitsEmpty}</p>}
-    <p className="benefit-availability" data-benefit-limitation>{ui.benefitsDisclaimer}</p>
     <a className="button-link" href={routeHash({screen:'journey',profileId:route.profileId})}>{ui.journey}</a>
   </article>;
 }

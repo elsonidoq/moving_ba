@@ -573,3 +573,41 @@ test('illustrative benefits empty served configuration restores exact bytes', as
  finally { writeFileSync(file,original); }
  expect(readFileSync(file).equals(original)).toBe(true);
 });
+
+test('natural configuration recovery', async ({ page }) => {
+  const failure = 'No pudimos cargar el contenido. Intentá de nuevo en unos momentos.';
+  for (const response of [undefined, '{', JSON.stringify({ schemaVersion: 2 })]) {
+    let valid = false;
+    await page.route('**/config/app-content.json', route => valid ? route.continue() : response === undefined ? route.abort() : route.fulfill({ contentType: 'application/json', body: response }));
+    await page.goto('/');
+    await expect(page.getByRole('alert')).toContainText(failure);
+    await expect(page.getByRole('button', { name: 'Intentar de nuevo', exact: true })).toBeVisible();
+    await expect(page.locator('main')).not.toContainText(/config|schema|JSON|404/i);
+    valid = true;
+    await page.getByRole('button', { name: 'Intentar de nuevo', exact: true }).click();
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(content.branding.name);
+    await page.unroute('**/config/app-content.json');
+  }
+});
+
+test('natural benefits and class planning confirmation', async ({ page }) => {
+  await page.goto('/'); await choose(page, 'returning');
+  const home = page.locator('.home-benefits');
+  await expect(home.locator('[data-benefit-id]')).toHaveCount(1);
+  await expect(home).toContainText('Te faltan 10 puntos.');
+  await expect(home.locator('p')).toHaveCount(0);
+  await expect(home.locator('progress')).toHaveCount(0);
+  await expect(page.locator('.benefit-summary,[data-benefit-limitation]')).toHaveCount(0);
+  await page.getByRole('link', { name: content.ui.viewAllBenefits, exact: true }).click();
+  await expect(page.locator('[data-benefit-id]')).toHaveCount(3);
+  await expect(page.locator('[data-benefit-id="coffee"]')).toContainText('Te faltan 10 puntos.');
+  await page.goto('/#/sports/yoga/classes/yoga-free');
+  await expect(page.locator('[data-detail-class-id]')).not.toContainText(content.ui.intentionNotice);
+  await expect(page.locator('[data-detail-class-id]')).not.toContainText('A confirmar');
+  await page.getByRole('button', { name: content.ui.interest, exact: true }).click();
+  await expect(page.getByRole('status')).toHaveText(content.ui.interestSuccess);
+  await page.getByRole('button', { name: content.ui.intention, exact: true }).click();
+  await expect(page.getByRole('status').filter({ hasText: content.ui.intentionNotice })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('status').filter({ hasText: content.ui.intentionNotice })).toBeVisible();
+});

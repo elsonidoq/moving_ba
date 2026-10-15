@@ -276,15 +276,13 @@ button.chat-option[aria-pressed="true"] { border-color: #a88d00; background: #ff
 .benefit-copy { padding: 15px 17px 17px; }
 .benefit-points { display: inline-block; border-radius: 99px; background: #fff2ad; color: #463c12; padding: 7px 12px; font-size: 12px; font-weight: 800; }
 .benefit-card progress { display: block; width: 100%; margin-top: 12px; }
-.benefit-availability { margin: 14px 0 21px; font-size: 12px; color: #526368; }
 @media (min-width: 520px) {
   .benefit-card { display: grid; grid-template-columns: 42% 1fr; min-height: 170px; }
   .benefit-card > img { height: 170px; min-height: 0; }
   .benefit-copy { display: flex; flex-direction: column; justify-content: center; }
 }
 
-.benefit-summary { margin: 20px 0; padding: 18px; border: 1px solid #e5ca43; border-radius: 20px; background: #fff9dc; }
-.benefit-summary h2 { margin: 6px 0 10px; }
-.benefit-summary > p { font-size: 13px; margin: 8px 0; }
-.home-benefit { margin: 14px 0; }
-.benefit-summary .button-link { margin-top: 12px; }
+.home-benefits { margin: 20px 0; }
+.home-benefit { margin: 0 0 12px; }
+.home-benefit .benefit-copy { padding: 12px 15px; }
+.home-benefit h2 { margin: 0 0 8px; font-size: 18px; }

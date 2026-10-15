@@ -12,7 +12,6 @@ export default function ClassCatalog() {
     <h1 tabIndex={-1}>{ui.classCatalog}</h1>
     {sport && <div className="sport-hero compact"><img src={sportPhotos[sport.id].hero.src} alt={sportPhotos[sport.id].hero.alt} /></div>}
     {route.screen === 'classes' && <nav className="class-filters" aria-label={ui.chooseSport}><a href="#/classes" aria-current={!sport?'page':undefined}>{ui.classes}</a>{content.sports.map(s=><a key={s.id} href={routeHash({screen:'classes',profileId:route.profileId,sportId:s.id})} aria-current={sport?.id===s.id?'page':undefined}>{s.name}</a>)}</nav>}
-    <p className="safety">{content.legal.fictionalClasses}</p>
     <div className="class-list">
       {content.classes.filter(item => !sport || item.sportId === sport.id).map(item => <article key={item.id} className="class-card" data-class-id={item.id}>
         {classPhotos[item.id] ? <img className="class-photo" src={classPhotos[item.id].src} alt={classPhotos[item.id].alt} /> : <p className="muted">{ui.imageUnavailable}</p>}
@@ -23,7 +22,6 @@ export default function ClassCatalog() {
           <div><dt>{ui.venue}</dt><dd>{item.venue}</dd></div>
           <div><dt>{ui.locality}</dt><dd>{item.locality}</dd></div>
           <div><dt>{ui.level}</dt><dd>{item.level}</dd></div>
-          <div><dt>{ui.receiver}</dt><dd>{item.receiver}</dd></div>
         </dl>
         <h3>{ui.requirements}</h3><ul>{item.requirements.map(text => <li key={text}>{text}</li>)}</ul>
         <p className="muted">{item.contactCopy}</p>

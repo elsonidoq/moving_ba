@@ -22,7 +22,7 @@ export default function SportChoice() {
     </a>
     <a className="route-card classes" href={routeHash({ screen: 'catalog', profileId: route.profileId, sportId: sport.id, mode: 'classes' })}>
       <span className="route-icon" aria-hidden="true">+</span>
-      <span><strong>{ui.classes}</strong><span>{ui.classesDescription}</span><small>{content.legal.fictionalClasses}</small></span>
+      <span><strong>{ui.classes}</strong><span>{ui.classesDescription}</span></span>
       <span className="chevron" aria-hidden="true">›</span>
     </a>
     <section className="support"><h2>{ui.environment}</h2><p>{sport.facilities}</p><ul>{sport.tips.map(tip => <li key={tip}>{tip}</li>)}</ul></section>

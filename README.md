@@ -1,8 +1,7 @@
 # Buenos Aires te mueve
 
-Spanish-language conceptual demo for one person's movement journey, not an official
-service. Practices, classes, contacts, intentions and rewards are simulations. No
-booking, attendance verification, AI, push, backend, account or live integration.
+Spanish-language movement experience for one person. It has no booking, attendance
+verification, AI, push, backend, account, or live integration.
 [Deployment](docs/deployment.md) owns the verified Railway production release,
 including its public URL and bounded live checks.
 
@@ -37,7 +36,7 @@ file listing. Hash navigation needs no server rewrite.
    Inicio recommends practices; Deportes opens all three sports; Clases explores all
    fictional free/paid ARS examples. The circular top-right control opens Perfil.
 2. In exact class detail, interest and **Voy a ir** are distinct. The latter saves one
-   simulated upcoming card on actual home; another choice replaces it without credit.
+   upcoming class card on actual home; another choice replaces it without credit.
 3. Plan offers **Duración estimada**: 15/30 min for yoga/calisthenics and 45/60 min
    for swimming water, with separate 15 min dry preparation. The shorter estimate is
    default; selection is display-only and resets on leave/change/reload. Exercises,
@@ -47,13 +46,13 @@ file listing. Hash navigation needs no server rewrite.
    start requires both autonomous ability and a permitted supervised pool with
    guardavidas/rules, rechecked at the command boundary. Dry/instructor options remain.
 4. Perfil groups saved sessions, weekly progress and Monday–Sunday activity bars,
-   plus situation editing, history, challenges and achievements. The illustrative
-   benefit points shown on Inicio, Perfil and Challenges equal the selected situation's
-   example base (currently 0/20/40) plus points from saved completions. Inicio shows
+   plus situation editing, history, challenges and achievements. Benefit points shown
+   on Inicio, Perfil and Challenges equal the selected situation baseline (currently
+   0/20/40) plus points from saved completions. Inicio shows
    one reached benefit or the nearest upcoming goal and links to all three photo-led
-   examples (coffee, Jardín Japonés and yoga); canjes are not enabled. Editing the
+   examples (coffee, Jardín Japonés and yoga); eligibility is display-only. Editing the
    situation changes the example base, not saved history or intention. Recorrido
-   shows saved-history points separately. Four named scenarios are deliberate **same-person previews**.
+   shows saved-history points separately. Four named scenarios are deliberate same-person previews.
    Sustained/return examples use configured dates/history, never actual records.
    The two notice scenarios show a wallpaper/clock/card composition without a top
    banner; each card opens its matching structured chat with four/five answer choices.

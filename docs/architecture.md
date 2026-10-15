@@ -34,13 +34,12 @@ memory-only. Storage events for the demo key or clear invalidate all transients
 before reread and guarded actual landing. No multi-tab transaction promise.
 `selectors.ts` derives actual lifetime sessions/points/weeks/badges and BA current
 Monday-week/calendar-month progress without mutable counters. Interest/intention/chat
-never credit. Only bars cap. `selectBenefitPresentation` adds a read-only illustrative
-baseline from the confirmed situation's configured scenario history to those earned
+never credit. Only bars cap. `selectBenefitPresentation` adds a read-only situation baseline from the confirmed situation's configured scenario history to those earned
 points in actual mode; it selects the highest eligible benefit (or nearest upcoming,
 then lexical ID) without persisting or fabricating records. Preview mode uses only
 `selectPreviewJourney` at its configured reference date, with no actual or baseline
-addition. Home, Profile and Benefits identify illustrative versus saved points; Journey
-continues to show earned saved-journey points. Canonical actual records/envelope remain untouched. Profile combines that projection's
+addition. Home, Profile and Benefits present natural point totals; Journey
+continues to show points from recorded practices. Canonical actual records/envelope remain untouched. Profile combines that projection's
 metrics with weekly progress and seven Monday–Sunday activity buckets. Buckets count
 unique source records by activityDate only through that projection's BA today, sum to
 weeklySessions, and have full Spanish weekday/date/count text equivalents. Empty weeks
@@ -80,7 +79,7 @@ Plan-local semantic selectors default to the shorter estimate; leaving/changing 
 reload resets selection. SportChoice summarizes both swimming paths distinctly. No
 exercise, command, attempt snapshot, Session duration, timer or credit rule changes.
 
-Profile-entered scenarios are one person's transient demonstrations. Journey scenarios
+Profile-entered scenarios are one person's transient previews. Journey scenarios
 show sustained progress/supportive return; notice scenarios open
 `#/notice/:scenarioId` with an image-backed translucent activation card, then `#/chat/:chatId` directly, with matching active context.
 Forged notice/chat hashes never activate preview. Exactly five missed-class/four
@@ -117,9 +116,7 @@ permission, original Pexels/license metadata for the mockup set, byte hashes and
 visual correspondence; its separate `welcomePhoto` entry records the owner-approved
 GetYourGuide image source and hash without implying a Pexels license. Two separate
 `benefitPhotos` records cover the owner-permitted Turismo BA Jardín Japonés photo and
-a Pexels coffee JPEG; a third card reuses the original yoga-class photo. Benefits
-show situation-led illustrative progress plus separately labeled saved points and local
-photos, not a redemption flow.
+a Pexels coffee JPEG; a third card reuses the original yoga-class photo. Benefits show situation-led point totals and local photos, with display-only eligibility and no redemption flow.
 Home uses the documented Buenos Aires park photo (Pexels 31414914) with a separate
 readable yellow copy panel, including saved-user and preview homes. Failed Home photos
 show a Spanish unavailable status without remote fallback.
@@ -135,8 +132,7 @@ the verified production release of this feature and its bounded live checks.
 helpers; serial Chromium tests own built port 4173 and compare actual raw bytes/rendered
 outcomes. Served JSON/photo recovery restores exact bytes in finally. Required evidence
 and implementation checkpoints are returned for independent review, not self-awarded
-acceptance or live-service claims. All training/classes/contact/rewards remain fictional,
-nonofficial, professional-review/no-booking/nonredeemable demonstrations.
+acceptance or live-service claims. Practices remain local guided flows; class interests and intentions stay local, benefits are display-only, and no external transaction is made.
 
 ## Historical initialization and planning provenance
 
