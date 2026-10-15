@@ -50,7 +50,7 @@ export interface Content {
   branding: { name: string; tagline: string; demoNotice: string };
   ui: UI;
   legal: Record<'illustrativeTraining' | 'professionalReview' | 'fictionalClasses' | 'noOfficialStatus' | 'nonredeemable' | 'noAgreement' | 'locationNotice', string>;
-  onboarding: { title: string; instructions: string; continueLabel: string; validationLabel: string; editTitle: string; editInstructions: string; choices: { id: ProfileId; label: string }[] };
+  onboarding: { startLabel: string; title: string; instructions: string; continueLabel: string; validationLabel: string; editTitle: string; editInstructions: string; choices: { id: ProfileId; label: string }[] };
   previewScenarios: PreviewScenario[];
   chats: ScriptedChat[];
   destinations: Destination[];

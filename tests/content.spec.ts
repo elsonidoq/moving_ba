@@ -131,6 +131,7 @@ test.describe('content validation extended contract', () => {
     console.log('All 36 exercises have explicit reviewed local JPEG subjects; general SVG imageAsset remains empty.');
   });
   const cases: [string, (c: Content) => void, string][] = [
+    ['missing welcome start label', c => { delete (c.onboarding as Partial<Content['onboarding']>).startLabel; }, 'onboarding.startLabel'],
     ['missing onboarding copy', c => { c.onboarding.editTitle = ''; }, 'onboarding.editTitle'],
     ['extra choice', c => { c.onboarding.choices.push({id:'other' as never,label:'Otra cosa'}); }, 'onboarding.choices'],
     ['incorrect exact choice', c => { c.onboarding.choices[0].label = 'Otra cosa'; }, 'label'],

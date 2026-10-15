@@ -180,3 +180,5 @@ legend { line-height: 1.5; margin-bottom: 12px; }
 .sport-hero img[src$="cali_hero.jpg"] { object-position: center 40%; }
 .sport-hero img[src$="yoga_hero.jpg"] { object-position: center 35%; }
 .step-photo[src$="yoga_child.jpg"] { object-position: center bottom; }
+
+button.welcome-start { background: var(--yellow); color: #171b1e; }

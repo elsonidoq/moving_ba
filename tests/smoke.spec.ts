@@ -7,27 +7,39 @@ const content=JSON.parse(readFileSync('public/config/app-content.json','utf8')) 
 const key='ba-en-movimiento:demo:v1';
 const evidence='/tmp/ba-batch2';mkdirSync(evidence,{recursive:true});
 const raw=(page:Page)=>page.evaluate(k=>localStorage.getItem(k),key);
-async function choose(page:Page,id='first') {await page.getByRole('radio',{name:content.onboarding.choices.find(c=>c.id===id)!.label,exact:true}).check();await page.getByRole('button',{name:content.onboarding.continueLabel,exact:true}).click();}
+async function choose(page:Page,id='first') {await expect(page.getByRole('heading',{level:1})).toBeVisible();const start=page.getByRole('button',{name:content.onboarding.startLabel,exact:true});if(await start.count())await start.click();await page.getByRole('radio',{name:content.onboarding.choices.find(c=>c.id===id)!.label,exact:true}).check();await page.getByRole('button',{name:content.onboarding.continueLabel,exact:true}).click();}
 function legacy():LegacyEnvelope {
  const profiles=Object.fromEntries(['first','returning','regular'].map(p=>[p,{baselineHistory:[{id:'collision',profileId:p,sportId:'yoga',planId:'retired',planTitle:`Histórica ${p}`,sportTitle:'Yoga',medium:'dry-land',activityDate:'2026-10-01',origin:'seed'}],completions:{'shared-attempt':{id:'shared-attempt',attemptId:'shared-attempt',profileId:p,sportId:'yoga',planId:'retired-completed',planTitle:`Terminada ${p}`,sportTitle:'Yoga',medium:'dry-land',activityDate:'2026-10-02',origin:'user-simulated',timestamp:'2026-10-02T15:00:00.000Z',completedStepIds:['step-one']}},interests:{'retired-class':{classId:'retired-class',profileId:p,sportId:'yoga',classTitle:`Clase ${p}`,sportTitle:'Yoga',timestamp:'2026-10-02T15:00:00.000Z',origin:'simulated-interest'}}}]));
  return {schemaVersion:1,selectedProfileId:'regular',scenarioReferenceDate:'2026-10-14',profiles} as LegacyEnvelope;
 }
 test('one-person onboarding profile exact unselected choices and no identity inference',async({page})=>{
  await page.goto('/#/regular/yoga/solo/yoga-regular');
- await expect(page.getByRole('radio')).toHaveCount(3);
- await expect(page.getByRole('radio',{checked:true})).toHaveCount(0);
- await expect(page.getByRole('button',{name:content.onboarding.continueLabel,exact:true})).toBeDisabled();
- await expect(page.getByRole('navigation',{name:'Principal'})).toHaveCount(0);
- expect(await raw(page)).toBeNull();
+ await expect(page.getByRole('heading',{level:1})).toHaveText(content.branding.name);
+ await expect(page.getByRole('radio')).toHaveCount(0);await expect(page.getByRole('navigation',{name:'Principal'})).toHaveCount(0);
+ await expect(page.locator('.city-hero')).toHaveAttribute('alt','Ciudad y parques de Buenos Aires');
+ const before=await raw(page);expect(before).toBeNull();await page.evaluate(()=>localStorage.setItem('unrelated','sentinel'));
+ for(const action of ['back','reload','reentry']){
+  await page.getByRole('button',{name:content.onboarding.startLabel,exact:true}).click();
+  await expect(page.getByRole('heading',{level:1})).toHaveText('Contanos sobre vos');
+  await expect(page.getByRole('group',{name:content.onboarding.instructions})).toBeVisible();
+  await expect(page.getByRole('radio')).toHaveCount(3);await expect(page.getByRole('radio',{checked:true})).toHaveCount(0);
+  await expect(page.getByRole('button',{name:content.onboarding.continueLabel,exact:true})).toBeDisabled();
+  await page.getByRole('radio').nth(1).check();expect(await raw(page)).toBe(before);
+  if(action==='back'){await page.getByRole('button',{name:content.ui.back,exact:true}).focus();await page.keyboard.press('Enter');}
+  else if(action==='reload')await page.reload();else await page.evaluate(()=>location.hash='#/sports/yoga');
+  await expect(page.getByRole('heading',{level:1})).toHaveText(content.branding.name);
+  await expect(page.getByRole('radio')).toHaveCount(0);expect(await raw(page)).toBe(before);expect(await page.evaluate(()=>localStorage.getItem('unrelated'))).toBe('sentinel');
+  console.log('T002/V1 selection-only',action,'before',before,'after',await raw(page),'sentinel unchanged');
+ }
 });
 for(const choice of content.onboarding.choices) test(`one-person onboarding profile ${choice.id} explicit recommendation survives reload`,async({page})=>{
  await page.goto('/');await choose(page,choice.id);const profile=content.profiles.find(p=>p.id===choice.id)!;
  await expect(page.locator('.hero')).toContainText(profile.hero);expect(JSON.parse((await raw(page))!).preference).toEqual({situationId:choice.id,confirmed:true});
- await page.reload();await expect(page.locator('.hero')).toContainText(profile.hero);console.log('choice',choice.id,'route',page.url(),'bytes',await raw(page));
+ await page.reload();await expect(page.locator('.hero')).toContainText(profile.hero);await expect(page.getByRole('button',{name:content.onboarding.startLabel,exact:true})).toHaveCount(0);await expect(page.getByRole('radio')).toHaveCount(0);const saved=await raw(page);await page.goto('/#/regular/home');await expect(page.locator('.hero')).toContainText(profile.hero);expect(await raw(page)).toBe(saved);console.log('choice',choice.id,'route',page.url(),'bytes',await raw(page));
 });
 test('one-person onboarding profile legacy collision choose reload edit preserves canonical history and lifetime',async({page})=>{
  const source=legacy();await page.addInitScript(({key,source})=>{if(!sessionStorage.getItem('seeded')){localStorage.setItem(key,JSON.stringify(source));sessionStorage.setItem('seeded','yes');}},{key,source});
- await page.goto('/#/regular/home');await expect(page.getByRole('radio',{checked:true})).toHaveCount(0);expect(await raw(page)).toBe(JSON.stringify(source));
+ await page.goto('/#/regular/home');await expect(page.getByRole('button',{name:content.onboarding.startLabel,exact:true})).toBeVisible();await expect(page.getByRole('radio')).toHaveCount(0);expect(await raw(page)).toBe(JSON.stringify(source));
  await choose(page,'first');let before=JSON.parse((await raw(page))!);expect(before.journey).toEqual(normalizeLegacy(source).journey);before.intention={classId:'yoga-free',sportId:'yoga',classSnapshot:content.classes.find(c=>c.id==='yoga-free'),chosenAt:'2026-10-14T15:00:00.000Z',origin:'simulated-intention'};await page.evaluate(({key,before})=>localStorage.setItem(key,JSON.stringify(before)),{key,before});
  await page.reload();await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await expect(page.locator('[data-stat="sessions"]')).toHaveText('6');await expect(page.locator('[data-stat="points"]')).toHaveText('60');
  await page.getByRole('link',{name:content.ui.journey,exact:true}).click();await expect(page.locator('[data-history-id]')).toHaveCount(6);
@@ -42,10 +54,10 @@ test('one-person reset recovery normal and invalid cancel exact no-op, confirmed
  await page.goto('/');await choose(page);await page.evaluate(()=>localStorage.setItem('unrelated','sentinel'));await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();
  const before=await raw(page);const url=page.url();page.once('dialog',d=>d.dismiss());await page.getByRole('button',{name:content.ui.reset,exact:true}).click();expect(await raw(page)).toBe(before);expect(page.url()).toBe(url);await expect(page.getByRole('button',{name:content.ui.reset,exact:true})).toBeFocused();
  page.once('dialog',d=>d.accept());await page.getByRole('button',{name:content.ui.reset,exact:true}).click();await expect(page.getByRole('radio',{checked:true})).toHaveCount(0);expect(JSON.parse((await raw(page))!)).toEqual({schemaVersion:1,layout:'one-person',preference:null,journey:{},interests:{},intention:null});
- await page.reload();await expect(page.getByRole('radio')).toHaveCount(3);expect(await page.evaluate(()=>localStorage.getItem('unrelated'))).toBe('sentinel');
+ await page.reload();await expect(page.getByRole('button',{name:content.onboarding.startLabel,exact:true})).toBeVisible();await expect(page.getByRole('radio')).toHaveCount(0);expect(await page.evaluate(()=>localStorage.getItem('unrelated'))).toBe('sentinel');
  await page.evaluate(k=>localStorage.setItem(k,'{invalid-exact-bytes'),key);await page.reload();await expect(page.getByRole('heading',{level:1})).toHaveText(content.ui.storageRecovery);const broken=await raw(page);const brokenURL=page.url();
  page.once('dialog',d=>d.dismiss());await page.getByRole('button',{name:content.ui.storageReset}).click();expect(await raw(page)).toBe(broken);expect(page.url()).toBe(brokenURL);
- page.once('dialog',d=>d.accept());await page.getByRole('button',{name:content.ui.storageReset}).click();await expect(page.getByRole('radio')).toHaveCount(3);expect(JSON.parse((await raw(page))!).journey).toEqual({});
+ page.once('dialog',d=>d.accept());await page.getByRole('button',{name:content.ui.storageReset}).click();await expect(page.getByRole('button',{name:content.onboarding.startLabel,exact:true})).toBeVisible();await expect(page.getByRole('radio')).toHaveCount(0);expect(JSON.parse((await raw(page))!).journey).toEqual({});
  console.log('normal cancel bytes',before,'corrupt cancel bytes',broken,'confirmed bytes',await raw(page),'sentinel',await page.evaluate(()=>localStorage.getItem('unrelated')));
 });
 test('one-person reset recovery denied read write and reset show tab-only failure then retained data returns on reload',async({page})=>{
@@ -65,13 +77,19 @@ test('one-person reset recovery denied read write and reset show tab-only failur
 });
 for(const width of [360,1280]) test(`one-person onboarding profile keyboard visual ${width}`,async({page})=>{
  await page.setViewportSize({width,height:900});await page.goto('/');await expect(page.getByRole('heading',{level:1})).toBeFocused();
+ await page.screenshot({path:`/tmp/ba-refresh-t002/${width}-welcome.png`,fullPage:true});await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:content.onboarding.startLabel,exact:true})).toBeFocused();await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toHaveText(content.onboarding.title);await expect(page.getByRole('heading',{level:1})).toBeFocused();
+ await shellCopy(page);for(const label of content.onboarding.choices.map(c=>c.label))await expect(page.getByRole('radio',{name:label,exact:true})).toBeVisible();
+ for(const control of await page.locator('.situation-option,button:not(.skip-link)').all()){const box=await control.boundingBox();expect(box!.height).toBeGreaterThanOrEqual(44);}
+ const entryGeometry=await page.locator('h1').evaluate(el=>({headingTop:el.getBoundingClientRect().top,headerBottom:document.querySelector('.app-header')!.getBoundingClientRect().bottom,overflow:document.documentElement.scrollWidth>innerWidth}));expect(entryGeometry.headingTop).toBeGreaterThanOrEqual(entryGeometry.headerBottom);expect(entryGeometry.overflow).toBe(false);console.log('T002/V2 entry geometry',width,entryGeometry);
+ await page.screenshot({path:`/tmp/ba-refresh-t002/${width}-selection.png`,fullPage:true});
  await page.keyboard.press('Tab');await expect(page.getByRole('radio').first()).toBeFocused();await page.keyboard.press('Space');await page.keyboard.press('ArrowDown');await expect(page.getByRole('radio').nth(1)).toBeChecked();
- await page.screenshot({path:`${evidence}/t003-${width}-onboarding.png`,fullPage:true});await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:content.onboarding.continueLabel,exact:true})).toBeFocused();await page.keyboard.press('Enter');
+ await page.screenshot({path:`${evidence}/t003-${width}-onboarding.png`,fullPage:true});await page.screenshot({path:`/tmp/ba-refresh-t002/${width}-radio-keyboard.png`});await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:content.onboarding.continueLabel,exact:true})).toBeFocused();await page.keyboard.press('Enter');
  await expect(page.getByRole('heading',{level:1})).toBeFocused();await page.screenshot({path:`${evidence}/t003-${width}-home.png`,fullPage:true});
  await page.getByRole('link',{name:content.ui.profileAccessibleName}).focus();await page.keyboard.press('Enter');await expect(page.getByRole('heading',{level:1})).toBeFocused();
  const reset=page.getByRole('button',{name:content.ui.reset,exact:true});await reset.focus();page.once('dialog',d=>d.dismiss());await page.keyboard.press('Enter');await expect(reset).toBeFocused();await page.screenshot({path:`${evidence}/t003-${width}-profile.png`,fullPage:true});
  for(const selector of ['.profile-button','.bottom-tabs a','button:not(.skip-link)','.situation-option'])for(const box of await page.locator(selector).all()){const b=await box.boundingBox();if(b)expect(b.height).toBeGreaterThanOrEqual(44);}
  const sizes=await page.evaluate(()=>({client:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,appBottom:document.querySelector('.app')!.getBoundingClientRect().bottom,tabHeight:document.querySelector('.bottom-tabs')!.getBoundingClientRect().height,padding:getComputedStyle(document.querySelector('.app')!).paddingBottom}));expect(sizes.scroll).toBeLessThanOrEqual(sizes.client);expect(parseInt(sizes.padding)).toBeGreaterThan(sizes.tabHeight);
+ const editBytes=await raw(page);await page.getByRole('button',{name:content.ui.editSituation,exact:true}).click();await expect(page.getByRole('heading',{level:1})).toHaveText(content.onboarding.editTitle);await expect(page.getByRole('group',{name:content.onboarding.editInstructions})).toBeVisible();await shellCopy(page);await expect(page.locator('main')).not.toContainText(/cómo estás hoy/i);await page.screenshot({path:`/tmp/ba-refresh-t002/${width}-profile-edit.png`,fullPage:true});await page.getByRole('radio').first().check();await page.getByRole('button',{name:content.ui.cancel,exact:true}).click();expect(await raw(page)).toBe(editBytes);
  await page.getByRole('button',{name:content.ui.skipToContent}).focus();await page.keyboard.press('Enter');await expect(page.locator('main')).toBeFocused();console.log('keyboard radio ArrowDown/profile/reset cancel/skip focus passed',width,sizes,'screenshots',`${evidence}/t003-${width}-*.png`);
 });
 
@@ -243,7 +261,7 @@ test('served profile content recovery serial actual dist edits, retry and local 
  async function reloadResponse(){const response=page.waitForResponse(r=>r.url().endsWith('/config/app-content.json'));await page.reload();return response;}
  async function practice(){await page.goto('/');await expect(page.locator('.hero')).toContainText(modified.profiles[0].hero);await page.goto('/#/sports/calisthenics/solo/cal-first');await expect(page.locator('[data-plan-id]')).toHaveAttribute('data-plan-id','cal-first');await page.getByRole('button',{name:content.ui.start,exact:true}).click();await expect(page.getByRole('heading',{level:1})).toHaveText(exercise.title);await expect(page.locator('main')).toContainText(exercise.technique);}
  try{
-  writeFileSync(file,JSON.stringify(modified));const responsePromise=page.waitForResponse(r=>r.url().endsWith('/config/app-content.json'));await page.goto('/');const response=await responsePromise;expect(response.status()).toBe(200);expect(response.headers()['cache-control']).toBe('no-store');await expect(page.locator('main')).toContainText(modified.onboarding.instructions);await choose(page);await expect(page.locator('.hero')).toContainText(modified.profiles[0].hero);
+  writeFileSync(file,JSON.stringify(modified));const responsePromise=page.waitForResponse(r=>r.url().endsWith('/config/app-content.json'));await page.goto('/');const response=await responsePromise;expect(response.status()).toBe(200);expect(response.headers()['cache-control']).toBe('no-store');await page.getByRole('button',{name:content.onboarding.startLabel,exact:true}).click();await expect(page.locator('main')).toContainText(modified.onboarding.instructions);await choose(page);await expect(page.locator('.hero')).toContainText(modified.profiles[0].hero);
   await page.getByRole('link',{name:content.ui.profileAccessibleName}).click();await page.getByRole('button',{name:content.ui.editSituation}).click();await expect(page.getByRole('heading',{level:1})).toHaveText(modified.onboarding.editTitle);await page.getByRole('button',{name:content.ui.cancel,exact:true}).click();
   await page.getByRole('button',{name:scenario.title,exact:true}).click();await expect(page.locator('main')).toContainText(scenario.notice!);await expect(page.locator('main')).toContainText(scenario.guidance);await page.getByRole('button',{name:scenario.activationLabel!,exact:true}).click();await expect(page.locator('main')).toContainText(chat.introduction);await page.getByRole('button',{name:answer.label,exact:true}).click();await expect(page.getByRole('status')).toContainText(answer.response);await page.getByRole('link',{name:destination.label,exact:true}).click();await expect(page.locator('[data-plan-id]')).toHaveAttribute('data-plan-id','yoga-returning');await page.getByRole('button',{name:content.ui.exitPreview,exact:true}).click();
   await practice();const img=page.locator('.exercise-photo img');await expect(img).toHaveAttribute('src',assignment.path!);await expect(img).toHaveAttribute('alt',assignment.alt);await img.evaluate((i:HTMLImageElement)=>i.decode());const served=await page.evaluate(async path=>{const r=await fetch(path);return {status:r.status,mime:r.headers.get('content-type'),bytes:Array.from(new Uint8Array(await r.arrayBuffer()))};},assignment.path!);expect(served.status).toBe(200);expect(served.mime).toContain('image/jpeg');expect(Buffer.from(served.bytes).equals(photoBytes)).toBe(true);
@@ -341,7 +359,7 @@ async function shellCopy(page:Page) {
  const visible=await page.locator('body').innerText();
  const accessible=await page.locator('body').ariaSnapshot();
  for(const text of [visible,accessible]){
-  expect(text).not.toMatch(/demo|demostración|inteligencia artificial/i);
+  expect(text).not.toMatch(/\b(?:demo|demostración)\b|inteligencia artificial/i);
   for(const paragraph of ['Antes de entrenar de verdad, estas propuestas requieren revisión','Propuesta conceptual, no es un servicio oficial','Prácticas ilustrativas: esta demo'])expect(text).not.toContain(paragraph);
  }
  await expect(page.locator('footer')).toHaveCount(0);

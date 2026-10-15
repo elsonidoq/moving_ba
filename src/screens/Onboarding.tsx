@@ -1,5 +1,5 @@
 import { mockupPhotos } from '../content/mockupPhotos';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ProfileId } from '../content/types';
 import { useApp } from '../state/context';
 export function SituationForm({editing=false,onCancel}:{editing?:boolean;onCancel?:()=>void}) {
@@ -17,6 +17,13 @@ export function SituationForm({editing=false,onCancel}:{editing?:boolean;onCance
 }
 export default function Onboarding() {
  const {content,route,command}=useApp();const recovery=route.screen==='recovery';
- return <>{!recovery && <img className="city-hero" src={mockupPhotos.city_hero.src} alt={mockupPhotos.city_hero.alt} />}<h1 tabIndex={-1}>{recovery?content.ui.storageRecovery:content.onboarding.title}</h1>
- {recovery?<button onClick={()=>command({type:'reset',confirmed:window.confirm(content.ui.resetConfirm),entry:'recovery'})}>{content.ui.storageReset}</button>:<SituationForm />}</>;
+ const [selecting,setSelecting]=useState(false);
+ useEffect(()=>setSelecting(false),[route]);
+ useEffect(()=>{const heading=document.querySelector<HTMLElement>('main h1');heading?.focus({preventScroll:true});heading?.scrollIntoView({block:'start'});},[selecting,recovery]);
+ if(recovery)return <><h1 tabIndex={-1}>{content.ui.storageRecovery}</h1><button onClick={()=>command({type:'reset',confirmed:window.confirm(content.ui.resetConfirm),entry:'recovery'})}>{content.ui.storageReset}</button></>;
+ return selecting?<><h1 tabIndex={-1}>{content.onboarding.title}</h1><SituationForm /><button type="button" className="secondary" onClick={()=>setSelecting(false)}>{content.ui.back}</button></>:<>
+  <img className="city-hero" src={mockupPhotos.city_hero.src} alt={mockupPhotos.city_hero.alt} />
+  <h1 tabIndex={-1}>{content.branding.name}</h1><p className="lead">{content.branding.tagline}</p>
+  <button className="welcome-start" onClick={()=>setSelecting(true)}>{content.onboarding.startLabel}</button>
+ </>;
 }

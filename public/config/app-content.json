@@ -1244,12 +1244,13 @@
     ]
   },
   "onboarding": {
-    "title": "¿Cómo estás hoy?",
-    "instructions": "Elegí una situación para recibir recomendaciones. Tu recorrido se conserva.",
+    "startLabel": "Comenzar",
+    "title": "Contanos sobre vos",
+    "instructions": "Elegí la situación que mejor te representa. Así podemos acompañarte para empezar, retomar o mantener tu práctica deportiva.",
     "continueLabel": "Continuar",
     "validationLabel": "Elegí una situación para continuar.",
-    "editTitle": "Editar mi situación",
-    "editInstructions": "Cambiá las recomendaciones sin perder tu recorrido.",
+    "editTitle": "Personalizá tu práctica",
+    "editInstructions": "Elegí tu preferencia para recibir recomendaciones para empezar, retomar o mantener tu práctica deportiva. Tu recorrido y tus logros se conservan.",
     "choices": [
       {
         "id": "first",

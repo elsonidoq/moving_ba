@@ -200,7 +200,7 @@ const cases = {
 } as const;
 function validateExtensions(root: RecordValue, exercises: RecordValue[], plans: RecordValue[], classes: RecordValue[], sports: RecordValue[]) {
   const onboarding = object(root.onboarding, 'onboarding');
-  fields(onboarding, ['title', 'instructions', 'continueLabel', 'validationLabel', 'editTitle', 'editInstructions'], 'onboarding');
+  fields(onboarding, ['startLabel', 'title', 'instructions', 'continueLabel', 'validationLabel', 'editTitle', 'editInstructions'], 'onboarding');
   const choices = entities(onboarding.choices, 'onboarding.choices');
   exactIds(choices, profileIds, 'onboarding.choices');
   profileIds.forEach((id, i) => {
