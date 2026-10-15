@@ -13,8 +13,8 @@ booking, training-verification or partner service.
 | Project | moving_ba (`cc82d4e3-18c9-4bf6-93fc-f5cd9f58a05d`) |
 | Environment | production (`75f39978-e9e1-4019-8b04-b60308632dcd`) |
 | Service | moving_ba (`07c70e92-6e27-477f-a3e0-2264da1c8c9c`) |
-| Deployment | `0c8f94dc-3db2-45f3-bb2b-f630765ea235` — **SUCCESS**, observed terminal-success |
-| Source | Clean main revision `078f3be083f04fdffe5b1db46629d1d3f11fc423`, uploaded from cwd |
+| Deployment | `f1c3c1e5-efd2-44b8-8c2a-d70160e6bfdb` — **SUCCESS**, observed terminal-success |
+| Source | Clean main revision `80c0b1d84b62e9098d025130f58de28b3b2bc128`, uploaded from cwd |
 | Region / replicas | us-east4-eqdc4a / 1 |
 | Domain target | 8080; domain ID `abf3962f-0602-4ae1-8dbf-a1d9055dfb94` |
 
@@ -34,9 +34,11 @@ snapshot. The prior verified release `753afdf2-7033-4c22-94b1-6045f6ffcfa2`
 at `d6ca077` included the one-person flow and all 29 bundled mockup photos. The
 previous verified visual-refresh release `c8664af7-a748-4e92-a5fa-05e27609e75c`
 at `cf08e056` added two-stage entry, profile charts and both notification-style
-scenarios. The current authorized cwd upload changes only the welcome photo to the
-owner-permitted, locally bundled Obelisk image; the original photos remain untouched.
-Documentation-only commits after `078f3be` are not part of its uploaded source snapshot.
+scenarios. The prior `0c8f94dc-3db2-45f3-bb2b-f630765ea235` release at `078f3be`
+added the owner-permitted, locally bundled Obelisk welcome photo. The current
+release adds mockup-inspired wallpaper notice scenes, photo-led challenges/benefits
+and concrete app copy; in-app points are calculated, but no canje is enabled.
+Documentation-only commits after `80c0b1d` are not part of its uploaded source snapshot.
 
 ## Verified local build/start boundary
 
@@ -159,7 +161,21 @@ envelope, it offers scoped demo recovery rather than migration/global browser cl
 
 ## Live verification and limitations
 
-The `078f3be` release's bounded checks after observed SUCCESS:
+The `80c0b1d` release's bounded checks after observed SUCCESS:
+
+- A fresh 360px Chromium browser selected a situation and opened both notice scenes.
+  Each had no top banner, kept its exit below the wallpaper and opened its matching
+  structured chat: inactive (4 answer choices), missed class (5 answer choices).
+- The Challenges screen showed 0 earned points, three benefit cards and no demo-style
+  wording. Both new local JPEGs loaded/decoded and their served bytes matched the
+  bundled coffee SHA-256 `223605ea58d7a623a0b5244f562c053121335d4adbea1e35e31fcf82547678f2`
+  and Jardín Japonés SHA-256 `5d4034f530566ea7690af7f34a33e9f9907b412a4d31405700e125394fe71582`.
+  The browser context was disposable; no rewards were issued or redeemed.
+- Before upload, the clean commit passed typecheck/build, 134 core tests and 48
+  Chromium tests. Local screenshots were inspected at 360 and 1280 widths. Live
+  verification was bounded to the checks above, not the full test matrix.
+
+The prior `078f3be` release's bounded checks after observed SUCCESS:
 
 - A fresh 360px Chromium visit loaded and decoded the Obelisk welcome photo at
   `/assets/photos/welcome_obelisk.jpg` (1280×1280), with Spanish alt. Its live JPEG
@@ -174,7 +190,7 @@ The `078f3be` release's bounded checks after observed SUCCESS:
 The prior `cf08e056` release had 132 core/42 Chromium checks and a clean independent
 final review. Its live smoke confirmed matching JSON bytes, the Buenos Aires Home
 photo and both notification→chat journeys. Those are prior-release observations, not
-new live coverage claims for this asset swap.
+new live coverage claims for this release.
 
 The earlier `d6ca077` release had 129 core and 33 Chromium checks; its live smoke
 also verified the three Home sport-card JPEGs and a Calistenia class-detail JPEG.
@@ -186,9 +202,9 @@ content or mock responses. Browser history belongs only to the disposable contex
 
 Physical cellphone hardware, Safari/Firefox, every production photo placement and
 universal device/accessibility support were not manually tested. Current live browser
-checks used one fresh 360px Chromium origin; local 360/1280 screenshots and focused
-tests are not universal live verification. Different browsers/devices retain independent
-HTTPS-origin localStorage. [OI-1](open_issues.md#oi-1--assess-reported-dependency-audit-warnings)
+checks used one fresh 360px Chromium origin; local 360/1280 screenshots and the full
+Chromium test suite are not universal live verification. Different browsers/devices
+retain independent HTTPS-origin localStorage. [OI-1](open_issues.md#oi-1--assess-reported-dependency-audit-warnings)
 tracks unassessed dependency warnings, and
 [OI-2](open_issues.md#oi-2--add-explicit-load-failure-feedback-for-plan-thumbnails)
 tracks the non-blocking plan-thumbnail load-failure feedback gap. No dependency fix or
