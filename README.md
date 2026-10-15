@@ -4,7 +4,7 @@ Spanish-language conceptual demo for one person's movement journey, not an offic
 service. Practices, classes, contacts, intentions and rewards are simulations. No
 booking, attendance verification, AI, push, backend, account or live integration.
 [Deployment](docs/deployment.md) owns the verified Railway production release at
-commit `d6ca077`, including its public URL and bounded live checks.
+commit `cf08e056`, including its public URL and bounded live checks.
 
 ## Run locally
 

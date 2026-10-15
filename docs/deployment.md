@@ -13,8 +13,8 @@ booking, training-verification or partner service.
 | Project | moving_ba (`cc82d4e3-18c9-4bf6-93fc-f5cd9f58a05d`) |
 | Environment | production (`75f39978-e9e1-4019-8b04-b60308632dcd`) |
 | Service | moving_ba (`07c70e92-6e27-477f-a3e0-2264da1c8c9c`) |
-| Deployment | `753afdf2-7033-4c22-94b1-6045f6ffcfa2` — **SUCCESS**, created at 01:03:08Z and observed terminal-success |
-| Source | Clean main revision `d6ca077011868ce4a9079d8a84a69cc4080ca45b`, uploaded from cwd |
+| Deployment | `c8664af7-a748-4e92-a5fa-05e27609e75c` — **SUCCESS**, created at 02:41:22Z and observed terminal-success |
+| Source | Clean main revision `cf08e056f1e0d36138954f79da9e74725b7996e3`, uploaded from cwd |
 | Region / replicas | us-east4-eqdc4a / 1 |
 | Domain target | 8080; domain ID `abf3962f-0602-4ae1-8dbf-a1d9055dfb94` |
 
@@ -30,9 +30,11 @@ The initial `railway up` created the project/service and submitted deployment
 Node listener but defaulted to `npm install`. One scoped environment configuration
 patch selected locked installation and explicit build/start commands, automatically
 creating prior deployment `bf3b2bdd-858f-4b7f-8481-f46f0a74de52` from that source
-snapshot. The current deployment above is a later authorized cwd upload containing the
-one-person flow, route corrections and all 29 bundled mockup photos. Closeout-only
-documentation commits after `d6ca077` are not part of its application snapshot.
+snapshot. The prior verified release `753afdf2-7033-4c22-94b1-6045f6ffcfa2`
+at `d6ca077` included the one-person flow and all 29 bundled mockup photos. The current
+authorized cwd upload adds the visual refresh, two-stage entry, profile activity
+charts and both notification-style scenarios without backend or new exercise assets.
+Documentation-only commits after `cf08e056` are not part of its uploaded source snapshot.
 
 ## Verified local build/start boundary
 
@@ -155,27 +157,32 @@ envelope, it offers scoped demo recovery rather than migration/global browser cl
 
 ## Live verification and limitations
 
-After current deployment SUCCESS, bounded HTTPS checks using Playwright 1.56.1 with
-matching Chromium 141.0.7390.37 passed against the public origin:
+The `cf08e056` release's bounded live checks after observed SUCCESS:
 
-- Runtime JSON returned 200 with JSON MIME and `Cache-Control: no-store`; its bytes
-  matched repository `public/config/app-content.json` SHA-256
-  `699d656834e8715e18b0e3a61c81196d99bac3d48c1ab383c34ecb44c93144bf`.
-- Fresh mobile onboarding reached actual Home. The three Home sport-card JPEGs and one
-  exact Calistenia class-detail JPEG decoded at their 1400px natural width using only
-  local production URLs; no external image request occurred.
-- The broader committed implementation evidence passed typecheck/build, 129 core tests
-  and 33 Chromium tests, including all-29 mapping/bytes/decode coverage, route isolation,
-  storage safety and representative responsive placement. The independent final review
-  passed with one non-blocking thumbnail-error note.
+- HTTPS root returned 200. Runtime JSON returned 200 with JSON MIME and
+  `Cache-Control: no-store`; its bytes matched `public/config/app-content.json`
+  SHA-256 `c2da6957b5ca1a2662eae88a88728265bb3df0c2f4339c894dea7a085da71afc`.
+- Bundled Buenos Aires `city_park.jpg` returned 200 with JPEG MIME and bytes matching
+  local SHA-256 `3d14d84f1b00641e3f05ec05b2727971bb791324106f257a6d8e50ecad89c6e0`.
+  A fresh 360px Chromium journey reached Home after welcome/selection, decoded that
+  photo at 1400px, and entered **both** manually chosen notice scenarios then chat.
+- Before upload, the same committed revision passed typecheck/build, 132 core tests
+  and 42 Chromium tests. One fresh independent final code review of `c3ea787..cf08e056`
+  found no issues; task-local visual checks were independently inspected at 360/1280.
+  Review and local tests are separate from the bounded live smoke above.
+
+The earlier `d6ca077` release had 129 core and 33 Chromium checks; its live smoke
+also verified the three Home sport-card JPEGs and a Calistenia class-detail JPEG.
+Those historical checks are not claims about a full live matrix for this release.
 
 Disposable closeout headers/config bytes and browser contexts under `/tmp` are not
 required for a fresh checkout or redeploy. Live verification did not mutate served
 content or mock responses. Browser history belongs only to the disposable context.
 
 Physical cellphone hardware, Safari/Firefox, every production photo placement and
-universal device/accessibility support were not manually tested. Verification was
-intentionally representative; different browsers/devices retain independent
+universal device/accessibility support were not manually tested. Current live browser
+checks used one fresh 360px Chromium origin; local 360/1280 screenshots and full test
+suite are not universal live verification. Different browsers/devices retain independent
 HTTPS-origin localStorage. [OI-1](open_issues.md#oi-1--assess-reported-dependency-audit-warnings)
 tracks unassessed dependency warnings, and
 [OI-2](open_issues.md#oi-2--add-explicit-load-failure-feedback-for-plan-thumbnails)
