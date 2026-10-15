@@ -103,7 +103,8 @@ never remote fallbacks. Home shows the documented Buenos Aires park photo (31414
 on actual and preview entry; welcome uses the owner-permitted Obelisk photograph.
 The app header stays pinned on ordinary pages with clear back/focus spacing;
 the immersive notice hides it. There is no repeated disclaimer footer; safety and
-unavailable-booking/canje states remain where relevant. Missing/unverified exercise
+storage warnings remain where relevant. Booking and benefit outcomes are local
+product demonstrations, not external transactions. Missing/unverified exercise
 photos preserve instructions with unavailable feedback. No photo reacquisition is needed.
 
 ## Checks
@@ -129,8 +130,8 @@ originals in finally; do not share that mutable fixture with another client. Cor
 imports actual validators/state/date/safety helpers. Browser checks compare exact raw
 storage with rendered outcomes, local JPEG bytes, recovery and keyboard/360/1280
 presentation measurements. Screenshots require actual viewing, not just generation.
-Fresh independent implementation review passed at `d6ca077`; owner acceptance and any
-future release remain separate decisions.
+Fresh independent implementation review passed at `91f0da5` after 137 core and
+57 Chromium checks; bounded live evidence is in [deployment](docs/deployment.md).
 
 [Architecture](docs/architecture.md) explains custody/routes; [docs index](docs/README.md)
 provides other owners. The dependency investigation and non-blocking plan-thumbnail load-failure gap are tracked

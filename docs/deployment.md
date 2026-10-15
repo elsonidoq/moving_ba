@@ -13,8 +13,8 @@ booking, training-verification or partner service.
 | Project | moving_ba (`cc82d4e3-18c9-4bf6-93fc-f5cd9f58a05d`) |
 | Environment | production (`75f39978-e9e1-4019-8b04-b60308632dcd`) |
 | Service | moving_ba (`07c70e92-6e27-477f-a3e0-2264da1c8c9c`) |
-| Deployment | `8daea6ea-0bb3-4d0c-af36-dfd6ec2580e8` — **SUCCESS**, observed terminal-success |
-| Source | Clean main revision `8c234582261fa7c8659d7ef752c278f8038642be`, uploaded from cwd; later test-only commit `a2675c1` changes no served bytes |
+| Deployment | `6333c4d1-3417-474c-afe8-1774e23bf6f3` — **SUCCESS**, observed terminal-success |
+| Source | Clean main revision `91f0da5789f08c1ec393826960b63d5863e517d8`, uploaded from cwd |
 | Region / replicas | us-east4-eqdc4a / 1 |
 | Domain target | 8080; domain ID `abf3962f-0602-4ae1-8dbf-a1d9055dfb94` |
 
@@ -35,7 +35,7 @@ at `d6ca077` included the one-person flow and all 29 bundled mockup photos. The
 previous verified visual-refresh release `c8664af7-a748-4e92-a5fa-05e27609e75c`
 at `cf08e056` added two-stage entry, profile charts and both notification-style
 scenarios. The prior `0c8f94dc-3db2-45f3-bb2b-f630765ea235` release at `078f3be`
-added the owner-permitted, locally bundled Obelisk welcome photo. The prior `f1c3c1e5-efd2-44b8-8c2a-d70160e6bfdb` release at `80c0b1d` added mockup-inspired wallpaper notice scenes, photo-led challenges/benefits and concrete app copy. The current release adds clearly labeled situation-based illustrative benefit points and a one-benefit Home card, without enabling canjes. The test-only commit after `8c23458` is not part of its uploaded source snapshot.
+added the owner-permitted, locally bundled Obelisk welcome photo. The prior `f1c3c1e5-efd2-44b8-8c2a-d70160e6bfdb` release at `80c0b1d` added mockup-inspired wallpaper notice scenes, photo-led challenges/benefits and concrete app copy. The prior `8daea6ea-0bb3-4d0c-af36-dfd6ec2580e8` release at `8c23458` added the situation-based benefit-point presentation. The current release presents a compact single-benefit Home card and natural in-app wording; eligibility remains display-only, with no real booking, canje or external transaction. Engineering documentation retains the simulation boundaries.
 
 ## Verified local build/start boundary
 
@@ -158,7 +158,9 @@ envelope, it offers scoped demo recovery rather than migration/global browser cl
 
 ## Live verification and limitations
 
-For deployment `8daea6ea-0bb3-4d0c-af36-dfd6ec2580e8`, the exact-ID Railway status was **SUCCESS**. HTTPS root returned 200; `/config/app-content.json` returned 200 with `no-store` and the new Spanish benefit labels; the bundled coffee JPEG returned 200. In a fresh 360px Chromium context, selecting `Ya estoy entrenando.` showed 40 illustrative points and the coffee card on Home; following `Ver todos los beneficios` showed the same 40 points and all three cards. This is a bounded live check, not a full-device or cross-browser claim. Before upload, focused core/browser tests, typecheck and build passed on the product revision; subsequent test-only corrections at `a2675c1` passed 10 affected browser tests and build/typecheck, and independent final review found no remaining acceptance issue. The source upload preceded the test-only corrections; no production code changed in them.
+For deployment `6333c4d1-3417-474c-afe8-1774e23bf6f3`, the exact-ID Railway status was **SUCCESS**. HTTPS root, runtime JSON (`no-store`) and local coffee photo returned 200. A fresh 360px Chromium context selected `Entrenaba antes y quiero volver.` and `Ya estoy entrenando.` separately: Home showed exactly one coffee card and respectively `Te faltan 10 puntos.` and `Ya podés canjear este beneficio.` without the old panel or visible `ilustrativo` copy; each `Ver todos los beneficios` link opened three cards. Local source/config scans found no Spanish `ilustrativo/a(s)` text. Before upload, 137 core and 57 Chromium tests, typecheck and build passed; the final unused-content string change was followed by 111 focused content checks, typecheck and build, and fresh independent review found no issues. These are bounded checks, not real canje or universal browser/device proof.
+
+For the previous deployment `8daea6ea-0bb3-4d0c-af36-dfd6ec2580e8`, the exact-ID Railway status was **SUCCESS**. HTTPS root returned 200; `/config/app-content.json` returned 200 with `no-store` and the new Spanish benefit labels; the bundled coffee JPEG returned 200. In a fresh 360px Chromium context, selecting `Ya estoy entrenando.` showed 40 illustrative points and the coffee card on Home; following `Ver todos los beneficios` showed the same 40 points and all three cards. This is a bounded live check, not a full-device or cross-browser claim. Before upload, focused core/browser tests, typecheck and build passed on the product revision; subsequent test-only corrections at `a2675c1` passed 10 affected browser tests and build/typecheck, and independent final review found no remaining acceptance issue. The source upload preceded the test-only corrections; no production code changed in them.
 
 The `80c0b1d` release's bounded checks after observed SUCCESS:
 
