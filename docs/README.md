@@ -18,8 +18,9 @@
 
 ## Child documentation directories
 
-None currently. Each future direct child documentation directory requires
-its own `README.md` and a parent-index pointer.
+- [Photographic mockup](mockup_ba_te_mueve/README.md): conceptual interactive mockup, source catalog, downloader, and local reference assets.
+
+Each future direct child documentation directory requires its own `README.md` and a parent-index pointer.
 
 ## Initialization approval
 
