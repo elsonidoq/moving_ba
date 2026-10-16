@@ -556,6 +556,14 @@ test('natural benefits show one home card and full list', async ({page}) => {
  const remote:string[]=[]; page.on('request',request=>{if(request.resourceType()==='image'&&!request.url().startsWith('http://127.0.0.1:4173/'))remote.push(request.url());});
  await page.goto('/'); await choose(page,'returning');
  await expect(page.locator('.home-benefit')).toHaveCount(1); await expect(page.locator('.home-benefit')).toContainText('Te faltan 10 puntos.');
+ await expect(page.locator('.home-benefits h2').first()).toHaveText(content.ui.homeBenefitsTitle);
+ await expect(page.locator('.home-benefits-description')).toHaveText(content.ui.homeBenefitsDescription);
+ for (const width of [360, 1280]) {
+  await page.setViewportSize({width, height: 900});
+  const sizes = await page.locator('.home-benefit, .sport-card').evaluateAll(cards => cards.map(card => ({height: card.getBoundingClientRect().height, width: card.getBoundingClientRect().width})));
+  expect(sizes[0].height).toBeLessThanOrEqual(sizes[1].height + 20);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+ }
  await expect(page.locator('.home-benefit img')).toHaveAttribute('src','/assets/photos/benefit_coffee.jpg'); await expect(page.locator('.benefit-summary,[data-benefit-limitation]')).toHaveCount(0);
  await page.getByRole('link',{name:content.ui.viewAllBenefits}).click(); await expect(page.locator('[data-benefit-id]')).toHaveCount(content.rules.benefits.length); await expect(page.locator('[data-benefit-id="coffee"]')).toContainText('Te faltan 10 puntos.');
  await page.goto('/#/sports/calisthenics'); await page.locator('.route-card.solo').click(); await page.getByRole('button',{name:content.ui.start}).click(); for(const step of content.plans.find(plan=>plan.id==='cal-returning')!.steps) await page.getByRole('button',{name:content.ui.completeStep}).click(); await page.goto('/#/home'); await expect(page.locator('.home-benefit')).toContainText(content.ui.benefitReached);

@@ -21,7 +21,9 @@ export default function Home() {
       {!photoFailed ? <img src={mockupPhotos.city_park.src} alt={mockupPhotos.city_park.alt} onError={() => setPhotoFailed(true)} /> : <span role="status">{content.ui.imageUnavailable}</span>}
       <div className="home-hero-copy"><p className="eyebrow">{profile.cta}</p><h2>{profile.hero}</h2><span className="home-hero-action">{content.ui.chooseSport} ↓</span></div>
     </a>
-    <section className="home-benefits" aria-label={content.ui.benefits}>
+    <section className="home-benefits" aria-labelledby="home-benefits-title">
+      <h2 className="section-title" id="home-benefits-title">{content.ui.homeBenefitsTitle}</h2>
+      <p className="home-benefits-description">{content.ui.homeBenefitsDescription}</p>
       {benefit ? <article className="benefit-card home-benefit" data-benefit-id={benefit.id}><img src={benefit.photo.path} alt={benefit.photo.alt} onError={event => { event.currentTarget.hidden = true; }} /><div className="benefit-copy"><h2>{benefit.title}</h2><strong>{benefit.eligible ? content.ui.benefitReached : content.ui.benefitRemaining.replace('{count}', String(benefit.remaining))}</strong></div></article> : <p role="status">{content.ui.benefitsEmpty}</p>}
       <a className="button-link secondary" href={routeHash({ screen: 'challenges', profileId: profile.id })}>{content.ui.viewAllBenefits}</a>
     </section>

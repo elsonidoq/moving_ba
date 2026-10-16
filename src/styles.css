@@ -284,6 +284,13 @@ button.chat-option[aria-pressed="true"] { border-color: #a88d00; background: #ff
 }
 
 .home-benefits { margin: 20px 0; }
-.home-benefit { margin: 0 0 12px; }
-.home-benefit .benefit-copy { padding: 12px 15px; }
-.home-benefit h2 { margin: 0 0 8px; font-size: 18px; }
+.home-benefits .section-title { margin-bottom: 5px; }
+.home-benefits-description { margin: 0 0 12px; font-size: 14px; color: var(--muted); }
+.home-benefit { display: flex; align-items: center; min-height: 88px; margin: 0 0 12px; }
+.home-benefit > img { width: 100px; height: 88px; flex: none; }
+.home-benefit .benefit-copy { min-width: 0; padding: 10px 14px; }
+.home-benefit h2 { margin: 0 0 5px; font-size: 16px; }
+.home-benefit strong { font-size: 13px; line-height: 1.4; }
+@media (max-width: 480px) {
+  .home-benefit > img { width: 80px; }
+}
