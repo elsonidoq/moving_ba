@@ -2,7 +2,7 @@
 
 ## Current status
 
-**Live demo verified on Railway, 2026-10-15.**
+**Live demo verified on Railway, 2026-10-16.**
 Public HTTPS: **https://movingba-production.up.railway.app** (desktop and phone browsers;
 no tunnel needed). This is still a conceptual, non-official simulation, not a live
 booking, training-verification or partner service.
@@ -13,8 +13,8 @@ booking, training-verification or partner service.
 | Project | moving_ba (`cc82d4e3-18c9-4bf6-93fc-f5cd9f58a05d`) |
 | Environment | production (`75f39978-e9e1-4019-8b04-b60308632dcd`) |
 | Service | moving_ba (`07c70e92-6e27-477f-a3e0-2264da1c8c9c`) |
-| Deployment | `5685a350-b75e-490e-b113-2df3ff5aeb0d` — **SUCCESS**, observed terminal-success |
-| Source | Clean main revision `252111a92f6ce1a9c5c341983b780318654b14e9`, uploaded from cwd |
+| Deployment | `dd2f6434-e2ca-4f9a-8e09-93cc07fe3474` — **SUCCESS**, observed terminal-success |
+| Source | Clean main revision `76924fbf19e48b5a4e6dd613b4cb56a80d0a679e`, uploaded from cwd |
 | Region / replicas | us-east4-eqdc4a / 1 |
 | Domain target | 8080; domain ID `abf3962f-0602-4ae1-8dbf-a1d9055dfb94` |
 
@@ -157,6 +157,8 @@ is browser-origin-specific, not hosted state. If an old build cannot read a futu
 envelope, it offers scoped demo recovery rather than migration/global browser clearing.
 
 ## Live verification and limitations
+
+For deployment `dd2f6434-e2ca-4f9a-8e09-93cc07fe3474`, the exact-ID Railway status was **SUCCESS** after uploading committed `76924fb`. A fresh 360px Chromium context loaded HTTPS root, runtime JSON (`no-store`) and the local coffee photo with HTTP 200. Selecting the returning situation displayed `Entrená y sumá beneficios` and `Cuanto más entrenás, más puntos sumás. Usalos para canjear beneficios.` above the coffee card, with `Te faltan 10 puntos.`; the card and sport cards each measured 90px tall and no page errors occurred. Before upload, local build, 137 core tests and the focused 360/1280 Chromium benefit test passed. This is a bounded live smoke check, not a cross-browser or hardware-device claim.
 
 For deployment `5685a350-b75e-490e-b113-2df3ff5aeb0d`, the exact-ID Railway status was **SUCCESS** after uploading committed `252111a`. A fresh 360px Chromium session loaded the public HTTPS root (200), selected the returning situation, clicked the home card and observed a smooth scroll request reaching the activities heading with no page errors. Before upload, local build/typecheck and three focused 360/1280/reduced-motion browser checks passed; reduced-motion users receive an instant scroll. No server configuration or data contract changed.
 
