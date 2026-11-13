@@ -2,8 +2,8 @@
 
 Spanish-language movement experience for one person. It has no booking, attendance
 verification, AI, push, backend, account, or live integration.
-[Deployment](docs/deployment.md) owns the verified Railway production release,
-including its public URL and bounded live checks.
+[Deployment](docs/deployment.md) owns GitHub Pages publishing and the existing Railway
+release, including public URLs and bounded live checks.
 
 ## Run locally
 
@@ -26,6 +26,25 @@ Open `http://localhost:4173`. Stop with Ctrl-C. Start serves only `dist` on
 `0.0.0.0`; PORT defaults to 3000 when unset, otherwise decimal 1–65535. Occupied
 ports fail without switching. Missing files return 404, with no SPA catch-all or
 file listing. Hash navigation needs no server rewrite.
+
+## GitHub Pages
+
+The demo's publishing URL is **https://elsonidoq.github.io/moving_ba/**, managed by
+`.github/workflows/pages.yml` on pushes to `main` or a manual Actions run.
+The workflow builds `dist/` with `/moving_ba/` as its base path; ordinary local and
+Railway builds keep `/`. No Node server runs on Pages. See the
+[deployment guide](docs/deployment.md#github-pages) for publishing and cache limitations.
+
+To check a Pages build locally with the installed Playwright browser:
+
+```sh
+npm run build -- --base=/moving_ba/
+npm exec playwright -- test --config=playwright.pages.config.ts
+```
+
+The checks also support `PLAYWRIGHT_CHANNEL=chrome` for an already installed Google
+Chrome, or `PAGES_URL=https://elsonidoq.github.io/moving_ba/` for a live smoke check.
+Rebuild with `npm run build` before the ordinary root-path browser suite.
 
 ## Presenter path and reset
 

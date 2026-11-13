@@ -1,3 +1,4 @@
+import { publicUrl } from '../content/publicUrl';
 import { welcomePhoto } from '../content/mockupPhotos';
 import { useEffect, useState } from 'react';
 import type { ProfileId } from '../content/types';
@@ -22,7 +23,7 @@ export default function Onboarding() {
  useEffect(()=>{const heading=document.querySelector<HTMLElement>('main h1');heading?.focus({preventScroll:true});heading?.scrollIntoView({block:'start'});},[selecting,recovery]);
  if(recovery)return <><h1 tabIndex={-1}>{content.ui.storageRecovery}</h1><button onClick={()=>command({type:'reset',confirmed:window.confirm(content.ui.resetConfirm),entry:'recovery'})}>{content.ui.storageReset}</button></>;
  return selecting?<><h1 tabIndex={-1}>{content.onboarding.title}</h1><SituationForm /><button type="button" className="secondary" onClick={()=>setSelecting(false)}>{content.ui.back}</button></>:<>
-  <img className="city-hero" src={welcomePhoto.src} alt={welcomePhoto.alt} />
+  <img className="city-hero" src={publicUrl(welcomePhoto.src)} alt={welcomePhoto.alt} />
   <h1 tabIndex={-1}>{content.branding.name}</h1><p className="lead">{content.branding.tagline}</p>
   <button className="welcome-start" onClick={()=>setSelecting(true)}>{content.onboarding.startLabel}</button>
  </>;

@@ -1,3 +1,4 @@
+import { publicUrl } from '../content/publicUrl';
 import { useApp } from '../state/context';
 import { selectBenefitPresentation } from '../state/selectors';
 import { routeHash } from '../state/navigation';
@@ -35,7 +36,7 @@ export default function Challenges() {
     </section>)}</div>
     <h2 className="section-title" id="benefits">{ui.benefits}</h2>
     <div className="benefit-list">{presentation.benefits.map(rule => <section className="benefit-card" key={rule.id} data-benefit-id={rule.id}>
-      <img src={rule.photo.path} alt={rule.photo.alt} loading="lazy" onError={event => { event.currentTarget.hidden = true; }} />
+      <img src={publicUrl(rule.photo.path)} alt={rule.photo.alt} loading="lazy" onError={event => { event.currentTarget.hidden = true; }} />
       <div className="benefit-copy"><h3>{rule.title}</h3><p>{rule.description}</p>
         <span className="benefit-points">{rule.eligible ? ui.benefitReached : ui.benefitRemaining.replace('{count}',String(rule.remaining))}</span>
         <progress value={Math.min(presentation.displayPoints, rule.pointsThreshold)} max={Math.max(1, rule.pointsThreshold)} aria-label={`${rule.title}: ${presentation.displayPoints} de ${rule.pointsThreshold} puntos`} />

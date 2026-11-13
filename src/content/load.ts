@@ -1,10 +1,11 @@
 import type { Content } from './types';
 import { validateContent } from './validate';
+import { publicUrl } from './publicUrl';
 
 export async function loadContent(signal?: AbortSignal): Promise<Content> {
   let response: Response;
   try {
-    response = await fetch('/config/app-content.json', { cache: 'no-store', signal });
+    response = await fetch(publicUrl('/config/app-content.json'), { cache: 'no-store', signal });
   } catch (error) {
     if (signal?.aborted) throw error;
     throw new Error('No pudimos leer /config/app-content.json. Revisá la conexión y que el archivo esté disponible.');

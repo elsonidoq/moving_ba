@@ -1,6 +1,45 @@
 # Deployment
 
-## Current status
+## GitHub Pages
+
+Target URL: **https://elsonidoq.github.io/moving_ba/**.
+Pages is enabled with GitHub Actions as the publishing source; HTTPS is enforced.
+The owner made `elsonidoq/moving_ba` public before setup. The source repository,
+built JavaScript, public JSON and bundled photos are publicly accessible.
+No account plan upgrade, custom domain or Railway change is part of this setup.
+
+`.github/workflows/pages.yml` runs on pushes to `main` and manual dispatch. It uses
+Node 22, `npm ci`, and `npm run build -- --base=/moving_ba/`, uploads only `dist/`,
+and deploys using `pages: write` and OIDC (`id-token: write`) permissions. The workflow
+serializes Pages releases. No repository secret, Node server or SPA rewrite is needed;
+existing hash routes support direct navigation and reloads. A successful push alone
+is not deployment proof: inspect the exact workflow run and check the public app.
+
+Canonical `/assets/...` paths remain unchanged in JSON, allowlists and saved practice
+snapshots. `src/content/publicUrl.ts` applies Vite's build base only at image rendering
+and the runtime JSON fetch boundary. Ordinary builds still target `/`, preserving
+local/Railway serving. Do not merely change Vite's base without resolving those public
+URLs. A content edit requires a new build/deploy; this is not a CMS.
+
+GitHub Pages controls response caching; it cannot reproduce the Node listener's custom
+`Cache-Control: no-store` response header. The client still fetches JSON with
+`cache: 'no-store'`. Browser progress is origin-local and does not transfer from
+Railway. The storage key is unchanged; other Pages apps on the same `elsonidoq.github.io`
+origin share localStorage access, irrespective of repository subpath. Never put secrets
+or sensitive records in public config or demo storage.
+
+Local verification: the Pages build/typecheck and `playwright.pages.config.ts` browser
+checks passed at 360px and 1280px using installed Chrome. These exercise the real
+subpath build, runtime JSON, welcome/Home/sport/class/benefit/exercise photos,
+practice start, hash reload and preference persistence with no HTTP/page errors.
+Set `PAGES_URL=https://elsonidoq.github.io/moving_ba/` to run the same checks live
+(no local server). The ordinary root build/typecheck, all 137 core checks and seven
+focused root-path browser checks passed. An attempted full root browser suite hit the
+command timeout after 37 passing checks, with no test failure reported before termination;
+its remaining checks are not claimed as passed. No subagents were used.
+Initial workflow publication and live verification are pending.
+
+## Existing Railway deployment
 
 **Live demo verified on Railway, 2026-10-16.**
 Public HTTPS: **https://movingba-production.up.railway.app** (desktop and phone browsers;

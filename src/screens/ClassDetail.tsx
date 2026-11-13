@@ -1,3 +1,4 @@
+import { publicUrl } from '../content/publicUrl';
 import { classPhotos } from '../content/mockupPhotos';
 import { useApp } from '../state/context';
 import { routeHash, safePlan } from '../state/navigation';
@@ -10,7 +11,7 @@ export default function ClassDetail() {
   const plan = safePlan(content, route.profileId, route.sportId);
   return <article data-detail-class-id={item.id}>
     <p className="eyebrow">{ui.classes}</p><h1 tabIndex={-1}>{item.title}</h1>
-    {classPhotos[item.id] ? <div className="sport-hero compact"><img src={classPhotos[item.id].src} alt={classPhotos[item.id].alt} /></div> : <p className="muted">{ui.imageUnavailable}</p>}
+    {classPhotos[item.id] ? <div className="sport-hero compact"><img src={publicUrl(classPhotos[item.id].src)} alt={classPhotos[item.id].alt} /></div> : <p className="muted">{ui.imageUnavailable}</p>}
     <p className="lead">{item.description}</p>
     <dl className="class-meta">
       <div><dt>{ui.schedule}</dt><dd>{item.schedule}</dd></div>

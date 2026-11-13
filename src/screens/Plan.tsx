@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { publicUrl } from '../content/publicUrl';
 import type { Plan as PlanContent, UI } from '../content/types';
 import { sportPhotos } from '../content/mockupPhotos';
 import { useApp } from '../state/context';
@@ -23,7 +24,7 @@ export default function Plan() {
       const exercise = content.exercises.find(e => e.id === step.exerciseId)!;
       const image = content.images.find(image => image.id === exercise.imageId);
       return <li key={step.id} data-step-id={step.id} data-exercise-id={exercise.id}>
-        {image?.path ? <img className="step-photo" src={image.path} alt={image.alt} /> : <span className="muted">{ui.imageUnavailable}</span>}
+        {image?.path ? <img className="step-photo" src={publicUrl(image.path)} alt={image.alt} /> : <span className="muted">{ui.imageUnavailable}</span>}
         <span className="step-number" aria-hidden="true">{index + 1}</span>
         <div><h3>{exercise.title}</h3><p className="quantity">{exercise.quantity}</p><p>{exercise.technique}</p></div>
       </li>;
@@ -33,7 +34,7 @@ export default function Plan() {
     <p className="eyebrow">{ui.planPreview}</p>
     <h1 tabIndex={-1}>{plan.name}</h1>
     <p className="lead">{plan.description}</p>
-    <div className="sport-hero compact"><img src={sportPhotos[sport.id].hero.src} alt={sportPhotos[sport.id].hero.alt} /></div>
+    <div className="sport-hero compact"><img src={publicUrl(sportPhotos[sport.id].hero.src)} alt={sportPhotos[sport.id].hero.alt} /></div>
     {sport.id === 'swimming' && <p className="medium-label">{ui.dryLand}</p>}
     <dl className="plan-meta">
       <div><dt className="visually-hidden">{ui.duration}</dt><dd><DurationEstimate key={plan.id} plan={plan} ui={ui} /></dd></div>

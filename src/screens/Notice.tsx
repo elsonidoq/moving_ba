@@ -1,3 +1,4 @@
+import { publicUrl } from '../content/publicUrl';
 import { mockupPhotos } from '../content/mockupPhotos';
 import { useApp } from '../state/context';
 export default function Notice() {
@@ -6,7 +7,7 @@ export default function Notice() {
  if(!scenario)return null;
  return <article data-notice-id={scenario.id} data-preview-scenario={scenario.id}>
  <h1 className="visually-hidden" tabIndex={-1}>{scenario.title}</h1>
- <div className="notice-photo"><img src={mockupPhotos.city_park.src} alt="" />
+ <div className="notice-photo"><img src={publicUrl(mockupPhotos.city_park.src)} alt="" />
  <div className="notice-time" aria-hidden="true"><strong>9:41</strong><span>Buenos Aires</span></div>
  <button className="notice-card" aria-label={scenario.activationLabel} aria-describedby={`notice-message-${scenario.id}`} onClick={()=>navigate({screen:'chat',profileId:scenario.recommendationSituationId,chatId:scenario.chatId!})}>
  <span className="notice-brand"><span aria-hidden="true">◈</span>{content.branding.name}</span>
