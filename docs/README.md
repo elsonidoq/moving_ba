@@ -6,7 +6,7 @@
 
 - [Conceptual interactive mockup](mockup_ba_te_mueve/index.html): Spanish-language demonstration of activity selection, individual practice or classes, continuity, and rewards. Not an operational service contract.
 - [Architecture](architecture.md): current implemented client/state/content/serving/test boundaries, exact dependencies, and preserved historical research.
-- [Deployment](deployment.md): verified local and Railway build/start/PORT contract, public HTTPS URL, exact successful deployment and content redeployment runbook.
+- [Deployment](deployment.md): GitHub Pages publishing and live checks; existing local/Railway build/start/PORT contract, public HTTPS URLs and redeployment runbook.
 - [Documentation routing](documentation-routing.md): material change categories and authoritative owners.
 - [Open issues](open_issues.md): canonical register for verified unresolved work.
 

@@ -2,7 +2,7 @@
 
 ## GitHub Pages
 
-Target URL: **https://elsonidoq.github.io/moving_ba/**.
+**Live demo verified:** **https://elsonidoq.github.io/moving_ba/**.
 Pages is enabled with GitHub Actions as the publishing source; HTTPS is enforced.
 The owner made `elsonidoq/moving_ba` public before setup. The source repository,
 built JavaScript, public JSON and bundled photos are publicly accessible.
@@ -37,7 +37,15 @@ Set `PAGES_URL=https://elsonidoq.github.io/moving_ba/` to run the same checks li
 focused root-path browser checks passed. An attempted full root browser suite hit the
 command timeout after 37 passing checks, with no test failure reported before termination;
 its remaining checks are not claimed as passed. No subagents were used.
-Initial workflow publication and live verification are pending.
+
+[Publishing run 43507991833](https://github.com/elsonidoq/moving_ba/actions/runs/43507991833)
+completed with **success** for source `26220065245a458886b3897993500d753465f69e`.
+The same two Pages browser checks then passed against public HTTPS at 360px and
+1280px, including runtime JSON, decoded local images, practice start, hash refresh
+and unchanged persisted preference, with no HTTP/page errors. These are bounded
+Chrome checks, not physical-phone or cross-browser certification. GitHub emitted
+non-blocking action-runtime deprecation and runner-image migration notices; both
+build and deployment jobs succeeded. The existing Railway service was not redeployed.
 
 ## Existing Railway deployment
 

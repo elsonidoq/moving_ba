@@ -4,8 +4,12 @@
 
 React 19.2.0/TypeScript 5.9.3/Vite 7.2.2, plain hooks/context and CSS. No new
 state/router/schema library, backend, database, account or live integration.
-`src/App.tsx` fetches `/config/app-content.json` through `content/load.ts` with
-no-store and complete validation before mounting consumers. Built-in Spanish
+`src/App.tsx` fetches public `config/app-content.json` through `content/load.ts` with
+no-store and complete validation before mounting consumers. `content/publicUrl.ts`
+resolves the runtime fetch and rendered image URLs against Vite's `BASE_URL`: `/`
+for ordinary builds and `/moving_ba/` for GitHub Pages. Content paths, image
+allowlists and saved snapshots remain canonical and unchanged. The
+[deployment guide](deployment.md#github-pages) owns Pages publishing and cache limits. Built-in Spanish
 loading/error/retry works without product JSON. Text renders as text, never HTML.
 The [content guide](CONTENT_CONFIGURATION.md) owns the editor contract.
 
